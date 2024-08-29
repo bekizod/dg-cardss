@@ -18,7 +18,7 @@ export default function TopHeader() {
   };
 
 
-  const flagSrc = selectedCountry === "saudi" ? "/saudi.png" : "/uae.png";
+  const flagSrc = selectedCountry === "saudi" ? "/saudiA.png" : "/uae.png";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -39,7 +39,7 @@ export default function TopHeader() {
       <div className="bg-gray-100 dark:bg-slate-900  text-sm font-thin py-2 flex justify-around items-center gap-8">
         <div className="flex items-center gap-3">
           <p>Welcome to Alsaif Gallery World</p>
-          <Image src={flagSrc} alt="Country flag" onClick={() => setOpen(true)} className="h-6 w-7 cursor-pointer" width={100} height={100} /> | <p>العربية</p>
+          <Image src={flagSrc} alt="Country flag" onClick={() => setOpen(true)} className="h-5 w-7 cursor-pointer" width={100} height={100} /> | <p>العربية</p>
         </div>
 
         <AnimatePresence>
@@ -53,7 +53,7 @@ export default function TopHeader() {
                       <input type="radio" name="country" checked={selectedCountry === "saudi"} readOnly className="h-5 w-5 cursor-pointer text-blue-600 focus:ring-blue-500" />
                       <p className="text-lg text-gray-800 dark:text-gray-100">المملكة العربية السعودية</p>
                     </div>
-                    <Image src="/saudi.png" alt="Saudi flag" className="h-10 w-10" width={40} height={40} />
+                    <Image src="/saudiA.png" alt="Saudi flag" className="h-10 w-10" width={40} height={40} />
                   </div>
                   <div className="flex items-center justify-between px-6 py-4 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md cursor-pointer" onClick={() => handleCountryChange("uae")}>
                     <div className="flex items-center space-x-4">
