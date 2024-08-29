@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "antd": "^5.20.3",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.3.30",
     "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18",
-    "swiper": "^11.1.11"
+    "swiper": "^11.1.11",
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
