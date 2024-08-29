@@ -1,9 +1,12 @@
 "use client";
-import { ThemeProvider as NextThemesProvider, ThemeProviderProps } from "next-themes";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import React, { ReactNode } from "react";
 
-interface CustomThemeProviderProps extends ThemeProviderProps {
+interface CustomThemeProviderProps {
   children: ReactNode;
+  attribute: string;
+  defaultTheme: string;
+  enableSystem: boolean;
 }
 
 const ThemeProvider: React.FC<CustomThemeProviderProps> = ({ children, ...props }) => {
