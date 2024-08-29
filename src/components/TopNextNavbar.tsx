@@ -1,22 +1,70 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { TfiAlignLeft } from "react-icons/tfi";
 import { FaRegUser } from "react-icons/fa";
-import { MdOutlineShoppingCart, MdFavoriteBorder, MdClose } from "react-icons/md";
+import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
 
+// Default tab data with categories
+const tabs = [
+  { id: 1, icon: <FaRegUser />, label: "Profile", category: null },
+  { id: 2, icon: <MdOutlineShoppingCart />, label: "Orders", category: null },
+  { id: 3, icon: <MdFavoriteBorder />, label: "Favorites", category: "favorites" },
+  { id: 4, icon: <AiOutlineSearch />, label: "Search", category: "search" },
+  { id: 5, icon: <AiOutlineSearch />, label: "Electronics", category: "electronics" },
+  { id: 6, icon: <AiOutlineSearch />, label: "Fashion", category: "fashion" },
+  { id: 7, icon: <AiOutlineSearch />, label: "Home", category: "home" },
+  { id: 8, icon: <AiOutlineSearch />, label: "Books", category: "books" },
+];
+
+// Expanded card data with categories
+const cards = [
+  { id: 1, title: "Laptop", content: "High performance laptop.", category: "electronics" },
+  { id: 2, title: "Smartphone", content: "Latest model smartphone.", category: "electronics" },
+  { id: 3, title: "Jeans", content: "Comfortable jeans.", category: "fashion" },
+  { id: 4, title: "Jacket", content: "Stylish jacket.", category: "fashion" },
+  { id: 5, title: "Sofa", content: "Comfortable sofa.", category: "home" },
+  { id: 6, title: "Coffee Table", content: "Modern coffee table.", category: "home" },
+  { id: 7, title: "Novel", content: "Bestselling novel.", category: "books" },
+  { id: 8, title: "Cookbook", content: "Delicious recipes.", category: "books" },
+  { id: 9, title: "Headphones", content: "Noise-cancelling headphones.", category: "electronics" },
+  { id: 10, title: "Smartwatch", content: "Track your fitness.", category: "electronics" },
+  // Add more card data with different categories up to 30 items
+  { id: 11, title: "Sneakers", content: "Comfortable running shoes.", category: "fashion" },
+  { id: 12, title: "Sunglasses", content: "UV protection sunglasses.", category: "fashion" },
+  { id: 13, title: "Microwave", content: "High efficiency microwave.", category: "home" },
+  { id: 14, title: "Blender", content: "Powerful kitchen blender.", category: "home" },
+  { id: 15, title: "Sci-Fi Book", content: "Amazing science fiction novel.", category: "books" },
+  { id: 16, title: "Historical Book", content: "Insightful historical book.", category: "books" },
+  // ... continue adding more cards as needed
+];
+
 export default function TopNextNavbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<number | null>(null);
+  const [filteredCards, setFilteredCards] = useState(cards);
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleTabClick = (tab: (typeof tabs)[0]) => {
+    setActiveTab(tab.id);
+    if (tab.category) {
+      setFilteredCards(cards.filter((card) => card.category === tab.category));
+    } else {
+      setFilteredCards(cards); // Reset to all cards if no category
+    }
+  };
+
+  // Handle clicks outside the modal
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -25,8 +73,8 @@ export default function TopNextNavbar() {
       <div className="hidden lg:flex gap-24 items-center w-full">
         {/* Logo Section */}
         <div className="flex gap-4 items-center">
-          <div className="text-3xl cursor-pointer" onClick={handleModalOpen}>
-            {isModalOpen ? <MdClose className="text-green-500" /> : <TfiAlignLeft className="text-green-500" />}
+          <div className="text-3xl cursor-pointer" onClick={handleModalToggle}>
+            <TfiAlignLeft className="text-green-500" />
           </div>
           <Link href="/">
             <Image src="/logo_landscape (1).svg" width={120} height={20} alt="logo" className="h-16 w-auto" />
@@ -77,25 +125,44 @@ export default function TopNextNavbar() {
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
-        <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleModalClose}>
-          <motion.div
-            className="bg-white dark:bg-slate-800 p-10 rounded-lg shadow-lg w-full max-w-4xl h-full max-h-[80vh] overflow-auto"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={(e) => e.stopPropagation()} // Prevents click from closing modal when clicking inside it
-          >
-            {/* Modal content here */}
-            <h2 className="text-xl font-semibold mb-4">Modal Title</h2>
-            <p className="mb-4">Modal content goes here. You can make this section as wide and tall as needed.</p>
-            <button onClick={handleModalClose} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              Close
-            </button>
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleBackgroundClick}>
+            <motion.div className="flex w-full h-full max-w-screen-lg bg-white dark:bg-slate-900 rounded-lg overflow-hidden relative" initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }} transition={{ duration: 0.3 }}>
+              {/* Close Button */}
+              <button className="absolute top-4 right-4 text-2xl text-gray-600 dark:text-gray-300" onClick={handleModalToggle}>
+                &times;
+              </button>
+
+              {/* Modal Content */}
+              <div className="flex w-full h-full">
+                {/* Tabs Section */}
+                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r border-gray-300 dark:border-slate-600">
+                  {tabs.map((tab) => (
+                    <button key={tab.id} onClick={() => handleTabClick(tab)} className={`flex items-center gap-2 px-4 py-2 text-left ${activeTab === tab.id ? "bg-gray-300 dark:bg-slate-700 text-green-500" : "hover:bg-gray-200 dark:hover:bg-slate-600"}`}>
+                      {tab.icon}
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Cards Section */}
+                <div className="w-3/4 p-6">
+                  {/* Placeholder for cards */}
+                  <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+                    {filteredCards.map((card) => (
+                      <motion.div key={card.id} className="bg-gray-100 dark:bg-slate-800 p-4 rounded-lg shadow-md" whileHover={{ scale: 1.05 }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
+                        <h3 className="text-lg font-semibold mb-2">{card.title}</h3>
+                        <p>{card.content}</p>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }
