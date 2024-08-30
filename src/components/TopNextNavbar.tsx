@@ -7,21 +7,21 @@ import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
-
+import {sideNav as tabs} from "../utils/data"
 // Default tab data
 
-  const tabs = [
-  { id: 1, icon: <FaRegUser />, label: "Electrical Appliances" },
-  { id: 2, icon: <MdOutlineShoppingCart />, label: "Best Catagories" },
-  { id: 3, icon: <MdFavoriteBorder />, label: "kitchenware" },
-  { id: 4, icon: <AiOutlineSearch />, label: "Televisions" },
-  { id: 5, icon: <FaRegUser />, label: "Large home appliances" },
-  { id: 6, icon: <MdOutlineShoppingCart />, label: "Serveware" },
-  { id: 7, icon: <MdFavoriteBorder />, label: "Home Appliances" },
-  { id: 8, icon: <AiOutlineSearch />, label: "Coffee LOVERS" },
-  { id: 9, icon: <FaRegUser />, label: "Health & Beauty" },
-  { id: 10, icon: <MdOutlineShoppingCart />, label: "Recent" },
-];
+//   const tabs = [
+//   { id: 1, icon: <FaRegUser />, label: "Electrical Appliances" },
+//   { id: 2, icon: <MdOutlineShoppingCart />, label: "Best Catagories" },
+//   { id: 3, icon: <MdFavoriteBorder />, label: "kitchenware" },
+//   { id: 4, icon: <AiOutlineSearch />, label: "Televisions" },
+//   { id: 5, icon: <FaRegUser />, label: "Large home appliances" },
+//   { id: 6, icon: <MdOutlineShoppingCart />, label: "Serveware" },
+//   { id: 7, icon: <MdFavoriteBorder />, label: "Home Appliances" },
+//   { id: 8, icon: <AiOutlineSearch />, label: "Coffee LOVERS" },
+//   { id: 9, icon: <FaRegUser />, label: "Health & Beauty" },
+
+// ];
 
 
 
@@ -160,10 +160,11 @@ export default function TopNextNavbar() {
               {/* Modal Content */}
               <div className="flex w-full h-full">
                 {/* Tabs Section */}
-                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r border-gray-300 dark:border-slate-600">
+                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r justify-evenly border-gray-300 dark:border-slate-600">
                   {tabs.map((tab) => (
                     <button key={tab.id} onClick={() => handleTabClick(tab.id)} className={`flex items-center gap-2 px-4 py-2 text-left ${activeTab === tab.id ? "bg-gray-300 dark:bg-slate-700 text-green-500" : "hover:bg-gray-200 dark:hover:bg-slate-600"}`}>
-                      {tab.icon}
+                      {/* {tab.icon} */}
+                      <Image src={tab.icon} alt= {tab.label} width={30} height={30} className="text-green-500" />
                       {tab.label}
                     </button>
                   ))}
