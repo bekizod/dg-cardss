@@ -175,7 +175,7 @@ export default function TopNextNavbar() {
                   {/* Placeholder for cards */}
                   <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                     {filteredCards.map((card) => (
-                      <motion.div key={card.id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-black"  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
+                      <motion.div key={card.id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
                         <Image src={card.image} alt={card.title} width={150} height={150} className="w-full  object-cover mb-4 rounded-md" />
                         {/* <h3 className="text-lg font-semibold mb-2">{card.title}</h3> */}
                         <p>{card.content}</p>
