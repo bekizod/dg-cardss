@@ -29,7 +29,7 @@ const Footer = () => {
             <div>
               <Image src="/Reference_images/footer img/badg.png" className="h-20 py-3" alt="Certified warranty" width={60} height={20} />{" "}
             </div>
-            <div className="font-bold text-">Certified warranty</div>
+            <div className="font-bold text-">Certified Warranty</div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
