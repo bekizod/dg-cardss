@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --clr: #222327;
+}
+
+
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px 10px 0 0;
+}
+
+.navigation ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.navigation ul li {
+    list-style: none;
+    width: 70px;
+    height: 70px;
+}
+
+.navigation ul li .icon {
+    display: block;
+    font-size: 1.5em;
+    text-align: center;
+    transition: 0.5s;
+    color: #333;
+}
+
+.navigation ul li .text {
+    display: block;
+    font-size: 0.75em;
+    text-align: center;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.navigation ul li.active .text {
+    opacity: 1;
+}
+
+.indicator {
+    position: absolute;
+    top: -25px;
+    width: 70px;
+    height: 70px;
+    background: #248248;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    transition: 0.5s;
+}
+
+.indicator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -22px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-top-right-radius: 20px;
+    box-shadow:  1px -10px 0 0 var(--clr);
+}
+
+.indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -22px;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-top-left-radius: 20px;
+    box-shadow:  -1px -10px 0 0 var(--clr);
+}
+
+.navigation ul li:nth-child(1).active ~ .indicator {
+    transform: translateX(calc(70px * 0));
+}
+
+.navigation ul li:nth-child(2).active ~ .indicator {
+    transform: translateX(calc(70px * 1));
+}
+
+.navigation ul li:nth-child(3).active ~ .indicator {
+    transform: translateX(calc(70px * 2));
+}
+
+.navigation ul li:nth-child(4).active ~ .indicator {
+    transform: translateX(calc(70px * 3));
+}
+
+.navigation ul li:nth-child(5).active ~ .indicator {
+    transform: translateX(calc(70px * 4));
+}
