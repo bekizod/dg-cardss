@@ -5,8 +5,10 @@
 
 
 body {
-  width:100vw;
-  box-sizing: border-box;
+  margin: 0;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
 }
 /* Base styling for the scrollbar */
 ::-webkit-scrollbar {
