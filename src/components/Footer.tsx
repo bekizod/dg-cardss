@@ -5,7 +5,7 @@ import { FaInfoCircle, FaWallet, FaShieldAlt, FaShippingFast, FaMoneyBillWave, F
 import { FaFacebookF, FaInstagram, FaSnapchatGhost, FaTwitter } from 'react-icons/fa';
 const Footer = () => {
   return (
-    <footer className="bg-[#248248] relative ">
+    <footer className="bg-[#248248] relative w-[100vw]">
       {/* Background Image */}
       <div className="absolute top-0 left-0 w-full h-full bg-[url('/Reference_images/footer%20img/footer01.png')] bg-no-repeat bg-top-left -z-10 "></div>
 
@@ -21,7 +21,7 @@ const Footer = () => {
       </div>
 
       {/* Second Section: Main Content with Three Columns */}
-      <div className="flex justify-evenly pb-4">
+      <div className="flex justify-evenly pb-8">
         {/* First Column */}
         <div className="flex flex-col gap-3 ">
           <h3 className="text-white font-bold border-b-2 pb-1 mx-16 flex justify-center">Questions and complaints</h3>
@@ -105,24 +105,31 @@ const Footer = () => {
           <h3 className="text-white font-bold text-center   mt-4">Download App</h3>
           <p className="text-xs text-center">Download the app and enjoy exclusive offers</p>
           <div className="flex flex-col items-center mt-4 space-y-4">
-            <Image
-              width={150} // Adjust width as needed
-              height={50} // Adjust height as needed
-              src="/Reference_images/footer img/image1.png"
-              alt="Download App Image 1"
-            />
-            <Image
-              width={150} // Adjust width as needed
-              height={50} // Adjust height as needed
-              src="/Reference_images/footer img/image2.png"
-              alt="Download App Image 2"
-            />
-            <Image
-              width={150} // Adjust width as needed
-              height={50} // Adjust height as needed
-              src="/Reference_images/footer img/image3.png"
-              alt="Download App Image 3"
-            />
+            <Link href="#">
+              <Image
+                width={150} // Adjust width as needed
+                height={50} // Adjust height as needed
+                src="/Reference_images/footer img/footer09.png"
+                alt="Download App Image 1"
+              />
+            </Link>
+            <Link href="#">
+              {" "}
+              <Image
+                width={150} // Adjust width as needed
+                height={50} // Adjust height as needed
+                src="/Reference_images/footer img/footer10.png"
+                alt="Download App Image 2"
+              />
+            </Link>
+            <Link href="#">
+              <Image
+                width={150} // Adjust width as needed
+                height={50} // Adjust height as needed
+                src="/Reference_images/footer img/footer11.png"
+                alt="Download App Image 3"
+              />
+            </Link>
           </div>
         </div>
       </div>
