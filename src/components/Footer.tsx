@@ -16,7 +16,7 @@ const Footer = () => {
     const [active, setActive] = useState(0);
   return (
     <footer>
-      <div className="bg-gray-100 py-3 hidden lg:block ">
+      <div className="bg-gray-100 dark:bg-slate-600 py-3 hidden lg:block ">
         <div className="flex flex-row justify-around ">
           <div className="flex flex-row gap-3 items-center">
             <div>
@@ -40,7 +40,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <main className="bg-[#248248]  relative  ">
+      <main className="bg-[#248248] dark:bg-green-950 relative  ">
         {/* Background Image */}
         <div>
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/Reference_images/footer%20img/footer01.png')] bg-no-repeat bg-top-left z-0"></div>
