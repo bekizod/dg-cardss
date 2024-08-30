@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const Footer = () => {
@@ -8,7 +9,7 @@ const Footer = () => {
 
       {/* First Section: Logo */}
       <div className="w-full flex justify-start p-4">
-        <img src="/path/to/logo.png" alt="Logo" className="h-12" />
+        <Image width={1000} height={1000} src="/path/to/logo.png" alt="Logo" className="h-12" />
       </div>
 
       {/* Second Section: Main Content with Three Columns */}
@@ -17,11 +18,11 @@ const Footer = () => {
         <div className="flex flex-col">
           <h3 className="text-white font-bold">Questions and complaints</h3>
           <div className="flex items-center">
-            <img src="/path/to/whatsapp-icon.png" alt="Whatsapp" className="h-6 mr-2" />
+            <Image width={1000} height={1000} src="/path/to/whatsapp-icon.png" alt="Whatsapp" className="h-6 mr-2" />
             <span className="text-white">Whatsapp: +966920009017</span>
           </div>
           <div className="flex items-center mt-2">
-            <img src="/path/to/phone-icon.png" alt="Call Us" className="h-6 mr-2" />
+            <Image width={1000} height={1000} src="/path/to/phone-icon.png" alt="Call Us" className="h-6 mr-2" />
             <span className="text-white">Call Us: +966920009016</span>
           </div>
         </div>
@@ -54,8 +55,8 @@ const Footer = () => {
 
       {/* Third Section: Images */}
       <div className="w-full flex justify-between p-4">
-        <img src="/path/to/image1.png" alt="Image 1" className="h-24" />
-        <img src="/path/to/image2.png" alt="Image 2" className="h-24" />
+        <Image width={1000} height={1000} src="/path/to/image1.png" alt="Image 1" className="h-24" />
+        <Image width={1000} height={1000} src="/path/to/image2.png" alt="Image 2" className="h-24" />
       </div>
 
       {/* Fourth Section: Copyright Information */}
