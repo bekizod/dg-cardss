@@ -8,24 +8,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
 import {sideNav as tabs} from "../utils/data"
-// Default tab data
-
-//   const tabs = [
-//   { id: 1, icon: <FaRegUser />, label: "Electrical Appliances" },
-//   { id: 2, icon: <MdOutlineShoppingCart />, label: "Best Catagories" },
-//   { id: 3, icon: <MdFavoriteBorder />, label: "kitchenware" },
-//   { id: 4, icon: <AiOutlineSearch />, label: "Televisions" },
-//   { id: 5, icon: <FaRegUser />, label: "Large home appliances" },
-//   { id: 6, icon: <MdOutlineShoppingCart />, label: "Serveware" },
-//   { id: 7, icon: <MdFavoriteBorder />, label: "Home Appliances" },
-//   { id: 8, icon: <AiOutlineSearch />, label: "Coffee LOVERS" },
-//   { id: 9, icon: <FaRegUser />, label: "Health & Beauty" },
-
-// ];
-
-
-
-// Default card data
 
 const cardData = [
   { id: 1, title: "Card Title 1", content: "Card content goes here.", category: "Profile", image: "https://via.placeholder.com/150" },
