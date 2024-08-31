@@ -60,7 +60,7 @@ export default function TopNextNavbar() {
 
         {/* User and Cart Section */}
         <div className="flex items-center gap-6">
-          <Link href="#" className="flex items-center gap-2 text-sm cursor-pointer">
+          <Link href="/login" className="flex items-center gap-2 text-sm cursor-pointer">
             <FaRegUser className="text-green-500" />
             <span className="hidden md:inline">Account/Login</span>
           </Link>
