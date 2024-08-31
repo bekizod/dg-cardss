@@ -6,6 +6,7 @@ import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import TopHeader from "@/components/TopHeader";
 import Footer from "@/components/Footer";
 import Test from "@/components/Test";
+import TopNextNavbar from "@/components/TopNextNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,10 @@ export default function RootLayout({
       <body className={`bg-white dark:bg-black ${inter.className}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ThemeSwitcher />
-          <TopHeader />
+          <div className="fixed top-0 left-0 right-0 z-50 ">
+            <TopHeader />
+            <TopNextNavbar />
+          </div>
           <main>{children}</main>
           <Footer /> 
         </ThemeProvider>
