@@ -74,8 +74,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen dark:bg-gray-800 px-2">
-      <div className="bg-slate-50 dark:bg-gray-900 dark:text-gray-100 p-8 rounded shadow-lg w-full max-w-xl">
+    <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800 ">
+      <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3  shadow-xl w-full max-w-xl">
         {/* Login Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">LOG IN</h2>
@@ -110,16 +110,16 @@ export default function Login() {
             </div>
 
             {loginMethod === "phone" && (
-              <div className="space-y-4">
-                <div className="flex flex-row items-center  ">
-                  <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="border  rounded dark:bg-gray-800 dark:border-gray-700 text-xs md:text-lg py-3 w-14 md:w-28 lg:w-40">
+              <div className="">
+                <div className="flex flex-row">
+                  <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="border  rounded dark:bg-gray-800 dark:border-gray-700 bg-slate-100 text-xs md:text-lg py-3 w-14 md:w-28 lg:w-40">
                     <option value="+968">+968</option>
                     <option value="+971">+971</option>
                     <option value="+966">+966</option>
                     <option value="+973">+973</option>
                   </select>
 
-                  <select value={selectedPhonePrefix} onChange={(e) => setSelectedPhonePrefix(e.target.value)} className="border rounded dark:bg-gray-800 dark:border-gray-700 text-xs py-3 w-10 md:text-lg  md:w-28 lg:w-32">
+                  <select value={selectedPhonePrefix} onChange={(e) => setSelectedPhonePrefix(e.target.value)} className="border rounded dark:bg-gray-800 dark:border-gray-700 bg-slate-100 text-xs py-3 w-10 md:text-lg  md:w-28 lg:w-32">
                     <option>__</option>
                     <option value="50">50</option>
                     <option value="51">51</option>
@@ -132,7 +132,7 @@ export default function Login() {
                     <option value="58">59</option>
                   </select>
 
-                  <input type="number" required placeholder="Phone number" className="text-xs md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full" />
+                  <input type="number" required placeholder="Phone number" className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full" />
                 </div>
               </div>
             )}
@@ -141,7 +141,7 @@ export default function Login() {
               <div className="space-y-4">
                 <div className="relative">
                   <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input type="email" required placeholder="Email" className="w-full p-3 pl-10  border rounded dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="email" required placeholder="Email" className="w-full bg-slate-100 p-3 pl-10  border rounded dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
             )}
