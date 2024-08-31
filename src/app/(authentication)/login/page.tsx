@@ -9,11 +9,12 @@ export default function Login() {
   const [loginMethod, setLoginMethod] = useState<"phone" | "email" | null>(null);
   const [selectedCountryCode, setSelectedCountryCode] = useState("+968");
   const [selectedPhonePrefix, setSelectedPhonePrefix] = useState("__");
-    const [showOTP, setShowOTP] = useState(false);
-    const [optError, setOtpError] = useState(false)
+  const [showOTP, setShowOTP] = useState(false);
+  const [optError, setOtpError] = useState(false);
 
   const [borderColors, setBorderColors] = useState<string[]>(Array(4).fill("border-slate-500"));
   const otpRefs = useRef<HTMLInputElement[]>([]);
+
   // Focus the first OTP input field when the component mounts
   useEffect(() => {
     if (showOTP && otpRefs.current[0]) {
@@ -50,9 +51,9 @@ export default function Login() {
       // If the input is invalid, clear the field and set border color to red
       otpRefs.current[index].value = "";
       setBorderColors((prev) => prev.map((color, i) => (i === index || optError ? "border-red-500" : color)));
-      }
-      //If an input is incorrect
-      setBorderColors((prev) => prev.map((color, i) => (optError ? "border-red-500" : color)));
+    }
+    // If an input is incorrect
+    setBorderColors((prev) => prev.map((color, i) => (optError ? "border-red-500" : color)));
   };
 
   const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,6 +64,13 @@ export default function Login() {
         }
       }
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Logic for handling form submission goes here
+    // For now, we'll just show OTP
+    setShowOTP(true);
   };
 
   return (
@@ -91,18 +99,18 @@ export default function Login() {
         )}
 
         {loginMethod && !showOTP && (
-          <>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex mb-6">
-              <button onClick={() => setLoginMethod("phone")} className={`flex-1 p-2 text-center ${loginMethod === "phone" ? "border-b-2 border-green-600 bg-green-100 dark:bg-gray-700" : "border-b dark:border-gray-700"}`}>
+              <button type="button" onClick={() => setLoginMethod("phone")} className={`flex-1 p-2 text-center ${loginMethod === "phone" ? "border-b-2 border-green-600 bg-green-100 dark:bg-gray-700" : "border-b dark:border-gray-700"}`}>
                 Phone Number
               </button>
-              <button onClick={() => setLoginMethod("email")} className={`flex-1 p-2 text-center ${loginMethod === "email" ? "border-b-2 border-green-600 bg-green-100 dark:bg-gray-700" : "border-b dark:border-gray-700"}`}>
+              <button type="button" onClick={() => setLoginMethod("email")} className={`flex-1 p-2 text-center ${loginMethod === "email" ? "border-b-2 border-green-600 bg-green-100 dark:bg-gray-700" : "border-b dark:border-gray-700"}`}>
                 Email
               </button>
             </div>
 
             {loginMethod === "phone" && (
-              <form className="space-y-4">
+              <div className="space-y-4">
                 <div className="flex">
                   <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="p-3 border rounded flex-shrink-0 dark:bg-gray-800 dark:border-gray-700">
                     <option value="+968">+968</option>
@@ -122,24 +130,24 @@ export default function Login() {
                     <option value="53">58</option>
                     <option value="53">59</option>
                   </select>
-                  <input type="numbe" placeholder="Phone number" className="p-3 border rounded flex-grow dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="number" required placeholder="Phone number" className="p-3 border rounded flex-grow dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-              </form>
+              </div>
             )}
 
             {loginMethod === "email" && (
-              <form className="space-y-4">
+              <div className="space-y-4">
                 <div className="relative">
                   <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input type="email" placeholder="Email" className="w-full p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="email" required placeholder="Email" className="w-full p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
                 </div>
-              </form>
+              </div>
             )}
 
-            <motion.button className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowOTP(true)}>
+            <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               Log In
             </motion.button>
-          </>
+          </form>
         )}
 
         {showOTP && (
@@ -160,7 +168,7 @@ export default function Login() {
                     key={index}
                     type="text" // Use type="text" to handle input restrictions fully
                     maxLength={1}
-                    className={`w-12 h-12 text-center text-lg border rounded dark:bg-gray-800 dark:border-gray-700 ${borderColors[index]}`}
+                    className={`w-12 h-12 text-center text-lg border rounded dark:bg-gray-800  ${borderColors[index]} dark:${borderColors[index]}`}
                     ref={(el) => {
                       if (el) otpRefs.current[index] = el;
                     }}
