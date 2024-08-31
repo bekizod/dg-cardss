@@ -37,7 +37,7 @@ export default function TopNextNavbar() {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center px-6 py-4 md:px-12 md:py-5 dark:bg-slate-950">
+    <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* For Large Devices: Logo, Search, User/Cart */}
       <div className="hidden lg:flex gap-24 items-center w-full">
         {/* Logo Section */}
@@ -60,7 +60,7 @@ export default function TopNextNavbar() {
 
         {/* User and Cart Section */}
         <div className="flex items-center gap-6">
-          <Link href="#" className="flex items-center gap-2 text-sm cursor-pointer">
+          <Link href="/login" className="flex items-center gap-2 text-sm cursor-pointer">
             <FaRegUser className="text-green-500" />
             <span className="hidden md:inline">Account/Login</span>
           </Link>
@@ -122,7 +122,7 @@ export default function TopNextNavbar() {
                   <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                     {filteredCards.map((card) => (
                       <motion.div key={card.id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
-                        <Image src={card.image} alt={card.title} width={150} height={150} className="w-full  object-cover mb-4 rounded-md" />
+                        <Image src={card.image} alt={card.title} width={150} height={150} className="w-full  object-contain mb-4 rounded-md" />
                         {/* <h3 className="text-lg font-semibold mb-2">{card.title}</h3> */}
                         <p>{card.title}</p>
                       </motion.div>
