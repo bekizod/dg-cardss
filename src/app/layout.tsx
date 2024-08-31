@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
+import TopHeader from "@/components/TopHeader";
+import TopNextNavbar from "@/components/TopNextNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,10 @@ export default function RootLayout({
       <body className={`bg-white dark:bg-black ${inter.className}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ThemeSwitcher />
+          <div className="fixed top-0 left-0 right-0 z-50 ">
+            <TopHeader />
+            <TopNextNavbar />
+          </div>
           <main>{children}</main>
         </ThemeProvider>
       </body>
