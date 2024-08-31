@@ -9,9 +9,11 @@ export default function Login() {
   const [loginMethod, setLoginMethod] = useState<"phone" | "email" | null>(null);
   const [selectedCountryCode, setSelectedCountryCode] = useState("+968");
   const [selectedPhonePrefix, setSelectedPhonePrefix] = useState("__");
-  const [showOTP, setShowOTP] = useState(false);
-  const otpRefs = useRef<HTMLInputElement[]>([]);
+    const [showOTP, setShowOTP] = useState(false);
+    const [optError, setOtpError] = useState(false)
 
+  const [borderColors, setBorderColors] = useState<string[]>(Array(4).fill("border-slate-500"));
+  const otpRefs = useRef<HTMLInputElement[]>([]);
   // Focus the first OTP input field when the component mounts
   useEffect(() => {
     if (showOTP && otpRefs.current[0]) {
@@ -30,18 +32,28 @@ export default function Login() {
     // Ensure the value is a digit between 0 and 9
     if (/^[0-9]$/.test(value)) {
       otpRefs.current[index].value = value;
+      setBorderColors((prev) => prev.map((color, i) => (i === index ? "border-green-500" : color)));
 
-      // Move focus to the next input field
+      // Move focus to the next input field if the current input is valid
       if (index < otpRefs.current.length - 1) {
         otpRefs.current[index + 1].focus();
+      } else {
+        // Check if all fields are filled
+        const allFilled = otpRefs.current.every((input) => input.value !== "");
+        if (allFilled) {
+          // All fields are filled; alert the inserted numbers
+          const otp = otpRefs.current.map((input) => input.value).join("");
+          alert(`Entered OTP: ${otp}`);
+        }
       }
     } else {
-      // If the input is invalid, clear the field
+      // If the input is invalid, clear the field and set border color to red
       otpRefs.current[index].value = "";
-    }
+      setBorderColors((prev) => prev.map((color, i) => (i === index || optError ? "border-red-500" : color)));
+      }
+      //If an input is incorrect
+      setBorderColors((prev) => prev.map((color, i) => (optError ? "border-red-500" : color)));
   };
-
-
 
   const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace") {
@@ -144,16 +156,19 @@ export default function Login() {
             <form className="space-y-4">
               <div className="flex justify-around gap-2">
                 {[...Array(4)].map((_, index) => (
-                  <input
+                  <motion.input
                     key={index}
                     type="text" // Use type="text" to handle input restrictions fully
                     maxLength={1}
-                    className="w-12 h-12 text-center text-lg border rounded dark:bg-gray-800 dark:border-gray-700"
+                    className={`w-12 h-12 text-center text-lg border rounded dark:bg-gray-800 dark:border-gray-700 ${borderColors[index]}`}
                     ref={(el) => {
                       if (el) otpRefs.current[index] = el;
                     }}
                     onChange={(e) => handleOTPChange(index, e)}
                     onKeyDown={(e) => handleKeyDown(index, e as React.KeyboardEvent<HTMLInputElement>)}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
                   />
                 ))}
               </div>
