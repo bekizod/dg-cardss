@@ -34,6 +34,13 @@ const Footer = () => {
 
           <div className="flex flex-row gap-3 items-center">
             <div>
+              <Image src="/Reference_images/footer img/free-shipping.png" className="h-20 py-3" alt="Certified warranty" width={60} height={20} />{" "}
+            </div>
+            <div className="font-bold text-">Free shipping for orders over 799 SAR</div>
+          </div>
+
+          <div className="flex flex-row gap-3 items-center">
+            <div>
               <Image src="/Reference_images/footer img/support.png" className="h-20 py-3" alt="Customer Service 24/7" width={60} height={20} />{" "}
             </div>
             <div className="font-bold text-">Customer Service 24/7</div>
