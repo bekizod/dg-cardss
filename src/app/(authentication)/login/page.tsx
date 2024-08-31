@@ -26,14 +26,22 @@ export default function Login() {
 
   const handleOTPChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+
+    // Ensure the value is a digit between 0 and 9
     if (/^[0-9]$/.test(value)) {
-      // Only allow numeric input
       otpRefs.current[index].value = value;
+
+      // Move focus to the next input field
       if (index < otpRefs.current.length - 1) {
         otpRefs.current[index + 1].focus();
       }
+    } else {
+      // If the input is invalid, clear the field
+      otpRefs.current[index].value = "";
     }
   };
+
+
 
   const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace") {
@@ -102,7 +110,7 @@ export default function Login() {
                     <option value="53">58</option>
                     <option value="53">59</option>
                   </select>
-                  <input type="text" placeholder="Phone number" className="p-3 border rounded flex-grow dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="numbe" placeholder="Phone number" className="p-3 border rounded flex-grow dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </form>
             )}
@@ -136,7 +144,17 @@ export default function Login() {
             <form className="space-y-4">
               <div className="flex justify-around gap-2">
                 {[...Array(4)].map((_, index) => (
-                  <input key={index} type="text" maxLength={1} className="w-12 h-12 text-center text-lg border rounded dark:bg-gray-800 dark:border-gray-700" ref={(el) => (otpRefs.current[index] = el as HTMLInputElement)} onChange={(e) => handleOTPChange(index, e)} onKeyDown={(e) => handleKeyDown(index, e as React.KeyboardEvent<HTMLInputElement>)} />
+                  <input
+                    key={index}
+                    type="text" // Use type="text" to handle input restrictions fully
+                    maxLength={1}
+                    className="w-12 h-12 text-center text-lg border rounded dark:bg-gray-800 dark:border-gray-700"
+                    ref={(el) => {
+                      if (el) otpRefs.current[index] = el;
+                    }}
+                    onChange={(e) => handleOTPChange(index, e)}
+                    onKeyDown={(e) => handleKeyDown(index, e as React.KeyboardEvent<HTMLInputElement>)}
+                  />
                 ))}
               </div>
             </form>
