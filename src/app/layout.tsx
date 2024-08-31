@@ -4,6 +4,8 @@ import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import TopHeader from "@/components/TopHeader";
+import Footer from "@/components/Footer";
+import Test from "@/components/Test";
 import TopNextNavbar from "@/components/TopNextNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,6 +30,7 @@ export default function RootLayout({
             <TopNextNavbar />
           </div>
           <main>{children}</main>
+          <Footer /> 
         </ThemeProvider>
       </body>
     </html>
