@@ -26,8 +26,7 @@ export default function RootLayout({
           <ThemeSwitcher />
           <TopHeader />
           <main>{children}</main>
-          <Footer />
-          {/* <Test /> */}
+          <Footer /> 
         </ThemeProvider>
       </body>
     </html>
