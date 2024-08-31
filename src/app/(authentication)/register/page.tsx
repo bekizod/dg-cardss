@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { FaMobileAlt, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function Login() {
+export default function Register() {
   const [loginMethod, setLoginMethod] = useState<"phone" | "email" | null>(null);
   const [selectedCountryCode, setSelectedCountryCode] = useState("+968");
   const [selectedPhonePrefix, setSelectedPhonePrefix] = useState("__");
@@ -13,7 +14,7 @@ export default function Login() {
       <div className="bg-slate-50 dark:bg-gray-900 dark:text-gray-100 p-8 rounded shadow-lg w-full max-w-xl">
         {/* Login Header */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold">LOG IN</h2>
+          <h2 className="text-2xl font-bold">Register</h2>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
             <p className="text-sm mx-2">Choose your login method</p>
@@ -23,12 +24,12 @@ export default function Login() {
 
         {/* Conditional Rendering for Login Method */}
         {!loginMethod && (
-          <motion.div className="space-y-4 flex flex-row justify-between" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 bg-green-600 text-white py-3 flex items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <FaPhoneAlt className="mr-2" /> Phone Number
+          <motion.div className="flex flex-row justify-between text-lg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 py-3 bg-green-600 text-white flex flex-col gap-3 items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <FaMobileAlt className="text-3xl" /> Phone Number
             </motion.button>
-            <motion.button onClick={() => setLoginMethod("email")} className="flex-1 bg-green-600 text-white py-3 flex items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <FaEnvelope className="mr-2" /> Email
+            <motion.button onClick={() => setLoginMethod("email")} className="flex-1 py-3 bg-green-600 text-white flex flex-col gap-3 items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <FaEnvelope className="text-3xl" /> Email
             </motion.button>
           </motion.div>
         )}
@@ -43,7 +44,6 @@ export default function Login() {
                 Email
               </button>
             </div>
-
             {loginMethod === "phone" && (
               <form className="space-y-4">
                 <div className="flex ">
@@ -69,7 +69,6 @@ export default function Login() {
                 </div>
               </form>
             )}
-
             {loginMethod === "email" && (
               <form className="space-y-4">
                 <div className="relative">
@@ -78,19 +77,20 @@ export default function Login() {
                 </div>
               </form>
             )}
+            <p className="text-center mt-6 text-gray-500 dark:text-gray-400">By accepting our term and policies</p>
 
             <motion.button className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              Log In
+              Register
             </motion.button>
           </>
         )}
 
         {/* Register Prompt */}
         <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
-          Don&apos;t have an account?{" "}
-          <a href="#" className="text-green-600">
-            Register now.
-          </a>
+          Have Already an account?
+          <Link href="/login" className="text-green-600">
+            Login now.
+          </Link>
         </p>
       </div>
     </div>
