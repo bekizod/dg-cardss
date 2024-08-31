@@ -9,8 +9,8 @@ export default function Login() {
   const [selectedPhonePrefix, setSelectedPhonePrefix] = useState("__");
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800">
-      <div className="bg-white dark:bg-gray-900 dark:text-gray-100 p-8 rounded shadow-lg w-full max-w-xl">
+    <div className="flex justify-center items-center min-h-screen  dark:bg-gray-800">
+      <div className="bg-slate-50 dark:bg-gray-900 dark:text-gray-100 p-8 rounded shadow-lg w-full max-w-xl">
         {/* Login Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">LOG IN</h2>
@@ -24,10 +24,10 @@ export default function Login() {
         {/* Conditional Rendering for Login Method */}
         {!loginMethod && (
           <motion.div className="space-y-4 flex flex-row justify-between" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <motion.button onClick={() => setLoginMethod("phone")} className="w-1/2 bg-green-600 text-white py-3 flex items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 bg-green-600 text-white py-3 flex items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <FaPhoneAlt className="mr-2" /> Phone Number
             </motion.button>
-            <motion.button onClick={() => setLoginMethod("email")} className="w-1/2 bg-green-600 text-white py-3 flex items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button onClick={() => setLoginMethod("email")} className="flex-1 bg-green-600 text-white py-3 flex items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <FaEnvelope className="mr-2" /> Email
             </motion.button>
           </motion.div>
@@ -46,7 +46,7 @@ export default function Login() {
 
             {loginMethod === "phone" && (
               <form className="space-y-4">
-                <div className="flex space-x-2">
+                <div className="flex ">
                   <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="p-3 border rounded flex-shrink-0  dark:bg-gray-800 dark:border-gray-700">
                     <option value="+968">+968</option>
                     <option value="+971">+971</option>
