@@ -74,7 +74,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen dark:bg-gray-800">
+    <div className="flex justify-center items-center min-h-screen dark:bg-gray-800 px-2">
       <div className="bg-slate-50 dark:bg-gray-900 dark:text-gray-100 p-8 rounded shadow-lg w-full max-w-xl">
         {/* Login Header */}
         <div className="text-center mb-6">
@@ -88,7 +88,7 @@ export default function Login() {
 
         {/* Conditional Rendering for Login Method */}
         {!loginMethod && (
-          <motion.div className="flex flex-row justify-between text-lg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <motion.div className="flex flex-row justify-between text-lg " initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 py-3 bg-green-600 text-white flex flex-col gap-3 items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <FaMobileAlt className="text-3xl" /> Phone Number
             </motion.button>
@@ -111,26 +111,28 @@ export default function Login() {
 
             {loginMethod === "phone" && (
               <div className="space-y-4">
-                <div className="flex">
-                  <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="p-3 border rounded flex-shrink-0 dark:bg-gray-800 dark:border-gray-700">
+                <div className="flex flex-row items-center  ">
+                  <select value={selectedCountryCode} onChange={(e) => setSelectedCountryCode(e.target.value)} className="border  rounded dark:bg-gray-800 dark:border-gray-700 text-xs md:text-lg py-3 w-14 md:w-28 lg:w-40">
                     <option value="+968">+968</option>
                     <option value="+971">+971</option>
-                    <option value="+966">+965</option>
-                    <option value="+973">+968</option>
+                    <option value="+966">+966</option>
+                    <option value="+973">+973</option>
                   </select>
-                  <select value={selectedPhonePrefix} onChange={(e) => setSelectedPhonePrefix(e.target.value)} className="p-3 border rounded flex-shrink-0 dark:bg-gray-800 dark:border-gray-700">
+
+                  <select value={selectedPhonePrefix} onChange={(e) => setSelectedPhonePrefix(e.target.value)} className="border rounded dark:bg-gray-800 dark:border-gray-700 text-xs py-3 w-10 md:text-lg  md:w-28 lg:w-32">
                     <option>__</option>
                     <option value="50">50</option>
                     <option value="51">51</option>
                     <option value="52">52</option>
                     <option value="53">54</option>
-                    <option value="53">55</option>
-                    <option value="53">56</option>
-                    <option value="53">57</option>
-                    <option value="53">58</option>
-                    <option value="53">59</option>
+                    <option value="54">55</option>
+                    <option value="55">56</option>
+                    <option value="56">57</option>
+                    <option value="57">58</option>
+                    <option value="58">59</option>
                   </select>
-                  <input type="number" required placeholder="Phone number" className="p-3 border rounded flex-grow dark:bg-gray-800 dark:border-gray-700" />
+
+                  <input type="number" required placeholder="Phone number" className="text-xs md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full" />
                 </div>
               </div>
             )}
@@ -139,7 +141,7 @@ export default function Login() {
               <div className="space-y-4">
                 <div className="relative">
                   <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input type="email" required placeholder="Email" className="w-full p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+                  <input type="email" required placeholder="Email" className="w-full p-3 pl-10  border rounded dark:bg-gray-800 dark:border-gray-700" />
                 </div>
               </div>
             )}

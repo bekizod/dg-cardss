@@ -37,7 +37,7 @@ export default function TopNextNavbar() {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center px-6 py-4 md:px-12 md:py-5 bg-white dark:bg-slate-950">
+    <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* For Large Devices: Logo, Search, User/Cart */}
       <div className="hidden lg:flex gap-24 items-center w-full">
         {/* Logo Section */}
