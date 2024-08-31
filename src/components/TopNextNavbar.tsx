@@ -7,43 +7,7 @@ import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
-import {sideNav as tabs} from "../utils/data"
-
-const cardData = [
-  { id: 1, title: "Card Title 1", content: "Card content goes here.", category: "Profile", image: "https://via.placeholder.com/150" },
-  { id: 2, title: "Card Title 2", content: "Card content goes here.", category: "Orders", image: "https://via.placeholder.com/150" },
-  { id: 3, title: "Card Title 3", content: "Card content goes here.", category: "Favorites", image: "https://via.placeholder.com/150" },
-  { id: 4, title: "Card Title 4", content: "Card content goes here.", category: "Search", image: "https://via.placeholder.com/150" },
-  { id: 5, title: "Card Title 5", content: "Card content goes here.", category: "Electrical Appliances", image: "https://via.placeholder.com/150" },
-  { id: 6, title: "Card Title 6", content: "Card content goes here.", category: "Orders", image: "https://via.placeholder.com/150" },
-  { id: 7, title: "Card Title 7", content: "Card content goes here.", category: "Favorites", image: "https://via.placeholder.com/150" },
-  { id: 8, title: "Card Title 8", content: "Card content goes here.", category: "Search", image: "https://via.placeholder.com/150" },
-  { id: 9, title: "Card Title 9", content: "Card content goes here.", category: "Settings", image: "https://via.placeholder.com/150" },
-  { id: 10, title: "Card Title 10", content: "Card content goes here.", category: "Electrical Appliances", image: "https://via.placeholder.com/150" },
-  { id: 11, title: "Card Title 11", content: "Card content goes here.", category: "Wishlist", image: "https://via.placeholder.com/150" },
-  { id: 12, title: "Card Title 12", content: "Card content goes here.", category: "Discover", image: "https://via.placeholder.com/150" },
-  { id: 13, title: "Card Title 13", content: "Card content goes here.", category: "Electrical Appliances", image: "https://via.placeholder.com/150" },
-  { id: 14, title: "Card Title 14", content: "Card content goes here.", category: "Recent", image: "https://via.placeholder.com/150" },
-  { id: 15, title: "Card Title 15", content: "Card content goes here.", category: "Profile", image: "https://via.placeholder.com/150" },
-  { id: 16, title: "Card Title 16", content: "Card content goes here.", category: "Orders", image: "https://via.placeholder.com/150" },
-  { id: 17, title: "Card Title 17", content: "Card content goes here.", category: "Favorites", image: "https://via.placeholder.com/150" },
-  { id: 18, title: "Card Title 18", content: "Card content goes here.", category: "Search", image: "https://via.placeholder.com/150" },
-  { id: 19, title: "Card Title 19", content: "Card content goes here.", category: "Settings", image: "https://via.placeholder.com/150" },
-  { id: 20, title: "Card Title 20", content: "Card content goes here.", category: "Cart", image: "https://via.placeholder.com/150" },
-  { id: 21, title: "Card Title 21", content: "Card content goes here.", category: "Wishlist", image: "https://via.placeholder.com/150" },
-  { id: 22, title: "Card Title 22", content: "Card content goes here.", category: "Discover", image: "https://via.placeholder.com/150" },
-  { id: 23, title: "Card Title 23", content: "Card content goes here.", category: "Notifications", image: "https://via.placeholder.com/150" },
-  { id: 24, title: "Card Title 24", content: "Card content goes here.", category: "Recent", image: "https://via.placeholder.com/150" },
-  { id: 25, title: "Card Title 25", content: "Card content goes here.", category: "Profile", image: "https://via.placeholder.com/150" },
-  { id: 26, title: "Card Title 26", content: "Card content goes here.", category: "Orders", image: "https://via.placeholder.com/150" },
-  { id: 27, title: "Card Title 27", content: "Card content goes here.", category: "Favorites", image: "https://via.placeholder.com/150" },
-  { id: 28, title: "Card Title 28", content: "Card content goes here.", category: "Search", image: "https://via.placeholder.com/150" },
-  { id: 29, title: "Card Title 29", content: "Card content goes here.", category: "Settings", image: "https://via.placeholder.com/150" },
-  { id: 30, title: "Card Title 30", content: "Card content goes here.", category: "Cart", image: "https://via.placeholder.com/150" },
-];
-
-
-  // Add up to 30 cards with different categories as needed
+import { sideNav as tabs, cardData } from "../utils/data";
 
 
 export default function TopNextNavbar() {
@@ -160,7 +124,7 @@ export default function TopNextNavbar() {
                       <motion.div key={card.id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
                         <Image src={card.image} alt={card.title} width={150} height={150} className="w-full  object-cover mb-4 rounded-md" />
                         {/* <h3 className="text-lg font-semibold mb-2">{card.title}</h3> */}
-                        <p>{card.content}</p>
+                        <p>{card.title}</p>
                       </motion.div>
                     ))}
                   </motion.div>
