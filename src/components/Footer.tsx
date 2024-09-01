@@ -94,7 +94,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm pt-3 flex flex-col items-center">
               <li className="flex items-center hover:text-slate-400">
                 <FaInfoCircle className="mr-2" />
-                <Link href="#">Our Story</Link>
+                <Link href="/our-story">Our Story</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaWallet className="mr-2" />
