@@ -36,7 +36,7 @@ const CommonQuestions = () => {
 
       <motion.div className="mb-6" variants={textVariants}>
         <h2 className="text-xl font-semibold mb-2">How can I change the mobile number registered in the Al-Saif Gallery platform?</h2>
-        <p>You can change the mobile number and address from "My Account" on the site.</p>
+        <p>You can change the mobile number and address from &quot;My Account&quot; on the site.</p>
       </motion.div>
 
       <motion.div className="mb-6" variants={textVariants}>
@@ -46,7 +46,7 @@ const CommonQuestions = () => {
 
       <motion.div className="mb-6" variants={textVariants}>
         <h2 className="text-xl font-semibold mb-2">How can I browse the &quot;Al-Saif Gallery&quot; website in English?</h2>
-        <p>If you are browsing our platform on a computer, you can switch the language by clicking on &quot;Language&quot; at the top of the browser and selecting "English." If you are using our mobile app, go to "Account" and then select "English."</p>
+        <p>If you are browsing our platform on a computer, you can switch the language by clicking on &quot;Language&quot; at the top of the browser and selecting &quot;English.&quot; If you are using our mobile app, go to "Account" and then select "English."</p>
       </motion.div>
 
       <motion.div className="mb-6" variants={textVariants}>
