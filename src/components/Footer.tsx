@@ -70,22 +70,22 @@ const Footer = () => {
             <h3 className="text-white font-bold border-b-2 pb-1 mx-16 flex justify-center">Questions and complaints</h3>
 
             {/* Whatsapp Section */}
-            <div className="flex items-center ml-10">
+            <Link href="https://wa.me/966920009017" className="flex items-center ml-10">
               <Image width={100} height={100} src="Reference_images/footer img/footer03.svg" alt="Whatsapp" className="h-6" />
               <div className="flex flex-col">
                 <span className="text-white">Whatsapp</span>
                 <span className="text-white">+966920009017</span>
               </div>
-            </div>
+            </Link>
             <hr className="mx-28 bg-gray-50 flex justify-center" />
             {/* Call Us Section */}
-            <div className="flex items-center ml-10">
+            <Link href="tel:+966920009016" className="flex items-center ml-10">
               <Image width={100} height={100} src="Reference_images/footer img/footer04.svg" alt="Call Us" className="h-6 mr-2" />
               <div className="flex flex-col">
                 <span className="text-white">Call Us</span>
                 <span className="text-white">+966920009016</span>
               </div>
-            </div>
+            </Link>
           </div>
 
           {/* Second Column */}
@@ -140,15 +140,23 @@ const Footer = () => {
             <h3 className="text-white font-bold text-center border-b-2 pb-1 mb-1 mx-24">Follow Us</h3>
             <p className="text-xs text-center">You can follow us on social media</p>
             <div className="flex justify-center space-x-4 mt-2">
-              <FaFacebookF className="text-2xl cursor-pointer" />
-              <FaTwitter className="text-2xl cursor-pointer" />
-              <FaInstagram className="text-2xl cursor-pointer" />
-              <FaSnapchatGhost className="text-2xl cursor-pointer" />
+              <Link href="https://www.facebook.com/alsaifgallery">
+                <FaFacebookF className="text-2xl cursor-pointer" />
+              </Link>
+              <Link href="https://twitter.com/alsaifgallery">
+                <FaTwitter className="text-2xl cursor-pointer" />
+              </Link>
+              <Link href="https://www.instagram.com/alsaifgallery38">
+                <FaInstagram className="text-2xl cursor-pointer" />
+              </Link>
+              <Link href="https://www.snapchat.com/add/alsaifgallery36">
+                <FaSnapchatGhost className="text-2xl cursor-pointer" />
+              </Link>
             </div>
             <h3 className="text-white font-bold text-center mt-4">Download App</h3>
             <p className="text-xs text-center">Download the app and enjoy exclusive offers</p>
             <div className="flex flex-col items-center mt-4 space-y-4">
-              <Link href="#">
+              <Link href="https://apps.apple.com/sa/app/alsaif-gallery-السيف-غاليري/id1459530502">
                 <Image
                   width={150} // Adjust width as needed
                   height={50} // Adjust height as needed
@@ -156,7 +164,7 @@ const Footer = () => {
                   alt="Download App Image 1"
                 />
               </Link>
-              <Link href="#">
+              <Link href="https://play.google.com/store/apps/details?id=com.alsaifgallery&amp;pcampaignid=web_share">
                 <Image
                   width={150} // Adjust width as needed
                   height={50} // Adjust height as needed
@@ -164,7 +172,7 @@ const Footer = () => {
                   alt="Download App Image 2"
                 />
               </Link>
-              <Link href="#">
+              <Link href="https://appgallery.huawei.com/app/C103540015">
                 <Image
                   width={150} // Adjust width as needed
                   height={50} // Adjust height as needed
