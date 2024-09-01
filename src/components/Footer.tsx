@@ -118,7 +118,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaFileContract className="mr-2" />
-                <Link href="/term-and-conditions">Terms and Conditions</Link>
+                <Link href="/terms-and-conditions">Terms and Conditions</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaQuestionCircle className="mr-2" />
