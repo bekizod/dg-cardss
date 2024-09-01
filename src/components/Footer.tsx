@@ -98,39 +98,39 @@ const Footer = () => {
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaWallet className="mr-2" />
-                <Link href="#">Loyalty Points Policy</Link>
+                <Link href="/loyalty-points-policy">Loyalty Points Policy</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaShieldAlt className="mr-2" />
-                <Link href="#">Privacy Policy</Link>
+                <Link href="/privacy-policy">Privacy Policy</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaMoneyBillWave className="mr-2" />
-                <Link href="#">Payment Method</Link>
+                <Link href="/payment-method">Payment Method</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaShippingFast className="mr-2" />
-                <Link href="#">Shipping and Delivery Information</Link>
+                <Link href="/shipping-and-delivery-information">Shipping and Delivery Information</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaShoppingCart className="mr-2" />
-                <Link href="#">How to Buy</Link>
+                <Link href="/how-to-buy">How to Buy</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaFileContract className="mr-2" />
-                <Link href="#">Terms and Conditions</Link>
+                <Link href="/term-and-conditions">Terms and Conditions</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaQuestionCircle className="mr-2" />
-                <Link href="#">FAQs</Link>
+                <Link href="/faqs">FAQs</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaArrowCircleRight className="mr-2" />
-                <Link href="#">Return Policy</Link>
+                <Link href="/return-policy">Return Policy</Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaPhone className="mr-2" />
-                <Link href="#">Warranty</Link>
+                <Link href="/warranty">Warranty</Link>
               </li>
             </ul>
           </div>
