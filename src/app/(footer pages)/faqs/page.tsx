@@ -46,7 +46,7 @@ const CommonQuestions = () => {
 
       <motion.div className="mb-6" variants={textVariants}>
         <h2 className="text-xl font-semibold mb-2">How can I browse the &quot;Al-Saif Gallery&quot; website in English?</h2>
-        <p>If you are browsing our platform on a computer, you can switch the language by clicking on &quot;Language&quot; at the top of the browser and selecting &quot;English.&quot; If you are using our mobile app, go to "Account" and then select "English."</p>
+        <p>If you are browsing our platform on a computer, you can switch the language by clicking on &quot;Language&quot; at the top of the browser and selecting &quot;English.&quot; If you are using our mobile app, go to &quot;Account&quot; and then select &quot;English.&quot;</p>
       </motion.div>
 
       <motion.div className="mb-6" variants={textVariants}>
