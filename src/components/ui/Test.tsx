@@ -1,86 +1,113 @@
-"use client";
-import { useState } from "react";
+"use client"; // Ensures this component is client-side
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-const slides = [
-  {
-    href: "/SA_en/alsaif-gallery-offers/wixsana.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Wixana-EN.jpg",
-    alt: "slide 6",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/national-day.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Green-02-EN.jpg",
-    alt: "slide 0",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/national-day-thermos.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Trams-EN.jpg",
-    alt: "slide 1",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/national-day-appliances.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/SDA-EN.jpg",
-    alt: "slide 2",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/national-day-kitchenware.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Cooking-_-serveware-EN_1.jpg",
-    alt: "slide 3",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/large-appliances-offers.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/MDA-EN_1.jpg",
-    alt: "slide 4",
-  },
-  {
-    href: "/SA_en/alsaif-gallery-offers/cooling-offers.html",
-    src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Ref-EN.jpg",
-    alt: "slide 5",
-  },
-];
+export default function Slider() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = 7; // Number of slides
 
-const Carousel = () => {
-  const [currentSlide, setCurrentSlide] = useState(3);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
+    }, 3000); // Change slide every 3 seconds
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [totalSlides]);
+
+  // Function to handle slide change
+  const goToSlide = (slideIndex: number) => {
+    setCurrentSlide(slideIndex);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  // Function to handle previous slide
+  const handlePrevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
+  };
+
+  // Function to handle next slide
+  const handleNextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
   };
 
   return (
-    <div className="carousel-root w-full overflow-hidden relative">
-      <div className="carousel-slider flex items-center">
-        <motion.div className="slider-wrapper flex" initial={{ x: `-${currentSlide * 100}%` }} animate={{ x: `-${currentSlide * 100}%` }} transition={{ duration: 0.35 }}>
-          {slides.map((slide, index) => (
-            <div key={index} className="slide flex-shrink-0 w-full">
-              <Link href={slide.href}>
-                <Image src={slide.src} alt={slide.alt} width={1920} height={1080} className="w-full" priority />
-              </Link>
+    <div className="relative w-full">
+      <div className="">
+        <div className="">
+          <div className="carousel-root">
+            <div className="carousel carousel-slider" style={{ width: "100%" }}>
+              <motion.div className="relative w-full flex overflow-hidden">
+                <motion.ul
+                  className="flex"
+                  style={{
+                    width: "100%",
+                    padding: 0,
+                    margin: 0,
+                    transition: "transform 0.35s ease-in-out",
+                    transform: `translateX(-${currentSlide * 100}%)`,
+                  }}
+                >
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/wixsana.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Wixana-EN.jpg" alt="slide 6" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/national-day.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Green-02-EN.jpg" alt="slide 0" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/national-day-thermos.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Trams-EN.jpg" alt="slide 1" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/national-day-appliances.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/SDA-EN.jpg" alt="slide 2" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/national-day-kitchenware.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Cooking-_-serveware-EN_1.jpg" alt="slide 3" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/large-appliances-offers.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/MDA-EN_1.jpg" alt="slide 4" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/cooling-offers.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Ref-EN.jpg" alt="slide 5" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                  <motion.li className="flex-shrink-0 w-full">
+                    <Link href="/SA_en/alsaif-gallery-offers/wixsana.html">
+                      <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Wixana-EN.jpg" alt="slide 6" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
+                    </Link>
+                  </motion.li>
+                </motion.ul>
+              </motion.div>
+              <button aria-label="previous slide / item" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-gray-800 p-2 rounded-full" onClick={handlePrevSlide}>
+                ‹
+              </button>
+              <button aria-label="next slide / item" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-gray-800 p-2 rounded-full" onClick={handleNextSlide}>
+                ›
+              </button>
+              <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {[...Array(totalSlides).keys()].map((index) => (
+                  <li key={index} className={`dot ${currentSlide === index ? "bg-gray-800" : "bg-gray-400"} w-3 h-3 rounded-full`} onClick={() => goToSlide(index)} />
+                ))}
+              </ul>
             </div>
-          ))}
-        </motion.div>
-        <button type="button" aria-label="previous slide" className="control-arrow control-prev absolute left-0 p-2 bg-gray-600 text-white disabled:opacity-50" onClick={prevSlide} disabled={currentSlide === 0}>
-          Previous
-        </button>
-        <button type="button" aria-label="next slide" className="control-arrow control-next absolute right-0 p-2 bg-gray-600 text-white disabled:opacity-50" onClick={nextSlide} disabled={currentSlide === slides.length - 1}>
-          Next
-        </button>
+          </div>
+        </div>
       </div>
-      <ul className="control-dots flex justify-center mt-4">
-        {slides.map((_, index) => (
-          <li key={index} className={`dot mx-1 cursor-pointer ${index === currentSlide ? "selected" : ""}`} onClick={() => setCurrentSlide(index)}>
-            <button type="button" className="w-4 h-4 rounded-full bg-gray-400 hover:bg-gray-700" aria-label={`slide item ${index + 1}`} />
-          </li>
-        ))}
-      </ul>
+
+     
     </div>
   );
-};
-
-export default Carousel;
+}

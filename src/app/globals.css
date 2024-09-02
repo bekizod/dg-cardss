@@ -12,7 +12,7 @@ body {
 }
 /* Base styling for the scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
   /* Width of the scrollbar */
 }
 
