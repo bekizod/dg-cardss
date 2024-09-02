@@ -78,7 +78,12 @@ export default function HomeHero() {
         </motion.div>
       </div>
 
-      <div></div>
+      <div>
+        <ScrollableBanner />
+      </div>
+
+
+      
       <div></div>
       <div></div>
       <div></div>

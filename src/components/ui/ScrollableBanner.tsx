@@ -19,6 +19,16 @@ export default function ScrollableBanner() {
     { href: "/SA_en/serveware/traies.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Traies.png", alt: "banner 9" },
     { href: "/SA_en/electrical-appliances/electric-bakers.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Bread-Makers_1.png", alt: "banner 10" },
   ];
+const banners2 = [
+  { href: "/SA_en/electrical-appliances/food-chopper.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Grinder.png", alt: "banner 0" },
+  { href: "/SA_en/electrical-appliances/sandwich-waffle-maker.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Waffle-_-Sandwich-Maker.png", alt: "banner 1" },
+  { href: "/SA_en/electrical-appliances/electric-kettles.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Kettle.png", alt: "banner 2" },
+  { href: "/SA_en/kitchenware/cake-mould-ovenpan.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Cake-Pans-_-Baking-Trays.png", alt: "banner 3" },
+  { href: "/SA_en/electrical-appliances/stove.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Electric-Stoves.png", alt: "banner 4" },
+  { href: "/SA_en/electrical-appliances/grill.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Grills.png", alt: "banner 5" },
+  { href: "/SA_en/serveware/teaset.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Teaset.png", alt: "banner 6" },
+  { href: "/SA_en/serveware/incense-holders.html", src: "https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Incense-Holders.png", alt: "banner 7" }
+];
 
   const itemsPerSlide = 6;
   const totalSlides = Math.ceil(banners.length / itemsPerSlide);
