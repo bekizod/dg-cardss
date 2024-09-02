@@ -13,8 +13,8 @@ export default function HomeHero() {
       <motion.div className="py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
         <Image
           src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Header-EN_1.jpg"
-          width={700}
-          height={40}
+          width={1000}
+          height={1000}
           alt="banner"
           className=" w-full rounded-2xl" // Add the rounded class here
         />
