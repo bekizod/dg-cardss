@@ -10,13 +10,16 @@ import BannerSection from "./BannerHero1";
 export default function HomeHero() {
   return (
     <div className="">
-      <motion.div style={{ position: "relative", width: "100%" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-        <div id="row_1_column_1_banner_1" className="">
-          <div className="" style={{ boxShadow: "none" }}>
-            <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Header-EN_1.jpg" width={1000} height={1000} alt="banner" loading="eager" fetchPriority="high" style={{ width: "100%" }} className="py-3 rounded-xl" />
-          </div>
-        </div>
+      <motion.div className="py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        <Image
+          src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Header-EN_1.jpg"
+          width={700}
+          height={40}
+          alt="banner"
+          className=" w-full rounded-2xl" // Add the rounded class here
+        />
       </motion.div>
+
       <div>
         <Slider />
       </div>

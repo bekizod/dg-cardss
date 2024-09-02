@@ -37,15 +37,15 @@ export default function Home() {
   return (
     <main className="pt-[124px]">
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-10">
-        <ul className="flex justify-center space-x-8 p-3">
+        <ul className="flex justify-center space-x-8 p-1">
           {["All", "ElectricalAppliance", "Kitchenware", "Serveware", "HomeAppliance"].map((tab) => (
-            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-green-500 text-white" : "bg-slate-400 text-white"}`} onClick={() => handleTabClick(tab)}>
+            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-green-500 text-white" : "bg-zinc-200 text-black"}`} onClick={() => handleTabClick(tab)}>
               {tab}
             </li>
           ))}
         </ul>
       </nav>
-      <div className="container mx-auto mt-14 px-4">{renderContent()}</div>
+      <div className="container mx-auto mt-10 px-4">{renderContent()}</div>
     </main>
   );
 }

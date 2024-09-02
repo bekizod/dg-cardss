@@ -34,11 +34,10 @@ export default function Slider() {
 
   return (
     <div className="relative w-full">
-      <div className="">
-        <div className="">
+      
           <div className="carousel-root">
             <div className="carousel carousel-slider" style={{ width: "100%" }}>
-              <motion.div className="relative w-full flex overflow-hidden">
+              <motion.div className="relative rounded-2xl w-full flex overflow-hidden">
                 <motion.ul
                   className="flex"
                   style={{
@@ -102,9 +101,7 @@ export default function Slider() {
                   <li key={index} className={`dot ${currentSlide === index ? "bg-gray-800" : "bg-gray-400"} w-3 h-3 rounded-full`} onClick={() => goToSlide(index)} />
                 ))}
               </ul>
-            </div>
-          </div>
-        </div>
+            </div> 
       </div>
 
      

@@ -28,7 +28,7 @@ export default function ScrollableBanner() {
   const slides = Array.from({ length: totalSlides }, (_, slideIndex) => banners.slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide));
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-gray-300">
+    <div className="relative w-full overflow-hidden rounded-2xl">
       <motion.div className="relative flex overflow-hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <motion.ul
           className="flex"
