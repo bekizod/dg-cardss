@@ -63,7 +63,7 @@ export default function Serveware() {
         </h2>
       </div>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex gap-4">
         <div className="w-1/3 p-2">
           <a href="/SA_en/serveware/dallah-teapots.html" className="block">
             <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-ENG_7.jpg" alt="banner" layout="responsive" width={500} height={300} className="rounded-2xl border border-gray-300" priority fetchPriority="high" />
