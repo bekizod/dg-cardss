@@ -36,6 +36,86 @@ export default function HomeHero() {
       <div className="">
         <BannerSection />
       </div>
+
+      <div>
+        <motion.div className="flex py-4 gap-2.5">
+          <div className="relative w-1/4">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/alsaif-gallery-offers/less-than-99.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/99-EN_3.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-1/4">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/alsaif-gallery-offers/less-than-199.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/199-EN_3.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-1/4">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/alsaif-gallery-offers/less-than-299.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/299-EN_3.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-1/4">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/alsaif-gallery-offers/less-than-399.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/399-EN_3.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>
+        <h1>Best Brands</h1>
+        <motion.div className="flex py-2 gap-2">
+          <div className="relative w-1/3">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/electrical-appliances.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Edison_4.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-1/3">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/kitchenware/pots.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Tornado_4.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="relative w-1/3">
+            <div className="PageBuilder_intersection_div__OvZlh">
+              <div className="Banner_container__VNJY5">
+                <Link href="/SA_en/serveware.html">
+                  <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Alsaif_4.jpg" alt="banner" width={1000} height={1000} loading="lazy" fetchPriority="low" className="w-full rounded-2xl" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
