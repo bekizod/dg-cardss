@@ -1,14 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import React, { useState, useEffect, useRef } from "react";
+import { BsChevronDown, BsChevronUp, BsSortDown, BsFilter } from "react-icons/bs";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const ProductPage: React.FC = () => {
   const [isSizeOpen, setIsSizeOpen] = useState(false);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const [isBrandOpen, setIsBrandOpen] = useState(false);
   const [isMaterialOpen, setIsMaterialOpen] = useState(false);
-  const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [sortModalOpen, setSortModalOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+
+  const sortModalRef = useRef<HTMLDivElement>(null);
+  const filterModalRef = useRef<HTMLDivElement>(null);
 
   const [selectedFilters, setSelectedFilters] = useState({
     size: [] as string[],
@@ -22,6 +28,7 @@ const ProductPage: React.FC = () => {
   };
 
   const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
+  const toggleFilterModal = () => setFilterModalOpen(!filterModalOpen);
 
   const handleCheckboxChange = (category: keyof typeof selectedFilters, value: string) => {
     setSelectedFilters((prev) => {
@@ -53,8 +60,24 @@ const ProductPage: React.FC = () => {
     console.log("Checked elements:", selectedFilters);
   }, [selectedFilters]);
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (sortModalRef.current && !sortModalRef.current.contains(event.target as Node)) {
+      setSortModalOpen(false);
+    }
+    if (filterModalRef.current && !filterModalRef.current.contains(event.target as Node)) {
+      setFilterModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="container mx-auto p-4 mt-[124px] dark:bg-gray-800 dark:text-white">
+    <div className="container mx-auto p-4 mt-[124px] dark:bg-slate-900 dark:text-white">
       {/* Breadcrumb */}
       <div className="mb-4">
         <nav aria-label="breadcrumb">
@@ -77,100 +100,171 @@ const ProductPage: React.FC = () => {
       </div>
 
       {/* Main Section */}
-      <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
-        {/* Left Column - Filter Menu */}
-        <div className="w-full lg:w-1/4 p-4 bg-white dark:bg-gray-700 rounded shadow">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold">Filter by</h3>
-            <button onClick={clearAllFilters} className="text-sm text-red-600">
-              Clear All
-            </button>
-          </div>
-
-          {/* Filter Types */}
-          {[
-            { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["S", "M", "L", "XL"], category: "size" },
-            { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Red", "Blue", "Green", "Black"], category: "color" },
-            { label: "Brand", state: isBrandOpen, setter: setIsBrandOpen, options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
-            { label: "Material", state: isMaterialOpen, setter: setIsMaterialOpen, options: ["Cotton", "Wool", "Polyester"], category: "material" },
-          ].map((filter, index) => (
-            <div key={index} className="mb-4">
-              <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
-                <span className="text-lg font-medium">{filter.label}</span>
-                {filter.state ? <BsChevronUp /> : <BsChevronDown />}
-              </button>
-              {filter.state && (
-                <div className="mt-2">
-                  <ul className="space-y-2">
-                    {filter.options.map((option, idx) => (
-                      <li
-                        key={idx}
-                        className={`flex items-center space-x-2 cursor-pointer ${
-                          selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold" : "text-gray-700 dark:text-gray-300"
-                        }`}
-                        onClick={() => handleCheckboxChange(filter.category, option)}
-                      >
-                        <span>{option}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <hr className="mx-11" />
-            </div>
-          ))}
-
-          <button className="mt-4 w-full py-2 bg-blue-600 text-white dark:bg-blue-500 rounded">Show Results</button>
-        </div>
-
+      <div className="flex flex-col lg:flex-row-reverse space-y-4 lg:space-y-0 ">
         {/* Right Column - Products and Sort */}
         <div className="w-full lg:w-3/4">
           {/* Title and Product Count */}
           <div className="mb-4">
-            <h2 className="text-2xl font-bold">Products (50)</h2>
+            <h2 className="text-2xl font-bold">
+              Products <span className="font-serif px-10 text-sm">50 Products</span>
+            </h2>
           </div>
 
-          {/* Sort Button */}
-          <div className="mb-6">
-            <button onClick={toggleSortModal} className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded">
-              Sort
+          {/* Sort and Filter Buttons for Small Screens */}
+          <div className="flex flex-row justify-between space-x-2 mb-4 lg:hidden">
+            <button onClick={toggleSortModal} className="py-2 px-4 w-1/3 bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2">
+              <BsSortDown className="text-gray-700 dark:text-gray-300" />
+              <span>Sort</span>
             </button>
-            {sortModalOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg">
-                  <h3 className="text-lg font-bold mb-4">Sort by</h3>
-                  <div className="flex flex-col space-y-2">
-                    <label>
-                      <input type="radio" name="sort" value="price-asc" defaultChecked /> Price: Low to High
-                    </label>
-                    <label>
-                      <input type="radio" name="sort" value="price-desc" /> Price: High to Low
-                    </label>
-                    <label>
-                      <input type="radio" name="sort" value="newest" /> Newest
-                    </label>
-                    <label>
-                      <input type="radio" name="sort" value="popularity" /> Popularity
-                    </label>
-                  </div>
-                  <button onClick={toggleSortModal} className="mt-4 py-2 px-4 bg-blue-600 text-white dark:bg-blue-500 rounded">
-                    Close
+            <button onClick={toggleFilterModal} className="py-2 px-4 w-1/3 justify-center place-items-center text-center bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
+              <BsFilter className="text-gray-700 dark:text-gray-300" />
+              <span>Filter</span>
+            </button>
+          </div>
+
+          {/* Sort Modal */}
+          {sortModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div ref={sortModalRef} className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg">
+                <h3 className="text-lg font-bold mb-4">Sort by</h3>
+                <div className="flex flex-col space-y-2">
+                  <label>
+                    <input type="radio" name="sort" value="price-asc" defaultChecked /> Price: Low to High
+                  </label>
+                  <label>
+                    <input type="radio" name="sort" value="price-desc" /> Price: High to Low
+                  </label>
+                  <label>
+                    <input type="radio" name="sort" value="newest" /> Newest
+                  </label>
+                  <label>
+                    <input type="radio" name="sort" value="popularity" /> Popularity
+                  </label>
+                </div>
+                <button onClick={toggleSortModal} className="mt-4 py-2 px-4 bg-blue-600 text-white dark:bg-blue-500 rounded">
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Filter Modal for Small Screens */}
+          {filterModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
+              <div ref={filterModalRef} className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg w-full max-w-lg max-h-full overflow-y-auto scrollbar-hidden">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-bold">Filter by</h3>
+                  <button onClick={clearAllFilters} className="text-sm text-red-600">
+                    Clear All
                   </button>
                 </div>
+
+                {/* Filter Types */}
+                {[
+                  { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["6.5 L", "40 cm", "1.8 L", "3.5 L", "60 L", "22 L", "21 L", "9 L", "1.7 L", "3.2 لتر"], category: "size" },
+                  { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Black", "Silver", "Grey", "White", "Dark grey", "Beige", "Pink", "Light Grey", "Green", "Brown"], category: "color" },
+                  { label: "Brand", state: isBrandOpen, setter: setIsBrandOpen, options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
+                  { label: "Material", state: isMaterialOpen, setter: setIsMaterialOpen, options: ["Cotton", "Wool", "Polyester"], category: "material" },
+                ].map((filter, index) => (
+                  <div key={index} className="mb-4">
+                    <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
+                      <span className="text-lg font-medium">{filter.label}</span>
+                      {filter.state ? <BsChevronUp /> : <BsChevronDown />}
+                    </button>
+                    {filter.state && (
+                      <div className="mt-2">
+                        <ul className="space-y-2">
+                          {filter.options.map((option, idx) => (
+                            <li key={idx} className={`flex items-center space-x-2 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
+                              <span>{option}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <hr className="mx-11" />
+                  </div>
+                ))}
+
+                <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
+                  Show Results
+                </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Product Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {/* Example product cards */}
-            {Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="bg-white dark:bg-gray-700 p-4 rounded shadow">
-                <img src="/path/to/image.jpg" alt="Product" className="mb-2" />
-                <h4 className="text-lg font-bold">Product Name {index + 1}</h4>
-                <p className="text-gray-600 dark:text-gray-300">$19.99</p>
+            {Array.from({ length: 20 }).map((_, index) => (
+              <motion.div key={index} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
+                <Link href="/SA_en/edison-electric-bakery-controller-disc-40-cm-brown-2200-w-2-slots.html">
+                  <div className="block relative p-3 sm:p-4">
+                    <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+                      50% <br /> OFF
+                    </p>
+                    <div className="w-full flex justify-center items-center bg-transparent">
+                      <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
+                        <Image id="CAT17-001181" src="/side cards/side Best Categories/BC01.png" alt="Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots product image" width={200} height={100} loading="eager" fetchPriority="high" className="w-full h-auto object-contain rounded-xl" />
+                      </motion.div>
+                    </div>
+                    <h2 className="font-semibold mt-2 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots</h2>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">Edison</p>
+                    <div className="mt-2 text-center">
+                      <p className="text-sm sm:text-base font-bold text-red-500">244 SAR</p>
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>
+                      <p className="text-xs text-green-500">SAVE 244 SAR</p>
+                    </div>
+                    <motion.button whileTap={{ scale: 0.95 }} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                      Add to Cart
+                    </motion.button>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Left Column - Filter */}
+        <div className=" p-3  w-1/3 max-w-lg mx-auto my-8 hidden lg:block">
+          <div className="bg-white rounded shadow-lg p-5 dark:bg-gray-700">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Filter by</h3>
+              <button onClick={clearAllFilters} className="text-sm text-red-600">
+                Clear All
+              </button>
+            </div>
+
+            {/* Filter Types */}
+            {[
+              { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["S", "M", "L", "XL"], category: "size" },
+              { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Red", "Blue", "Green", "Black"], category: "color" },
+              { label: "Brand", state: isBrandOpen, setter: setIsBrandOpen, options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
+              { label: "Material", state: isMaterialOpen, setter: setIsMaterialOpen, options: ["Cotton", "Wool", "Polyester"], category: "material" },
+            ].map((filter, index) => (
+              <div key={index} className="mb-4">
+                <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
+                  <span className="text-lg font-medium ">{filter.label}</span>
+                  {filter.state ? <BsChevronUp /> : <BsChevronDown />}
+                </button>
+                {filter.state && (
+                  <div className="mt-2  ">
+                    <ul className="space-y-2">
+                      {filter.options.map((option, idx) => (
+                        <li key={idx} className={`flex items-center justify-center mx-12  space-x-2 hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
+                          <span>{option}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <hr className="mx-11" />
               </div>
             ))}
+
+            <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
+              Show Results
+            </button>
           </div>
         </div>
       </div>
@@ -180,262 +274,3 @@ const ProductPage: React.FC = () => {
 
 export default ProductPage;
 
-
-
-
-
-
-
-
-
-
-
-
-
-// "use client";
-// import React, { useState, useEffect } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import { BsChevronDown, BsChevronUp, BsFilter, BsSortDown } from "react-icons/bs";
-
-// const ProductPage: React.FC = () => {
-//   const [isSizeOpen, setIsSizeOpen] = useState(false);
-//   const [isColorOpen, setIsColorOpen] = useState(false);
-//   const [isBrandOpen, setIsBrandOpen] = useState(false);
-//   const [isMaterialOpen, setIsMaterialOpen] = useState(false);
-//   const [sortModalOpen, setSortModalOpen] = useState(false);
-//   const [filterModalOpen, setFilterModalOpen] = useState(false);
-
-//   const [selectedFilters, setSelectedFilters] = useState({
-//     size: [] as string[],
-//     color: [] as string[],
-//     brand: [] as string[],
-//     material: [] as string[],
-//   });
-
-//   const toggleFilter = (filterSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
-//     filterSetter((prev) => !prev);
-//   };
-
-//   const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
-//   const toggleFilterModal = () => setFilterModalOpen(!filterModalOpen);
-
-//   const handleCheckboxChange = (category: keyof typeof selectedFilters, value: string) => {
-//     setSelectedFilters((prev) => {
-//       const isSelected = prev[category].includes(value);
-//       if (isSelected) {
-//         return {
-//           ...prev,
-//           [category]: prev[category].filter((item) => item !== value),
-//         };
-//       } else {
-//         return {
-//           ...prev,
-//           [category]: [...prev[category], value],
-//         };
-//       }
-//     });
-//   };
-
-//   const clearAllFilters = () => {
-//     setSelectedFilters({
-//       size: [],
-//       color: [],
-//       brand: [],
-//       material: [],
-//     });
-//   };
-
-//   useEffect(() => {
-//     console.log("Checked elements:", selectedFilters);
-//   }, [selectedFilters]);
-
-//   return (
-//     <div className="container mx-auto p-4 mt-[124px] dark:bg-gray-800 dark:text-white">
-//       {/* Mobile and Tablet Layout */}
-//       <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
-//         <div className="flex flex-col lg:hidden mb-4">
-//           {/* Title */}
-//           <div className="mb-4">
-//             <h2 className="text-2xl font-bold">Products (50)</h2>
-//           </div>
-
-//           {/* Buttons */}
-//           <div className="flex flex-row space-x-2 mb-4">
-//             <button onClick={toggleSortModal} className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
-//               <BsSortDown className="text-gray-700 dark:text-gray-300" />
-//               <span>Sort</span>
-//             </button>
-//             <button onClick={toggleFilterModal} className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
-//               <BsFilter className="text-gray-700 dark:text-gray-300" />
-//               <span>Filter</span>
-//             </button>
-//           </div>
-
-//           {/* Breadcrumb */}
-//           <div className="mb-4">
-//             <nav aria-label="breadcrumb">
-//               <ol className="flex space-x-2 text-sm">
-//                 <li>
-//                   <a href="#" className="text-gray-600 dark:text-gray-300">
-//                     Home
-//                   </a>
-//                 </li>
-//                 <li>/</li>
-//                 <li>
-//                   <a href="#" className="text-gray-600 dark:text-gray-300">
-//                     Category
-//                   </a>
-//                 </li>
-//                 <li>/</li>
-//                 <li className="text-gray-900 dark:text-gray-100">Product List</li>
-//               </ol>
-//             </nav>
-//           </div>
-
-//           {/* Product Cards */}
-//           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-//             {Array.from({ length: 5 }).map((_, index) => (
-//               <motion.div key={index} className="bg-white dark:bg-gray-700 p-4 rounded shadow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-//                 <img src="/path/to/image.jpg" alt="Product" className="mb-2" />
-//                 <h4 className="text-lg font-bold">Product Name {index + 1}</h4>
-//                 <p className="text-gray-600 dark:text-gray-300">$19.99</p>
-//               </motion.div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Desktop Layout */}
-//         <div className="flex lg:flex-row lg:space-x-4">
-//           {/* Left Column - Filter Menu */}
-//           <div className="w-full lg:w-1/4 p-4 bg-white dark:bg-gray-700 rounded shadow">
-//             <div className="flex justify-between items-center mb-4">
-//               <h3 className="text-xl font-bold">Filter by</h3>
-//               <button onClick={clearAllFilters} className="text-sm text-red-600">
-//                 Clear All
-//               </button>
-//             </div>
-
-//             {/* Filter Types */}
-//             {[
-//               { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["S", "M", "L", "XL"], category: "size" },
-//               { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Red", "Blue", "Green", "Black"], category: "color" },
-//               { label: "Brand", state: isBrandOpen, setter: setIsBrandOpen, options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
-//               { label: "Material", state: isMaterialOpen, setter: setIsMaterialOpen, options: ["Cotton", "Wool", "Polyester"], category: "material" },
-//             ].map((filter, index) => (
-//               <div key={index} className="mb-4">
-//                 <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
-//                   <span className="text-lg font-medium">{filter.label}</span>
-//                   {filter.state ? <BsChevronUp /> : <BsChevronDown />}
-//                 </button>
-//                 {filter.state && (
-//                   <div className="mt-2">
-//                     <ul className="space-y-2">
-//                       {filter.options.map((option, idx) => (
-//                         <li key={idx} className={`flex items-center space-x-2 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
-//                           <span>{option}</span>
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   </div>
-//                 )}
-//                 <hr className="mx-11" />
-//               </div>
-//             ))}
-
-//             <button className="mt-4 w-full py-2 bg-blue-600 text-white dark:bg-blue-500 rounded">Show Results</button>
-//           </div>
-
-//           {/* Right Column - Products and Sort */}
-//           <div className="flex-1 flex flex-col">
-//             {/* Title and Product Count */}
-//             <div className="mb-4">
-//               <h2 className="text-2xl font-bold">Products (50)</h2>
-//             </div>
-
-//             {/* Sort Button */}
-//             <div className="mb-6 lg:hidden flex flex-row space-x-2">
-//               <button onClick={toggleSortModal} className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
-//                 <BsSortDown className="text-gray-700 dark:text-gray-300" />
-//                 <span>Sort</span>
-//               </button>
-//               <button onClick={toggleFilterModal} className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
-//                 <BsFilter className="text-gray-700 dark:text-gray-300" />
-//                 <span>Filter</span>
-//               </button>
-//             </div>
-
-//             {/* Product Cards */}
-//             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-//               {Array.from({ length: 20 }).map((_, index) => (
-//                 <motion.div key={index} className="bg-white dark:bg-gray-700 p-4 rounded shadow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-//                   <img src="/path/to/image.jpg" alt="Product" className="mb-2" />
-//                   <h4 className="text-lg font-bold">Product Name {index + 1}</h4>
-//                   <p className="text-gray-600 dark:text-gray-300">$19.99</p>
-//                 </motion.div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Filter Modal */}
-//       <AnimatePresence>
-//         {filterModalOpen && (
-//           <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-//             <div className="bg-white dark:bg-gray-800 rounded shadow-lg p-6 max-w-sm w-full">
-//               <h3 className="text-xl font-bold mb-4">Filter Options</h3>
-//               {/* Duplicate filter menu code for modal view */}
-//               {[
-//                 { label: "Size", options: ["S", "M", "L", "XL"], category: "size" },
-//                 { label: "Color", options: ["Red", "Blue", "Green", "Black"], category: "color" },
-//                 { label: "Brand", options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
-//                 { label: "Material", options: ["Cotton", "Wool", "Polyester"], category: "material" },
-//               ].map((filter, index) => (
-//                 <div key={index} className="mb-4">
-//                   <h4 className="text-lg font-semibold mb-2">{filter.label}</h4>
-//                   <ul className="space-y-2">
-//                     {filter.options.map((option, idx) => (
-//                       <li key={idx} className={`cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
-//                         {option}
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               ))}
-//               <button onClick={clearAllFilters} className="mt-4 w-full py-2 bg-red-600 text-white dark:bg-red-500 rounded">
-//                 Clear All Filters
-//               </button>
-//               <button onClick={toggleFilterModal} className="absolute top-4 right-4 text-gray-600 dark:text-gray-300">
-//                 ×
-//               </button>
-//             </div>
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-
-//       {/* Sort Modal */}
-//       <AnimatePresence>
-//         {sortModalOpen && (
-//           <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-//             <div className="bg-white dark:bg-gray-800 rounded shadow-lg p-6 max-w-sm w-full">
-//               <h3 className="text-xl font-bold mb-4">Sort Options</h3>
-//               {/* Add sort options here */}
-//               {/* Example sort options */}
-//               <div className="flex flex-col space-y-4">
-//                 <button className="w-full py-2 bg-gray-200 dark:bg-gray-600 rounded">Price: Low to High</button>
-//                 <button className="w-full py-2 bg-gray-200 dark:bg-gray-600 rounded">Price: High to Low</button>
-//                 <button className="w-full py-2 bg-gray-200 dark:bg-gray-600 rounded">Newest First</button>
-//                 <button className="w-full py-2 bg-gray-200 dark:bg-gray-600 rounded">Best Selling</button>
-//               </div>
-//               <button onClick={toggleSortModal} className="absolute top-4 right-4 text-gray-600 dark:text-gray-300">
-//                 ×
-//               </button>
-//             </div>
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-//     </div>
-//   );
-// };
-
-// export default ProductPage;
