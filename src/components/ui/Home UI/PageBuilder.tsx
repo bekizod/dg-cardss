@@ -44,15 +44,15 @@ export default function PageBuilder() {
             </motion.li>
           </motion.ul>
         </motion.div>
-        <button aria-label="previous slide / item" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-gray-800 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
+        <button aria-label="previous slide / item" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
           ‹
         </button>
-        <button aria-label="next slide / item" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-gray-800 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
+        <button aria-label="next slide / item" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
           ›
         </button>
         <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
           {[...Array(totalSlides).keys()].map((index) => (
-            <li key={index} className={`dot ${currentSlide === index ? "bg-gray-800" : "bg-gray-400"} w-3 h-3 rounded-full`} />
+            <li key={index} className={`dot ${currentSlide === index ? "bg-green-500" : "bg-gray-400"} w-2 h-2 rounded-full`} />
           ))}
         </ul>
       </motion.div>
