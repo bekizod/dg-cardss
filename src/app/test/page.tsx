@@ -150,7 +150,7 @@ const ProductPage: React.FC = () => {
 
           {/* Filter Modal for Small Screens */}
           {filterModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
+            <div className="fixed inset-0 lg:hidden bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
               <div ref={filterModalRef} className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg w-full max-w-lg max-h-full overflow-y-auto scrollbar-hidden">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-bold">Filter by</h3>
@@ -175,7 +175,7 @@ const ProductPage: React.FC = () => {
                       <div className="mt-2">
                         <ul className="space-y-2">
                           {filter.options.map((option, idx) => (
-                            <li key={idx} className={`flex items-center space-x-2 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
+                            <li key={idx} className={`flex items-center justify-center mx-12  space-x-2 hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
                               <span>{option}</span>
                             </li>
                           ))}
@@ -237,8 +237,8 @@ const ProductPage: React.FC = () => {
 
             {/* Filter Types */}
             {[
-              { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["S", "M", "L", "XL"], category: "size" },
-              { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Red", "Blue", "Green", "Black"], category: "color" },
+              { label: "Size", state: isSizeOpen, setter: setIsSizeOpen, options: ["6.5 L", "40 cm", "1.8 L", "3.5 L", "60 L", "22 L", "21 L", "9 L", "1.7 L", "3.2 لتر"], category: "size" },
+              { label: "Color", state: isColorOpen, setter: setIsColorOpen, options: ["Black", "Silver", "Grey", "White", "Dark grey", "Beige", "Pink", "Light Grey", "Green", "Brown"], category: "color" },
               { label: "Brand", state: isBrandOpen, setter: setIsBrandOpen, options: ["Brand A", "Brand B", "Brand C"], category: "brand" },
               { label: "Material", state: isMaterialOpen, setter: setIsMaterialOpen, options: ["Cotton", "Wool", "Polyester"], category: "material" },
             ].map((filter, index) => (
