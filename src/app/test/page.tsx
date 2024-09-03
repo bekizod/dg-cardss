@@ -81,7 +81,7 @@ const ProductPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container w-[100vw] p-2 mt-[124px] dark:bg-slate-900 dark:text-white">
+    <div className="container w-[100vw]  p-2 mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="mb-4">
         <nav aria-label="breadcrumb">
