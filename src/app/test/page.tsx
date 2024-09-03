@@ -251,7 +251,7 @@ const ProductPage: React.FC = () => {
                   <div className="mt-2  ">
                     <ul className="space-y-2">
                       {filter.options.map((option, idx) => (
-                        <li key={idx} className={`flex items-center justify-center mx-12  space-x-2 hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
+                        <li key={idx} className={`flex items-center justify-center mx-12  space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
                           <span>{option}</span>
                         </li>
                       ))}
