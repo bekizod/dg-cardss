@@ -4,6 +4,7 @@ import { BsChevronDown, BsChevronUp, BsSortDown, BsFilter } from "react-icons/bs
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import MultiRangeSlider, { ChangeResult } from "multi-range-slider-react";
 
 const ProductPage: React.FC = () => {
   const [isSizeOpen, setIsSizeOpen] = useState(false);
@@ -12,10 +13,12 @@ const ProductPage: React.FC = () => {
   const [isMaterialOpen, setIsMaterialOpen] = useState(false);
   const [sortModalOpen, setSortModalOpen] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
   const sortModalRef = useRef<HTMLDivElement>(null);
   const filterModalRef = useRef<HTMLDivElement>(null);
-
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(40000);
+ 
   const [selectedFilters, setSelectedFilters] = useState({
     size: [] as string[],
     color: [] as string[],
@@ -26,7 +29,6 @@ const ProductPage: React.FC = () => {
   const toggleFilter = (filterSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
     filterSetter((prev) => !prev);
   };
-
   const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
   const toggleFilterModal = () => setFilterModalOpen(!filterModalOpen);
 
@@ -185,7 +187,33 @@ const ProductPage: React.FC = () => {
                     <hr className="mx-11" />
                   </div>
                 ))}
-
+                {/* Price Filter */}
+                <div className="mb-4">
+                  <button onClick={() => toggleFilter(setIsPriceOpen)} className="flex justify-between items-center w-full text-left">
+                    <span className="text-lg font-medium">Price</span>
+                    {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
+                  </button>
+                  {isPriceOpen && (
+                    <div className="mt-2 ">
+                      <MultiRangeSlider
+                        min={0}
+                        max={40000}
+                        step={1000}
+                        minValue={minValue}
+                        maxValue={maxValue}
+                        onInput={(e) => {
+                          setMinValue(e.minValue);
+                          setMaxValue(e.maxValue);
+                        }}
+                      />
+                      <div className="flex justify-between mt-2">
+                        <span>Min: {minValue}</span>
+                        <span>Max: {maxValue}</span>
+                      </div>
+                    </div>
+                  )}
+                  <hr className="mx-11" />
+                </div>
                 <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
                   Show Results
                 </button>
@@ -226,7 +254,7 @@ const ProductPage: React.FC = () => {
         </div>
 
         {/* Left Column - Filter */}
-        <div className=" p-3  w-1/3 max-w-lg mx-auto my-8 hidden lg:block">
+        <div className="p-3 w-1/3 max-w-lg mx-auto my-8 hidden lg:block">
           <div className="bg-white rounded shadow-lg p-5 dark:bg-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Filter by</h3>
@@ -244,14 +272,14 @@ const ProductPage: React.FC = () => {
             ].map((filter, index) => (
               <div key={index} className="mb-4">
                 <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
-                  <span className="text-lg font-medium ">{filter.label}</span>
+                  <span className="text-lg font-medium">{filter.label}</span>
                   {filter.state ? <BsChevronUp /> : <BsChevronDown />}
                 </button>
                 {filter.state && (
-                  <div className="mt-2  ">
+                  <div className="mt-2">
                     <ul className="space-y-2">
                       {filter.options.map((option, idx) => (
-                        <li key={idx} className={`flex items-center justify-center mx-12  space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
+                        <li key={idx} className={`flex items-center justify-center mx-12 space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category].includes(option) ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category, option)}>
                           <span>{option}</span>
                         </li>
                       ))}
@@ -261,6 +289,34 @@ const ProductPage: React.FC = () => {
                 <hr className="mx-11" />
               </div>
             ))}
+
+            {/* Price Filter */}
+            <div className="mb-4">
+              <button onClick={() => toggleFilter(setIsPriceOpen)} className="flex justify-between items-center w-full text-left">
+                <span className="text-lg font-medium">Price</span>
+                {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
+              </button>
+              {isPriceOpen && (
+                <div className="mt-2 ">
+                  <MultiRangeSlider
+                    min={0}
+                    max={40000}
+                    step={1000}
+                    minValue={minValue}
+                    maxValue={maxValue}
+                    onInput={(e) => {
+                      setMinValue(e.minValue);
+                      setMaxValue(e.maxValue);
+                    }}
+                  />
+                  <div className="flex justify-between mt-2">
+                    <span>Min: {minValue}</span>
+                    <span>Max: {maxValue}</span>
+                  </div>
+                </div>
+              )}
+              <hr className="mx-11" />
+            </div>
 
             <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
               Show Results
@@ -273,4 +329,22 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// components/Cart.tsx
+
+
 
