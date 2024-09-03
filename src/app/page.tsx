@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { FaHome, FaPlug, FaBlender, FaUtensils, FaHouseUser } from "react-icons/fa";
-import Carousel from "@/components/ui/Test";
 import ElectricalAppliance from "@/components/ui/Test1";
 import HomeHero from "@/components/ui/HomeHero";
 import KitchenWare from "@/components/ui/Test2";
@@ -9,6 +8,7 @@ import Serveware from "@/components/ui/Test3";
 import HomeAppliance from "@/components/ui/Test4";
 
 import Image from "next/image";
+import Navigation from "@/components/Test";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("All");
