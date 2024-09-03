@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import Slider from "./Test";
+import Slider from "./Slider";
 import ScrollableBanner from "./ScrollableBanner";
 import BannerSection from "./BannerHero1";
 import ProductSlider from "./ProductCarousel";

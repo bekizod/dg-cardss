@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import { FaHome, FaPlug, FaBlender, FaUtensils, FaHouseUser } from "react-icons/fa";
-import ElectricalAppliance from "@/components/ui/Test1";
-import HomeHero from "@/components/ui/HomeHero";
-import KitchenWare from "@/components/ui/Test2";
-import Serveware from "@/components/ui/Test3";
-import HomeAppliance from "@/components/ui/Test4";
+import ElectricalAppliance from "@/components/ui/Home UI/PageBuilder";
+import HomeHero from "@/components/ui/Home UI/HomeHero";
+import KitchenWare from "@/components/ui/Home UI/KitchenWare";
+import Serveware from "@/components/ui/Home UI/Serveware";
+import HomeAppliance from "@/components/ui/Home UI/HomeAppliance";
 
 import Image from "next/image";
 import Navigation from "@/components/Test";
