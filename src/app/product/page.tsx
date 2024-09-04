@@ -1,16 +1,28 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
+import Slider from "@/components/ui/Home UI/Slider";
+import ProductCarousel from "@/components/ui/Home UI/ProductCarousel";
 const ProductPage = () => {
   const [activeTab, setActiveTab] = useState("description");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [purchaseOption, setPurchaseOption] = useState("purchase-now");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  const slides = ["/side cards/side Best Categories/BC03.png", "/side cards/side Best Categories/BC04.png", "/side cards/side Best Categories/BC05.png"];
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+  };
   const handleAddToCart = () => {
     setIsModalOpen(true);
   };
@@ -18,16 +30,58 @@ const ProductPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  // Number of slides
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, 5000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [slides.length]);
   return (
-    <div className="container mx-auto flex flex-col space-y-8 p-2 lg:p-5 mt-[124px] max-w-screen-xl">
+    <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
-        <div className="flex-shrink-0 lg:w-1/3 w-full">
-          <motion.div className="rounded-2xl overflow-hidden" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <Image src="/path-to-your-image.jpg" alt="Product Image" width={400} height={400} className="rounded-2xl" priority fetchPriority="high" />
-          </motion.div>
-          {/* Add your Swiper slider here */}
+        <div className="relative w-full lg:w-1/3">
+          {/* Carousel wrapper */}
+          <div className="relative h-72 overflow-hidden rounded-lg lg:h-96">
+            {slides.map((src, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0  transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "300px" }} // Fixed height
+              >
+                <Image
+                  src={src}
+                  alt={`slide ${index}`}
+                  layout="intrinsic" // Adjust layout to maintain original dimensions
+                  width={700} // Decrease the width as needed
+                  height={700} // Fixed height
+                  objectFit="contain" // Ensure the image scales without stretching
+                  className="block rounded-2xl px-10"
+                />
+              </div>
+            ))}
+          </div>
+          {/* Slider controls */}
+          <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToPrevious}>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500 dark:bg-green-500 group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+              <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
+              </svg>
+              <span className="sr-only">Previous</span>
+            </span>
+          </button>
+          <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToNext}>
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500 dark:bg-green-500 group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+              <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
+              </svg>
+              <span className="sr-only">Next</span>
+            </span>
+          </button>
         </div>
 
         {/* Description Section */}
