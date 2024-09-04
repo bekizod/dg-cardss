@@ -87,34 +87,28 @@ const ProductCarousel = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <div ref={carouselRef} className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide">
-        <motion.div className="flex gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <motion.div className="flex gap-2 py-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           {products.map((product, index) => (
-            <motion.div key={index} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -3, transition: { duration: 0.3 } }}>
-              <Link href="/SA_en/edison-electric-bakery-controller-disc-40-cm-brown-2200-w-2-slots.html">
-                <div className="block relative p-2 sm:p-3 md:p-4">
-                  <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                    50% <br /> OFF
-                  </p>
-                  <div className="w-full flex justify-center items-center bg-transparent">
-                    <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                      <Image id="CAT17-001181" src="/side cards/side Best Categories/BC01.png" alt="Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots product image" width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-auto object-contain rounded-xl" />
-                    </motion.div>
+            <div key={index} className="relative w-64 flex-shrink-0">
+              <div className="bg-white  p-4 rounded-lg shadow-lg" data-href={product.href}>
+                <Link href={product.href} passHref>
+                  <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
+                    <Image src={product.imageSrc} alt={product.alt} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-auto rounded-xl object-cover" />
+                    <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountLabel}</p>
+                    <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
+                    <p className="text-sm text-gray-600">{product.brand}</p>
+                    <div className="mt-2">
+                      <p className="text-xl font-bold text-green-500">{product.finalPrice}</p>
+                      <p className="text-sm line-through text-gray-500">{product.regularPrice}</p>
+                      <p className="text-sm text-red-500">SAVE {product.save}</p>
+                    </div>
+                    <button className="mt-2 w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Add to Cart</button>
                   </div>
-                  <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots</h2>
-                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">Edison</p>
-                  <div className="mt-1 text-center">
-                    <p className="text-sm sm:text-base font-bold text-red-500">244 SAR</p>
-                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>
-                    <p className="text-xs text-green-500">SAVE 244 SAR</p>
-                  </div>
-                  <motion.button whileTap={{ scale: 0.95 }} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                    Add to Cart
-                  </motion.button>
-                </div>
-              </Link>
-            </motion.div>
+                </Link>
+              </div>
+            </div>
           ))}
         </motion.div>
       </div>
