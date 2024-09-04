@@ -1,18 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import Slider from "@/components/ui/Home UI/Slider";
+import React from "react";
 import ProductCarousel from "@/components/ui/Home UI/ProductCarousel";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 const ProductPage = () => {
   const [activeTab, setActiveTab] = useState("description");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [purchaseOption, setPurchaseOption] = useState("purchase-now");
   const [currentIndex, setCurrentIndex] = useState(0);
+    const [rating, setRating] = useState(1);
 
   const slides = ["/side cards/side Best Categories/BC03.png", "/side cards/side Best Categories/BC04.png", "/side cards/side Best Categories/BC05.png"];
 
@@ -90,8 +92,10 @@ const ProductPage = () => {
             Product Title
           </motion.h1>
           <div className="flex flex-row gap-2 items-center">
-            <motion.div className="text-xl text-yellow-500 dark:text-yellow-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
-              ★★★★☆
+            <motion.div className="text-xl flex flex-row text-yellow-500 dark:text-yellow-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
+              {[...Array(5)].map((_, index) => (
+                <React.Fragment key={index}>{index < rating ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
+              ))}
             </motion.div>{" "}
             |
             <motion.p className="text-sm text-gray-500 dark:text-gray-400" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
@@ -290,20 +294,21 @@ const ProductPage = () => {
               <div id="dt-reviews-content" className="space-y-4">
                 <div className="flex items-center space-x-2">
                   <p className="text-gray-800 dark:text-gray-200">Ratings</p>
-                  <p className="text-lg font-bold text-gray-800 dark:text-gray-200">0</p>
+                  <p className="text-lg font-bold text-gray-800 dark:text-gray-200">{rating}</p>
                 </div>
                 <div>
-                  {[...Array(5)].map((_, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="flex space-x-1">
-                        {[...Array(5)].map((_, starIndex) => (
-                          <AiFillStar key={starIndex} className="w-6 h-6 text-yellow-500" />
-                        ))}
-                      </div>
-                      <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
-                      <p className="text-gray-800 dark:text-gray-200">0</p>
+                  {/* Render the star rating */}
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      {[...Array(5)].map((_, index) => (
+                        <React.Fragment key={index}>{index < rating ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                  {/* Render the horizontal line */}
+                  <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
+                  {/* Render the number of ratings (if needed) */}
+                  <p className="text-gray-800 dark:text-gray-200">{rating}</p>
                 </div>
               </div>
             )}
