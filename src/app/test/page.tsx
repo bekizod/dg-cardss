@@ -224,23 +224,23 @@ const ProductPage: React.FC = () => {
           )}
 
           {/* Product Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-3">
             {/* Example product cards */}
             {Array.from({ length: 20 }).map((_, index) => (
-              <motion.div key={index} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
+              <motion.div key={index} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
                 <Link href="/SA_en/edison-electric-bakery-controller-disc-40-cm-brown-2200-w-2-slots.html">
-                  <div className="block relative p-3 sm:p-4">
+                  <div className="block relative p-2 sm:p-3 md:p-4">
                     <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
                       50% <br /> OFF
                     </p>
                     <div className="w-full flex justify-center items-center bg-transparent">
                       <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                        <Image id="CAT17-001181" src="/side cards/side Best Categories/BC01.png" alt="Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots product image" width={200} height={100} loading="eager" fetchPriority="high" className="w-full h-auto object-contain rounded-xl" />
+                        <Image id="CAT17-001181" src="/side cards/side Best Categories/BC01.png" alt="Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots product image" width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-auto object-contain rounded-xl" />
                       </motion.div>
                     </div>
-                    <h2 className="font-semibold mt-2 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots</h2>
+                    <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">Edison Electric Bakery, Controller Disc 40 cm Brown 2200 W, 2-Slots</h2>
                     <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">Edison</p>
-                    <div className="mt-2 text-center">
+                    <div className="mt-1 text-center">
                       <p className="text-sm sm:text-base font-bold text-red-500">244 SAR</p>
                       <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>
                       <p className="text-xs text-green-500">SAVE 244 SAR</p>
