@@ -10,6 +10,7 @@ import BannerSection from "./BannerHero1";
 import ProductSlider from "./ProductCarousel";
 import ProductCarousel from "./ProductCarousel";
 import ScrollableBanner2 from "./ScrollableBanner2";
+import OffersCountdown from "./OffersCountdown";
 export default function HomeHero() {
   return (
     <div className="">
@@ -34,8 +35,14 @@ export default function HomeHero() {
       </motion.div>
 
       <div>
+        <OffersCountdown />
+      </div>
+      
+      <div>
         <ScrollableBanner />
       </div>
+
+      
       <div className="">
         <BannerSection />
       </div>
