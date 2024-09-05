@@ -65,7 +65,7 @@ export default function TopNextNavbar() {
             <span className="hidden md:inline">Account/Login</span>
           </Link>
           <div className="hidden md:block">|</div>
-          <Link href="#" className="flex items-center gap-2 text-sm cursor-pointer">
+          <Link href="/cart" className="flex items-center gap-2 text-sm cursor-pointer">
             <MdOutlineShoppingCart className="text-green-500" />
             <span className="hidden md:inline">Cart</span>
           </Link>
