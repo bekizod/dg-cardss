@@ -13,7 +13,7 @@ const Footer = () => {
   const pathname = usePathname();
   const navItems = [
     { name: "Home", icon: <FaHome />, href: "/" },
-    { name: "Categories", icon: <FaList />, href: "/categories" },
+    { name: "Categories", icon: <FaList />, href: "/menu" },
     { name: "Cart", icon: <FaShoppingCart />, href: "/cart" },
     { name: "Offers", icon: <FaTag />, href: "/offers" },
     { name: "Account", icon: <FaUser />, href: "/account" },
@@ -27,7 +27,7 @@ const Footer = () => {
   ];
   const [active, setActive] = useState(0);
   return (
-    <footer className="pb-16 lg:hidden">
+    <footer className=" pb-16 lg:pb-0">
       <div className="bg-gray-100 dark:bg-slate-600 py-3 hidden lg:block ">
         <div className="flex flex-row justify-around ">
           <div className="flex flex-row gap-3 items-center">
@@ -223,11 +223,11 @@ const Footer = () => {
         </div>
       </main>
 
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-300 border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div className="lg:hidden  fixed bottom-0 left-0 right-0 z-50 bg-gray-300 border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="grid grid-cols-5 h-16 max-w-lg mx-auto">
           {navItems.map((item) => (
             <Link key={item.name} href={item.href}>
-              <motion.div className={`flex flex-col items-center justify-center p-2 transition-transform duration-300 ${pathname === item.href ? "text-green-600 dark:text-green-400" : "text-gray-500 dark:text-gray-400"} ${pathname === item.href ? "bg-white dark:bg-slate-700 rounded-full shadow-lg" : ""}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <motion.div className={`flex flex-col items-center justify-center p-3 transition-transform duration-300 ${pathname === item.href ? "text-green-600 dark:text-green-400 bg-[#ffffff5d] dark:bg-slate-700 rounded-full shadow-xl translate-y-[-26px]" : "text-gray-500 dark:text-gray-400"}`} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
                 {item.icon}
                 <span className="text-xs mt-1">{item.name}</span>
               </motion.div>
