@@ -24,7 +24,7 @@ const Page = () => {
       <div className="w-1/4 flex  flex-col border-r border-gray-300 dark:border-slate-600 relative">
         <div className="scrollbar-hidden">
           {tabs.map((tab) => (
-            <button key={tab.id} onClick={() => handleTabClick(tab.id)} className={`flex items-center gap-2 text-center  py-2 justify-center ${activeTab === tab.id ? "bg-gray-300 dark:bg-slate-700 text-green-500" : "hover:bg-gray-200 dark:hover:bg-slate-600"}`}>
+            <button key={tab.id} onClick={() => handleTabClick(tab.id)} className={`flex items-center gap-2 text-c  py-2 justify-center ${activeTab === tab.id ? "bg-gray-300 dark:bg-slate-700 text-green-500" : "hover:bg-gray-200 dark:hover:bg-slate-600"}`}>
               <div className="flex flex-col justify-center text-center items-center">
                 <Image src={tab.icon} alt={tab.label} width={20} height={20} className="text-green-500" />
                 <span className="text-xs text-center">{tab.label}</span>
