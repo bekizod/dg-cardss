@@ -42,11 +42,11 @@ const ProgressSteps: FC = () => {
   };
 
   return (
-    <ol className="flex items-center justify-center mt-[124px] w-full">
+    <ol className="flex items-center   ustify-center mt-[124px] w-full">
       {steps.map((step, index) => (
         <li key={step.id} className="flex w-full items-center relative">
           {/* Step Circle */}
-          <div className={`flex items-center justify-center z-10 w-10 h-10 ${activeStep >= step.id ? "bg-blue-100 text-blue-600 dark:bg-blue-800" : "bg-gray-100 dark:bg-gray-700 text-gray-500"} rounded-full cursor-pointer lg:h-12 lg:w-12 shrink-0`} onClick={() => handleStepClick(step.id)}>
+          <div className={`flex items-center justify-center ustify-center z-10 w-10 h-10 ${activeStep >= step.id ? "bg-blue-100 text-blue-600 dark:bg-blue-800" : "bg-gray-100 dark:bg-gray-700 text-gray-500"} rounded-full cursor-pointer lg:h-12 lg:w-12 shrink-0`} onClick={() => handleStepClick(step.id)}>
             {renderSVG(step.svg, activeStep >= step.id)}
           </div>
 

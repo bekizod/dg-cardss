@@ -24,7 +24,7 @@ const CartComponent = () => {
   };
 
   return (
-    <div ref={cartRef} id="cart_component_container" className="flex flex-col md:flex-row justify-center mt-[124px] items-center p-4 md:px-12 lg:px-16 dark:bg-gray-900">
+    <div ref={cartRef} id="cart_component_container" className="flex flex-col md:flex-row justify-center h-screen mt-[124px] items-center p-4 md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
         {cartEmpty && (
           <motion.div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
