@@ -85,6 +85,7 @@ export default function PaymentMethods() {
 
   const handleConfirm = (data: { cardNumber: string; expiryDate: string; cvv: string }) => {
     // Handle form confirmation for Credit/Debit Card Payment
+     alert(`Selected method ID: ${selectedMethod}\nCard Number: ${data.cardNumber}\nExpiry Date: ${data.expiryDate}\nCVV: ${data.cvv}`);
     setModalData(data);
     setModalConfirmed(true); // Mark modal as confirmed
     setSelectedMethod(2); // Keep the radio button checked for Credit/Debit Card Payment
