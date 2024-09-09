@@ -9,9 +9,9 @@ import { usePathname } from "next/navigation";
 // import { steps } from "../steps"; // Extracted step data
 
 const steps = [
-  { id: 1, label: "Step 1", svg: "check" },
-  { id: 2, label: "Step 2", svg: "user" },
-  { id: 3, label: "Step 3", svg: "file" },
+  { id: 1, label: "Step 1", svg: "check", name: "Login" },
+  { id: 2, label: "Step 2", svg: "user", name: "Address"  },
+  { id: 3, label: "Step 3", svg: "file", name: "Payment"  },
 ];
 
 interface Product {
@@ -159,28 +159,25 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
       {!cartEmpty && (
         <div className="flex flex-col md:flex-row gap-3 px-3 w-full">
           {/* Product Section */}
-          <div className="flex flex-col  gap-4 md:w-2/3">
-            <div className="flex  justify-center py-4  ">
-              <div className="flex items-center ml-24 w-full max-w-4xl ">
+          <div className="flex flex-col items-center gap-6 w-full md:w-2/3 mx-auto">
+            <div className="flex justify-center py-6 w-full">
+              <div className="flex items-center justify-center w-full max-w-4xl relative">
                 {steps.map((step, index) => (
-                  <div key={step.id} className="relative flex items-center w-full">
-                    {/* Step Circle */}
-                    <div className={`flex items-center justify-center z-10 w-10 h-10 ${activeStep >= step.id ? "bg-blue-100 text-blue-600 dark:bg-blue-800" : "bg-gray-100 dark:bg-gray-700 text-gray-500"} rounded-full cursor-pointer lg:h-12 lg:w-12 shrink-0`}>
-                      {renderSVG(step.svg, activeStep >= step.id)}
+                  <div key={step.id} className="relative flex flex-col items-center w-full">
+                    {/* Step Container with Active Background */}
+                    <div className={`relative p-3 rounded-full transition-all duration-300 ease-in-out ${activeStep >= step.id ? "bg-green-100 dark:bg-green-800 shadow-lg" : "bg-transparent"}`}>
+                      {/* Step Circle */}
+                      <div className={`flex items-center justify-center z-10 w-10 h-10 lg:h-12 lg:w-12 rounded-full border-4 ${activeStep >= step.id ? "bg-green-600 text-white border-green-600 shadow-lg" : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-300 dark:border-gray-600"} transition-all duration-300 ease-in-out cursor-pointer`}>{renderSVG(step.svg, activeStep >= step.id)}</div>
                     </div>
 
-                    {/* Progress Line */}
-                    {index < steps.length - 1 && (
-                      <div className="absolute left-1/2 top-1/2 w-full h-1 -translate-x-1/2">
-                        <div className={`w-full h-full ${activeStep > step.id ? "bg-blue-100 dark:bg-blue-800" : "bg-gray-300 dark:bg-gray-500"}`}></div>
-                      </div>
-                    )}
+                    {/* Bottom Label */}
+                    <p className={`text-sm mt-2 font-medium ${activeStep >= step.id ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"}`}>{step.name}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-                      <div>{children}</div>
+            <div className="w-full">{children}</div>
           </div>
 
           {/* Order Summary */}
