@@ -48,8 +48,8 @@ const paymentMethods = [
 export default function PaymentMethods() {
   const [selectedMethod, setSelectedMethod] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<{ cardNumber: string; expiryDate: string; cvv: string } | null>(null);
   const [modalConfirmed, setModalConfirmed] = useState(false); // Track if the modal was confirmed
+  const [modalData, setModalData] = useState<{ cardNumber: string; expiryDate: string; cvv: string } | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -57,14 +57,14 @@ export default function PaymentMethods() {
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        if (!modalConfirmed) {
-          // Uncheck the radio button only if the modal was not confirmed
+        if (!modalConfirmed && selectedMethod === 2) {
+          // Uncheck the radio button only if the modal was not confirmed for Credit/Debit Card Payment
           setSelectedMethod(null);
         }
         setModalOpen(false);
       }
     },
-    [modalConfirmed]
+    [modalConfirmed, selectedMethod]
   );
 
   useEffect(() => {
@@ -75,20 +75,20 @@ export default function PaymentMethods() {
   }, [handleClickOutside]);
 
   const handleMethodClick = (id: number) => {
-    setSelectedMethod(id);
     if (id === 2) {
-      // Open modal if Credit/Debit Card Payment is selected
-      setModalOpen(true);
-      setModalConfirmed(false); // Reset modal confirmation state when opening modal
+      setModalOpen(true); // Open modal for Credit/Debit Card Payment
+      setModalConfirmed(false); // Reset confirmation state when modal opens
+    } else {
+      setSelectedMethod(id); // Select method for non-modal payment methods
     }
   };
 
   const handleConfirm = (data: { cardNumber: string; expiryDate: string; cvv: string }) => {
-    alert(`Selected method ID: ${selectedMethod}\nCard Number: ${data.cardNumber}\nExpiry Date: ${data.expiryDate}\nCVV: ${data.cvv}`);
-    // Optionally, send data to a backend or perform other actions here
+    // Handle form confirmation for Credit/Debit Card Payment
     setModalData(data);
-    setModalConfirmed(true); // Set modal confirmation state
-    setModalOpen(false);
+    setModalConfirmed(true); // Mark modal as confirmed
+    setSelectedMethod(2); // Keep the radio button checked for Credit/Debit Card Payment
+    setModalOpen(false); // Close modal after confirmation
   };
 
   return (
@@ -106,17 +106,6 @@ export default function PaymentMethods() {
             </div>
           </motion.div>
         ))}
-        <motion.div className="flex items-center gap-4 p-1 rounded-lg shadow-md cursor-pointer transition-transform duration-300 bg-gray-50 dark:bg-gray-600" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-gray-600 dark:text-gray-300">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
-          </svg>
-          <div className="flex-1">
-            <p className="text-sm dark:text-gray-300">Split into 3 payments, without fees with Tamara</p>
-          </div>
-          <div className="w-12 h-12 relative">
-            <Image src="/ic_tamara.png" alt="tamara_pay_by_instalments icon" layout="fill" objectFit="contain" />
-          </div>
-        </motion.div>
       </div>
 
       {/* Render the modal */}
