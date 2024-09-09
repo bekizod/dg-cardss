@@ -194,12 +194,15 @@ export default function Login() {
 
         {/* Register Prompt */}
         {!showOTP && (
-          <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
-            Don&apos;t have an account?
-            <Link href="/register" className="text-green-600 dark:text-green-400">
-              Register now.
-            </Link>
-          </p>
+          <>
+            <Link href="#" className="flex justify-center pt-2 ">Forgot Password?</Link>
+            <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
+              Don&apos;t have an account?
+              <Link href="/register" className="text-green-600 dark:text-green-400">
+                Register now.
+              </Link>
+            </p>
+          </>
         )}
       </div>
     </div>
