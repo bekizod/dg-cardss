@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa"; // Import icons from React Icons
 
@@ -73,9 +74,11 @@ export default function Address() {
 
           {/* Confirm Button */}
           <div className="flex justify-center mt-4">
-            <motion.button className="bg-green-500 text-white p-2 rounded-lg shadow-md hover:bg-green-600 transition duration-300 dark:bg-green-600 dark:hover:bg-green-700" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-              Confirm
-            </motion.button>
+            <Link href="/checkout1/payment">
+              <motion.button className="bg-green-500 text-white p-2 rounded-lg shadow-md hover:bg-green-600 transition duration-300 dark:bg-green-600 dark:hover:bg-green-700" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                Confirm
+              </motion.button>
+            </Link>
           </div>
         </div>
       </div>
