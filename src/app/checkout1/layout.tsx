@@ -1,10 +1,11 @@
 // app/checkout/layout.tsx
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 // import { steps } from "../steps"; // Extracted step data
 
 const steps = [
@@ -45,6 +46,7 @@ const CartProduct = () => {
     },
     // Add more products here
   ];
+
 
   return (
     <div>
@@ -118,6 +120,18 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
         return null;
     }
   };
+ const pathname = usePathname();  // Initialize useRouter
+
+    useEffect(() => {
+      if (pathname.includes("/checkout1/login") || pathname.includes("/checkout1/register")) {
+        setActiveStep(1);
+      } else if (pathname.includes("/checkout1/address")) {
+        setActiveStep(2);
+      } else if (pathname.includes("/checkout1/payment")) {
+        setActiveStep(3);
+      }
+    }, [pathname]);
+
 
   return (
     <div className="flex flex-col md:flex-row justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
@@ -146,12 +160,12 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
         <div className="flex flex-col md:flex-row gap-3 px-3 w-full">
           {/* Product Section */}
           <div className="flex flex-col  gap-4 md:w-2/3">
-            <div className="flex justify-center py-4 bg-gray-100 dark:bg-gray-700 rounded-md shadow-lg">
-              <div className="flex items-center w-full max-w-4xl gap-4">
+            <div className="flex  justify-center py-4  ">
+              <div className="flex items-center ml-24 w-full max-w-4xl ">
                 {steps.map((step, index) => (
                   <div key={step.id} className="relative flex items-center w-full">
                     {/* Step Circle */}
-                    <div className={`flex items-center justify-center z-10 w-10 h-10 ${activeStep >= step.id ? "bg-blue-100 text-blue-600 dark:bg-blue-800" : "bg-gray-100 dark:bg-gray-700 text-gray-500"} rounded-full cursor-pointer lg:h-12 lg:w-12 shrink-0`} onClick={() => handleStepClick(step.id)}>
+                    <div className={`flex items-center justify-center z-10 w-10 h-10 ${activeStep >= step.id ? "bg-blue-100 text-blue-600 dark:bg-blue-800" : "bg-gray-100 dark:bg-gray-700 text-gray-500"} rounded-full cursor-pointer lg:h-12 lg:w-12 shrink-0`}>
                       {renderSVG(step.svg, activeStep >= step.id)}
                     </div>
 
