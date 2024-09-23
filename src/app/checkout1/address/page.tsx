@@ -33,7 +33,7 @@ export default function Address() {
 
       {/* Map Modal */}
       {showMap && (
-        <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-800 bg-opacity-75 dark:bg-gray-900">
+        <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-800 bg-opacity-75 dark:bg-gray-300">
           <motion.div className="relative w-full max-w-4xl bg-white rounded-lg shadow-md p-4 dark:bg-gray-900" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }}>
             <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" onClick={() => setShowMap(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@ export default function Address() {
               </svg>
             </button>
             {/* Add your map embed or component here */}
-            <p className="text-center pt-20">Map will be displayed here</p>
+            <p className="text-center h-56">Map will be displayed here</p>
           </motion.div>
         </div>
       )}

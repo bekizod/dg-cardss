@@ -49,8 +49,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onConfirm }) => 
             <div className="flex-1">
               <p className="text-sm pb-2 dark:text-gray-300">Expiry date</p>
               <div className="flex gap-2">
-                <input className="border border-gray-300 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-1/3" dir="auto" placeholder="MM" type="tel" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} />
-                <input className="border border-gray-300 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-1/3" dir="auto" placeholder="YY" type="tel" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} />
+                <input className="border border-gray-300 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-12" dir="auto" placeholder="MM" type="tel" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} />
+                <input className="border border-gray-300 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-12" dir="auto" placeholder="YY" type="tel" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} />
               </div>
             </div>
             <div className="flex flex-col justify-center">

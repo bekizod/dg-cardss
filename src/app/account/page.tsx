@@ -36,16 +36,16 @@ const AccountPage = () => {
         )}
 
         {/* Utilities Section */}
-        <div className="utilities flex justify-evenly mb-6">
+        <div className="flex flex-col sm:flex-row justify-evenly gap-4">
           {[
             { href: "/SA_en/account/orders", imgSrc: "/orders.png", label: "Orders" },
             { href: "/SA_en/account/returns", imgSrc: "/return.png", label: "Returns" },
             { href: "/SA_en/account/favourite", imgSrc: "/favourite.png", label: "Favourite" },
           ].map((utility, index) => (
-            <Link key={index} href={utility.href}>
-              <motion.div className="utility p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex flex-col items-center cursor-pointer" whileHover={{ scale: 1.1 }}>
-                <Image src={utility.imgSrc} alt={`${utility.label} icon`} width={24} height={24} />
-                <p className="mt-2">{utility.label}</p>
+            <Link key={index} href={utility.href} className="w-full sm:w-1/3">
+              <motion.div className="bg-gray-100 dark:bg-gray-700 rounded-lg flex flex-col items-center justify-center h-full min-h-[150px] p-4 cursor-pointer" whileHover={{ scale: 1.05 }}>
+                <Image src={utility.imgSrc} alt={`${utility.label} icon`} width={32} height={32} />
+                <p className="mt-2 text-sm md:text-base text-center">{utility.label}</p>
               </motion.div>
             </Link>
           ))}
