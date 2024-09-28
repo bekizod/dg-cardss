@@ -30,7 +30,7 @@ export default function Register() {
     password: "",
     mobile: "",
   });
-
+ const [registering , setRegistering] = useState(false)
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,7 +53,7 @@ export default function Register() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setRegistering(true)
     try {
       const response = await fetch("https://alsaifgallery.onrender.com/api/v1/user/register", {
         method: "POST",
@@ -77,6 +77,8 @@ export default function Register() {
     } catch (error) {
       console.error("Error during registration:", error);
       openNotification(false," "); // Show error notification
+    } finally {
+      setRegistering(false)
     }
   };
 
@@ -144,7 +146,9 @@ export default function Register() {
           </div>
 
           <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            Register
+            {
+              registering ? "registering..." : "register"
+             }
           </motion.button>
         </form>
 

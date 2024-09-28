@@ -4,6 +4,7 @@ import { FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
 import "antd/dist/reset.css"; // Import Ant Design styles
+import Link from "next/link";
 
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
@@ -77,11 +78,15 @@ export default function Login() {
             <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
           </div>
           <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            {
-              loging ? "Loging......." : "Log In"
-            }
+            {loging ? "Loging......." : "Log In"}
           </motion.button>
         </form>
+        <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
+          Did Not have Account?{" "}
+          <Link href="/login" className="text-green-600">
+            Sign Up.
+          </Link>
+        </p>
       </div>
     </div>
   );
