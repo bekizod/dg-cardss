@@ -11,6 +11,7 @@ type NotificationType = "success" | "error" | "info" | "warning";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loging,setLoging] = useState(false)
 
   // Update the function to use the defined NotificationType and set a 3-second duration
   const openNotification = (type: NotificationType, message: string, description: string) => {
@@ -24,6 +25,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoging(true)
     try {
       const response = await fetch("https://alsaifgallery.onrender.com/api/v1/user/signIn", {
         method: "POST",
@@ -54,6 +56,8 @@ export default function Login() {
 
       // Display error notification for exceptions
       openNotification("error", "Login Error", "Something went wrong. Please try again later.");
+    } finally {
+       setLoging(false)
     }
   };
 
@@ -73,7 +77,9 @@ export default function Login() {
             <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
           </div>
           <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            Log In
+            {
+              loging ? "Loging......." : "Log In"
+            }
           </motion.button>
         </form>
       </div>
