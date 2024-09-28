@@ -83,7 +83,7 @@ export default function Login() {
         </form>
         <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Did Not have Account?{" "}
-          <Link href="/login" className="text-green-600">
+          <Link href="/register" className="text-green-600">
             Sign Up.
           </Link>
         </p>

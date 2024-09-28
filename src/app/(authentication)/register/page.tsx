@@ -145,10 +145,15 @@ export default function Register() {
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} required placeholder="Password" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
           </div>
 
+          <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
+            By creating account you accept our{" "}
+            <Link href="/privacy-policy" className="text-green-600">
+              Privacy & Policy
+            </Link>
+          </p>
+
           <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            {
-              registering ? "registering..." : "register"
-             }
+            {registering ? "registering..." : "register"}
           </motion.button>
         </form>
 
