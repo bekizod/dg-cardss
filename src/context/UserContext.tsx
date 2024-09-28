@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(token);
     setUser(user);
     Cookies.set("token", token, { expires: 7 }); // Store token in cookie for 7 days
-    Cookies.set("user", JSON.stringify(user), { expires: 7 }); // Store user info in cookie
+    // Cookies.set("user", JSON.stringify(user), { expires: 7 }); // Store user info in cookie
   };
 
   // Logout function to clear token and user

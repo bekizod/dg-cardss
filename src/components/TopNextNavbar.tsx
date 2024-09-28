@@ -8,13 +8,14 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
 import { sideNav as tabs, cardData } from "../utils/data";
-
+import { FaSignOutAlt } from "react-icons/fa";
+import { useAuth } from "@/context/UserContext";
 
 export default function TopNextNavbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<number>(1);
   const [filteredCards, setFilteredCards] = useState(cardData);
-
+  const { user, logout } = useAuth(); 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };

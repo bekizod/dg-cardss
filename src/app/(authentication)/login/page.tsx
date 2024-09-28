@@ -72,13 +72,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex  mt-[128px] justify-center items-center py-10 bg-gray-200 dark:bg-gray-800">
+    <div className="flex  mt-[128px]  justify-center items-center py-10 bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">LOG IN</h2>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <p className="text-sm mx-2">Login Make your Shoping Easy</p>
+            <p className="text-sm mx-2">Login Make your Shopping Easy</p>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
