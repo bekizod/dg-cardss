@@ -1,7 +1,7 @@
-// app/layout.tsx or app/RootLayout.tsx
-"use client"; // Ensure this component is client-side
+"use client";
 
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -9,21 +9,33 @@ import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import TopHeader from "@/components/TopHeader";
 import Footer from "@/components/Footer";
 import TopNextNavbar from "@/components/TopNextNavbar";
+import enTranslations from "@/locales/en.json";
+import arTranslations from "@/locales/ar.json";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter(); // Use `useRouter` from `next/navigation`
-  const { locale, asPath } = router;
+  const [currentLocale, setCurrentLocale] = useState("en");
+  const [translations, setTranslations] = useState(enTranslations);
+  const pathname = usePathname(); // Get the current path
 
-  // Toggle function for language
+  // Initialize locale from URL or localStorage
+  useEffect(() => {
+    const storedLocale = localStorage.getItem("locale") || "en";
+    setCurrentLocale(storedLocale);
+    setTranslations(storedLocale === "ar" ? arTranslations : enTranslations);
+  }, [pathname]);
+
+  // Handle language toggle without URL redirection
   const handleLanguageToggle = () => {
-    const newLocale = locale === "en" ? "ar" : "en";
-    router.push(`/${newLocale}${asPath}`, undefined, { locale: newLocale });
+    const newLocale = currentLocale === "en" ? "ar" : "en";
+    localStorage.setItem("locale", newLocale);
+    setTranslations(newLocale === "ar" ? arTranslations : enTranslations);
+    setCurrentLocale(newLocale);
   };
 
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <html lang={currentLocale} dir={currentLocale === "ar" ? "rtl" : "ltr"}>
       <body className={`bg-white dark:bg-black ${inter.className}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ThemeSwitcher />

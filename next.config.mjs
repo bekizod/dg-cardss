@@ -2,7 +2,7 @@
 const nextConfig = {
   i18n: {
     locales: ["en", "ar"],
-    defaultLocale: "ar",
+    defaultLocale: "en",
   },
   images: {
     domains: ["via.placeholder.com", "/", "pwa-cdn.alsaifgallery.com"],

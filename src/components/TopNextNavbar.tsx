@@ -43,9 +43,9 @@ export default function TopNextNavbar({ onLanguageToggle }: TopNextNavbarProps) 
   return (
     <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* Language Toggle */}
-      <button onClick={onLanguageToggle} className="text-green-500">
+      {/* <button onClick={onLanguageToggle} className="text-green-500">
         {t("toggle_language")}
-      </button>
+      </button> */}
 
       {/* Rest of the Navbar */}
       {/* For Large Devices: Logo, Search, User/Cart */}

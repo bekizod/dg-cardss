@@ -1,0 +1,14 @@
+{
+  "welcome": "Welcome to Alsaif Gallery World",
+  "follow_orders": "Follow my orders",
+  "english": "English",
+  "arabic": "العربية",
+  "all_offers":"All Offers",
+  "tabs": {
+    "All": "All",
+    "ElectricalAppliance": "Electrical Appliance",
+    "Kitchenware": "Kitchenware",
+    "Serveware": "Serveware",
+    "HomeAppliance": "Home Appliance"
+  }
+}
