@@ -7,6 +7,7 @@ import TopHeader from "@/components/TopHeader";
 import Footer from "@/components/Footer";
 import Test from "@/components/Test";
 import TopNextNavbar from "@/components/TopNextNavbar";
+import { AuthProvider } from "@/context/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,15 +24,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-white dark:bg-black ${inter.className}`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ThemeSwitcher />
-          <div className="fixed top-0 left-0 right-0 z-50 ">
-            <TopHeader />
-            <TopNextNavbar />
-          </div>
-          <main>{children}</main>
-          <Footer /> 
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ThemeSwitcher />
+            <div className="fixed top-0 left-0 right-0 z-50 ">
+              <TopHeader />
+              <TopNextNavbar />
+            </div>
+            <main>{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

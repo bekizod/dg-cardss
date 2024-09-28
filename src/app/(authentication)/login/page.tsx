@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import { notification } from "antd";
 import "antd/dist/reset.css"; // Import Ant Design styles
 import Link from "next/link";
+import { useAuth } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
+ // Import the AuthContext
 
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
@@ -12,9 +15,11 @@ type NotificationType = "success" | "error" | "info" | "warning";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loging,setLoging] = useState(false)
+  const [loging, setLoging] = useState(false);
+  const router = useRouter()
+  const { login } = useAuth(); // Use the login function from AuthContext
 
-  // Update the function to use the defined NotificationType and set a 3-second duration
+  // Notification function with a 3-second duration
   const openNotification = (type: NotificationType, message: string, description: string) => {
     notification[type]({
       message,
@@ -26,7 +31,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoging(true)
+    setLoging(true);
     try {
       const response = await fetch("https://alsaifgallery.onrender.com/api/v1/user/signIn", {
         method: "POST",
@@ -41,10 +46,14 @@ export default function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        const userInfo = data.data.user;
+        const { token, user } = data.data;
 
-        // Display success notification with user's personal information
-        openNotification("success", "Login Successful", `Name: ${userInfo.firstName} ${userInfo.lastName}\nEmail: ${userInfo.email}\nMobile: ${userInfo.mobile}`);
+        // Store the token and user information in the context and cookies
+        login(token, user);
+
+        // Display success notification
+        openNotification("success", "Login Successful", `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`);
+        router.push("/account");
       } else {
         const errorData = await response.json();
         console.error("Login error", errorData);
@@ -58,7 +67,7 @@ export default function Login() {
       // Display error notification for exceptions
       openNotification("error", "Login Error", "Something went wrong. Please try again later.");
     } finally {
-       setLoging(false)
+      setLoging(false);
     }
   };
 
