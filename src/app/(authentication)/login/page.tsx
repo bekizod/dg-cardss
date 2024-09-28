@@ -67,8 +67,12 @@ export default function Login() {
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">LOG IN</h2>
+          <div className="flex items-center justify-center mt-2">
+            <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
+            <p className="text-sm mx-2">Login Make your Shoping Easy</p>
+            <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
+          </div>
         </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
             <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />

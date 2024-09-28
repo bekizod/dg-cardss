@@ -89,7 +89,7 @@ export default function Register() {
           <h2 className="text-2xl font-bold">Register</h2>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <p className="text-sm mx-2">Complete the form below</p>
+            <p className="text-sm mx-2">Don&apos;t know Us, Join Today</p>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
