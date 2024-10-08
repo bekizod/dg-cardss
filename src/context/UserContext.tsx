@@ -28,12 +28,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Logout function to clear token and user
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    Cookies.remove("token");
-    Cookies.remove("user");
-  };
+ const logout = () => {
+   setToken(null);
+   setUser(null);
+   Cookies.remove("token");
+   Cookies.remove("user");
+   window.location.reload(); // Refresh the page
+ };
+
 
   return (
     <AuthContext.Provider value={{ token, user, login, logout }}>

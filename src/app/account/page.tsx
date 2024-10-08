@@ -1,13 +1,16 @@
-"use client"
+"use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
- // Import useAuth for context
 import Link from "next/link";
 import { FaFacebookF, FaTwitter, FaInstagram, FaShoppingCart, FaUndoAlt, FaHeart } from "react-icons/fa";
 import { useAuth } from "@/context/UserContext";
+import Cookies from "js-cookie"; // Import js-cookie to handle cookies
 
 const AccountPage = () => {
   const { user } = useAuth(); // Fetch user info from context
+  const router = useRouter(); // Use router for redirection
   const [showSettings, setShowSettings] = useState(false);
   const [isClient, setIsClient] = useState(false); // State to track if we're in the browser
   const [oldPassword, setOldPassword] = useState("");
@@ -15,8 +18,18 @@ const AccountPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
-    setIsClient(true); // Set to true after the first render on the client
-  }, []);
+    // Set to true after the first render on the client
+    setIsClient(true);
+
+    // Check for auth-token in cookies
+    const token = Cookies.get("token");
+
+    // If token is missing, redirect to login page
+    if (!token) {
+      router.push("/login"); // Redirect to login if no token is found
+    }
+    console.log("token is" + token)
+  }, [router]);
 
   const handlePasswordChange = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +41,8 @@ const AccountPage = () => {
   if (!isClient || !user) {
     return <div>Loading...</div>;
   }
-
   return (
-    <div className="page-container   p-5 flex justify-center w-full dark:bg-gray-900 mt-[124px] dark:text-white">
+    <div className="page-container p-5 flex justify-center w-full dark:bg-gray-900 mt-[124px] dark:text-white">
       <div className="content max-w-7xl w-full bg-white dark:bg-gray-800 px-6 py-8 rounded-2xl shadow-lg mx-4">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
@@ -96,14 +108,14 @@ const AccountPage = () => {
 
         {/* Saved Addresses Section */}
         <Link href="/SA_en/account/address" className="block mb-4">
-          <motion.div whileHover={{ x: 15 }} className="flex items-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer ">
-            <div className="flex justify-evenly items-center space-x-2 w-full ">
+          <motion.div whileHover={{ x: 15 }} className="flex items-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer">
+            <div className="flex justify-evenly items-center space-x-2 w-full">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
               </svg>
-              <p className="text-center  ">Saved Addresses</p>
+              <p className="text-center">Saved Addresses</p>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300 ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </motion.div>

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { FaMobileAlt, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
-import "antd/dist/reset.css";
 import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import Link from "next/link";

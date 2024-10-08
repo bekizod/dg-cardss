@@ -3,7 +3,6 @@ import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
-import "antd/dist/reset.css"; // Import Ant Design styles
 import Link from "next/link";
 import { useAuth } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
@@ -72,13 +71,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex  mt-[128px]  justify-center items-center py-10 bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold">LOG IN</h2>
+          <div className="text-2xl font-bold">LOG IN</div>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <p className="text-sm mx-2">Login Make your Shopping Easy</p>
+            <div className="text-sm mx-2">Login Make your Shopping Easy</div>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
@@ -94,13 +93,94 @@ export default function Login() {
             {loging ? "Loging......." : "Log In"}
           </motion.button>
         </form>
-        <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
+        <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Did Not have Account?{" "}
           <Link href="/register" className="text-green-600">
             Sign Up.
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+// import { useState, useRef, useEffect } from "react";
+// import { FaMobileAlt, FaEnvelope, FaTimes } from "react-icons/fa";
+// import { TiBackspaceOutline } from "react-icons/ti";
+// import { motion } from "framer-motion";
+// import Link from "next/link";
+
+// export default function Login() {
+   
+   
+
+//   return (
+//     <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800">
+//       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
+//         <div className="text-center mb-6">
+//           <div className="text-2xl font-bold">LOG IN</div>
+//           <div className="flex items-center justify-center mt-2">
+//             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
+//             <div className="text-sm mx-2">Login Make your Shopping Easy</div>
+//             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
+//           </div>
+//         </div>
+//         <form   className="space-y-4">
+//           <div className="relative">
+//             <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+//             <input type="email" required placeholder="Email"    className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+//           </div>
+//           <div className="relative">
+//             <input type="password" required placeholder="Password"     className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+//           </div>
+//           <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+//              login
+//           </motion.button>
+//         </form>
+//         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
+//           Did Not have Account?{" "}
+//           <Link href="/register" className="text-green-600">
+//             Sign Up.
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
