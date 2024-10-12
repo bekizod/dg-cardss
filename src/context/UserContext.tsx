@@ -1,7 +1,9 @@
 "use client"
 // AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+// AuthContext.tsx
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 // Define the shape of the AuthContext
 type AuthContextType = {
@@ -14,28 +16,49 @@ type AuthContextType = {
 // Create the AuthContext
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// API to fetch user info using the token
+const fetchUserInfo = async (token: string) => {
+  try {
+    const response = await axios.get("https://alsaifgallery.onrender.com/api/v1/user/getUserInfo", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.data; // Assuming user info is in response.data.data
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    return null;
+  }
+};
+
 // Provider component that wraps your app and makes auth object available to child components
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(Cookies.get("token") || null);
-  const [user, setUser] = useState<any | null>(Cookies.get("user") ? JSON.parse(Cookies.get("user")!) : null);
+  const [user, setUser] = useState<any | null>(null);
+
+  // Fetch user info if token exists
+  useEffect(() => {
+    if (token && !user) {
+      fetchUserInfo(token).then((userInfo) => {
+        if (userInfo) setUser(userInfo);
+        else logout(); // If user info couldn't be fetched, log out
+      });
+    }
+  }, [token]);
 
   // Login function to store token and user
   const login = (token: string, user: any) => {
     setToken(token);
     setUser(user);
     Cookies.set("token", token, { expires: 7 }); // Store token in cookie for 7 days
-    // Cookies.set("user", JSON.stringify(user), { expires: 7 }); // Store user info in cookie
   };
 
   // Logout function to clear token and user
- const logout = () => {
-   setToken(null);
-   setUser(null);
-   Cookies.remove("token");
-   Cookies.remove("user");
-   window.location.reload(); // Refresh the page
- };
-
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    Cookies.remove("token");
+    Cookies.remove("user");
+    window.location.reload(); // Refresh the page to clear the state
+  };
 
   return (
     <AuthContext.Provider value={{ token, user, login, logout }}>

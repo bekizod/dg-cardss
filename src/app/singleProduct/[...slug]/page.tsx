@@ -1,29 +1,115 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+ 
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FaCheckCircle } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
-import Slider from "@/components/ui/Home UI/Slider";
 import React from "react";
-import ProductCarousel from "@/components/ui/Home UI/ProductCarousel";
+// import ProductCarousel from "@/components/ui/Home UI/ProductCarousel";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-const ProductPage = () => {
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSingleProduct } from "@/redux/slices/categorySlice";
+import { RootState } from "@/redux/store";
+import axios from "axios";
+import { notification , Rate } from "antd";
+import "./stars.css";
+import Custom404 from "@/app/not-found";
+
+
+export default function SingleProductPage({ params }: { params: { slug: string[] } }) {
   const [activeTab, setActiveTab] = useState("description");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [purchaseOption, setPurchaseOption] = useState("purchase-now");
   const [currentIndex, setCurrentIndex] = useState(0);
-    const [rating, setRating] = useState(1);
 
-  const slides = ["/side cards/side Best Categories/BC03.png", "/side cards/side Best Categories/BC04.png", "/side cards/side Best Categories/BC05.png"];
+  const dispatch = useDispatch();
+  const { product, loading, error } = useSelector((state: RootState) => state.categories as { product: any; loading: boolean; error: string });
+  const [rating, setRating] = useState<number>(product.ratings?.averageRating || 0); // Set initial rating
+
+  const slugLength = params.slug.length;
+
+  let parentName = "";
+  let parentId = "";
+  let subCategoryName = "";
+  let subcategoryId = "";
+  let productName = "";
+  let productId = "";
+  let generalCategoryName = "";
+  let generalCategoryId = "";
+
+  if (slugLength === 4) {
+    generalCategoryName = decodeURIComponent(params.slug[0]);
+    generalCategoryId = decodeURIComponent(params.slug[1]);
+    productName = decodeURIComponent(params.slug[2]);
+    productId = decodeURIComponent(params.slug[3]);
+  } else if (slugLength === 6) {
+    parentName = decodeURIComponent(params.slug[0]);
+    parentId = decodeURIComponent(params.slug[1]);
+    subCategoryName = decodeURIComponent(params.slug[2]);
+    subcategoryId = decodeURIComponent(params.slug[3]);
+    productName = decodeURIComponent(params.slug[4]);
+    productId = decodeURIComponent(params.slug[5]);
+  } else {
+    return (<Custom404 />) as any;
+  }
+
+  useEffect(() => {
+    dispatch(fetchSingleProduct(productId) as any);
+  }, [dispatch, productId]);
+
+  const handleRate = async (value: number) => {
+    setRating(value); // Update local state immediately on user selection
+
+    const token = Cookies.get("token"); // Retrieve Bearer token from cookies
+
+    try {
+      const response = await axios.post(
+        `https://alsaifgallery.onrender.com/api/v1/product/rateProduct/${productId}`,
+        { rating: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add Bearer token
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        notification.success({
+          message: "Rating Submitted",
+          description: "Your rating has been submitted successfully!",
+          placement: "topRight", // You can change placement if needed
+        });
+      } else {
+        notification.error({
+          message: "Submission Failed",
+          description: "Failed to submit rating.",
+          placement: "topRight",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: "Error",
+        description: "Error submitting rating. Please try again.",
+        placement: "topRight",
+      });
+    }
+    //  finally {
+    //   setLoading(false);
+    // }
+  };
+  if (loading) return <p className="mt-[124px] text-3xl  h-screen">Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + product.imageIds?.length) % product.imageIds?.length);
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % product.imageIds?.length);
   };
   const handleAddToCart = () => {
     setIsModalOpen(true);
@@ -34,35 +120,82 @@ const ProductPage = () => {
   };
   // Number of slides
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000); // Change slide every 3 seconds
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+  //   }, 5000); // Change slide every 3 seconds
 
-    return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [slides.length]);
+  //   return () => clearInterval(interval); // Clean up interval on component unmount
+  // }, [slides.length]);
+
   return (
     <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
+
         <div className="relative w-full lg:w-1/3">
           {/* Carousel wrapper */}
-          <div className="relative h-72 overflow-hidden rounded-lg lg:h-96">
-            {slides.map((src, index) => (
+          {slugLength === 4 && (
+            <div className="mb-4">
+              <nav aria-label="breadcrumb">
+                <ol className="flex space-x-2 text-sm">
+                  <li>
+                    <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                      Home
+                    </Link>
+                  </li>
+                  <li>/</li>
+                  <li>
+                    <Link href={`/${parentName}/${parentId}`} className="text-blue-500 underline">
+                      {parentName}
+                    </Link>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+          )}
+
+          {slugLength === 6 && (
+            <div className="mb-4">
+              <nav aria-label="breadcrumb">
+                <ol className="flex space-x-2 text-sm">
+                  <li>
+                    <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                      Home
+                    </Link>
+                  </li>
+                  <li>/</li>
+                  <li>
+                    <Link href={`/${parentName}/${parentId}`} className="text-gray-600 dark:text-gray-300">
+                      {parentName}
+                    </Link>
+                  </li>
+                  <li>/</li>
+                  <li className="text-gray-900 dark:text-gray-100">
+                    {" "}
+                    {subCategoryName} / {productName}
+                  </li>
+                </ol>
+              </nav>
+            </div>
+          )}
+
+          <div className="relative  h-full overflow-hidden rounded-lg  ">
+            {product.imageIds?.map((src: any, index: any) => (
               <div
                 key={index}
                 className={`absolute inset-0  transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "300px" }} // Fixed height
+                style={{ display: "flex", alignItems: "center", justifyContent: "center" }} // Fixed height
               >
                 <Image
-                  src={src}
-                  alt={`slide ${index}`}
+                  src={product.imageIds[index] as any}
+                  alt={`product ${index}`}
                   layout="intrinsic" // Adjust layout to maintain original dimensions
                   width={700} // Decrease the width as needed
                   height={700} // Fixed height
                   objectFit="contain" // Ensure the image scales without stretching
-                  className="block rounded-2xl px-10"
+                  className="  rounded-2xl px-10"
                 />
               </div>
             ))}
@@ -89,23 +222,18 @@ const ProductPage = () => {
         {/* Description Section */}
         <div className="lg:w-1/3 w-full space-y-4">
           <motion.h1 className="text-2xl font-semibold dark:text-white" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            Product Title
+            {product.name}
           </motion.h1>
-          <div className="flex flex-row gap-2 items-center">
-            <motion.div className="text-xl flex flex-row text-yellow-500 dark:text-yellow-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
-              {[...Array(5)].map((_, index) => (
-                <React.Fragment key={index}>{index < rating ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
-              ))}
-            </motion.div>{" "}
-            |
+          <div className="flex flex-row gap-2 items-center text-slate-400">
+            <Rate value={product.ratings?.averageRating} onChange={handleRate} disabled={loading} className="custom-rate bg-gray-50 rounded" />|
             <motion.p className="text-sm text-gray-500 dark:text-gray-400" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
-              XYZ
+              {product.adjective}
             </motion.p>
           </div>
           <motion.div className="flex p-1 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="flex items-center space-x-2">
               <Image src="/ic_return_static.png" alt="return icon" width="20" height="20" />
-              <p className="text-xs">Free return</p>
+              <p className="text-xs">{product.additionalInformation?.returnPolicy}</p>
             </div>
             <div className="flex items-center space-x-2">
               <Image src="/ic_90_static.png" alt="90 icon" width="20" height="20" />
@@ -119,11 +247,11 @@ const ProductPage = () => {
                   fill="#C9747C"
                 />
               </svg>
-              <p className="text-xs">Price Match Guarantee</p>
+              <p className="text-xs">{product.additionalInformation?.warranty}</p>
             </div>
           </motion.div>
           <motion.p className="text-gray-700 dark:text-gray-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.5 }}>
-            Product description goes here.
+            {product.description}
           </motion.p>
         </div>
 
@@ -134,7 +262,7 @@ const ProductPage = () => {
             <div>
               {/* Original Price and Discount */}
               <div className="flex justify-between items-center">
-                <p className="line-through text-gray-500 dark:text-gray-400">799 SAR</p>
+                <p className="line-through text-gray-500 dark:text-gray-400">{product.price}</p>
                 <p className="text-red-600 dark:text-red-400 text-sm">SAVE 399 SAR</p>
               </div>
 
@@ -256,7 +384,7 @@ const ProductPage = () => {
               <div id="dt-description-content" className="space-y-2">
                 <p className="text-gray-800 dark:text-gray-200">A Turkish coffee maker gives you the perfect cup of coffee filled with flavors and aromas that awaken your senses and inspire your day.</p>
                 <p className="text-gray-800 dark:text-gray-200">
-                  <strong>Adjustable coffee quantity:</strong> Make your coffee to your liking by determining the amount in each cup.
+                  <strong>{product.description}</strong> Make your coffee to your liking by determining the amount in each cup.
                 </p>
                 <p className="text-gray-800 dark:text-gray-200">
                   <strong>Double cup option:</strong> Choose between one or two cups at a time for complete comfort.
@@ -279,13 +407,13 @@ const ProductPage = () => {
             {activeTab === "additional-info" && (
               <div id="dt-additional-info-content" className="space-y-2">
                 <ul className="text-gray-800 dark:text-gray-200">
-                  <li>SKU: CAT17-005077</li>
-                  <li>Barcode: 6285360131555</li>
-                  <li>Brand: Edison</li>
-                  <li>Color: Beige</li>
-                  <li>Material: Plastic</li>
-                  <li>Size: 0.8 L</li>
-                  <li>Warranty: Three Years</li>
+                  <li>SKU: {product.additionalInformation?.SKU}</li>
+                  <li>Barcode: {product.additionalInformation?.barcode}</li>
+                  <li>Brand: {product.additionalInformation?.brand}</li>
+                  <li>Color: {product.additionalInformation?.color}</li>
+                  <li>Material: {product.additionalInformation?.material}</li>
+                  <li>Size: {product.additionalInformation?.size}</li>
+                  <li>warranty: {product.additionalInformation?.warranty}</li>
                 </ul>
               </div>
             )}
@@ -299,16 +427,16 @@ const ProductPage = () => {
                 <div>
                   {/* Render the star rating */}
                   <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">
+                    <motion.div className="text-xl flex flex-row text-yellow-500 dark:text-yellow-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
                       {[...Array(5)].map((_, index) => (
                         <React.Fragment key={index}>{index < rating ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                   {/* Render the horizontal line */}
                   <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
                   {/* Render the number of ratings (if needed) */}
-                  <p className="text-gray-800 dark:text-gray-200">{rating}</p>
+                  <p className="text-gray-800 dark:text-gray-200">{product.ratings?.numberOfRatings || 0} Customers Rate This product</p>
                 </div>
               </div>
             )}
@@ -317,37 +445,4 @@ const ProductPage = () => {
       </section>
     </div>
   );
-};
-
-export default ProductPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

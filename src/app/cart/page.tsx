@@ -160,7 +160,7 @@ const CartComponent = () => {
             </div>
 
             {/* Checkout Button */}
-            <Link href="/checkout" passHref>
+            <Link href="/checkout1" >
               <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-600">
                 Buy Now
               </motion.button>

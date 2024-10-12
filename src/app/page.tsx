@@ -40,7 +40,7 @@ export default function Home() {
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
         <ul className="hidden md:flex justify-center space-x-8 p-1">
           {["All", "ElectricalAppliance", "Kitchenware", "Serveware", "HomeAppliance"].map((tab) => (
-            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-green-500 text-white" : "bg-zinc-200 text-black"}`} onClick={() => handleTabClick(tab)}>
+            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-green-500 dark:text-white text-black " : "dark:bg-slate-900  bg-zinc-200   dark:text-white text-black"}`} onClick={() => handleTabClick(tab)}>
               {tab}
             </li>
           ))}

@@ -1,0 +1,9 @@
+/* Custom star color for filled stars */
+.custom-rate .ant-rate-star-full {
+  color: #00c500; /* Gold color for filled stars */
+}
+
+/* Custom star color for unfilled stars */
+.custom-rate .ant-rate-star {
+  color: rgb(255, 230, 0); /* Light grey for unfilled stars */
+}
