@@ -14,8 +14,9 @@ import { addFavorite, removeFavorite } from "@/redux/slices/favoriteSlice";
 import { notification } from "antd";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
+import { addToCart } from "@/redux/slices/cartSlice";
 export default function ProductsAccordion({ params }: { params: { slug: string[] } }) {
-  const { user, token } = useAuth();
+  const { user, token } = useAuth();const cartItems = useSelector((state: RootState) => state.cart.items);
   const [isSizeOpen, setIsSizeOpen] = useState(false);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const [isBrandOpen, setIsBrandOpen] = useState(false);
@@ -27,9 +28,12 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   const filterModalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const { favorites, loading: favoritesLoading, error: favoritesError } = useSelector((state: RootState) => state.favorites);
-  const { products, loading: productsLoading, error: productsError } = useSelector((state: RootState) => state.categories);
+  const { products, loading: productsLoading, error: productsError } = useSelector((state: RootState) => state.categories as { products: any; loading: boolean; error: string });
   const [thisCategoryId, setThisCategoryId] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
+ 
+  const buyerId = user?._id || "guest";
+   
   const [filterOptions, setFilterOptions] = useState({
     sizes: [] as string[],
     colors: [] as string[],
@@ -291,6 +295,25 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   if (favoritesLoading) return <p className="mt-[124px] text-3xl">Favorite Loading...</p>;
   if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
+
+  const handleAddToCart = (product : any) => {
+    // Implement the logic to dispatch addToCart action with the product details
+    
+      dispatch(
+        addToCart({
+          id: product._id,
+          buyerId: user?._id || "guest", // Include buyerId if needed
+          image: product.imageIds[0], // Example: Use the first image
+          color: product.additionalInformation?.color,
+          name: product.name,
+          quantity: 1, // Set the initial quantity as needed
+          stockQuantity: product.stockQuantity,
+          price: product.price,
+          discount: 0,
+        })
+      );
+     
+  };
   return (
     <div className="px-4 lg:px-32 p-2 mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
@@ -342,7 +365,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div> */}
 
-        <div className="flex items-center space-x-2 text-lg font-medium text-green-600 dark:text-green-400 cursor-pointer hover:text-green-900 transition-colors duration-200" onClick={() =>handleAddFavorite()}>
+        <div className="flex items-center space-x-2 text-lg font-medium text-green-600 dark:text-green-400 cursor-pointer hover:text-green-900 transition-colors duration-200" onClick={() => handleAddFavorite()}>
           {isFavorited ? <GoHeartFill className="text-green-600" /> : <GoHeart />}
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div>
@@ -503,36 +526,51 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           )}
           {/* Product Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {filteredProducts.map((product: any) => (
-              <motion.div key={product._id} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
-                <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
-                  <div className="block relative p-2 sm:p-3 md:p-4">
+            {filteredProducts.map((product: any) => {
+              const productIdt = product?._id as any;
+              const buyerId = user?._id || "guest";
+              const productColor = product?.additionalInformation?.color || "default"; 
+              // Check if the product is already in the cart
+              const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
+
+              return (
+                <motion.div key={product._id} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
+                  <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
                     <div className="block relative p-2 sm:p-3 md:p-4">
-                      {false && (
-                        <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                          50% <br /> OFF
-                        </p>
-                      )}
-                      <div className="w-full flex justify-center items-center bg-transparent">
-                        <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                          <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-auto object-contain rounded-xl" />
-                        </motion.div>
+                      <div className="block relative p-2 sm:p-3 md:p-4">
+                        {false && (
+                          <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+                            50% <br /> OFF
+                          </p>
+                        )}
+                        <div className="w-full  flex flex-1 justify-center items-center bg-transparent">
+                          <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
+                            <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-3/4 object-cover rounded-xl" />
+                          </motion.div>
+                        </div>
+                        <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">{product.name}</h2>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
+                        <div className="mt-1 text-center">
+                          <p className="text-sm sm:text-base font-bold text-red-500">{product.price}</p>
+                          {false && <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>}
+                          <p className="text-xs text-green-500">SAVE 244 SAR</p>
+                        </div>
+                        {/* Conditionally render the button */}
+                        {existingItem ? (
+                          <button disabled className="mt-2 w-full bg-gray-400 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                            Already in Cart
+                          </button>
+                        ) : (
+                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                            Add to Cart
+                          </motion.button>
+                        )}
                       </div>
-                      <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">{product.name}</h2>
-                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
-                      <div className="mt-1 text-center">
-                        <p className="text-sm sm:text-base font-bold text-red-500">{product.price}</p>
-                        {false && <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>}
-                        <p className="text-xs text-green-500">SAVE 244 SAR</p>
-                      </div>
-                      <motion.button whileTap={{ scale: 0.95 }} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                        Add to Cart
-                      </motion.button>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 

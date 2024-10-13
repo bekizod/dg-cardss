@@ -14,21 +14,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "@/redux/slices/categorySlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { notification , Rate } from "antd";
+import { message, notification , Rate } from "antd";
 import "./stars.css";
 import Custom404 from "@/app/not-found";
+import { addToCart } from "@/redux/slices/cartSlice";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/UserContext";
 
+interface Product {
+  id: string;
+  imageIds: string[];
+  name: string;
+  color: string;
+  stockQuantity: number;
+  price: number;
+  discount: number;
+}
+
+interface SingleProductPageProps {
+  product: Product;
+}
 
 export default function SingleProductPage({ params }: { params: { slug: string[] } }) {
+  const {user} = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [purchaseOption, setPurchaseOption] = useState("purchase-now");
   const [currentIndex, setCurrentIndex] = useState(0);
-
+const router = useRouter();
   const dispatch = useDispatch();
   const { product, loading, error } = useSelector((state: RootState) => state.categories as { product: any; loading: boolean; error: string });
   const [rating, setRating] = useState<number>(product.ratings?.averageRating || 0); // Set initial rating
+ const productIdt = product?._id;
+ const buyerId = user?._id || "guest";
+ const productColor = product?.additionalInformation?.color || "default"; // Ensure a fallback color
 
+ // Now use useSelector to get cart items and perform the logic outside of the hook
+ const existingItem = useSelector((state: RootState) => state.cart.items.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor));
+
+ 
   const slugLength = params.slug.length;
 
   let parentName = "";
@@ -60,6 +84,12 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
     dispatch(fetchSingleProduct(productId) as any);
   }, [dispatch, productId]);
 
+ useEffect(() => {
+   if (existingItem) {
+     // If the item exists, you could perform some action here
+     console.log("Item exists in cart:", existingItem);
+   }
+ }, [existingItem]);
   const handleRate = async (value: number) => {
     setRating(value); // Update local state immediately on user selection
 
@@ -97,9 +127,7 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
         placement: "topRight",
       });
     }
-    //  finally {
-    //   setLoading(false);
-    // }
+  
   };
   if (loading) return <p className="mt-[124px] text-3xl  h-screen">Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -111,23 +139,37 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
   const goToNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % product.imageIds?.length);
   };
-  const handleAddToCart = () => {
-    setIsModalOpen(true);
-  };
+  // const handleAddToCart = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  // Number of slides
+       const handleAddToCart = () => {
+         // Check if the product is already in the cart for this buyer
+         
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  //   }, 5000); // Change slide every 3 seconds
-
-  //   return () => clearInterval(interval); // Clean up interval on component unmount
-  // }, [slides.length]);
-
+         if (existingItem) {
+           // If the item already exists, redirect to the cart page
+           router.push("/cart");
+         } else {
+           // If not, add the item to the cart
+           dispatch(
+             addToCart({
+               id: product._id,
+               buyerId: user?._id || "guest", // Pass the buyer/customer ID here
+               image: product.imageIds[0],
+               color: product.additionalInformation?.color,
+               name: product.name,
+               quantity: 1,
+               stockQuantity: product.stockQuantity,
+               price: product.price,
+               discount: 0,
+             })
+           );
+         }
+       };
   return (
     <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
       {/* First Section */}
@@ -142,14 +184,18 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
                 <ol className="flex space-x-2 text-sm">
                   <li>
                     <Link href={`/`} className="text-gray-600 dark:text-gray-300">
-                      Home
+                      Home/General
                     </Link>
                   </li>
                   <li>/</li>
                   <li>
-                    <Link href={`/${parentName}/${parentId}`} className="text-blue-500 underline">
-                      {parentName}
+                    <Link href={`/${generalCategoryName}/${generalCategoryId}`} className="text-blue-500 underline">
+                      {generalCategoryName}
                     </Link>
+                  </li>
+                  <li>/</li>
+                  <li>
+                    {productName}
                   </li>
                 </ol>
               </nav>
@@ -180,7 +226,7 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
               </nav>
             </div>
           )}
-
+          <div>total product in stock : {product.stockQuantity}</div>
           <div className="relative  h-full overflow-hidden rounded-lg  ">
             {product.imageIds?.map((src: any, index: any) => (
               <div
@@ -290,7 +336,7 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
 
             {/* Add to Cart Button */}
             <motion.button onClick={handleAddToCart} className="mt-4 w-full py-2 px-4 bg-green-600 dark:bg-green-700 text-white rounded-lg" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}>
-              Add to Cart
+              {existingItem ? "Product in Cart, Go to Cart" : "Add to Cart"}
             </motion.button>
           </motion.div>
           {/* Modal */}
