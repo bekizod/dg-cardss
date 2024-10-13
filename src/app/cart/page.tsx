@@ -8,21 +8,43 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { removeFromCart, incrementQuantity, decrementQuantity } from '../../redux/slices/cartSlice';
 import { message } from 'antd';
+import { useAuth } from "@/context/UserContext";
+import Cookies from 'js-cookie'; 
+
 
 const CartComponent = () => {
+  const { user } = useAuth();
   const [cartEmpty, setCartEmpty] = useState(false); // Assuming cart state
   const cartRef = useRef<HTMLDivElement | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [showCouponFields, setShowCouponFields] = useState(false);
-const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = Cookies.get("token");
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const [isMounted, setIsMounted] = useState(false);
   const { totalQuantity, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
   // Ensure component is mounted before rendering cart items (client-side rendering)
+  const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+
+  // Ensure component is mounted before rendering cart items (client-side rendering)
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+
+    // Filter cart items based on buyerId (either user._id or 'guest')
+    if (token && user) {
+      // If user is logged in, filter by user's ID
+      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      setFilteredCartItems(userCartItems);
+    } else {
+      // If guest, filter by 'guest' ID
+      const guestCartItems = cartItems.filter((item) => item.buyerId === "guest");
+      setFilteredCartItems(guestCartItems);
+    }
+  }, [cartItems, user, token]);
+
+   
+
+   
 
   const handleDelete = (id: string, buyerId: string) => {
     dispatch(removeFromCart({ id, buyerId }));
@@ -40,7 +62,7 @@ const token = typeof window !== "undefined" ? localStorage.getItem("token") : nu
   return (
     <div className="flex justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
-        {cartItems.length === 0 && (
+        {filteredCartItems.length === 0 && (
           <motion.div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
             <div className="p-4">
               <div className="mb-4">
@@ -60,11 +82,11 @@ const token = typeof window !== "undefined" ? localStorage.getItem("token") : nu
         )}
       </AnimatePresence>
 
-      {cartItems.length !== 0 && (
+      {filteredCartItems.length !== 0 && (
         <div className="flex flex-col md:flex-row gap-6 px-3 w-full">
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
-            {cartItems.map((item) => (
+            {filteredCartItems.map((item) => (
               <div className="flex flex-col gap-4 " key={item.id}>
                 <div className="flex gap-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md shadow-lg">
                   <Link href={`/singleProduct/${item.name}/${item.id}`} className="self-center md:self-start">

@@ -29,13 +29,17 @@ const initialState: CartState = {
   totalDiscount: 0, // Initialize totalDiscount
 };
 
-const calculateTotals = (state: CartState) => {
-  state.totalQuantity = state.items.reduce((acc, item) => acc + item.quantity, 0);
-  state.totalPrice = state.items.reduce(
+const calculateTotals = (state: CartState, buyerId: string) => {
+  // Filter the items by buyerId
+  const filteredItems = state.items.filter(item => item.buyerId === buyerId);
+
+  // Calculate totals based on filtered items
+  state.totalQuantity = filteredItems.reduce((acc, item) => acc + item.quantity, 0);
+  state.totalPrice = filteredItems.reduce(
     (acc, item) => acc + (item.price - (item.price * item.discount) / 100) * item.quantity,
     0
   );
-  state.totalDiscount = state.items.reduce(
+  state.totalDiscount = filteredItems.reduce(
     (acc, item) => acc + (item.price * item.discount) / 100 * item.quantity,
     0
   );
@@ -63,46 +67,56 @@ const cartSlice = createSlice({
       }
 
       // Recalculate totals after adding item
-      calculateTotals(state);
+      calculateTotals(state, buyerId);
     },
     removeFromCart: (state, action: PayloadAction<{ id: string; buyerId: string }>) => {
-      const { id, buyerId } = action.payload;
+  const { id, buyerId } = action.payload;
 
-      // Remove the product based on both id and buyerId
-      state.items = state.items.filter(
-        item => item.id !== id || item.buyerId !== buyerId
-      );
+  // Remove the product based on both id and buyerId
+  state.items = state.items.filter(item => item.id !== id || item.buyerId !== buyerId);
 
-      // Recalculate totals after removing item
-      calculateTotals(state);
-    },
-    incrementQuantity: (state, action: PayloadAction<{ id: string; buyerId: string }>) => {
-      const { id, buyerId } = action.payload;
+  // Recalculate totals after removing item
+  calculateTotals(state, buyerId);
+},
 
-      const item = state.items.find(
-        item => item.id === id && item.buyerId === buyerId
-      );
+incrementQuantity: (state, action: PayloadAction<{ id: string; buyerId: string }>) => {
+  const { id, buyerId } = action.payload;
 
-      if (item && item.quantity < item.stockQuantity) {
-        item.quantity += 1;
-      }
+  const item = state.items.find(item => item.id === id && item.buyerId === buyerId);
 
-      // Recalculate totals after incrementing quantity
-      calculateTotals(state);
-    },
-    decrementQuantity: (state, action: PayloadAction<{ id: string; buyerId: string }>) => {
-      const { id, buyerId } = action.payload;
+  if (item && item.quantity < item.stockQuantity) {
+    item.quantity += 1;
+  }
 
-      const item = state.items.find(
-        item => item.id === id && item.buyerId === buyerId
-      );
+  // Recalculate totals after incrementing quantity
+  calculateTotals(state, buyerId);
+},
 
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
-      }
+decrementQuantity: (state, action: PayloadAction<{ id: string; buyerId: string }>) => {
+  const { id, buyerId } = action.payload;
 
-      // Recalculate totals after decrementing quantity
-      calculateTotals(state);
+  const item = state.items.find(item => item.id === id && item.buyerId === buyerId);
+
+  if (item && item.quantity > 1) {
+    item.quantity -= 1;
+  }
+
+  // Recalculate totals after decrementing quantity
+  calculateTotals(state, buyerId);
+},
+
+updateBuyerIdAfterLogin: (state, action: PayloadAction<string>) => {
+      const userId = action.payload;
+
+      // Update all items where buyerId is 'guest'
+      state.items.forEach(item => {
+        if (item.buyerId === 'guest') {
+          item.buyerId = userId; // Replace with logged-in user's ID
+        }
+      });
+
+      // Recalculate totals after updating buyerId
+      calculateTotals(state, userId);
     },
   },
 });
