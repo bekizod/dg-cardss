@@ -40,7 +40,7 @@ const advertisementSlice = createSlice({
         state.status = 'succeeded';
         state.data = action.payload; // Set the fetched data
       })
-      .addCase(getAdvertisements.rejected, (state, action) => {
+      .addCase(getAdvertisements.rejected, (state : any, action) => {
         state.status = 'failed';
         state.error = action.payload || "Error when Fetching Banners";
       });

@@ -23,9 +23,9 @@ export default function HomeAppliance(){
     return () => {
       dispatch(resetAdvertisements());
     };
-  }, [dispatch, parentId]);
+  }, [dispatch  ]);
 
-  
+
   useEffect(() => {
      
     const interval = setInterval(() => {

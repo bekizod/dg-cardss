@@ -23,7 +23,7 @@ useEffect(() => {
     return () => {
       dispatch(resetAdvertisements());
     };
-  }, [dispatch, parentId]);
+  }, [dispatch ]);
 
  useEffect(() => {
     
