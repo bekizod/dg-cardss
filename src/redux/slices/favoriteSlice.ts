@@ -41,6 +41,7 @@ export const addFavorite = createAsyncThunk('favorites/add', async (categoryId: 
   return response.data.data;
 });
 
+
 // Thunk to remove a favorite category
 export const removeFavorite = createAsyncThunk('favorites/remove', async (categoryId: string) => {
   const token = Cookies.get('token');

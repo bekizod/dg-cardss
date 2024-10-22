@@ -72,7 +72,7 @@ const ChangePassword = () => {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="Confirm your new password" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
           </div>
-          <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             Change Password
           </motion.button>
         </form>

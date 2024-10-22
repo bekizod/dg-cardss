@@ -59,7 +59,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <main className="bg-[#248248] dark:bg-green-950 relative hidden lg:block ">
+      <main className="bg-[var(--color-tertiary)] dark:bg-green-950 relative hidden lg:block ">
         {/* Background Image */}
         <div>
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/Reference_images/footer%20img/footer01.png')] bg-no-repeat bg-top-left z-0"></div>

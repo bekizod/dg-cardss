@@ -51,15 +51,15 @@ const banners = [
           ))}
         </motion.ul>
       </motion.div>
-      <button aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
+      <button aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
         ‹
       </button>
-      <button aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
+      <button aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
         ›
       </button>
       <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {[...Array(totalSlides).keys()].map((index) => (
-          <li key={index} className={`w-3 h-3 rounded-full ${currentSlide === index ? "bg-green-500" : "bg-gray-200"}`} />
+          <li key={index} className={`w-3 h-3 rounded-full ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-gray-200"}`} />
         ))}
       </ul>
     </div>

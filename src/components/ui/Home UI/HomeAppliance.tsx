@@ -2,19 +2,40 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { getAdvertisements,resetAdvertisements } from "@/redux/slices/bannersSlice";
+import Link from "next/link";
+ 
 export default function HomeAppliance(){
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 2; // Adjust based on the number of slides
+   
+ // Adjust based on the number of slides
+ const dispatch = useDispatch<AppDispatch>();
+  const advertisements = useSelector((state: any) => state.advertisement.data); // Access advertisements from the Redux state
+ const totalSlides = advertisements?.length || 0;
 
+ useEffect(() => {
+    // Fetch advertisements when the component mounts or when the parentId changes
+    dispatch(getAdvertisements("67176d7b8f31afc8d962be92"));
+
+    // Optionally reset the advertisements when the component unmounts
+    return () => {
+      dispatch(resetAdvertisements());
+    };
+  }, [dispatch, parentId]);
+
+  
   useEffect(() => {
+     
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
     }, 3000); // Change slide every 3 seconds
 
     return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [totalSlides]);
+  }, [ totalSlides   ]);
 
+  
   return (
     <div className="page-container flex flex-col gap-8 py-10 px-4">
       <div className="relative w-full overflow-hidden rounded-2xl border border-gray-300">
@@ -29,29 +50,37 @@ export default function HomeAppliance(){
               transform: `translateX(-${currentSlide * 100}%)`,
             }}
           >
-            <motion.li className="flex-shrink-0 w-full">
-              <a href="/SA_en/sweeteners-antiques/antiques.html">
-                <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-eng_77.jpg" alt="slide 1" layout="responsive" width={1200} height={800} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
-              </a>
-            </motion.li>
-            <motion.li className="flex-shrink-0 w-full">
-              <a href="/SA_en/coffee-spices/personal-care.html">
-                <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-eng_75.jpg" alt="slide 0" layout="responsive" width={1200} height={800} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
-              </a>
-            </motion.li>
+            {advertisements?.map((ad: any, index: number) => (
+              <motion.li key={index} className="flex-shrink-0 w-full">
+                <Link href={`/${ad.parentCategoryId?.categoryName}/${ad.parentCategoryId?._id}/${ad.subCategoryId.categoryName}/${ad.subCategoryId._id}`}>
+                  {" "}
+                  {/* Assuming 'link' is the URL to redirect */}
+                  <Image
+                    src={ad.imageId?.data} // Assuming 'imageUrl' holds the image link
+                    alt={`slide ${index}`}
+                    layout="responsive"
+                    width={1200}
+                    height={500}
+                    priority
+                    className="rounded-2xl border border-gray-300"
+                    fetchPriority="high"
+                  />
+                </Link>
+              </motion.li>
+            ))}
           </motion.ul>
         </motion.div>
 
-        <button type="button" aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
+        <button type="button" aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
           ‹
         </button>
-        <button type="button" aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
+        <button type="button" aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
           ›
         </button>
 
         <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
           {[...Array(totalSlides).keys()].map((index) => (
-            <li key={index} className={`dot ${currentSlide === index ? "bg-green-500" : "bg-gray-400"} w-2 h-2 rounded-full`} />
+            <li key={index} className={`dot ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-gray-400"} w-2 h-2 rounded-full`} />
           ))}
         </ul>
       </div>

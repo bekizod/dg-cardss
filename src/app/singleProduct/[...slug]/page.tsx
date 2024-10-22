@@ -129,7 +129,36 @@ const router = useRouter();
     }
   
   };
-  if (loading) return <p className="mt-[124px] text-3xl  h-screen">Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col gap-3   mt-[124px]  animate-pulse    rtl:space-x-reverse">
+        <div role="status" className="space-y-8 mt-[124px] px-4 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col  ">
+          <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded dark:bg-gray-700">
+            <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+            </svg>
+          </div>
+
+          <div className="w-full">
+            <div className="h-3 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5"></div>
+            <div className="h-5 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5"></div>
+            <div className="h-24 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5"></div>
+          </div>
+
+          <div className="flex items-center justify-center w-full h-64 bg-gray-300 rounded   dark:bg-gray-700">
+            <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+            </svg>
+          </div>
+
+          <span className="sr-only">Loading...</span>
+        </div>
+
+        <div className="h-24 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5 mx-4">
+          <div className="h-4 bg-gray-300 mt-4 mx-1 rounded-sm dark:bg-gray-500 mb-2.5"></div>
+        </div>
+      </div>
+    );
   if (error) return <p>Error: {error}</p>;
 
   const goToPrevious = () => {
@@ -139,37 +168,35 @@ const router = useRouter();
   const goToNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % product.imageIds?.length);
   };
-  // const handleAddToCart = () => {
-  //   setIsModalOpen(true);
-  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-       const handleAddToCart = () => {
-         // Check if the product is already in the cart for this buyer
-         
+  const handleAddToCart = () => {
+    // Check if the product is already in the cart for this buyer
 
-         if (existingItem) {
-           // If the item already exists, redirect to the cart page
-           router.push("/cart");
-         } else {
-           // If not, add the item to the cart
-           dispatch(
-             addToCart({
-               id: product._id,
-               buyerId: user?._id || "guest", // Pass the buyer/customer ID here
-               image: product.imageIds[0],
-               color: product.additionalInformation?.color,
-               name: product.name,
-               quantity: 1,
-               stockQuantity: product.stockQuantity,
-               price: product.price,
-               discount: 0,
-             })
-           );
-         }
-       };
+    if (existingItem) {
+      // If the item already exists, redirect to the cart page
+      router.push("/cart");
+    } else {
+      setIsModalOpen(true);
+      // If not, add the item to the cart
+      dispatch(
+        addToCart({
+          id: product._id,
+          buyerId: user?._id || "guest", // Pass the buyer/customer ID here
+          image: product.imageIds[0],
+          color: product.additionalInformation?.color,
+          name: product.name,
+          quantity: 1,
+          stockQuantity: product.stockQuantity,
+          price: product.price,
+          discount: 0,
+          test: "test",
+        })
+      );
+    }
+  };
   return (
     <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
       {/* First Section */}
@@ -194,9 +221,7 @@ const router = useRouter();
                     </Link>
                   </li>
                   <li>/</li>
-                  <li>
-                    {productName}
-                  </li>
+                  <li>{productName}</li>
                 </ol>
               </nav>
             </div>
@@ -248,7 +273,7 @@ const router = useRouter();
           </div>
           {/* Slider controls */}
           <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToPrevious}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500 dark:bg-green-500 group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark: bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
               </svg>
@@ -256,7 +281,7 @@ const router = useRouter();
             </span>
           </button>
           <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToNext}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500 dark:bg-green-500 group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark: bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
               </svg>
@@ -335,7 +360,14 @@ const router = useRouter();
             </div>
 
             {/* Add to Cart Button */}
-            <motion.button onClick={handleAddToCart} className="mt-4 w-full py-2 px-4 bg-green-600 dark:bg-green-700 text-white rounded-lg" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}>
+            <motion.button
+              onClick={() => {
+                handleAddToCart();
+              }}
+              className="mt-4 w-full py-2 px-4  bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-lg"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+            >
               {existingItem ? "Product in Cart, Go to Cart" : "Add to Cart"}
             </motion.button>
           </motion.div>
@@ -343,17 +375,17 @@ const router = useRouter();
           {isModalOpen && (
             <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-80 z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <motion.div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full" initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}>
-                <div className="flex items-center space-x-4">
+                <Link href="/cart" className="flex items-center space-x-4">
                   <BsCartCheck size={40} className="text-green-500 dark:text-green-400" />
                   <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">Added to cart</p>
-                </div>
+                </Link>
                 <p className="mt-4 text-gray-600 dark:text-gray-300">Product added successfully to cart</p>
                 <div className="mt-6 flex justify-between">
                   <button className="text-xs lg:text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition" onClick={handleCloseModal}>
                     Continue Shopping
                   </button>
-                  <Link href="/SA_en/cart">
-                    <button className="text-xs lg:text-lg bg-green-600 dark:bg-green-700 text-white dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-green-700 dark:hover:bg-green-600 transition">Complete Purchase</button>
+                  <Link href="/cart">
+                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)] dark:bg-green-700 text-white dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-green-700 dark:hover: bg-[var(--color-primary)] transition">Complete Purchase</button>
                   </Link>
                 </div>
               </motion.div>

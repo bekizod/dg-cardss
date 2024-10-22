@@ -82,18 +82,11 @@ const Countdown = () => {
   };
 
   return (
-    <div className="flex flex-col shadow-lg my-3 items-center border bg-gray-200 dark:bg-slate-800 border-green-500 rounded-2xl justify-center w-full ">
+    <div className="flex flex-col shadow-lg my-3 items-center border bg-gray-200 dark:bg-slate-800 border-[var(--color-primary)] rounded-2xl justify-center w-full ">
       <motion.div className="text-center pt-3" initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeInOut" }}>
-        <h2 className="text-2xl lg:text-2xl font-bold text-green-600">
+        <h2 className="text-2xl lg:text-2xl font-bold text-[var(--color-primary)]">
           Offers Available{"   "}
-          <motion.span
-            className="inline-block cursor-pointer"
-            initial={{ opacity: 1, x: -50 }}
-            animate={{opacity: 1,
-              x: ["10%", "-9%", "15%", "-8%", "10%", "10%"],
-              transition: { duration: 4, repeat: Infinity, repeatType: "loop" },
-            }}
-          >
+          <motion.span className="inline-block cursor-pointer" initial={{ opacity: 1, x: -50 }} animate={{ opacity: 1, x: ["10%", "-9%", "15%", "-8%", "10%", "10%"], transition: { duration: 4, repeat: Infinity, repeatType: "loop" } }}>
             View All
           </motion.span>
         </h2>
@@ -103,7 +96,7 @@ const Countdown = () => {
       <div className="flex flex-wrap sm:flex-nowrap items-center justify-evenly w-full py-6 gap-2 sm:gap-4">
         {["days", "hours", "minutes", "second"].map((unit, index) => (
           <motion.div key={unit} className="timer w-full max-w-[60px] sm:max-w-[80px] md:max-w-[150px] flex justify-center" variants={containerAnimation} initial="initial" animate="animate">
-            <div className="rounded-xl bg-gradient-to-b shadow-lg from-green-700 to-green-300 py-2 w-full flex items-center justify-center flex-col gap-1 aspect-square px-1 sm:px-2">
+            <div className="rounded-xl bg-gradient-to-b shadow-lg from-[var(--color-primary)] to-green-300 py-2 w-full flex items-center justify-center flex-col gap-1 aspect-square px-1 sm:px-2">
               <AnimatePresence mode="wait">
                 <motion.h3 key={unit + time[unit as keyof typeof time]} className="countdown-element font-manrope font-semibold text-lg sm:text-xl md:text-2xl text-white text-center" variants={numberAnimation} initial="initial" animate="animate" exit="exit">
                   {time[unit as keyof typeof time]}
@@ -139,15 +132,15 @@ const Countdown = () => {
                 ))}
               </motion.ul>
             </motion.div>
-            <button aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full" onClick={handlePrevSlide}>
+            <button aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full" onClick={handlePrevSlide}>
               ‹
             </button>
-            <button aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full" onClick={handleNextSlide}>
+            <button aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full" onClick={handleNextSlide}>
               ›
             </button>
             <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
               {[...Array(totalSlides).keys()].map((index) => (
-                <li key={index} className={`dot ${currentSlide === index ? "bg-green-500" : "bg-white"} w-2 h-2 rounded-full`} onClick={() => goToSlide(index)} />
+                <li key={index} className={`dot ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-white"} w-2 h-2 rounded-full`} onClick={() => goToSlide(index)} />
               ))}
             </ul>
           </div>

@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import categoryReducer from './slices/categorySlice';
+import postFeedbackReducer from './slices/postFeedbackSlice';
 import favoriteReducer from './slices/favoriteSlice';
 import cartReducer from './slices/cartSlice';
+import themeReducer from './slices/themeSlice';
+import advertisementReducer from './slices/bannersSlice';
 import localStorageMiddleware from './localStorageMiddleware';
 import { loadCartFromLocalStorage } from '../utils/localStorage';
 
@@ -25,9 +28,12 @@ const initialCartState = {
 // Configure the store
 export const store = configureStore({
   reducer: {
+    theme: themeReducer,  
     categories: categoryReducer,
     favorites: favoriteReducer,
     cart: cartReducer,
+    postFeedback: postFeedbackReducer,
+    advertisement: advertisementReducer,
   },
   preloadedState: {
     cart: initialCartState, // Set initial state for the cart

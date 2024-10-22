@@ -96,7 +96,7 @@ const ProductCarousel = () => {
                 <Link href={product.href} passHref>
                   <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
                     <Image src={product.imageSrc} alt={product.alt} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-auto rounded-xl object-cover" />
-                    <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountLabel}</p>
+                    <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountLabel}</p>
                     <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
                     <p className="text-sm text-gray-600">{product.brand}</p>
                     <div className="mt-2">
@@ -104,7 +104,7 @@ const ProductCarousel = () => {
                       <p className="text-sm line-through text-gray-500">{product.regularPrice}</p>
                       <p className="text-sm text-red-500">SAVE {product.save}</p>
                     </div>
-                    <button className="mt-2 w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Add to Cart</button>
+                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover: bg-[var(--color-primary)]">Add to Cart</button>
                   </div>
                 </Link>
               </div>
@@ -112,12 +112,12 @@ const ProductCarousel = () => {
           ))}
         </motion.div>
       </div>
-      <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2 bg-green-500 text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
+      <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
       </button>
-      <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2 bg-green-500 text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
+      <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>

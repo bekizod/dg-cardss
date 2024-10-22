@@ -10,7 +10,7 @@ import { removeFromCart, incrementQuantity, decrementQuantity } from '../../redu
 import { message } from 'antd';
 import { useAuth } from "@/context/UserContext";
 import Cookies from 'js-cookie'; 
-
+import { useRouter } from "next/navigation";
 
 const CartComponent = () => {
   const { user } = useAuth();
@@ -25,7 +25,7 @@ const CartComponent = () => {
   const { totalQuantity, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
-
+  const router = useRouter();
   // Ensure component is mounted before rendering cart items (client-side rendering)
   useEffect(() => {
     setIsMounted(true);
@@ -42,23 +42,40 @@ const CartComponent = () => {
     }
   }, [cartItems, user, token]);
 
-   
-
-   
-
   const handleDelete = (id: string, buyerId: string) => {
     dispatch(removeFromCart({ id, buyerId }));
     message.warning("Item removed from cart.");
   };
-
   if (!isMounted) {
-    return <p className="mt-[124px] text-2xl font-bold">Loading...</p>;
+    return (
+      <div role="status" className="space-y-8 py-4 mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col px-6 ">
+        <div className="md:w-2/3">
+          <div className="h-24 bg-gray-200 rounded-lg dark:bg-gray-700 mb-2.5"></div>
+          <div className="h-24 bg-gray-200 rounded-lg dark:bg-gray-700 mb-2.5"></div>
+          <div className="h-24 bg-gray-200 rounded-lg dark:bg-gray-700 mb-2.5"></div>
+        </div>
+        <div className="flex items-center justify-center md:w-1/3 h-64 bg-gray-300 rounded dark:bg-gray-700">
+          <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+          </svg>
+        </div>
+
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   const toggleCouponFields = () => {
     setShowCouponFields(!showCouponFields);
   };
 
+  const handleBuyNow = () => {
+    if (!token || !user) {
+      router.push("/checkout/login");
+    } else {
+      router.push("/checkout/address");
+    }
+  };
   return (
     <div className="flex justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
@@ -72,7 +89,7 @@ const CartComponent = () => {
                 <Image src="/cart.gif" alt="empty cart icon" width={250} height={250} className="mb-4" />
                 <p className="text-center text-gray-600 dark:text-gray-400 mb-4">Your cart is empty. Add your favorite products to it.</p>
                 <Link href="/ " passHref>
-                  <motion.button whileTap={{ scale: 0.95 }} className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 dark:hover:bg-green-300">
+                  <motion.button whileTap={{ scale: 0.95 }} className=" bg-[var(--color-primary)] text-white py-2 px-4 rounded-lg hover: bg-[var(--color-primary)] dark:hover:bg-green-300">
                     Start Shopping
                   </motion.button>
                 </Link>
@@ -154,7 +171,7 @@ const CartComponent = () => {
                         </label>
                         <div className="flex w-full mt-1">
                           <input id="coupon_code" type="text" className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300" />
-                          <button className="  bg-green-500 dark:bg-green-700 text-white rounded-r-md">Apply</button>
+                          <button className="   bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">Apply</button>
                         </div>
                       </div>
 
@@ -165,7 +182,7 @@ const CartComponent = () => {
                         </label>
                         <div className="flex mt-1">
                           <input id="gift_card_code" type="text" className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300" />
-                          <button className=" bg-green-500 dark:bg-green-700 text-white rounded-r-md">Apply</button>
+                          <button className="  bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">Apply</button>
                         </div>
                       </div>
                     </motion.div>
@@ -196,11 +213,11 @@ const CartComponent = () => {
               </div>
 
               {/* Checkout Button */}
-              <Link href="/checkout1">
-                <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-600">
+              <div onClick={() => handleBuyNow()}>
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover: bg-[var(--color-primary)] dark:bg-green-700 dark:hover: bg-[var(--color-primary)]">
                   Buy Now
                 </motion.button>
-              </Link>
+              </div>
               <Image className="mt-4 w-full" src="/payment_methods.png" alt="payment methods banner" width={500} height={100} />
             </div>
           </div>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-green-100 dark:bg-green-900">
+    <div className="flex items-center justify-center h-screen bg-green-100/30 dark:bg-green-900/30 backdrop-blur-md">
       <motion.div
         className="relative flex items-center justify-center w-20 h-20"
         animate={{

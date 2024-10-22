@@ -216,7 +216,7 @@
 //                   )}
 //                   <hr className="mx-11" />
 //                 </div>
-//                 <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
+//                 <button onClick={toggleFilterModal} className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded">
 //                   Show Results
 //                 </button>
 //               </div>
@@ -230,7 +230,7 @@
 //               <motion.div key={index} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
 //                 <Link href="/SA_en/edison-electric-bakery-controller-disc-40-cm-brown-2200-w-2-slots.html">
 //                   <div className="block relative p-2 sm:p-3 md:p-4">
-//                     <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+//                     <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
 //                       50% <br /> OFF
 //                     </p>
 //                     <div className="w-full flex justify-center items-center bg-transparent">
@@ -245,7 +245,7 @@
 //                       <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>
 //                       <p className="text-xs text-green-500">SAVE 244 SAR</p>
 //                     </div>
-//                     <motion.button whileTap={{ scale: 0.95 }} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+//                     <motion.button whileTap={{ scale: 0.95 }} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
 //                       Add to Cart
 //                     </motion.button>
 //                   </div>
@@ -320,7 +320,7 @@
 //               <hr className="mx-11" />
 //             </div>
 
-//             <button onClick={toggleFilterModal} className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded">
+//             <button onClick={toggleFilterModal} className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded">
 //               Show Results
 //             </button>
 //           </div>

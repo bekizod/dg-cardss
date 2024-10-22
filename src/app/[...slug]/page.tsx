@@ -170,9 +170,9 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           });
           setIsFavorited(false);
         })
-        .catch(() => {
+        .catch((error : any) => {
           notification.error({
-            message: "Error removing category from favorites",
+            message: error?.message || "Error removing category from favorites",
           });
         });
  
@@ -187,9 +187,9 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           });
           setIsFavorited(true);
         })
-        .catch(() => {
+        .catch((error : any) => {
           notification.error({
-            message: "Error",
+            message:  error?.message ||"Error, Make sure about your connection or make sure you have logged in",
           });
         });
 
@@ -289,30 +289,67 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   //   };
   // }, []);
 
-  if (productsLoading) return <p className="mt-[124px] text-3xl">Product Loading...</p>;
+  if (productsLoading)
+    return (
+      <div role="status" className="space-y-8 py-3 px-5 mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center">
+        <div className="flex items-center justify-center w-full h-72 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+          <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+          </svg>
+        </div>
+
+        <div className="  w-1/2 flex flex-col gap-3">
+          <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[460px] mb-2.5"></div>
+          <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+          <div className="flex gap-3">
+            <div className="flex items-center justify-center w-1/4 h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
+            </div>
+            <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
+            </div>
+            <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
+            </div>
+            <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
   if (productsError) return <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>;
 
   if (favoritesLoading) return <p className="mt-[124px] text-3xl">Favorite Loading...</p>;
   if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
-
-  const handleAddToCart = (product : any) => {
+  const handleAddToCart = (product: any) => {
     // Implement the logic to dispatch addToCart action with the product details
-    
-      dispatch(
-        addToCart({
-          id: product._id,
-          buyerId: user?._id || "guest", // Include buyerId if needed
-          image: product.imageIds[0], // Example: Use the first image
-          color: product.additionalInformation?.color,
-          name: product.name,
-          quantity: 1, // Set the initial quantity as needed
-          stockQuantity: product.stockQuantity,
-          price: product.price,
-          discount: 0,
-        })
-      );
-     
+
+    dispatch(
+      addToCart({
+        id: product._id,
+        buyerId: user?._id || "guest", // Include buyerId if needed
+        image: product.imageIds[0], // Example: Use the first image
+        color: product.additionalInformation?.color,
+        name: product.name,
+        quantity: 1, // Set the initial quantity as needed
+        stockQuantity: product.stockQuantity,
+        price: product.price,
+        discount: 0,
+        test: "test",
+      })
+    );
   };
   return (
     <div className="px-4 lg:px-32 p-2 mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
@@ -365,8 +402,8 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div> */}
 
-        <div className="flex items-center space-x-2 text-lg font-medium text-green-600 dark:text-green-400 cursor-pointer hover:text-green-900 transition-colors duration-200" onClick={() => handleAddFavorite()}>
-          {isFavorited ? <GoHeartFill className="text-green-600" /> : <GoHeart />}
+        <div className="flex items-center space-x-2 text-lg font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200" onClick={() => handleAddFavorite()}>
+          {isFavorited ? <GoHeartFill className="text-[var(--color-primary)]" /> : <GoHeart />}
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div>
       </div>
@@ -517,7 +554,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                     applyFilters();
                     toggleFilterModal(); // Close the modal if needed
                   }}
-                  className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded"
+                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded"
                 >
                   Show Results
                 </button>
@@ -529,7 +566,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
             {filteredProducts.map((product: any) => {
               const productIdt = product?._id as any;
               const buyerId = user?._id || "guest";
-              const productColor = product?.additionalInformation?.color || "default"; 
+              const productColor = product?.additionalInformation?.color || "default";
               // Check if the product is already in the cart
               const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
 
@@ -539,7 +576,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                     <div className="block relative p-2 sm:p-3 md:p-4">
                       <div className="block relative p-2 sm:p-3 md:p-4">
                         {false && (
-                          <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+                          <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
                             50% <br /> OFF
                           </p>
                         )}
@@ -561,7 +598,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                             Already in Cart
                           </button>
                         ) : (
-                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full bg-green-500 dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
                             Add to Cart
                           </motion.button>
                         )}
@@ -668,7 +705,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                 applyFilters();
                 toggleFilterModal(); // Close the modal if needed
               }}
-              className="mt-4 w-full py-2 bg-green-600 text-white dark:bg-green-500 rounded"
+              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded"
             >
               Show Results
             </button>

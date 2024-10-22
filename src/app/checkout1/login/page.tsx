@@ -89,10 +89,10 @@ export default function Login() {
         {/* Conditional Rendering for Login Method */}
         {!loginMethod && (
           <motion.div className="flex flex-row justify-between text-lg " initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 py-3 bg-green-600 text-white flex flex-col gap-3 items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button onClick={() => setLoginMethod("phone")} className="flex-1 py-3  bg-[var(--color-primary)] text-white flex flex-col gap-3 items-center justify-center rounded mr-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <FaMobileAlt className="text-3xl" /> Phone Number
             </motion.button>
-            <motion.button onClick={() => setLoginMethod("email")} className="flex-1 py-3 bg-green-600 text-white flex flex-col gap-3 items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button onClick={() => setLoginMethod("email")} className="flex-1 py-3  bg-[var(--color-primary)] text-white flex flex-col gap-3 items-center justify-center rounded ml-2" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <FaEnvelope className="text-3xl" /> Email
             </motion.button>
           </motion.div>
@@ -146,7 +146,7 @@ export default function Login() {
               </div>
             )}
 
-            <motion.button type="submit" className="w-full bg-green-600 text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               Log In
             </motion.button>
           </form>

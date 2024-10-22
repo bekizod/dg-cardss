@@ -1,11 +1,13 @@
 // app/checkout/address/page.tsx
 "use client";
 
+import { useAuth } from "@/context/UserContext";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa"; // Import icons from React Icons
-
+import Cookies from "js-cookie";
 const addresses: any[] = [
   {
     id: 1,
@@ -22,7 +24,17 @@ const addresses: any[] = [
 
 export default function Address() {
   const [showMap, setShowMap] = useState(false);
+  const router = useRouter();
+  const { user } = useAuth();
+  useEffect(() => {
+    const token = Cookies.get("token");
 
+    if (!token) {
+      router.push("/checkout/login"); // Redirect to login if no token
+    } else if (user && addresses) {
+      router.push("/checkout/payment"); // Redirect to payment if user has an address
+    }
+  }, [user, router]);
   return (
     <div className="flex flex-col gap-4 p-4 dark:bg-gray-800 dark:text-white">
       <div className="flex justify-center mt-4">

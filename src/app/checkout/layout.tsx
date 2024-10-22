@@ -10,8 +10,8 @@ import { usePathname } from "next/navigation";
 
 const steps = [
   { id: 1, label: "Step 1", svg: "check", name: "Login" },
-  { id: 2, label: "Step 2", svg: "user", name: "Address"  },
-  { id: 3, label: "Step 3", svg: "file", name: "Payment"  },
+  { id: 2, label: "Step 2", svg: "user", name: "Address" },
+  { id: 3, label: "Step 3", svg: "file", name: "Payment" },
 ];
 
 interface Product {
@@ -46,7 +46,6 @@ const CartProduct = () => {
     },
     // Add more products here
   ];
-
 
   return (
     <div>
@@ -120,18 +119,17 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
         return null;
     }
   };
- const pathname = usePathname();  // Initialize useRouter
+  const pathname = usePathname(); // Initialize useRouter
 
-    useEffect(() => {
-      if (pathname.includes("/checkout1/login") || pathname.includes("/checkout1/register")) {
-        setActiveStep(1);
-      } else if (pathname.includes("/checkout1/address")) {
-        setActiveStep(2);
-      } else if (pathname.includes("/checkout1/payment")) {
-        setActiveStep(3);
-      }
-    }, [pathname]);
-
+  useEffect(() => {
+    if (pathname.includes("/checkout1/login") || pathname.includes("/checkout1/register")) {
+      setActiveStep(1);
+    } else if (pathname.includes("/checkout1/address")) {
+      setActiveStep(2);
+    } else if (pathname.includes("/checkout1/payment")) {
+      setActiveStep(3);
+    }
+  }, [pathname]);
 
   return (
     <div className="flex flex-col md:flex-row justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">

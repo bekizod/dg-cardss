@@ -40,25 +40,25 @@ export default function Home() {
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
         <ul className="hidden md:flex justify-center space-x-8 p-1">
           {["All", "ElectricalAppliance", "Kitchenware", "Serveware", "HomeAppliance"].map((tab) => (
-            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-green-500 dark:text-white text-black " : "dark:bg-slate-900  bg-zinc-200   dark:text-white text-black"}`} onClick={() => handleTabClick(tab)}>
+            <li key={tab} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === tab ? "bg-[var(--color-primary)] dark:text-white text-white " : "dark:bg-slate-900  bg-[var(--color-secondary)]  dark:text-white text-black"}`} onClick={() => handleTabClick(tab)}>
               {tab}
             </li>
           ))}
         </ul>
         <ul className="md:hidden flex justify-around p-2">
-          <li className={`cursor-pointer  ${activeTab === "All" ? "text-green-500" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("All")}>
+          <li className={`cursor-pointer  ${activeTab === "All" ? "text-[var(--color-primary)]" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("All")}>
             <FaHome />
           </li>
-          <li className={`cursor-pointer ${activeTab === "ElectricalAppliance" ? "text-green-500" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("ElectricalAppliance")}>
+          <li className={`cursor-pointer ${activeTab === "ElectricalAppliance" ? "text-[var(--color-primary)]" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("ElectricalAppliance")}>
             <FaPlug />
           </li>
-          <li className={`cursor-pointer ${activeTab === "Kitchenware" ? "text-green-500" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("Kitchenware")}>
+          <li className={`cursor-pointer ${activeTab === "Kitchenware" ? "text-[var(--color-primary)]" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("Kitchenware")}>
             <FaBlender />
           </li>
-          <li className={`cursor-pointer ${activeTab === "Serveware" ? "text-green-500" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("Serveware")}>
+          <li className={`cursor-pointer ${activeTab === "Serveware" ? "text-[var(--color-primary)]" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("Serveware")}>
             <FaUtensils />
           </li>
-          <li className={`cursor-pointer ${activeTab === "HomeAppliance" ? "text-green-500" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("HomeAppliance")}>
+          <li className={`cursor-pointer ${activeTab === "HomeAppliance" ? "text-[var(--color-primary)]" : "text-black; dark:text-white"}`} onClick={() => handleTabClick("HomeAppliance")}>
             <FaHouseUser />
           </li>
         </ul>

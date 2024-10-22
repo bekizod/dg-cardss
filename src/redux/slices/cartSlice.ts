@@ -10,7 +10,9 @@ export interface CartItem {
   quantity: number;
   stockQuantity: number;
   price: number;
-  discount: number; // Discount as a percentage
+  discount: number;
+  test: string; 
+  // Discount as a percentage
 }
 
 // Define CartState interface with total fields
@@ -51,7 +53,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      const { id, buyerId, quantity , color } = action.payload;
+      const { id, buyerId, quantity , color, test } = action.payload;
 
       // Check if the same product (by id) and buyerId already exists in the cart
       const existingItem = state.items.find(
@@ -122,5 +124,5 @@ updateBuyerIdAfterLogin: (state, action: PayloadAction<string>) => {
 });
 
 // Export the actions and the reducer
-export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity } = cartSlice.actions;
+export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBuyerIdAfterLogin } = cartSlice.actions;
 export default cartSlice.reducer;
