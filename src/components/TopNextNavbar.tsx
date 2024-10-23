@@ -12,8 +12,9 @@ import { useAuth } from "@/context/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { fetchParentCategories, fetchSubCategories } from "@/redux/slices/categorySlice";
+import { SearchProducts} from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
-
+import { notification } from "antd"; 
  
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
@@ -24,8 +25,59 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const { user, logout } = useAuth(); // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector((state: RootState) => state.categories as { parentCategories: any[]; subCategories: any[]; loading: boolean; error: string });
+   const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts); 
+
+
+  const [searchTerm, setSearchTerm] = useState(''); // State for search term
+  const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (searchTerm) {
+         const queryParams = [
+  `page=`,
+  `size=`,
+  searchTerm ? `q=${searchTerm}` :  "q=", // Only add 'q' if searchTerm is not empty
+  `color=`,
+  `productSize=`,
+  `brand=`,
+  `material=`,
+  `minPrice=`,
+  `maxPrice=`,
+  `category=`,
+  `hasDiscount=`
+].filter(Boolean).join('&'); // Filter out any null values before joining
+
+
+        try {
+          // Dispatch the action
+          await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
+           
+        } catch (err : any) {
+          // Error notification
+          notification.error({
+            message: 'Search Failed',
+            description: err?.message || 'Failed to fetch products. Please try again.',
+          });
+        }
+      }
+    };
+
+    fetchProducts(); // Call the async function inside the useEffect
+
+  }, [dispatch, searchTerm]);
+
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    setSearchIsModalOpen(true); // Open the modal when the search is submitted
+  };
+
+  const searchcloseModal = () => {
+    setSearchIsModalOpen(false); // Close the modal when done
+  };
+
   const handleModalToggle = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen(!issearchModalOpen);
+    
   };
 
   const filterCards = (tabId: number) => {
@@ -83,7 +135,14 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         <div className="flex-1 mx-4">
           <div className="relative flex items-center">
             <AiOutlineSearch className="text-[var(--color-primary)] absolute left-3" />
-            <input type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)]   dark:bg-slate-800" />
+            <input value={searchTerm}
+       onChange={(e) => setSearchTerm(e.target.value)}
+         onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission and page reload
+        setSearchIsModalOpen(true); // Open the modal when "Enter" is pressed
+      }
+    }} type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)]   dark:bg-slate-800" />
           </div>
         </div>
 
@@ -262,6 +321,113 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+
+     <AnimatePresence>
+  {issearchModalOpen && (
+    <motion.div
+      className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="bg-gray-200 dark:bg-slate-900 p-6 rounded-lg shadow-lg md:w-[85vw] relative"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 50, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        <button
+          onClick={searchcloseModal}
+          className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+        >
+          &#10005; {/* X icon to close */}
+        </button>
+
+        <div className="text-2xl font-semibold mb-4">Search Results <span>Total Products of { total}</span></div>
+
+        {status === "loading" && <p>Loading products...</p>}
+        {status === "failed" && <p>Error fetching products: {error}</p>}
+
+        {status === "succeeded" && (
+          <div className="product-list max-h-96 overflow-y-auto"> {/* Set max height and enable scrolling */}
+            {products.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {/* {products.map((product) => (
+                  <div
+                    key={product._id}
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+                  >
+                    {product.imageIds.length > 0 && (
+                      <img
+                        src={product.imageIds[0]} // Assuming the first image ID is used
+                        alt={product.name}
+                        className="w-full h-48 object-cover"
+                      />
+                    )}
+                    <div className="p-4">
+                      <h4 className="font-bold text-lg">{product.name}</h4>
+                      <p className="text-gray-500">{product.adjective}</p>
+                      <p className="text-gray-700 dark:text-gray-300 font-semibold mt-2">
+                        Price: {product.price}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Brand: {product.additionalInformation.brand}
+                      </p>
+                    </div>
+                  </div>
+                ))} */}
+
+                {products.map((product, index) => (
+            <div key={index} className="relative w-64 flex-shrink-0">
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
+                <Link href={`/#` } passHref>
+                  <div >
+                    <Image src={product.imageIds[0]} alt={product.alt} width={1000} height={1000} loading="eager" fetchPriority="high" className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl" />
+                    {product.discount && <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountPercentage }% OFF</p>}
+                    <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
+                    <p className="text-sm text-gray-600">{product.additionalInformation?.brand}</p>
+                    <div className="mt-2">
+                       {
+  product.discount ? (
+    <>
+      <p className="text-xl font-bold text-green-500">
+        {product.price - product.discount} {/* Assuming discount is subtracted from price */}
+      </p>
+      <p className="text-sm line-through text-gray-500">
+        {product.price}
+      </p>
+      <p className="text-sm text-red-500">
+        SAVE {product.discount}
+      </p>
+    </>
+  ) : (
+    <p className="text-xl font-bold text-green-500">{product.price}</p>
+  )
+}
+
+                    </div>
+                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover: bg-[var(--color-primary)]">Add to Cart</button>
+                  </div>
+                </Link>
+              </div>
+            </div>
+           ))}
+              </div>
+            ) : (
+              <p>No products found for the search term: "{searchTerm}"</p>
+            )}
+          </div>
+        )}
+         <div className="text-2xl font-semibold mb-4">{pages > 1 ? <>Pages: { pages}</> : ""} </div>
+
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+
     </div>
   );
 }

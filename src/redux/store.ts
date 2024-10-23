@@ -4,6 +4,7 @@ import postFeedbackReducer from './slices/postFeedbackSlice';
 import favoriteReducer from './slices/favoriteSlice';
 import cartReducer from './slices/cartSlice';
 import themeReducer from './slices/themeSlice';
+import searchSliceReducer from './slices/searchSlice';
 import parentCategoriesSliceReducer from './slices/parentCategoriesSlice';
 import advertisementReducer from './slices/bannersSlice';
 import coverPictureSliceReducer from './slices/coverPictureSlice';
@@ -37,7 +38,8 @@ export const store = configureStore({
     postFeedback: postFeedbackReducer,
     advertisement: advertisementReducer,
     coverPictureSlice:coverPictureSliceReducer,
-    parentCategoriesSlice:parentCategoriesSliceReducer
+    parentCategoriesSlice:parentCategoriesSliceReducer,
+    searchProducts:searchSliceReducer,
   },
   preloadedState: {
     cart: initialCartState, // Set initial state for the cart
