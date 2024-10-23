@@ -1,13 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Thunk for fetching advertisements
+// Thunk for fetching advertisements by parentId with caching
 export const getAdvertisements = createAsyncThunk(
   'advertisement/getAdd',
-  async (parentId: string, { rejectWithValue }) => {
+  async (parentId: string, { getState, rejectWithValue }) => {
+    const { advertisement } = getState() as { advertisement: { cache: Record<string, any> } };
+
+    // Check if the data for this parentId already exists in the cache
+    if (advertisement.cache[parentId]) {
+      // Return cached data to avoid a new API call
+      return advertisement.cache[parentId];
+    }
+
     try {
       const response = await axios.get(`https://alsaifgallery.onrender.com/api/v1/advertisement/getAdd/${parentId}`);
-      return response.data.data; // Returns the array of advertisements
+      return { parentId, data: response.data.data }; // Return both parentId and fetched data
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'An error occurred');
     }
@@ -18,14 +26,14 @@ export const getAdvertisements = createAsyncThunk(
 const advertisementSlice = createSlice({
   name: 'advertisement',
   initialState: {
-    data: [],    // Advertisements data
+    cache: {},  // Store advertisements data by parentId
     status: 'idle',
     error: null,
   },
   reducers: {
-    // Optional: Add a reset action if you ever need to manually clear the state
+    // Optional: Reset action to clear the cache or data manually
     resetAdvertisements: (state) => {
-      state.data = [];
+      state.cache = {};
       state.status = 'idle';
       state.error = null;
     },
@@ -34,18 +42,18 @@ const advertisementSlice = createSlice({
     builder
       .addCase(getAdvertisements.pending, (state) => {
         state.status = 'loading';
-        state.data = [];  // Clear the previous advertisements data before loading new data
       })
-      .addCase(getAdvertisements.fulfilled, (state, action) => {
+      .addCase(getAdvertisements.fulfilled, (state : any, action) => {
         state.status = 'succeeded';
-        state.data = action.payload; // Set the fetched data
+        const { parentId, data } = action.payload;
+        state.cache[parentId] = data; // Cache the fetched data for the specific parentId
       })
       .addCase(getAdvertisements.rejected, (state : any, action) => {
         state.status = 'failed';
-        state.error = action.payload || "Error when Fetching Banners";
+        state.error = action.payload || 'Error when Fetching Banners';
       });
   },
 });
 
-export const { resetAdvertisements } = advertisementSlice.actions;  // Export the reset action
+export const { resetAdvertisements } = advertisementSlice.actions;
 export default advertisementSlice.reducer;

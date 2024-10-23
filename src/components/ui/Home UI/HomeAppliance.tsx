@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, cache } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,28 +12,28 @@ export default function HomeAppliance(){
    
  // Adjust based on the number of slides
  const dispatch = useDispatch<AppDispatch>();
-  const advertisements = useSelector((state: any) => state.advertisement.data); // Access advertisements from the Redux state
- const totalSlides = advertisements?.length || 0;
+ const [parentId, setParentId] = useState<string>("67176d7b8f31afc8d962be92");
+   const { cache, status, error } = useSelector((state: RootState) => state.advertisement as any); // Access advertisements from the Redux state
+  const totalSlides = cache[parentId]?.length || 0;
+  const[pages, setPages] = useState<number>(0)
 
- useEffect(() => {
-    // Fetch advertisements when the component mounts or when the parentId changes
-    dispatch(getAdvertisements("67176d7b8f31afc8d962be92"));
-
-    // Optionally reset the advertisements when the component unmounts
-    return () => {
-      dispatch(resetAdvertisements());
-    };
-  }, [dispatch  ]);
-
+   useEffect(() => {
+     if (!cache[parentId]) {
+       // Fetch advertisements only if they are not already cached
+       dispatch(getAdvertisements(parentId));
+       setPages(cache[parentId]?.length);
+     }else{
+      setPages(cache[parentId]?.length);
+     }
+   }, [dispatch, parentId, cache]);
 
   useEffect(() => {
-     
     const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % pages);
     }, 3000); // Change slide every 3 seconds
 
     return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [ totalSlides   ]);
+  }, [pages]);
 
   
   return (
@@ -50,7 +50,7 @@ export default function HomeAppliance(){
               transform: `translateX(-${currentSlide * 100}%)`,
             }}
           >
-            {advertisements?.map((ad: any, index: number) => (
+            {cache[parentId] && cache[parentId]?.length > 0 && cache[parentId]?.map((ad: any, index: number) => (
               <motion.li key={index} className="flex-shrink-0 w-full">
                 <Link href={`/${ad.parentCategoryId?.categoryName}/${ad.parentCategoryId?._id}/${ad.subCategoryId.categoryName}/${ad.subCategoryId._id}`}>
                   {" "}
@@ -79,7 +79,7 @@ export default function HomeAppliance(){
         </button>
 
         <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {[...Array(totalSlides).keys()].map((index) => (
+          {[...Array(pages)?.keys()].map((index) => (
             <li key={index} className={`dot ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-gray-400"} w-2 h-2 rounded-full`} />
           ))}
         </ul>

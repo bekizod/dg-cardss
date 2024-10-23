@@ -4,7 +4,9 @@ import postFeedbackReducer from './slices/postFeedbackSlice';
 import favoriteReducer from './slices/favoriteSlice';
 import cartReducer from './slices/cartSlice';
 import themeReducer from './slices/themeSlice';
+import parentCategoriesSliceReducer from './slices/parentCategoriesSlice';
 import advertisementReducer from './slices/bannersSlice';
+import coverPictureSliceReducer from './slices/coverPictureSlice';
 import localStorageMiddleware from './localStorageMiddleware';
 import { loadCartFromLocalStorage } from '../utils/localStorage';
 
@@ -34,6 +36,8 @@ export const store = configureStore({
     cart: cartReducer,
     postFeedback: postFeedbackReducer,
     advertisement: advertisementReducer,
+    coverPictureSlice:coverPictureSliceReducer,
+    parentCategoriesSlice:parentCategoriesSliceReducer
   },
   preloadedState: {
     cart: initialCartState, // Set initial state for the cart

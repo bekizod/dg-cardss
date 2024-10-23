@@ -27,6 +27,7 @@
     "next-i18next": "^15.3.1",
     "next-themes": "^0.3.0",
     "react": "^18",
+    "react-barcode": "^1.5.3",
     "react-country-region-selector": "^3.6.1",
     "react-dom": "^18",
     "react-i18next": "^15.0.1",
