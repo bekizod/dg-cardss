@@ -25,7 +25,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const { user, logout } = useAuth(); // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector((state: RootState) => state.categories as { parentCategories: any[]; subCategories: any[]; loading: boolean; error: string });
-   const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts); 
+   const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts as any); 
 
 
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
@@ -76,7 +76,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   };
 
   const handleModalToggle = () => {
-    setIsModalOpen(!issearchModalOpen);
+    setIsModalOpen(!isModalOpen);
     
   };
 
@@ -379,7 +379,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                   </div>
                 ))} */}
 
-                {products.map((product, index) => (
+                {products.map((product : any, index : any) => (
             <div key={index} className="relative w-64 flex-shrink-0">
               <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
                 <Link href={`/#` } passHref>
@@ -408,7 +408,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
 }
 
                     </div>
-                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover: bg-[var(--color-primary)]">Add to Cart</button>
+                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hoverbg-[var(--color-primary)]">Add to Cart</button>
                   </div>
                 </Link>
               </div>
