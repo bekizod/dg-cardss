@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "@/redux/slices/categorySlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { message, notification , Rate } from "antd";
+import { message, notification,Modal, Input, Button, Rate } from "antd";
 import "./stars.css";
 import Custom404 from "@/app/not-found";
 import { addToCart } from "@/redux/slices/cartSlice";
@@ -44,11 +44,14 @@ export default function SingleProductPage({ params }: { params: { slug: string[]
 const router = useRouter();
   const dispatch = useDispatch();
   const { product, loading, error } = useSelector((state: RootState) => state.categories as { product: any; loading: boolean; error: string });
-  const [rating, setRating] = useState<number>(product.ratings?.averageRating || 0); // Set initial rating
+  const [rating, setRating] = useState<number | null>(product.ratings?.averageRating || 0); // Set initial rating
  const productIdt = product?._id;
  const buyerId = user?._id || "guest";
  const productColor = product?.additionalInformation?.color || "default"; // Ensure a fallback color
-
+const [comment, setComment] = useState<string>("");
+const [isModalVisible, setIsModalVisible] = useState(false);
+const [addComment, setAddComment] = useState(false);
+const [Loading, setLoading] = useState(false);
  // Now use useSelector to get cart items and perform the logic outside of the hook
  const existingItem = useSelector((state: RootState) => state.cart.items.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor));
 
@@ -90,45 +93,7 @@ const router = useRouter();
      console.log("Item exists in cart:", existingItem);
    }
  }, [existingItem]);
-  const handleRate = async (value: number) => {
-    setRating(value); // Update local state immediately on user selection
-
-    const token = Cookies.get("token"); // Retrieve Bearer token from cookies
-
-    try {
-      const response = await axios.post(
-        `https://alsaifgallery.onrender.com/api/v1/product/rateProduct/${productId}`,
-        { rating: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Add Bearer token
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        notification.success({
-          message: "Rating Submitted",
-          description: "Your rating has been submitted successfully!",
-          placement: "topRight", // You can change placement if needed
-        });
-      } else {
-        notification.error({
-          message: "Submission Failed",
-          description: "Failed to submit rating.",
-          placement: "topRight",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: "Error",
-        description: "Error submitting rating. Please try again.",
-        placement: "topRight",
-      });
-    }
   
-  };
   if (loading)
     return (
       <div className="flex flex-col gap-3   mt-[124px]  animate-pulse    rtl:space-x-reverse">
@@ -196,6 +161,62 @@ const router = useRouter();
         })
       );
     }
+  };
+
+
+
+  const handleRate = async () => {
+    const token = Cookies.get("token");
+    try {
+      const response = await axios.post(
+        `https://alsaifgallery.onrender.com/api/v1/product/rateProduct/${productId}`,
+        { rating, comment: addComment ? comment : "" },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        notification.success({
+          message: "Rating Submitted",
+          description: "Your rating has been submitted successfully!",
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Submission Failed",
+          description: "Failed to submit rating.",
+          placement: "topRight",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: "Error",
+        description: "Error submitting rating. Please try again.",
+        placement: "topRight",
+      });
+    } finally {
+      setLoading(false);
+      setIsModalVisible(false);
+    }
+  };
+
+  const handleRateChange = (value: number) => {
+    setRating(value);
+    setIsModalVisible(true); // Show the modal on rate selection
+  };
+
+  const handleModalOk = () => {
+    setLoading(true);
+    handleRate();
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    setRating(null); // Reset rating if user cancels
+    setComment(""); // Reset comment if user cancels
+    setAddComment(false); // Reset add comment option
   };
   return (
     <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
@@ -273,7 +294,7 @@ const router = useRouter();
           </div>
           {/* Slider controls */}
           <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToPrevious}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark: bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
               </svg>
@@ -281,7 +302,7 @@ const router = useRouter();
             </span>
           </button>
           <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToNext}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark: bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
               <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
               </svg>
@@ -296,10 +317,17 @@ const router = useRouter();
             {product.name}
           </motion.h1>
           <div className="flex flex-row gap-2 items-center text-slate-400">
-            <Rate value={product.ratings?.averageRating} onChange={handleRate} disabled={loading} className="custom-rate bg-gray-50 rounded" />|
+            <Rate value={rating || product.ratings?.averageRating} onChange={handleRateChange} disabled={Loading} className="custom-rate bg-gray-50 rounded" />|
             <motion.p className="text-sm text-gray-500 dark:text-gray-400" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
               {product.adjective}
             </motion.p>
+            <Modal title="Submit Rating" visible={isModalVisible} onOk={handleModalOk} onCancel={handleModalCancel} okText="Submit" cancelText="Cancel" confirmLoading={Loading}>
+              <p>Do you want to add a comment with your rating?</p>
+              <Button onClick={() => setAddComment(true)}>Yes</Button>
+              <Button onClick={() => setAddComment(false)}>No</Button>
+
+              {addComment && <Input.TextArea placeholder="Enter your comment" value={comment} onChange={(e) => setComment(e.target.value)} rows={3} style={{ marginTop: 10 }} />}
+            </Modal>
           </div>
           <motion.div className="flex p-1 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="flex items-center space-x-2">
@@ -385,7 +413,7 @@ const router = useRouter();
                     Continue Shopping
                   </button>
                   <Link href="/cart">
-                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)] dark:bg-green-700 text-white dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-green-700 dark:hover: bg-[var(--color-primary)] transition">Complete Purchase</button>
+                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)] dark:bg-green-700 text-white dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-green-700 dark:hover:bg-[var(--color-primary)] transition">Complete Purchase</button>
                   </Link>
                 </div>
               </motion.div>

@@ -7,23 +7,29 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa"; // Import icons from React Icons
+import { Button, Form, Input, notification } from "antd";
+import axios from 'axios';
 import Cookies from "js-cookie";
+
+
 const addresses: any[] = [
-  {
-    id: 1,
-    name: "tt nnt",
-    details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
-  },
-  {
-    id: 1,
-    name: "tt nnt",
-    details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
-  },
+  // {
+  //   id: 1,
+  //   name: "tt nnt",
+  //   details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
+  // },
+  // {
+  //   id: 1,
+  //   name: "tt nnt",
+  //   details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
+  // },
   // Add more address objects here if needed
 ];
 
 export default function Address() {
   const [showMap, setShowMap] = useState(false);
+   const [loading, setLoading] = useState(false);
+   const [address, setAddress] = useState("");
   const router = useRouter();
   const { user } = useAuth();
   useEffect(() => {
@@ -31,14 +37,49 @@ export default function Address() {
 
     if (!token) {
       router.push("/checkout/login"); // Redirect to login if no token
-    } else if (user && addresses) {
+    } else if (user) {
       router.push("/checkout/payment"); // Redirect to payment if user has an address
     }
   }, [user, router]);
+
+
+   const handleSubmit = async () => {
+     setLoading(true);
+     const token = Cookies.get("token"); // Retrieve Bearer token from cookies
+     try {
+       const response = await axios.post(
+         "https://alsaifgallery.onrender.com/api/v1/user/setAddress",
+         { address },
+         {
+           headers: {
+             Authorization: `Bearer ${token}`, // Add Bearer token to header
+           },
+         }
+       );
+
+       if (response.status === 200) {
+         notification.success({
+           message: "Address Added",
+           description: response.data.message, // Displays "Address added successfully"
+         });
+         setAddress(""); // Clear the input after successful submission
+          setShowMap(false) 
+       }
+     } catch (error) {
+       console.error(error);
+       notification.error({
+         message: "Submission Failed",
+         description: "Failed to add the address. Please try again.",
+       });
+     } finally {
+       setLoading(false);
+     }
+  };
+  
   return (
     <div className="flex flex-col gap-4 p-4 dark:bg-gray-800 dark:text-white">
       <div className="flex justify-center mt-4">
-        <motion.button className=" bg-[var(--color-primary)] text-white p-2 rounded-full  justify-center items-center shadow-md hover: bg-[var(--color-primary)] transition duration-300 dark: bg-[var(--color-primary)] dark:hover:bg-green-700" onClick={() => setShowMap(!showMap)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <motion.button className=" bg-[var(--color-primary)] text-white p-2 rounded-full  justify-center items-center shadow-md hover:bg-[var(--color-primary)] transition duration-300 dark:bg-[var(--color-primary)] dark:hover:bg-green-700" onClick={() => setShowMap(!showMap)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
           {showMap ? <FaMinus size={20} /> : <FaPlus size={20} />}
         </motion.button>
       </div>
@@ -47,13 +88,22 @@ export default function Address() {
       {showMap && (
         <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-800 bg-opacity-75 dark:bg-gray-300">
           <motion.div className="relative w-full max-w-4xl bg-white rounded-lg shadow-md p-4 dark:bg-gray-900" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }}>
-            <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" onClick={() => setShowMap(false)}>
+            <button className="absolute z-50 top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" onClick={() => setShowMap(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path d="M19.707 4.293a1 1 0 00-1.414 0L12 9.586 5.707 3.293a1 1 0 00-1.414 1.414L10.586 11 4.293 17.293a1 1 0 001.414 1.414L12 12.414l6.293 6.293a1 1 0 001.414-1.414L13.414 11l6.293-6.293a1 1 0 000-1.414z" fill="currentColor"></path>
               </svg>
             </button>
             {/* Add your map embed or component here */}
-            <p className="text-center h-56">Map will be displayed here</p>
+            <Form layout="vertical" onFinish={handleSubmit}>
+              <Form.Item label="Address" required>
+                <Input.TextArea value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Enter your address" rows={4} />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" loading={loading} disabled={!address}>
+                  Submit Address
+                </Button>
+              </Form.Item>
+            </Form>
           </motion.div>
         </div>
       )}
