@@ -1,7 +1,7 @@
 // app/checkout/address/page.tsx
 "use client";
 
-import { useAuth } from "@/context/UserContext";
+import { fetchUserInfo, useAuth } from "@/context/UserContext";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,49 +10,42 @@ import { FaPlus, FaMinus } from "react-icons/fa"; // Import icons from React Ico
 import { Button, Form, Input, notification } from "antd";
 import axios from 'axios';
 import Cookies from "js-cookie";
-
-
-const addresses: any[] = [
-  // {
-  //   id: 1,
-  //   name: "tt nnt",
-  //   details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
-  // },
-  // {
-  //   id: 1,
-  //   name: "tt nnt",
-  //   details: "RHSC3084, 3084 Salih Al Khazraji, 7430, As Sulimaniyah, Riyadh 12232, Saudi Arabia",
-  // },
-  // Add more address objects here if needed
-];
+ 
+ 
 
 export default function Address() {
   const [showMap, setShowMap] = useState(false);
    const [loading, setLoading] = useState(false);
    const [address, setAddress] = useState("");
   const router = useRouter();
-  const { user } = useAuth();
-  useEffect(() => {
-    const token = Cookies.get("token");
+  const { user,token } = useAuth();
+  const [addressMe, setAddressMe] = useState( []);
+   useEffect(() => {
+     const token = Cookies.get("token");
+     console.log("User data: " + JSON.stringify(user, null, 2));
+     setAddressMe(user?.savedAddress);
+     if (!token) {
+       router.push("/checkout/login");
+     }
+   }, [user, router]);
 
-    if (!token) {
-      router.push("/checkout/login"); // Redirect to login if no token
-    } else if (user) {
-      router.push("/checkout/payment"); // Redirect to payment if user has an address
-    }
-  }, [user, router]);
-
+   const fetchData = async () => {
+     if (token) {
+       await fetchUserInfo(token);
+       setAddressMe(user?.savedAddress);
+     }
+   };
 
    const handleSubmit = async () => {
      setLoading(true);
-     const token = Cookies.get("token"); // Retrieve Bearer token from cookies
+     const token = Cookies.get("token");
      try {
        const response = await axios.post(
          "https://alsaifgallery.onrender.com/api/v1/user/setAddress",
          { address },
          {
            headers: {
-             Authorization: `Bearer ${token}`, // Add Bearer token to header
+             Authorization: `Bearer ${token}`,
            },
          }
        );
@@ -60,10 +53,14 @@ export default function Address() {
        if (response.status === 200) {
          notification.success({
            message: "Address Added",
-           description: response.data.message, // Displays "Address added successfully"
+           description: response.data.message,
          });
-         setAddress(""); // Clear the input after successful submission
-          setShowMap(false) 
+         setAddress("");
+         setShowMap(false);
+
+         // Fetch the updated user data to refresh the address list
+         await fetchData();
+         window.location.reload(); 
        }
      } catch (error) {
        console.error(error);
@@ -74,8 +71,7 @@ export default function Address() {
      } finally {
        setLoading(false);
      }
-  };
-  
+   };
   return (
     <div className="flex flex-col gap-4 p-4 dark:bg-gray-800 dark:text-white">
       <div className="flex justify-center mt-4">
@@ -112,13 +108,12 @@ export default function Address() {
       <div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-900 dark:text-white">
         <div className="gap-4">
           {/* Saved Addresses */}
-          {addresses.length > 0 ? (
+          {addressMe?.length > 0 ? (
             <div className="space-y-4">
-              {addresses.map((address) => (
-                <motion.div key={address.id} className="p-4 bg-gray-100 rounded-lg shadow-md w-full flex justify-between items-start dark:bg-gray-800" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              {addressMe?.map((address, index) => (
+                <motion.div key={index} className="p-4 bg-gray-100 rounded-lg shadow-md w-full flex justify-between items-start dark:bg-gray-800" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
                   <div>
-                    <p className="text-lg font-semibold">{address.name}</p>
-                    <p className="text-gray-700 dark:text-gray-400">{address.details}</p>
+                    <p className="text-lg font-semibold">{address}</p>
                   </div>
                   <button className="text-green-500 dark:text-green-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -136,8 +131,8 @@ export default function Address() {
 
           {/* Confirm Button */}
           <div className="flex justify-center mt-4">
-            <Link href="/checkout1/payment">
-              <motion.button className=" bg-[var(--color-primary)] text-white p-2 rounded-lg shadow-md hover: bg-[var(--color-primary)] transition duration-300 dark: bg-[var(--color-primary)] dark:hover:bg-green-700" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+            <Link href="/checkout/payment">
+              <motion.button className=" bg-[var(--color-primary)] text-white p-2 rounded-lg shadow-md hover:bg-[var(--color-primary)] transition duration-300 dark:bg-[var(--color-primary)] dark:hover:bg-green-700" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
                 Confirm
               </motion.button>
             </Link>

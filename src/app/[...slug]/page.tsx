@@ -339,14 +339,15 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     dispatch(
       addToCart({
         id: product._id,
-        buyerId: user?._id || "guest", // Include buyerId if needed
-        image: product.imageIds[0], // Example: Use the first image
+        buyerId: user?._id || "guest",
+        image: product.imageIds[0],
         color: product.additionalInformation?.color,
         name: product.name,
-        quantity: 1, // Set the initial quantity as needed
+        quantity: 1,
         stockQuantity: product.stockQuantity,
         price: product.price,
-        discount: 0,
+        unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
+        discount: product.discountPercentage || 0,
         test: "test",
       })
     );

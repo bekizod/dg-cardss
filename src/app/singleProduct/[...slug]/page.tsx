@@ -149,14 +149,15 @@ const [Loading, setLoading] = useState(false);
       dispatch(
         addToCart({
           id: product._id,
-          buyerId: user?._id || "guest", // Pass the buyer/customer ID here
+          buyerId: user?._id || "guest",
           image: product.imageIds[0],
           color: product.additionalInformation?.color,
           name: product.name,
           quantity: 1,
           stockQuantity: product.stockQuantity,
           price: product.price,
-          discount: 0,
+         unitPrice : product.discount ? product.discount : product.price, // Pass unit price based on discount
+          discount: product.discountPercentage || 0,
           test: "test",
         })
       );

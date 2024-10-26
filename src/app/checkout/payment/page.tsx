@@ -3,11 +3,15 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import axios from "axios";
 import { useState, useRef, useEffect, useCallback } from "react";
 import CardModal from "@/components/CardModal"; // Update the import path as necessary
 import Cookies from "js-cookie";
+import { notification } from "antd";
 import { useAuth } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 const paymentMethods = [
   {
     id: 1,
@@ -55,15 +59,50 @@ export default function PaymentMethods() {
   const { user } = useAuth();
   const modalRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+   const [loading, setLoading] = useState(false);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { totalQuantity, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
+  const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+  const token = Cookies.get("token");
+
+
+  const createOrderList = () => {
+    const cart = filteredCartItems?.map((item) => ({
+      productId: item.id, // Replace with your product ID property
+      quantity: item.quantity, // Adjust based on your item structure
+      unitPrice: item.unitPrice,
+    }));
+
+    const orderList = {
+      orderedBy: user._id,
+      cart: cart,
+      totalAmount: totalQuantity, // Implement a function to calculate total amount
+    };
+
+    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
+  };
+
  useEffect(() => {
     const token = Cookies.get('token');
 
     if (!token) {
       router.push('/checkout/login'); // Redirect to login if no token
-    } else if (user && !user.address) {
-      router.push('/checkout/address'); // Redirect to address if no address
+    } else if (user && !user?.savedAddress) {
+      router.push("/checkout/address"); // Redirect to address if no address
+      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      setFilteredCartItems(userCartItems);
     }
-  }, [user, router]);
+  }, [user, router,cartItems]);
+
+
+    useEffect(() => {
+      // Filter cart items based on buyerId (either user._id or 'guest')
+      if (token && user) {
+        // If user is logged in, filter by user's ID
+        const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+        setFilteredCartItems(userCartItems);
+      }
+    }, [cartItems, user, token]);
   // Handle clicks outside the modal
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
@@ -102,9 +141,55 @@ export default function PaymentMethods() {
     setSelectedMethod(2); // Keep the radio button checked for Credit/Debit Card Payment
     setModalOpen(false); // Close modal after confirmation
   };
+const handleCreateOrder = async () => {
+  setLoading(true);
+  const token = Cookies.get("token"); // Retrieve Bearer token from cookies
+  const orderedBy = "66fe8ba7cf917c38eddda512"; // Example orderedBy ID
+const cart = filteredCartItems?.map((item) => ({
+  productId: item.id, // Replace with your product ID property
+  quantity: item.quantity, // Adjust based on your item structure
+  unitPrice: item.unitPrice,
+}));
+  try {
+    const response = await axios.post(
+      "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
+      {
+        orderedBy: user._id,
+        cart,
+        totalAmount: totalQuantity,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add Bearer token to header
+          "Content-Type": "application/json", // Set content type
+        },
+      }
+    );
 
+    if (response.status === 200) {
+      notification.success({
+        message: "Order Created",
+        description: response.data.message || "Order created successfully",
+      });
+      // Optionally clear cart or handle further actions here
+    }
+  } catch (error) {
+    console.error(error);
+    notification.error({
+      message: "Order Creation Failed",
+      description: "Failed to create order. Please try again.",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <div className="flex   justify-center">
+        <button className="p-2 rounded-lg bg-green-500" onClick={handleCreateOrder} disabled={loading}>
+          {loading ? "Creating Order..." : "Create Order"}
+        </button>
+      </div>
       <p className="text-lg text-center font-semibold mb-4 dark:text-white">Choose payment method</p>
       <div className="space-y-1">
         {paymentMethods.map((method) => (
@@ -122,6 +207,10 @@ export default function PaymentMethods() {
 
       {/* Render the modal */}
       <CardModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onConfirm={handleConfirm} />
+
+      <button onClick={handleCreateOrder} disabled={loading}>
+        {loading ? "Creating Order..." : "Create Order"}
+      </button>
     </div>
   );
 }

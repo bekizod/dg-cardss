@@ -122,11 +122,11 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
   const pathname = usePathname(); // Initialize useRouter
 
   useEffect(() => {
-    if (pathname.includes("/checkout1/login") || pathname.includes("/checkout1/register")) {
+    if (pathname.includes("/checkout/login") || pathname.includes("/checkout/register")) {
       setActiveStep(1);
-    } else if (pathname.includes("/checkout1/address")) {
+    } else if (pathname.includes("/checkout/address")) {
       setActiveStep(2);
-    } else if (pathname.includes("/checkout1/payment")) {
+    } else if (pathname.includes("/checkout/payment")) {
       setActiveStep(3);
     }
   }, [pathname]);

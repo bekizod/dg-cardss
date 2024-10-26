@@ -76,6 +76,22 @@ const CartComponent = () => {
       router.push("/checkout/address");
     }
   };
+
+   const createOrderList = () => {
+     const cart = filteredCartItems?.map((item) => ({
+       productId: item.id, // Replace with your product ID property
+       quantity: item.quantity, // Adjust based on your item structure
+       unitPrice :item.unitPrice,
+     }));
+
+     const orderList = {
+       orderedBy: user._id,
+       cart: cart,
+       totalAmount: totalQuantity, // Implement a function to calculate total amount
+     };
+
+     console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
+   };
   return (
     <div className="flex justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
@@ -103,6 +119,7 @@ const CartComponent = () => {
         <div className="flex flex-col md:flex-row gap-6 px-3 w-full">
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
+            <div>total quantity in cart : {totalQuantity}</div>
             {filteredCartItems.map((item) => (
               <div className="flex flex-col gap-4 " key={item.id}>
                 <div className="flex gap-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md shadow-lg">
@@ -216,6 +233,11 @@ const CartComponent = () => {
               <div onClick={() => handleBuyNow()}>
                 <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover: bg-[var(--color-primary)] dark:bg-green-700 dark:hover: bg-[var(--color-primary)]">
                   Buy Now
+                </motion.button>
+              </div>
+              <div onClick={() => createOrderList()}>
+                <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover: bg-[var(--color-primary)] dark:bg-green-700 dark:hover: bg-[var(--color-primary)]">
+                  Check Order
                 </motion.button>
               </div>
               <Image className="mt-4 w-full" src="/payment_methods.png" alt="payment methods banner" width={500} height={100} />

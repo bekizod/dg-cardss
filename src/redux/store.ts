@@ -18,14 +18,15 @@ const loadedCartItems = loadCartFromLocalStorage();
 const initialCartState = {
   items: loadedCartItems || [],
   totalQuantity: loadedCartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0,
-  totalPrice: loadedCartItems?.reduce(
+     totalPrice: loadedCartItems?.reduce(
     (acc, item) => acc + (item.price - (item.price * item.discount) / 100) * item.quantity,
     0
   ) || 0,
   totalDiscount: loadedCartItems?.reduce(
     (acc, item) => acc + (item.price * item.discount) / 100 * item.quantity,
     0
-  ) || 0,   
+  ) || 0, 
+  totalItems : loadedCartItems?.length,
 };
 
 // Configure the store

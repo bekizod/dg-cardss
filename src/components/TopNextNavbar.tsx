@@ -378,7 +378,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                     </div>
                   </div>
                 ))} */}
-
+{/* href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`} */}
                 {products.map((product : any, index : any) => (
             <div key={index} className="relative w-64 flex-shrink-0">
               <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>

@@ -1,6 +1,6 @@
-"use client"
 // AuthContext.tsx
-// AuthContext.tsx
+
+"use client";
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -17,7 +17,8 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // API to fetch user info using the token
-const fetchUserInfo = async (token: string) => {
+export const fetchUserInfo = async (token: string) => {
+  // <- make this exportable
   try {
     const response = await axios.get("https://alsaifgallery.onrender.com/api/v1/user/getUserInfo", {
       headers: { Authorization: `Bearer ${token}` },
@@ -60,11 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.location.reload(); // Refresh the page to clear the state
   };
 
-  return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ token, user, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 // Hook for child components to get the auth object and re-render when it changes
