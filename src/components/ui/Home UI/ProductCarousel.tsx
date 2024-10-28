@@ -1,80 +1,53 @@
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-const products = [
-  {
-    href: "/SA_en/6285360150099.html",
-    discountLabel: "50% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150099-1.jpg?width=200",
-    alt: "إديسون قدر ضغط كهربائي برو بوعاء جرانيت بيد 6 لتر 1000 واط product image",
-    name: "إديسون قدر ضغط كهربائي برو بوعاء جرانيت بيد 6 لتر 1000 واط",
-    brand: "إديسون",
-    finalPrice: "250 SAR",
-    regularPrice: "499 SAR",
-    save: "SAVE 249 SAR"
-  },
-  {
-    href: "/SA_en/6285360150100.html",
-    discountLabel: "30% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150100-1.jpg?width=200",
-    alt: "إديسون محضر طعام كهربائي بوعاء زجاجي 1.5 لتر 600 واط product image",
-    name: "إديسون محضر طعام كهربائي بوعاء زجاجي 1.5 لتر 600 واط",
-    brand: "إديسون",
-    finalPrice: "150 SAR",
-    regularPrice: "215 SAR",
-    save: "SAVE 65 SAR"
-  },
-  {
-    href: "/SA_en/6285360150101.html",
-    discountLabel: "40% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150101-1.jpg?width=200",
-    alt: "إديسون خلاط كهربائي بوعاء بلاستيكي 2 لتر 700 واط product image",
-    name: "إديسون خلاط كهربائي بوعاء بلاستيكي 2 لتر 700 واط",
-    brand: "إديسون",
-    finalPrice: "120 SAR",
-    regularPrice: "200 SAR",
-    save: "SAVE 80 SAR"
-  },
-  {
-    href: "/SA_en/6285360150102.html",
-    discountLabel: "20% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150102-1.jpg?width=200",
-    alt: "إديسون غلاية كهربائية 1.7 لتر 1800 واط product image",
-    name: "إديسون غلاية كهربائية 1.7 لتر 1800 واط",
-    brand: "إديسون",
-    finalPrice: "90 SAR",
-    regularPrice: "112 SAR",
-    save: "SAVE 22 SAR"
-  },
-  {
-    href: "/SA_en/6285360150103.html",
-    discountLabel: "10% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150103-1.jpg?width=200",
-    alt: "إديسون ماكينة قهوة كهربائية 1.2 لتر 850 واط product image",
-    name: "إديسون ماكينة قهوة كهربائية 1.2 لتر 850 واط",
-    brand: "إديسون",
-    finalPrice: "110 SAR",
-    regularPrice: "122 SAR",
-    save: "SAVE 12 SAR"
-  },
-  {
-    href: "/SA_en/6285360150104.html",
-    discountLabel: "25% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150104-1.jpg?width=200",
-    alt: "إديسون مقلاة كهربائية 1.5 لتر 900 واط product image",
-    name: "إديسون مقلاة كهربائية 1.5 لتر 900 واط",
-    brand: "إديسون",
-    finalPrice: "130 SAR",
-    regularPrice: "175 SAR",
-    save: "SAVE 45 SAR"
-  }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { SearchProducts} from "@/redux/slices/searchSlice";
+ 
 
 const ProductCarousel = () => {
+  // Get user and logout function from context
+  const dispatch = useDispatch<AppDispatch>();
+   const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts as any); 
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+useEffect(() => {
+    const fetchProducts = async () => {
+       
+         const queryParams = [
+  `page=`,
+  `size=`,
+   `q=`, // Only add 'q' if searchTerm is not empty
+  `color=`,
+  `productSize=`,
+  `brand=`,
+  `material=`,
+  `minPrice=`,
+  `maxPrice=`,
+  `category=`,
+  `hasDiscoun=true`
+].filter(Boolean).join('&'); // Filter out any null values before joining
 
+
+        try {
+          // Dispatch the action
+          await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
+           
+        } catch (err : any) {
+          // Error notification
+          notification.error({
+            message: 'Search Failed',
+            description: err?.message || 'Failed to fetch products. Please try again.',
+          });
+        }
+      
+    };
+
+    fetchProducts(); // Call the async function inside the useEffect
+
+  }, [dispatch ]);
   const handleNavigation = (direction: number) => {
     const newIndex = currentIndex + direction;
     if (newIndex >= 0 && newIndex < products.length && carouselRef.current) {
@@ -91,20 +64,26 @@ const ProductCarousel = () => {
       <div ref={carouselRef} className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide">
         <motion.div className="flex gap-2 py-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
           {products.map((product, index) => (
-            <div key={index} className="relative w-64 flex-shrink-0">
-              <div className="bg-white  p-4 rounded-lg shadow-lg" data-href={product.href}>
-                <Link href={product.href} passHref>
-                  <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
-                    <Image src={product.imageSrc} alt={product.alt} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-auto rounded-xl object-cover" />
-                    <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountLabel}</p>
+            <div key={index} className="relative w-64  flex-shrink-0">
+              <div className="bg-white   p-4 rounded-lg shadow-lg"   >
+                <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}  >
+                  <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}  >
+                    <Image src={product?.imageIds[0]} alt={product.alt} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-40  rounded-xl object-cover" />
+                    {
+                      product?.discount > 0 ? <p className="absolute top-0 right-0 c text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{Math.round(product.discountPercentage)}% SAVE</p> :    <p className="absolute top-0 right-0 c text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">Expired Discount</p> 
+                    }
+                 
                     <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
-                    <p className="text-sm text-gray-600">{product.brand}</p>
-                    <div className="mt-2">
-                      <p className="text-xl font-bold text-green-500">{product.finalPrice}</p>
-                      <p className="text-sm line-through text-gray-500">{product.regularPrice}</p>
-                      <p className="text-sm text-red-500">SAVE {product.save}</p>
+                    <p className="text-sm text-gray-600">{product.additionalInformation.brand}</p>
+                    <div className="mt-2  ">
+                      {
+                        product?.discount ? (<><p className="text-xl  font-bold text-green-500">{product.discount}</p>
+                      <p className="text-sm line-through text-gray-500">{product.price}</p>
+                      <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p></>) : (<p className="py-5 text-xl font-bold text-green-500">{product.price}</p>)
+                      }
+                       
                     </div>
-                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover: bg-[var(--color-primary)]">Add to Cart</button>
+                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button>
                   </div>
                 </Link>
               </div>

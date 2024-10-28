@@ -11,7 +11,17 @@ import ProductSlider from "./ProductCarousel";
 import ProductCarousel from "./ProductCarousel";
 import ScrollableBanner2 from "./ScrollableBanner2";
 import OffersCountdown from "./OffersCountdown";
+import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 export default function HomeHero() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
+   
+  useEffect(() => {
+    dispatch(getAllCoverPictures({parentId:""}));
+  }, [dispatch]);
+ 
   return (
     <div className="">
       <motion.div className="py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
@@ -34,20 +44,34 @@ export default function HomeHero() {
         </div>
       </motion.div>
 
-      <div>
+      {isFetching && <div>Cover Pics Are Fetching</div>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {pictures?.map((item: any) => (
+          <Link href={`/${item?.parentCategory?.categoryName}/${item?.parentCategory?._id}/${item?.subCategory?.categoryName}/${item?.subCategory?._id}`} key={item?._id}>
+            <motion.div className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105" whileHover={{ scale: 1.05 }}>
+              <Image width={1000} height={1000} src={item?.coverPic?.data} alt={item?.subCategory?.categoryName} className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80" />
+              {/* <div className="p-4 bg-white">
+                <h3 className="text-lg font-semibold text-gray-800">{item.subCategory.categoryName}</h3>
+                <p className="text-sm text-gray-600">{item.parentCategory.categoryName}</p>
+              </div> */}
+            </motion.div>
+          </Link>
+        ))}
+      </div>
+
+      {/* <div>
         <OffersCountdown />
-      </div>
-      
-      <div>
+      </div> */}
+
+      {/* <div>
         <ScrollableBanner />
-      </div>
+      </div> */}
 
-      
-      <div className="">
+      {/* <div className="">
         <BannerSection />
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <motion.div className="flex py-4 gap-2.5">
           <div className="relative w-1/4">
             <div className="PageBuilder_intersection_div__OvZlh">
@@ -86,13 +110,13 @@ export default function HomeHero() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <ScrollableBanner2 />
-      </div>
+      </div> */}
       {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
+      {/* <div>
         <div className="flex py-2 gap-2">
           <motion.div className="relative w-1/2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
             <div className="relative">
@@ -127,9 +151,9 @@ export default function HomeHero() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </div> */}
       {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
+      {/* <div>
         <div className="relative py-2 flex gap-2">
           <div className="relative w-1/2">
             <motion.div id="row_13_column_1_banner_1" className="PageBuilder_intersection_div__OvZlh" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -175,9 +199,9 @@ export default function HomeHero() {
             </motion.div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
+      {/* <div>
         <div className="flex py-3 gap-2">
           <motion.div className="relative w-1/4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
             <div className="relative">
@@ -244,9 +268,9 @@ export default function HomeHero() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </div> */}
       {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
+      {/* <div>
         <div className="relative pb-3 flex gap-2">
           <div className="relative w-full">
             <motion.div id="row_15_column_1_banner_1" className="PageBuilder_intersection_div__OvZlh" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -258,10 +282,10 @@ export default function HomeHero() {
             </motion.div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* //////////////////////////////////////////////////////////////////// */}
       <div>
-        <div className="flex pb-3 gap-2">
+        {/* <div className="flex pb-3 gap-2">
           <motion.div className="relative w-1/4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
             <div className="relative">
               <Link href="/SA_en/televisions/tv.html" className="block">
@@ -327,14 +351,14 @@ export default function HomeHero() {
             </div>
           </motion.div>
         </div>
-      </div>
-      {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
-        You May Also Like
-        <ProductCarousel />
-      </div>
-      {/* //////////////////////////////////////////////////////////////////// */}
-      <div>
+      </div> */}
+        {/* //////////////////////////////////////////////////////////////////// */}
+        <div>
+          You May Also Like
+          <ProductCarousel />
+        </div>
+        {/* //////////////////////////////////////////////////////////////////// */}
+        {/* <div>
         <h1>Best Brands</h1>
         <motion.div className="flex py-3 gap-2">
           <div className="relative w-1/3">
@@ -364,7 +388,7 @@ export default function HomeHero() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );

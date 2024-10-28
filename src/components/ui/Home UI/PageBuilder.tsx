@@ -46,7 +46,7 @@ useEffect(() => {
   return (
     <div className="space-y-4 py-10 px-4">
       {/* Slider Section */}
-      <div>Id is {parentId}</div>
+      
       <motion.div className="relative w-full overflow-hidden rounded-2xl border border-gray-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <motion.div className="relative w-full flex overflow-hidden">
           <motion.ul
