@@ -14,11 +14,13 @@ export default function PageBuilder({ parentId } : {parentId : any}) {
   const { cache, status, error } = useSelector((state: RootState) => state.advertisement as any); // Access advertisements from the Redux state
   // const totalSlides = cache[parentId]?.length || 0;
   const [pages, setPages] = useState<number>(0);
-const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
+  const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
+  
 useEffect(() => {
   // Fetch cover pictures when the component mounts
+  if(parentId){
   dispatch(getAllCoverPictures({ parentId }));
-
+}
   // Optionally reset the state when unmounting
   
 }, [dispatch, parentId]); 
@@ -44,7 +46,7 @@ useEffect(() => {
   return (
     <div className="space-y-4 py-10 px-4">
       {/* Slider Section */}
-
+      <div>Id is {parentId}</div>
       <motion.div className="relative w-full overflow-hidden rounded-2xl border border-gray-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <motion.div className="relative w-full flex overflow-hidden">
           <motion.ul

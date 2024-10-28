@@ -15,6 +15,7 @@ import { fetchParentCategories, fetchSubCategories } from "@/redux/slices/catego
 import { SearchProducts} from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
 import { notification } from "antd"; 
+import { addToCart } from "@/redux/slices/cartSlice";
  
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector((state: RootState) => state.categories as { parentCategories: any[]; subCategories: any[]; loading: boolean; error: string });
    const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts as any); 
-
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
@@ -117,6 +118,26 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
       handleModalToggle();
     }
   };
+
+  const handleAddToCart = (product: any) => {
+    // Implement the logic to dispatch addToCart action with the product details
+
+    dispatch(
+      addToCart({
+        id: product._id,
+        buyerId: user?._id || "guest",
+        image: product.imageIds[0],
+        color: product.additionalInformation?.color,
+        name: product.name,
+        quantity: 1,
+        stockQuantity: product.stockQuantity,
+        price: product.price,
+        unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
+        discount: product.discountPercentage || 0,
+        test: "test",
+      })
+    );
+  };
   return (
     <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* For Large Devices: Logo, Search, User/Cart */}
@@ -135,14 +156,19 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         <div className="flex-1 mx-4">
           <div className="relative flex items-center">
             <AiOutlineSearch className="text-[var(--color-primary)] absolute left-3" />
-            <input value={searchTerm}
-       onChange={(e) => setSearchTerm(e.target.value)}
-         onKeyDown={(e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent form submission and page reload
-        setSearchIsModalOpen(true); // Open the modal when "Enter" is pressed
-      }
-    }} type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)]   dark:bg-slate-800" />
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Prevent form submission and page reload
+                  setSearchIsModalOpen(true); // Open the modal when "Enter" is pressed
+                }
+              }}
+              type="text"
+              placeholder="What are you looking for?"
+              className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)]   dark:bg-slate-800"
+            />
           </div>
         </div>
 
@@ -322,39 +348,28 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {issearchModalOpen && (
+          <motion.div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div className="bg-gray-200 dark:bg-slate-900 p-6 rounded-lg shadow-lg md:w-[85vw] relative" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }} transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <button onClick={searchcloseModal} className="absolute top-3 right-3 text-red-500 hover:text-red-700">
+                &#10005; {/* X icon to close */}
+              </button>
 
-     <AnimatePresence>
-  {issearchModalOpen && (
-    <motion.div
-      className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <motion.div
-        className="bg-gray-200 dark:bg-slate-900 p-6 rounded-lg shadow-lg md:w-[85vw] relative"
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 50, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      >
-        <button
-          onClick={searchcloseModal}
-          className="absolute top-3 right-3 text-red-500 hover:text-red-700"
-        >
-          &#10005; {/* X icon to close */}
-        </button>
+              <div className="text-2xl font-semibold mb-4">
+                Search Results <span>Total Products of {total}</span>
+              </div>
 
-        <div className="text-2xl font-semibold mb-4">Search Results <span>Total Products of { total}</span></div>
+              {status === "loading" && <p>Loading products...</p>}
+              {status === "failed" && <p>Error fetching products: {error}</p>}
 
-        {status === "loading" && <p>Loading products...</p>}
-        {status === "failed" && <p>Error fetching products: {error}</p>}
-
-        {status === "succeeded" && (
-          <div className="product-list max-h-96 overflow-y-auto"> {/* Set max height and enable scrolling */}
-            {products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {/* {products.map((product) => (
+              {status === "succeeded" && (
+                <div className="product-list max-h-96 overflow-y-auto">
+                  {" "}
+                  {/* Set max height and enable scrolling */}
+                  {products.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                      {/* {products.map((product) => (
                   <div
                     key={product._id}
                     className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
@@ -378,56 +393,62 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                     </div>
                   </div>
                 ))} */}
-{/* href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`} */}
-                {products.map((product : any, index : any) => (
-            <div key={index} className="relative w-64 flex-shrink-0">
-              <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
-                <Link href={`/#` } passHref>
-                  <div >
-                    <Image src={product.imageIds[0]} alt={product.alt} width={1000} height={1000} loading="eager" fetchPriority="high" className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl" />
-                    {product.discount && <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountPercentage }% OFF</p>}
-                    <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
-                    <p className="text-sm text-gray-600">{product.additionalInformation?.brand}</p>
-                    <div className="mt-2">
-                       {
-  product.discount ? (
-    <>
-      <p className="text-xl font-bold text-green-500">
-        {product.price - product.discount} {/* Assuming discount is subtracted from price */}
-      </p>
-      <p className="text-sm line-through text-gray-500">
-        {product.price}
-      </p>
-      <p className="text-sm text-red-500">
-        SAVE {product.discount}
-      </p>
-    </>
-  ) : (
-    <p className="text-xl font-bold text-green-500">{product.price}</p>
-  )
-}
-
+                      {/* href={`/singleProduct/${product.category.parentCategory.categoryName}/${product.category.parentCategory._id}/${product.category.categoryName}/${product.category._id}/${product.name}/${product._id}`} */}
+                      {products.map((product: any, index: any) => {
+                        const productIdt = product?._id as any;
+                        const buyerId = user?._id || "guest";
+                        const productColor = product?.additionalInformation?.color || "default";
+                        // Check if the product is already in the cart
+                        const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
+                        return (
+                          <div key={index} className="relative w-64 flex-shrink-0">
+                            <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
+                              <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`} onClick={searchcloseModal} passHref>
+                                <div>
+                                  <Image src={product.imageIds[0]} alt={product.alt} width={1000} height={1000} loading="eager" fetchPriority="high" className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl" />
+                                  {product.discount && <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountPercentage}% OFF</p>}
+                                  <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
+                                  <p className="text-sm text-gray-600">{product.additionalInformation?.brand}</p>
+                                  <div className="mt-2">
+                                    {product.discount ? (
+                                      <>
+                                        <p className="text-xl font-bold text-green-500">
+                                          {product.price - product.discount} {/* Assuming discount is subtracted from price */}
+                                        </p>
+                                        <p className="text-sm line-through text-gray-500">{product.price}</p>
+                                        <p className="text-sm text-red-500">SAVE {product.discount}</p>
+                                      </>
+                                    ) : (
+                                      <p className="text-xl font-bold text-green-500">{product.price}</p>
+                                    )}
+                                  </div>
+                                  {/* <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button> */}
+                                  {existingItem ? (
+                                    <button disabled className="mt-2 w-full bg-gray-400 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                                      Already in Cart
+                                    </button>
+                                  ) : (
+                                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                                      Add to Cart
+                                    </motion.button>
+                                  )}
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hoverbg-[var(--color-primary)]">Add to Cart</button>
-                  </div>
-                </Link>
-              </div>
-            </div>
-           ))}
-              </div>
-            ) : (
-              <p>No products found for the search term: "{searchTerm}"</p>
-            )}
-          </div>
+                  ) : (
+                    <p>No products found for the search term: &apos;{searchTerm}&apos;</p>
+                  )}
+                </div>
+              )}
+              <div className="text-2xl font-semibold mb-4">{pages > 1 ? <>Pages: {pages}</> : ""} </div>
+            </motion.div>
+          </motion.div>
         )}
-         <div className="text-2xl font-semibold mb-4">{pages > 1 ? <>Pages: { pages}</> : ""} </div>
-
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
-
+      </AnimatePresence>
     </div>
   );
 }

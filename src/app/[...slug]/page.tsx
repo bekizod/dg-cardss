@@ -16,7 +16,8 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
 import { addToCart } from "@/redux/slices/cartSlice";
 export default function ProductsAccordion({ params }: { params: { slug: string[] } }) {
-  const { user, token } = useAuth();const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { user, token } = useAuth();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const [isSizeOpen, setIsSizeOpen] = useState(false);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const [isBrandOpen, setIsBrandOpen] = useState(false);
@@ -555,7 +556,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                     applyFilters();
                     toggleFilterModal(); // Close the modal if needed
                   }}
-                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded"
+                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark:bg-[var(--color-primary)] rounded"
                 >
                   Show Results
                 </button>
