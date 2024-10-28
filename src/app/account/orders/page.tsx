@@ -42,32 +42,7 @@ export default function Order() {
         {loading && <p>Loading orders...</p>}
         {error && <p>Error loading orders: {error}</p>}
 
-        {/* Render orders   
-        {orders?.length > 0 ? (
-          orders.map((order: OrderData) => (
-            <div key={order._id} className="order-card">
-              <h3>Order ID: {order._id}</h3>
-              <p>Ordered By: {order.orderedBy}</p>
-              <p>Status: {order.status}</p>
-              <p>Payment Status: {order.paymentStatus}</p>
-              <p>Total Amount: ${order.totalAmount}</p>
-              <p>Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-
-              <div className="cart-items">
-                <h4>Cart Items:</h4>
-                {order.cart.map((item) => (
-                  <div key={item.productId} className="cart-item">
-                    <p>Product ID: {item.productId}</p>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Unit Price: ${item.unitPrice}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No orders found.</p>
-        )} */}
+        */}
       </div>
     );
 }

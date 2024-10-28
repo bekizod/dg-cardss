@@ -124,7 +124,8 @@ export default function Register() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Country</label>
-            <CountryDropdown value={selectedCountry} onChange={(value) => setSelectedCountry(value)} className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <CountryDropdown value={selectedCountry} onChange={(value) => setSelectedCountry(value)} />
+            {/* className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" */}
           </div>
 
           <div>
