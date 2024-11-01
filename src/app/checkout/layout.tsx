@@ -6,6 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { FaTrashAlt } from "react-icons/fa";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../redux/store';
+import { removeFromCart, incrementQuantity, decrementQuantity } from '../../redux/slices/cartSlice';
+import { message } from 'antd';
+import { useAuth } from "@/context/UserContext";
+import Cookies from 'js-cookie'; 
+import { useRouter } from "next/navigation";
 // import { steps } from "../steps"; // Extracted step data
 
 const steps = [
@@ -23,68 +31,37 @@ interface Product {
   quantity: number;
   price: string;
 }
-
-const CartProduct = () => {
-  const products: Product[] = [
-    {
-      href: "/SA_en/karcher-high-pressure-washer-100-bar.html",
-      imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/69ac3f4e9a6e4cbfdfdd61c00da77ca5/_/1/_1_2_1200x1200_-_1_3_1.jpg?width=300",
-      alt: "cart Product image",
-      name: "Karcher high-pressure washer 100 bar",
-      color: "Yellow",
-      quantity: 1,
-      price: "299 SAR",
-    },
-    {
-      href: "/SA_en/karcher-high-pressure-washer-100-bar.html",
-      imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/69ac3f4e9a6e4cbfdfdd61c00da77ca5/_/1/_1_2_1200x1200_-_1_3_1.jpg?width=300",
-      alt: "cart Product image",
-      name: "Karcher high-pressure washer 100 bar",
-      color: "Yellow",
-      quantity: 1,
-      price: "299 SAR",
-    },
-    // Add more products here
-  ];
-
-  return (
-    <div>
-      {products.map((product, index) => (
-        <div key={index} id="cart_product_component_container" className="flex items-center mb-4">
-          <Link href={product.href} className="flex-shrink-0">
-            <Image src={product.imageSrc} alt={product.alt} width={100} height={100} className="rounded-xl" />
-          </Link>
-          <div className="ml-4 flex flex-col justify-between">
-            <div>
-              <Link href={product.href}>
-                <p className="text-sm font-semibold">{product.name}</p>
-                <p>Color: {product.color}</p>
-                <p>Quantity: {product.quantity}</p>
-              </Link>
-            </div>
-            <div className="text-sm font-bold text-green-600">{product.price}</div>
-            <p className="text-sm text-gray-500">Tax included</p>
-          </div>
-        </div>
-      ))}
-      <hr />
-    </div>
-  );
-};
-
+ 
 export default function CheckoutLayout({ children }: { children: React.ReactNode }) {
   const [cartEmpty, setCartEmpty] = useState(false); // Assuming cart state
   const cartRef = useRef<HTMLDivElement | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [showCouponFields, setShowCouponFields] = useState(false);
+  const { user } = useAuth();
+const token = Cookies.get("token");
+const cartItems = useSelector((state: RootState) => state.cart.items);
+const dispatch = useDispatch<AppDispatch>();
+const [isMounted, setIsMounted] = useState(false);
+const { totalQuantity, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
+// Ensure component is mounted before rendering cart items (client-side rendering)
+const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+const router = useRouter();
+  
+ useEffect(() => {
+    setIsMounted(true);
 
-  const handleIncrease = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleDecrease = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-  };
+    // Filter cart items based on buyerId (either user._id or 'guest')
+    if (token && user) {
+      // If user is logged in, filter by user's ID
+      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      setFilteredCartItems(userCartItems);
+    } else {
+      // If guest, filter by 'guest' ID
+      const guestCartItems = cartItems.filter((item) => item.buyerId === "guest");
+      setFilteredCartItems(guestCartItems);
+    }
+  }, [cartItems, user, token]);
+ 
 
   const toggleCouponFields = () => {
     setShowCouponFields(!showCouponFields);
@@ -185,7 +162,35 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
             {/* Order Summary Title */}
             <h2 className="text-xl font-semibold dark:text-gray-200">Order Summary</h2>
 
-            <CartProduct />
+           <div>
+            {filteredCartItems.map((item) => (
+              <div className="flex items-center mb-4 " key={item.id}>
+                 
+                  <Link href={`/singleProduct/${item.name}/${item.id}`} className="flex-shrink-0">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={150} // Adjusted size for responsiveness
+                      height={150} // Adjusted size for responsiveness
+                      className="rounded-xl"
+                    />
+                  </Link>
+            <div className="ml-4 flex flex-col justify-between">
+            <div>
+              <Link href= "/#" >
+                <p className="text-sm font-semibold">{item.name}</p>
+                <p>Color: {item.color}</p>
+                <p>Quantity: {item.quantity}</p>
+              </Link>
+            </div>
+            <div className="text-sm font-bold text-green-600">{item.price}</div>
+            <p className="text-sm text-gray-500">Tax included</p>
+          </div>
+                   
+             
+              </div>
+            ))}
+           </div>
 
             {/* Coupon/Gift Card Section */}
             <div className="mt-4">
@@ -227,30 +232,30 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
 
             {/* Money Totals */}
             <div className="mt-6 space-y-2 dark:text-gray-300">
-              <div className="flex justify-between">
-                <p>Subtotal</p>
-                <p>300 SAR</p>
+                <div className="flex justify-between">
+                  <p>Subtotal</p>
+                  <p>{totalPrice} SAR</p>
+                </div>
+                <div className="flex justify-between text-red-500 dark:text-red-400">
+                  <p>Discount</p>
+                  <p>-{totalDiscount} SAR</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>Shipping</p>
+                  <p>0 SAR</p>
+                </div>
               </div>
-              <div className="flex justify-between text-red-500 dark:text-red-400">
-                <p>Discount</p>
-                <p>-299 SAR</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Shipping</p>
-                <p>0 SAR</p>
-              </div>
-            </div>
 
-            {/* Total */}
-            <div className="flex justify-between text-lg font-bold mt-4 dark:text-gray-200">
-              <p>Total</p>
-              <p>1 SAR</p>
-            </div>
+              {/* Total */}
+              <div className="flex justify-between text-lg font-bold mt-4 dark:text-gray-200">
+                <p>Total</p>
+                <p>{totalPrice} SAR</p>
+              </div>
 
             {/* Checkout Button */}
             <Link href="/checkout" passHref>
               <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover: bg-[var(--color-primary)] dark:bg-green-700 dark:hover: bg-[var(--color-primary)]">
-                Buy Now
+                Order Now
               </motion.button>
             </Link>
 

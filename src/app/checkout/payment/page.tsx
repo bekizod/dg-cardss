@@ -9,9 +9,10 @@ import CardModal from "@/components/CardModal"; // Update the import path as nec
 import Cookies from "js-cookie";
 import { notification } from "antd";
 import { useAuth } from "@/context/UserContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import { clearCartByBuyerId } from "@/redux/slices/cartSlice";
 const paymentMethods = [
   {
     id: 1,
@@ -52,6 +53,7 @@ const paymentMethods = [
 ];
 
 export default function PaymentMethods() {
+  const dispatch = useDispatch();
   const [selectedMethod, setSelectedMethod] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalConfirmed, setModalConfirmed] = useState(false); // Track if the modal was confirmed
@@ -65,7 +67,19 @@ export default function PaymentMethods() {
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
   const token = Cookies.get("token");
 
+  const searchParams = useSearchParams();
+  const [address, setAddress] = useState<string | null>(null);
+ 
 
+  useEffect(() => {
+    // Retrieve the address query parameter and decode it
+    const queryAddress = searchParams.get('address');
+    if (queryAddress) {
+      const decodedAddress = decodeURIComponent(queryAddress);
+      setAddress(decodedAddress); // Set the decoded address in the state
+    }
+  }, [searchParams]);
+  
   const createOrderList = () => {
     const cart = filteredCartItems?.map((item) => ({
       productId: item.id, // Replace with your product ID property
@@ -144,19 +158,21 @@ export default function PaymentMethods() {
 const handleCreateOrder = async () => {
   setLoading(true);
   const token = Cookies.get("token"); // Retrieve Bearer token from cookies
-  const orderedBy = "66fe8ba7cf917c38eddda512"; // Example orderedBy ID
-const cart = filteredCartItems?.map((item) => ({
-  productId: item.id, // Replace with your product ID property
-  quantity: item.quantity, // Adjust based on your item structure
-  unitPrice: item.unitPrice,
-}));
+  // Example orderedBy ID
+  const cart = filteredCartItems?.map((item) => ({
+    productId: item.id, // Replace with your product ID property
+    quantity: item.quantity, // Adjust based on your item structure
+    unitPrice: Math.floor(item.unitPrice), // Convert unitPrice to an integer
+  }));
   try {
     const response = await axios.post(
       "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
       {
         orderedBy: user._id,
         cart,
+        address : address,
         totalAmount: totalQuantity,
+        
       },
       {
         headers: {
@@ -171,7 +187,8 @@ const cart = filteredCartItems?.map((item) => ({
         message: "Order Created",
         description: response.data.message || "Order created successfully",
       });
-      // Optionally clear cart or handle further actions here
+      dispatch(clearCartByBuyerId(user?._id));
+      router.push("/account/orders")
     }
   } catch (error) {
     console.error(error);
@@ -191,6 +208,7 @@ const cart = filteredCartItems?.map((item) => ({
         </button>
       </div>
       <p className="text-lg text-center font-semibold mb-4 dark:text-white">Choose payment method</p>
+      <div>selected Address {address}</div>
       <div className="space-y-1">
         {paymentMethods.map((method) => (
           <motion.div key={method.id} className={`flex items-center gap-1 p-1 rounded-lg shadow-md cursor-pointer transition-transform duration-300 ${selectedMethod === method.id ? "bg-gray-100 dark:bg-gray-700" : "bg-gray-50 dark:bg-gray-600"}`} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} onClick={() => handleMethodClick(method.id)}>
@@ -208,9 +226,7 @@ const cart = filteredCartItems?.map((item) => ({
       {/* Render the modal */}
       <CardModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onConfirm={handleConfirm} />
 
-      <button onClick={handleCreateOrder} disabled={loading}>
-        {loading ? "Creating Order..." : "Create Order"}
-      </button>
+       
     </div>
   );
 }

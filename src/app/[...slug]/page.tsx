@@ -14,7 +14,7 @@ import { addFavorite, removeFavorite } from "@/redux/slices/favoriteSlice";
 import { notification } from "antd";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
 export default function ProductsAccordion({ params }: { params: { slug: string[] } }) {
   const { user, token } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -570,18 +570,27 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
               const buyerId = user?._id || "guest";
               const productColor = product?.additionalInformation?.color || "default";
               // Check if the product is already in the cart
-              const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
+              const existingItem = cartItems.find(
+                (item) => 
+                  item.id === productIdt &&
+                  item.buyerId === buyerId &&
+                  item.color === productColor
+              );
+              
+              // If the item exists, get its quantity; otherwise, default to 0
+              const existingQuantity = existingItem ? existingItem.quantity : 0;
+              const BuyerId = existingItem ? existingItem.buyerId : "guest";
+              const ID = existingItem ? existingItem.id : "";
 
               return (
                 <motion.div key={product._id} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
-                  <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
-                    <div className="block relative p-2 sm:p-3 md:p-4">
+                  {/* <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}> */}
+                    <div className="block relative   ">
                       <div className="block relative p-2 sm:p-3 md:p-4">
-                        {false && (
-                          <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                            50% <br /> OFF
-                          </p>
-                        )}
+                        <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
+                        {
+                      product?.discount > 0 ? <p className="absolute top-0 right-0   text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{Math.round(product.discountPercentage)}% SAVE</p> :     ""
+                    }
                         <div className="w-full  flex flex-1 justify-center items-center bg-transparent">
                           <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
                             <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-3/4 object-cover rounded-xl" />
@@ -590,15 +599,24 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                         <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">{product.name}</h2>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
                         <div className="mt-1 text-center">
-                          <p className="text-sm sm:text-base font-bold text-red-500">{product.price}</p>
-                          {false && <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through">488 SAR</p>}
-                          <p className="text-xs text-green-500">SAVE 244 SAR</p>
+                        {
+                        product?.discount ? (<><p className="text-xl  font-bold text-green-500">{product.discount}</p>
+                      <p className="text-sm line-through text-gray-500">{product.price}</p>
+                      <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p></>) : (<p className="py-2 text-xl font-bold text-green-500">{product.price}</p>)
+                      }
                         </div>
+                        </Link>
                         {/* Conditionally render the button */}
                         {existingItem ? (
-                          <button disabled className="mt-2 w-full bg-gray-400 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                            Already in Cart
-                          </button>
+                           <div className="flex flex-row items-center justify-center py-2 gap-2">
+                           <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                             -
+                           </button>
+                           <div className="dark:text-gray-200">{existingQuantity}</div>
+                           <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                             +
+                           </button>
+                         </div>
                         ) : (
                           <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
                             Add to Cart
@@ -606,7 +624,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                         )}
                       </div>
                     </div>
-                  </Link>
+                  {/* </Link> */}
                 </motion.div>
               );
             })}

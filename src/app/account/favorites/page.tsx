@@ -23,10 +23,11 @@ const FavoriteList: React.FC = () => {
           message: "Favorites loaded successfully",
         });
       })
-      .catch(() => {
+      .catch((error : any) => {
         notification.error({
           message: "Error loading favorites",
         });
+console.log(error.message)
       });
   }, [dispatch]);
 

@@ -14,8 +14,8 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { fetchParentCategories, fetchSubCategories } from "@/redux/slices/categorySlice";
 import { SearchProducts} from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
-import { notification } from "antd"; 
-import { addToCart } from "@/redux/slices/cartSlice";
+import { notification,Badge } from "antd";  
+import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
  
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const { parentCategories, subCategories, loading, error } = useSelector((state: RootState) => state.categories as { parentCategories: any[]; subCategories: any[]; loading: boolean; error: string });
    const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts as any); 
   const cartItems = useSelector((state: RootState) => state.cart.items);
-
+const { totalItems  } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
             <TfiAlignLeft className="text-[var(--color-primary)]" />
           </div>
           <Link href="/">
-            <Image src={logoUrl} width={120} height={20} alt="logo" className="h-16 w-auto" />
+            <Image src={logoUrl} width={120} height={20} alt="logo" loading="lazy" className="h-16 w-auto" />
           </Link>
         </div>
 
@@ -198,8 +198,10 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
           )}
           <div className="hidden md:block">|</div>
           <Link href="/cart" className="flex items-center gap-2 text-sm cursor-pointer">
-            <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
-            <span className="hidden md:inline">Cart</span>
+            <Badge count={totalItems} offset={[3,-7]}  >
+             <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
+            </Badge>
+             <p className="hidden md:inline">Cart</p>
           </Link>
         </div>
       </div>
@@ -400,15 +402,19 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                         const productColor = product?.additionalInformation?.color || "default";
                         // Check if the product is already in the cart
                         const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
+                        const existingQuantity = existingItem ? existingItem.quantity : 0;
+                        const BuyerId = existingItem ? existingItem.buyerId : "guest";
+                        const ID = existingItem ? existingItem.id : "";
                         return (
                           <div key={index} className="relative w-64 flex-shrink-0">
                             <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
-                              <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`} onClick={searchcloseModal} passHref>
+                              
                                 <div>
+                                <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`} onClick={searchcloseModal} passHref>
                                   <Image src={product.imageIds[0]} alt={product.alt} width={1000} height={1000} loading="eager" fetchPriority="high" className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl" />
                                   {product.discount && <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountPercentage}% OFF</p>}
                                   <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
-                                  <p className="text-sm text-gray-600">{product.additionalInformation?.brand}</p>
+                                  <p className="text-sm text-gray-600 dark:text-gray-300">{product.additionalInformation?.brand}</p>
                                   <div className="mt-2">
                                     {product.discount ? (
                                       <>
@@ -422,18 +428,25 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                       <p className="text-xl font-bold text-green-500">{product.price}</p>
                                     )}
                                   </div>
+                                  </Link>
                                   {/* <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button> */}
                                   {existingItem ? (
-                                    <button disabled className="mt-2 w-full bg-gray-400 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                                      Already in Cart
-                                    </button>
-                                  ) : (
-                                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                                      Add to Cart
-                                    </motion.button>
-                                  )}
+                           <div className="flex flex-row items-center justify-center py-2 gap-2">
+                           <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                             -
+                           </button>
+                           <div className="dark:text-gray-200">{existingQuantity}</div>
+                           <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                             +
+                           </button>
+                         </div>
+                        ) : (
+                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                            Add to Cart
+                          </motion.button>
+                        )}
                                 </div>
-                              </Link>
+                    
                             </div>
                           </div>
                         );

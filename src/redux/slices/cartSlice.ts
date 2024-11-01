@@ -38,7 +38,7 @@ const calculateTotals = (state: CartState, buyerId: string) => {
   const filteredItems = state.items.filter(item => item.buyerId === buyerId);
   state.totalQuantity = filteredItems.reduce((acc, item) => acc + item.quantity, 0);
   state.totalPrice = filteredItems.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  state.totalDiscount = filteredItems.reduce((acc, item) => acc + (item.discount / 100) * item.price * item.quantity, 0);
+  state.totalDiscount = filteredItems.reduce((acc, item) => acc + (item.price - item.unitPrice) * item.quantity, 0);
   state.totalItems = filteredItems.length;
 };
 
@@ -83,8 +83,13 @@ const cartSlice = createSlice({
       });
       calculateTotals(state, userId);
     },
+    clearCartByBuyerId: (state, action: PayloadAction<string>) => {
+      const buyerId = action.payload;
+      state.items = state.items.filter(item => item.buyerId !== buyerId);
+      calculateTotals(state, buyerId); // Recalculate totals to update state after clearing
+    },
   },
 });
 
-export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBuyerIdAfterLogin } = cartSlice.actions;
+export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBuyerIdAfterLogin, clearCartByBuyerId } = cartSlice.actions;
 export default cartSlice.reducer;

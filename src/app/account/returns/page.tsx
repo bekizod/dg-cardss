@@ -19,7 +19,7 @@ interface PurchaseData {
   orderedBy: string;
 }
 
-export default function Order() {
+export default function OrderReturned() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useAuth();
   const { orders, loading, error } = useSelector((state: RootState) => state.orders as any);
@@ -33,20 +33,21 @@ export default function Order() {
     }
   }, [dispatch, user?._id]);
 
+  // Filter for orders with status 'returned'
   const data: PurchaseData[] = orders?.data
     ? orders.data
-    .filter((order: any) => order.status !== "returned") 
-    .map((order: any) => ({
-        item: "Order",
-        itemCode: order._id,
-        amount: order.totalAmount,
-        price: order.cart.reduce((sum: number, cartItem: any) => sum + Number(cartItem.productId.price), 0),
-        discount: 0,
-        date: new Date(order.createdAt).toLocaleDateString("en-GB"),
-        status: order.status,
-        cart: order.cart,
-        orderedBy: order.orderedBy.firstName,
-      }))
+        .filter((order: any) => order.status === "returned") // Only include returned orders
+        .map((order: any) => ({
+            item: "Order",
+            itemCode: order._id,
+            amount: order.totalAmount,
+            price: order.cart.reduce((sum: number, cartItem: any) => sum + Number(cartItem.productId.price), 0),
+            discount: 0,
+            date: new Date(order.createdAt).toLocaleDateString("en-GB"),
+            status: order.status,
+            cart: order.cart,
+            orderedBy: order.orderedBy.firstName,
+        }))
     : [];
 
   const getStatusClass = (status: string) => {
@@ -57,6 +58,8 @@ export default function Order() {
         return "bg-yellow-200 text-yellow-800"; // Light yellow background with dark yellow text
       case "canceled":
         return "bg-red-200 text-red-800"; // Light red background with dark red text
+      case "returned":
+        return "bg-blue-200 text-blue-800"; // Light blue background with dark blue text
       default:
         return "bg-gray-200 text-gray-800"; // Default light gray background
     }
@@ -68,15 +71,15 @@ export default function Order() {
 
   return (
     <div className="order-list mt-[64px] md:mt-[124px] p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">Order History</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">Returned Orders History</h2>
 
       {/* Loading and error handling */}
       {loading && <p className="text-gray-500 text-center">Loading orders...</p>}
       {error && <p className="text-red-600 text-center">Error loading orders: {error}</p>}
 
-      {/* Render order data */}
+      {/* Render filtered order data */}
       {data.length === 0 && !loading ? (
-        <p className="text-gray-500 text-center">No orders found.</p>
+        <p className="text-gray-500 text-center">No returned orders found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((order) => {
@@ -99,7 +102,7 @@ export default function Order() {
                 {/* Button to toggle cart items visibility for the specific order */}
                 <button
                   onClick={() => toggleCartItemsVisibility(order.itemCode)}
-                  className="mt-4 bg-[var(--color-primary)]   text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
+                  className="mt-4 bg-[var(--color-primary)] text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
                 >
                   {isVisible ? 'Hide Cart Items' : 'View Cart Items'}
                 </button>
