@@ -31,7 +31,7 @@ export default function Register() {
     password: "",
     mobile: "",
     country: selectedCountry,
-    userType: "", // Initialize userType
+    userType: "web", // Initialize userType
   });
   const [registering, setRegistering] = useState(false);
 
@@ -145,17 +145,7 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} required placeholder="Password" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">User Type</label>
-            <select name="userType" value={formData.userType} onChange={handleInputChange} required className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700">
-              <option value="">Select User Type</option>
-              <option value="web">Website</option>
-              <option value="iPhone">iPhone</option>
-              <option value="Android">Android</option>
-            </select>
-          </div>
-
+          
           <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
             By creating an account you accept our{" "}
             <Link href="/privacy-policy" className="text-[var(--color-primary)]">

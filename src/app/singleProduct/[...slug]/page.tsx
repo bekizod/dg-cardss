@@ -536,7 +536,7 @@ const [Loading, setLoading] = useState(false);
                   <div className="flex items-center space-x-2">
                     <motion.div className="text-xl flex flex-row text-yellow-500 dark:text-yellow-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}>
                       {[...Array(5)].map((_, index) => (
-                        <React.Fragment key={index}>{index < rating ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
+                        <React.Fragment key={index}>{index < (rating || 0) ? <AiFillStar key={index} className="w-6 h-6 text-yellow-500" /> : <AiOutlineStar key={index} className="w-6 h-6 text-gray-400" />}</React.Fragment>
                       ))}
                     </motion.div>
                   </div>

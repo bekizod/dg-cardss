@@ -16,7 +16,9 @@ import { SearchProducts} from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
 import { notification,Badge } from "antd";  
 import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
- 
+import Cookies from 'js-cookie';
+
+
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
   const [parentName, setParentName] = useState<string>("");
@@ -31,6 +33,25 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
 const { totalItems  } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
+  const token = Cookies.get("token");
+  const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+
+
+  useEffect(() => {
+
+
+    // Filter cart items based on buyerId (either user._id or 'guest')
+    if (token && user) {
+      // If user is logged in, filter by user's ID
+      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      setFilteredCartItems(userCartItems);
+    } else {
+      // If guest, filter by 'guest' ID
+      const guestCartItems = cartItems.filter((item) => item.buyerId === "guest");
+      setFilteredCartItems(guestCartItems);
+    }
+  }, [cartItems, user, token]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       if (searchTerm) {
@@ -198,7 +219,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
           )}
           <div className="hidden md:block">|</div>
           <Link href="/cart" className="flex items-center gap-2 text-sm cursor-pointer">
-            <Badge count={totalItems} offset={[3,-7]}  >
+            <Badge count={filteredCartItems?.length} offset={[3,-7]}  >
              <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
             </Badge>
              <p className="hidden md:inline">Cart</p>

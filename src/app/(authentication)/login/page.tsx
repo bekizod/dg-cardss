@@ -97,6 +97,7 @@ export default function Login() {
           <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             {loging ? "Loging......." : "Log In"}
           </motion.button>
+          <Link href={"/forgotpassword"} className="text-blue py-1">forgot password?</Link>
         </form>
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Did Not have Account?{" "}

@@ -22,9 +22,9 @@ const CartComponent = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const [isMounted, setIsMounted] = useState(false);
-  const { totalQuantity,totalItems, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+  const { totalItems, totalPrice, totalDiscount } = useSelector((state: RootState) => state.cart);
   const router = useRouter();
   // Ensure component is mounted before rendering cart items (client-side rendering)
   useEffect(() => {
@@ -119,7 +119,7 @@ const CartComponent = () => {
         <div className="flex flex-col md:flex-row gap-6 px-3 w-full">
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
-            <div>total quantity in cart : {totalItems}</div>
+            <div>total quantity in cart : {filteredCartItems?.length}</div>
             {filteredCartItems.map((item) => (
               <div className="flex flex-col gap-4 " key={item.id}>
                 <div className="flex gap-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md shadow-lg">

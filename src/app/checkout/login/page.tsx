@@ -1,28 +1,26 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
 import Link from "next/link";
-import Cookies from "js-cookie";
 import { useAuth } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-// Import the AuthContext
+import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
+ 
 
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useAuth();
-  const token = Cookies.get("token");
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loging, setLoging] = useState(false);
-  const router = useRouter();
+  const router = useRouter()
   const { login } = useAuth(); // Use the login function from AuthContext
 
   // Notification function with a 3-second duration
@@ -34,12 +32,6 @@ export default function Login() {
       duration: 3, // Notification will disappear after 3 seconds
     });
   };
-
-  useEffect(() => {
-    if (user && token && !user.address) {
-      router.push("/checkout/address"); // Redirect to address if no address
-    }
-  }, [router, token, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,10 +54,10 @@ export default function Login() {
 
         // Store the token and user information in the context and cookies
         login(token, user);
-        dispatch(updateBuyerIdAfterLogin(user._id));
+
         // Display success notification
         openNotification("success", "Login Successful", `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`);
-        router.push("/checkout/address");
+        router.push("/account");
       } else {
         const errorData = await response.json();
         console.error("Login error", errorData);
@@ -84,7 +76,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28    bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">LOG IN</div>
@@ -105,10 +97,11 @@ export default function Login() {
           <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             {loging ? "Loging......." : "Log In"}
           </motion.button>
+          <Link href={"/forgotpassword"} className="text-blue py-1">forgot password?</Link>
         </form>
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Did Not have Account?{" "}
-          <Link href="/register" className="text-green-600">
+          <Link href="/checkout/register" className="text-[var(--color-primary)]">
             Sign Up.
           </Link>
         </div>
@@ -116,6 +109,42 @@ export default function Login() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // "use client";
 // import { useState, useRef, useEffect } from "react";
@@ -125,6 +154,8 @@ export default function Login() {
 // import Link from "next/link";
 
 // export default function Login() {
+   
+   
 
 //   return (
 //     <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800">
