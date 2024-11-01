@@ -103,7 +103,7 @@ const CartComponent = () => {
               </div>
               <div className="flex flex-col items-center">
                 <Image src="/cart.gif" alt="empty cart icon" width={250} height={250} className="mb-4" />
-                <p className="text-center text-gray-600 dark:text-gray-400 mb-4">Your cart is empty. Add your favorite products to it.</p>
+                <p className="text-center text-gray-600 dark:text-gray-400 mb-4">Your cart is empty.Please Add your favorite products to it.</p>
                 <Link href="/ " passHref>
                   <motion.button whileTap={{ scale: 0.95 }} className=" bg-[var(--color-primary)] text-white py-2 px-4 rounded-lg hover:bg-[var(--color-primary)] dark:hover:bg-green-300">
                     Start Shopping
