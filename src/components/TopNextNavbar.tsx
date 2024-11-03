@@ -351,7 +351,13 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                   ) : subCategories?.length > 0 ? (
                     <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                       {subCategories.map((subCategory) => (
-                        <Link onClick={() => setIsModalOpen(false)} href={`${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`} key={subCategory._id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950">
+                       <Link
+                       onClick={() => setIsModalOpen(false)}
+                       href={`/${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`}
+                       passHref
+                       key={subCategory._id}
+                       className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"
+                     >
                           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
                             <Image src={subCategory.categoryLogo?.data} alt={subCategory.categoryName} width={150} height={150} className="w-full object-contain mb-4 rounded-md" />
                             <p className="hover:text-[var(--color-primary)]">{subCategory.categoryName}</p>
