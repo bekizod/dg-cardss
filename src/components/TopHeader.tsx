@@ -38,7 +38,7 @@ export default function TopHeader() {
       {" "}
       <div className="bg-gray-100 dark:bg-slate-900  text-sm font-serif py-2 flex justify-around items-center gap-8">
         <div className="flex items-center gap-3">
-          <p>Welcome to Alsaif Gallery World</p>
+          <p>Welcome to Digital Card</p>
           <Image src={flagSrc} alt="Country flag" onClick={() => setOpen(true)} className="h-5 w-7 cursor-pointer" width={100} height={100} /> | <p>العربية</p>
         </div>
 

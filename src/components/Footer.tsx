@@ -61,17 +61,17 @@ const Footer = () => {
       </div>
       <main className="bg-[var(--color-tertiary)] dark:bg-green-950 relative hidden lg:block ">
         {/* Background Image */}
-        <div>
+        {/* <div>
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/Reference_images/footer%20img/footer01.png')] bg-no-repeat bg-top-left z-0"></div>
-        </div>
+        </div> */}
         {/* First Section: Logo */}
         <div className="relative  z-10 flex justify-start pl-32">
           <Image
             width={1200} // Decreased width
             height={125} // Decreased height
-            src="/Reference_images/footer img/footer02.svg"
+            src="/footer3.png"
             alt="Logo"
-            className="h-32 pt-3 w-auto "
+            className="h-32 pt-3 w-[20rem] bg-transparent"
           />
         </div>
 
@@ -219,7 +219,7 @@ const Footer = () => {
 
         {/* Fourth Section: Copyright Information */}
         <div className="text-center text-white py-2 z-10">
-          <p>Copyright © alsaifgallery.com/ All rights reserved.</p>
+          <p>Copyright © digitalcard.com/ All rights reserved.</p>
         </div>
       </main>
 
