@@ -123,7 +123,7 @@ const CartComponent = () => {
             {filteredCartItems.map((item) => (
               <div className="flex flex-col gap-4 " key={item.id}>
                 <div className="flex gap-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md shadow-lg">
-                  <Link href={`/singleProduct/${item.name}/${item.id}`} className="self-center md:self-start">
+                  <div  className="self-center md:self-start">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -131,7 +131,7 @@ const CartComponent = () => {
                       height={150} // Adjusted size for responsiveness
                       className="rounded-xl"
                     />
-                  </Link>
+                  </div>
 
                   <div className="flex flex-col justify-between w-full">
                     <div className="flex justify-between">

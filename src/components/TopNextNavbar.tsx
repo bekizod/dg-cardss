@@ -34,7 +34,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
   const token = Cookies.get("token");
-  const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
+  const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
 
 
   useEffect(() => {
@@ -162,19 +162,19 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
   return (
     <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* For Large Devices: Logo, Search, User/Cart */}
-      <div className="hidden lg:flex gap-24 items-center w-full">
+      <div className="hidden lg:flex gap-16 items-center w-full">
         {/* Logo Section */}
         <div className="flex gap-4 items-center">
           <div className="text-3xl p-2 rounded bg-[var(--color-secondary)] cursor-pointer" onClick={handleModalToggle}>
             <TfiAlignLeft className="text-[var(--color-primary)]" />
           </div>
-          <Link href="/">
-            <Image src={logoUrl} width={120} height={20} alt="logo" loading="lazy" className="h-16 w-auto" />
+          <Link href="/" >
+            <Image src={logoUrl} width={120} height={20} alt="logo" loading="lazy" className="h-16 object-cover w-[12rem]" />
           </Link>
         </div>
 
         {/* Search Bar Section */}
-        <div className="flex-1 mx-4">
+        <div className="flex-1 mx-1">
           <div className="relative flex items-center">
             <AiOutlineSearch className="text-[var(--color-primary)] absolute left-3" />
             <input
@@ -222,7 +222,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
             <Badge count={filteredCartItems?.length} offset={[3,-7]}  >
              <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
             </Badge>
-             <p className="hidden md:inline">Cart</p>
+             <div className="hidden md:inline">Cart</div>
           </Link>
         </div>
       </div>
@@ -351,7 +351,13 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                   ) : subCategories?.length > 0 ? (
                     <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                       {subCategories.map((subCategory) => (
-                        <Link onClick={() => setIsModalOpen(false)} href={`${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`} key={subCategory._id} className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950">
+                       <Link
+                       onClick={() => setIsModalOpen(false)}
+                       href={`/${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`}
+                       passHref
+                       key={subCategory._id}
+                       className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"
+                     >
                           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
                             <Image src={subCategory.categoryLogo?.data} alt={subCategory.categoryName} width={150} height={150} className="w-full object-contain mb-4 rounded-md" />
                             <p className="hover:text-[var(--color-primary)]">{subCategory.categoryName}</p>

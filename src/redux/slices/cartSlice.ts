@@ -39,7 +39,7 @@ const calculateTotals = (state: CartState, buyerId: string) => {
   state.totalQuantity = filteredItems.reduce((acc, item) => acc + item.quantity, 0);
   state.totalPrice = filteredItems.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
   state.totalDiscount = filteredItems.reduce((acc, item) => acc + (item.price - item.unitPrice) * item.quantity, 0);
-  state.totalItems = filteredItems.length;
+  state.totalItems = state.items.filter(item => item.buyerId === buyerId).length;
 };
 
 const cartSlice = createSlice({

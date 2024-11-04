@@ -6,6 +6,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 const { Meta } = Card;
 
@@ -92,18 +93,22 @@ console.log(error.message)
       
         {favorites?.length > 0 ? (
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  
           {favorites.map((category) => (
+            
             <Card
               key={category._id}
               hoverable
               cover={
-                <Image
+                <><Link key={category?._id} href={`/${category?.parentCategory?.categoryName}/${category?.parentCategory?._id}/${category?.categoryName}/${category?._id}`}><Image
                   src={category.categoryLogo?.data as string} // Assuming it's a valid URL string
                   alt={category.categoryName}
                   width={1000}
                   height={1000}
-                  className="object-cover"
-                />
+                  className="object-cover" />
+                  </Link> 
+                  </>
+                
               }
               style={{ width: 200, margin: "auto" }}
               className="dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-200  transition-colors duration-300"
@@ -117,6 +122,7 @@ console.log(error.message)
                 </Button>
               </div>
             </Card>
+       
           ))}
 </div>
         ) : (
