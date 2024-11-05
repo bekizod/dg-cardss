@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Slider from "./Slider";
-import ScrollableBanner from "./ScrollableBanner";
-import BannerSection from "./BannerHero1";
+// import ScrollableBanner from "./ScrollableBanner";
+// import BannerSection from "./BannerHero1";
 import ProductSlider from "./ProductCarousel";
 import ProductCarousel from "./ProductCarousel";
 import ScrollableBanner2 from "./ScrollableBanner2";
-import OffersCountdown from "./OffersCountdown";
+// import OffersCountdown from "./OffersCountdown";
 import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -45,6 +45,7 @@ export default function HomeHero() {
       </motion.div>
 
       {isFetching && <div>Cover Pics Are Fetching</div>}
+      <>Test test Test cover images</>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {pictures?.map((item: any) => (
           <Link href={`/${item?.parentCategory?.categoryName}/${item?.parentCategory?._id}/${item?.subCategory?.categoryName}/${item?.subCategory?._id}`} key={item?._id}>
