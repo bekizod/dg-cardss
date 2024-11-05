@@ -82,7 +82,7 @@ export default function Register() {
 
       if (data.status) {
         openNotification(true, " ");
-        router.push("/login");
+        router.push("/checkout/login");
       } else {
         openNotification(false, data.message);
       }
@@ -160,7 +160,7 @@ export default function Register() {
 
         <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Already have an account?{" "}
-          <Link href="/login" className="text-[var(--color-primary)]">
+          <Link href="/checkout/login" className="text-[var(--color-primary)]">
             Login now.
           </Link>
         </p>

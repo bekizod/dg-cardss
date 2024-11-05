@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
- 
-
+import Cookies from "js-cookie";
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
 
@@ -22,7 +21,15 @@ export default function Login() {
   const [loging, setLoging] = useState(false);
   const router = useRouter()
   const { login } = useAuth(); // Use the login function from AuthContext
+  const { user } = useAuth();
+  const token = Cookies.get("token");
+  
 
+  useEffect(() => {
+    if (user && token && !user.address) {
+      router.push("/checkout/address"); // Redirect to address if no address
+    }
+  }, [router, token, user]);
   // Notification function with a 3-second duration
   const openNotification = (type: NotificationType, message: string, description: string) => {
     notification[type]({
@@ -54,10 +61,10 @@ export default function Login() {
 
         // Store the token and user information in the context and cookies
         login(token, user);
-
+        dispatch(updateBuyerIdAfterLogin(user._id));
         // Display success notification
         openNotification("success", "Login Successful", `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`);
-        router.push("/account");
+        router.push("/checkout/address");
       } else {
         const errorData = await response.json();
         console.error("Login error", errorData);
