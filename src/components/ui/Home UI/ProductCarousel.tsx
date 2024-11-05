@@ -8,6 +8,7 @@ import { SearchProducts} from "@/redux/slices/searchSlice";
 import { notification } from "antd";
 import { useAuth } from "@/context/UserContext";
 import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
+import React from "react";
  
 
 const ProductCarousel = () => {
@@ -146,16 +147,22 @@ useEffect(() => {
 })}
         </motion.div>
       </div>
-      <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </button>
-      <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </button>
+      {
+        products?.discount > 0 && <React.Fragment> 
+        
+        <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+        </React.Fragment>
+      }
+      
     </div>
   );
 };
