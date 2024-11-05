@@ -148,7 +148,7 @@ useEffect(() => {
         </motion.div>
       </div>
       {
-        products?.discount > 0 && <React.Fragment> 
+        products?.length > 0 && <React.Fragment> 
         
         <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
