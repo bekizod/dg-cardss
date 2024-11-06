@@ -21,23 +21,34 @@ const coverPictureSlice = createSlice({
     isFetching: false,
     error: ''
   },
-  reducers: {},
+  reducers: {
+    // Reducer to clear pictures array
+    clearPictures: (state) => {
+      state.pictures = [];
+    },
+    // Reducer to reset error
+    resetError: (state) => {
+      state.error = '';
+    }
+  },
   extraReducers: (builder) => {
     builder
-      // Handle fetching all cover pictures
-      .addCase(getAllCoverPictures.pending, (state: any) => {
+      .addCase(getAllCoverPictures.pending, (state) => {
         state.isFetching = true;
-        state.error = null;
+        state.error = '';
       })
-      .addCase(getAllCoverPictures.fulfilled, (state: any, action: any) => {
+      .addCase(getAllCoverPictures.fulfilled, (state, action) => {
         state.isFetching = false;
         state.pictures = action.payload.data; // Load all cover pictures
       })
-      .addCase(getAllCoverPictures.rejected, (state: any, action: any) => {
+      .addCase(getAllCoverPictures.rejected, (state, action : any) => {
         state.isFetching = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message || 'Failed to fetch cover pictures';
       });
   }
 });
+
+// Exporting actions for clearing pictures or resetting errors
+export const { clearPictures, resetError } = coverPictureSlice.actions;
 
 export default coverPictureSlice.reducer;
