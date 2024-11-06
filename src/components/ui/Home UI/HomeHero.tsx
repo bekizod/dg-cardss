@@ -16,41 +16,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import axios from "axios";
 export default function HomeHero() {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
+  const dispatch = useDispatch<AppDispatch>();
+  const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
    
-  // useEffect(() => {
-  //   dispatch(getAllCoverPictures({parentId:""}));
-  // }, [dispatch]);
-  const [coverPictures, setCoverPictures] = useState<any[]>([]); // to store the cover pictures
-  const [loading, setLoading] = useState<boolean>(false); // to track loading state
-  const [error, setError] = useState<string | null>(null); // to store error message
   useEffect(() => {
-    const fetchCoverPictures = async () => {
-      setLoading(true);
-      setError(null); // Reset error before making the request
-      try {
-        const response = await axios.get(
-          `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories`
-        );
-        setCoverPictures(response.data); // Set the data when the request is successful
-      } catch (err: any) {
-        setError(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
-      } finally {
-        setLoading(false); // Stop loading once the request is complete
-      }
-    };
+    dispatch(getAllCoverPictures({parentId:""}));
+  }, [dispatch]);
+  // const [coverPictures, setCoverPictures] = useState<any[]>([]); // to store the cover pictures
+  // const [loading, setLoading] = useState<boolean>(false); // to track loading state
+  // const [error, setError] = useState<string | null>(null); // to store error message
+  // useEffect(() => {
+  //   const fetchCoverPictures = async () => {
+  //     setLoading(true);
+  //     setError(null); // Reset error before making the request
+  //     try {
+  //       const response = await axios.get(
+  //         `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories`
+  //       );
+  //       setCoverPictures(response.data); // Set the data when the request is successful
+  //     } catch (err: any) {
+  //       setError(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
+  //     } finally {
+  //       setLoading(false); // Stop loading once the request is complete
+  //     }
+  //   };
 
-    fetchCoverPictures();
-  }, []);
+  //   fetchCoverPictures();
+  // }, []);
  
-  if (loading) {
-    return <div>Loading... Cover Pics</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading... Cover Pics</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
   return (
     <div className="">
       <motion.div className="py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
@@ -75,7 +75,7 @@ export default function HomeHero() {
 
       {/* {isFetching && <div>Cover Pics Are Fetching</div>} */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {coverPictures?.map((item: any) => (
+        {pictures?.map((item: any) => (
           <Link href={`/${item?.parentCategory?.categoryName}/${item?.parentCategory?._id}/${item?.subCategory?.categoryName}/${item?.subCategory?._id}`} key={item?._id}>
             <motion.div className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105" whileHover={{ scale: 1.05 }}>
               <Image width={1000} height={1000} src={item?.coverPic?.data} alt={item?.subCategory?.categoryName} className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80" />
