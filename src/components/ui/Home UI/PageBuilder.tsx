@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { getAdvertisements,resetAdvertisements } from "@/redux/slices/bannersSlice";
 import Link from "next/link";
 import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
+import axios from "axios";
 
 export default function PageBuilder({ parentId } : {parentId : any}) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -16,14 +17,43 @@ export default function PageBuilder({ parentId } : {parentId : any}) {
   const [pages, setPages] = useState<number>(0);
   const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
   
-useEffect(() => {
-  // Fetch cover pictures when the component mounts
-  if(parentId){
-  dispatch(getAllCoverPictures({ parentId }));
-}
-  // Optionally reset the state when unmounting
+// useEffect(() => {
+//   // Fetch cover pictures when the component mounts
+//   if(parentId){
+//   dispatch(getAllCoverPictures({ parentId }));
+// }
+//   // Optionally reset the state when unmounting
   
-}, [dispatch, parentId]); 
+// }, [dispatch, parentId]); 
+const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
+  const [loading, setLoading] = useState<boolean>(false); // Track loading state
+  const [Cerror, setCerror] = useState<string | null>(null); // Store error message
+useEffect(() => {
+  const fetchCoverPictures = async () => {
+    setLoading(true);
+    setCerror(null); // Reset error before making the request
+
+    if(parentId){
+    try {
+      const response = await axios.get(
+        `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories/${parentId}`
+      );
+      // Directly set the response data as an array
+      setCoverPictures(response.data.data); // Set the data when the request is successful
+      console.log(response.data); // Log the response to check its structure
+    } catch (err: any) {
+      setCerror(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
+    } finally {
+      setLoading(false); // Stop loading once the request is complete
+    }
+  };
+
+}
+
+  fetchCoverPictures();
+}, [parentId]);
+
+
 
 useEffect(() => {
     if (!cache[parentId]) {
@@ -43,6 +73,16 @@ useEffect(() => {
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [pages]);
 
+
+
+  if (loading) {
+    return <div>Loading... Cover Pics</div>;
+  }
+  
+  if (error) {
+    return <div>Error: {Cerror}</div>;
+  }
+  
   return (
     <div className="space-y-4 py-10 px-4">
       {/* Slider Section */}
@@ -289,7 +329,7 @@ useEffect(() => {
       </motion.div> */}
       {isFetching && <div>Cover Pics Are Fetching</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {pictures?.map((item: any) => (
+        {coverPictures?.map((item: any) => (
           <Link href={`/${item.parentCategory?.categoryName}/${item.parentCategory?._id}/${item.subCategory.categoryName}/${item.subCategory._id}`} key={item._id}>
             <motion.div className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105" whileHover={{ scale: 1.05 }}>
               <Image width={1000} height={1000} src={item.coverPic.data} alt={item.subCategory.categoryName} className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80" />
