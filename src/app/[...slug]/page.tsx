@@ -190,7 +190,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
         })
         .catch((error : any) => {
           notification.error({
-            message:  error?.message ||"Error, Make sure about your connection or make sure you have logged in",
+            message: "Ooops!!, Make sure about your connection or make sure you have logged in",
           });
         });
 
