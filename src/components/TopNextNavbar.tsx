@@ -229,22 +229,22 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
       {/* For Small/Medium Devices: Logo, Search, Favorite */}
       <div className="lg:hidden flex w-full justify-between items-center -mt-2">
         {/* Logo Section */}
-        <div className="relative w-10 h-12">
-          <Image src="/logo_landscape-cropped.svg" layout="fill" objectFit="contain" alt="logo" className="object-contain" />
-        </div>
+        <Link  href={"/"}  className="relative  ">
+        <Image src={logoUrl} width={1000} height={1000} alt="logo" loading="lazy" className="h-11 object-cover w-[4rem]" />
+        </Link>
 
         {/* Search Bar Section */}
         <div className="flex-1 mx-3">
           <div className="relative flex items-center">
             <AiOutlineSearch className="absolute left-3 text-gray-500" />
-            <input type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[#F5F5F5] md:bg-[#E9FFF1] dark:bg-slate-800" />
+            <input type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)] dark:bg-slate-800" />
           </div>
         </div>
 
         {/* Favorite Icon Section */}
-        <div className="flex items-center">
+        <Link href={"/account/favorites"} className="flex items-center">
           <MdFavoriteBorder className="text-[var(--color-primary)] text-2xl cursor-pointer" />
-        </div>
+        </Link>
       </div>
 
       {/* Modal */}
