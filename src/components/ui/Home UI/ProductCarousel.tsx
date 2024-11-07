@@ -100,7 +100,7 @@ useEffect(() => {
             const ID = existingItem ? existingItem.id : "";
 
   return(
-<div key={index} className="relative w-64  flex-shrink-0">
+<div key={index} className="relative w-64   flex-shrink-0">
               <div className="bg-white dark:bg-slate-700   p-4 rounded-lg shadow-lg"   >
                   <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}  >
                 <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}  >
@@ -148,14 +148,14 @@ useEffect(() => {
         </motion.div>
       </div>
       {
-        products?.length > 0 && <React.Fragment> 
+        products?.length > 5 && <React.Fragment> 
         
-        <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
+        <button className="absolute top-1/2 -translate-y-1/2 -left-12 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </button>
-        <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
+        <button className="absolute top-1/2 -translate-y-1/2 -right-12 p-2  bg-[var(--color-primary)] text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
