@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FaShoppingCart, FaUndoAlt, FaHeart } from "react-icons/fa";
+import { FaShoppingCart, FaUndoAlt, FaHeart, FaSignOutAlt } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/UserContext";
 import { notification } from "antd";
@@ -11,13 +11,12 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 
 const AccountPage = () => {
-  const { user, token } = useAuth(); // Fetch user info from context
+  const { user,logout, token } = useAuth(); // Fetch user info from context
   const router = useRouter(); // Use router for redirection
   const [showSettings, setShowSettings] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   useEffect(() => {
     const tokenInCookie = Cookies.get("token");
     if (!tokenInCookie) {
@@ -40,6 +39,10 @@ const AccountPage = () => {
       setCountry(user.country);
     }
   }, [user]); // Dependency on user
+
+  const handleLogout = () => {
+    logout(); // Call logout function from the context
+  };
 
   const handlePasswordChange = async (e: any) => {
     e.preventDefault();
@@ -212,6 +215,12 @@ const AccountPage = () => {
               </motion.div>
             </Link>
           ))}
+
+<button onClick={handleLogout} className="flex lg:hidden  items-center gap-2 text-sm cursor-pointer">
+<span className=" md:inline font-bold text-lg">Logout</span>
+                <FaSignOutAlt className="text-red-500" size={27} />
+                
+              </button>
         </div>
       </div>
     </div>
