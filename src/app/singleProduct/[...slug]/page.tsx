@@ -274,11 +274,11 @@ const [Loading, setLoading] = useState(false);
             </div>
           )}
           <div>total product in stock : {product.stockQuantity}</div>
-          <div className="relative  h-full overflow-hidden rounded-lg  ">
+          <div className="relative overflow-hidden rounded-lg  ">
             {product.imageIds?.map((src: any, index: any) => (
               <div
                 key={index}
-                className={`absolute inset-0  transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
+                className={`relative transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
                 style={{ display: "flex", alignItems: "center", justifyContent: "center" }} // Fixed height
               >
                 <Image

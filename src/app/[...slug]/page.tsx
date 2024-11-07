@@ -354,7 +354,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     );
   };
   return (
-    <div className="px-4 lg:px-32 p-2 mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className="px-4 lg:px-32 p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="flex flex-row justify-between">
         {slugLength === 2 && (
@@ -725,7 +725,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                 applyFilters();
                 toggleFilterModal(); // Close the modal if needed
               }}
-              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark: bg-[var(--color-primary)] rounded"
+              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark:bg-[var(--color-primary)] rounded"
             >
               Show Results
             </button>

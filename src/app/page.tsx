@@ -115,7 +115,7 @@ export default function Home() {
   };
 
   return (
-    <main className="md:pt-[124px] pt-[62px]">
+    <main className=" pt-[28px] md:pt-[64px] lg:pt-[124px]">
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
         <ul className="hidden md:flex justify-center space-x-8 p-1">
           <li className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === "All" ? "bg-[var(--color-primary)] dark:text-white text-white" : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"}`} onClick={() => handleTabClick("All")}>

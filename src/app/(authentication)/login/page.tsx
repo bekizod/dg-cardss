@@ -76,7 +76,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 max-lg:h-screen lg:mt-[124px]   bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">LOG IN</div>

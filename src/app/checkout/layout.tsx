@@ -109,7 +109,7 @@ const router = useRouter();
   }, [pathname]);
 
   return (
-    <div className="flex flex-col md:flex-row justify-center lg:mt-[124px] mt-[68px] sm:h-screen md:h-screen lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
+    <div className="flex flex-col md:flex-row justify-center lg:mt-[124px] mt-[68px]      lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
         {cartEmpty && (
           <motion.div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
@@ -134,7 +134,7 @@ const router = useRouter();
       {!cartEmpty && (
         <div className="flex flex-col md:flex-row gap-3 px-3 w-full">
           {/* Product Section */}
-          <div className="flex flex-col items-center gap-6 w-full md:w-2/3 mx-auto">
+          <div className="flex flex-col items-center gap-6 w-full lg:w-2/3 mx-auto">
             <div className="flex justify-center py-6 w-full">
               <div className="flex items-center justify-center w-full max-w-4xl relative">
                 {steps.map((step, index) => (
@@ -156,7 +156,7 @@ const router = useRouter();
           </div>
 
           {/* Order Summary */}
-          <div className="mt-4 md:mt-0 p-4 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-xl w-full md:w-1/4">
+          <div className="mt-4 md:mt-0 p-4 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-xl w-full md:w-2/4 lg:w-1/4">
             {/* Cart Products */}
 
             {/* Order Summary Title */}
@@ -254,7 +254,7 @@ const router = useRouter();
 
             {/* Checkout Button */}
             <Link href="/checkout" passHref>
-              <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover: bg-[var(--color-primary)] dark:bg-green-700 dark:hover: bg-[var(--color-primary)]">
+              <motion.button whileTap={{ scale: 0.95 }} className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover:bg-[var(--color-primary)] dark:bg-green-700 dark:hover:bg-[var(--color-primary)]">
                 Order Now
               </motion.button>
             </Link>

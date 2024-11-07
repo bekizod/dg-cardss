@@ -78,7 +78,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex mt-[124px] justify-center items-center py-28 bg-gray-200 dark:bg-gray-800">
+    <div className="flex max-lg:h-screen lg:mt-[124px] justify-center items-center py-28  bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">{step === "sendCode" ? "Forgot Password" : "Recover Password"}</h2>
         <form onSubmit={step === "sendCode" ? handleSendCode : handleRecoverPassword} className="space-y-4">

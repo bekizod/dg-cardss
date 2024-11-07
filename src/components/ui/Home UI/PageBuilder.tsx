@@ -8,6 +8,7 @@ import { getAdvertisements,resetAdvertisements } from "@/redux/slices/bannersSli
 import Link from "next/link";
 import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
 import axios from "axios";
+import Loader from "@/app/loading";
 
 export default function PageBuilder({ parentId } : {parentId : any}) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -76,7 +77,7 @@ useEffect(() => {
 
 
   if (loading) {
-    return <div>Loading... Cover Pics</div>;
+    return <Loader />;
   }
   
   if (error) {

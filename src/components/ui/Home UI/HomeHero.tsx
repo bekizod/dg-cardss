@@ -7,6 +7,7 @@ import Link from "next/link";
 import Slider from "./Slider";
 import ProductCarousel from "./ProductCarousel";
 import axios from "axios";
+import Loader from "@/app/loading";
 
 export default function HomeHero() {
   const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
@@ -35,7 +36,7 @@ export default function HomeHero() {
   }, []);
 
   if (loading) {
-    return <div>Loading... Cover Pics</div>;
+    return <Loader />;
   }
 
   if (error) {
