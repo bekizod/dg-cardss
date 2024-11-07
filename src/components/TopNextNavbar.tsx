@@ -85,7 +85,6 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
     };
 
     fetchProducts(); // Call the async function inside the useEffect
-
   }, [dispatch, searchTerm]);
 
   const handleSearch = (event: React.FormEvent) => {
