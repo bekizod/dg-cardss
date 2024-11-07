@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {  FaTag, FaList,  } from "react-icons/fa";
 import Link from "next/link";
@@ -8,6 +8,11 @@ import { usePathname } from "next/navigation";
 import { FaInfoCircle, FaWallet, FaShieldAlt, FaShippingFast, FaMoneyBillWave, FaShoppingCart, FaFileContract, FaQuestionCircle, FaPhone, FaArrowCircleRight } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaSnapchatGhost, FaTwitter } from "react-icons/fa";
 import { FaHome, FaSearch, FaUser } from "react-icons/fa";
+import { Badge } from "antd";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useAuth } from "@/context/UserContext";
+import Cookies from 'js-cookie';
 
 const Footer = () => {
   const pathname = usePathname();
@@ -26,6 +31,26 @@ const Footer = () => {
     { name: "Settings", icon: "settings-outline", dis: "translate-x-64" },
   ];
   const [active, setActive] = useState(0);
+  const { user, logout } = useAuth(); 
+  const token = Cookies.get("token");
+  const dispatch = useDispatch<AppDispatch>();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
+
+  useEffect(() => {
+
+
+    // Filter cart items based on buyerId (either user._id or 'guest')
+    if (token && user) {
+      // If user is logged in, filter by user's ID
+      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      setFilteredCartItems(userCartItems);
+    } else {
+      // If guest, filter by 'guest' ID
+      const guestCartItems = cartItems.filter((item) => item.buyerId === "guest");
+      setFilteredCartItems(guestCartItems);
+    }
+  }, [cartItems, user, token]);
   return (
     <footer className=" pb-16 lg:pb-0">
       <div className="bg-gray-100 dark:bg-slate-600 py-3 hidden lg:block ">
@@ -241,7 +266,24 @@ const Footer = () => {
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {item.icon}
+      {item.name === "Cart" ? (
+        // Check if the current item is Cart and render the badge
+        <>
+        <Badge count={filteredCartItems?.length} offset={[23, -20]} style={{
+    backgroundColor: '#FF6347', // Change badge background color
+    color: 'white', // Set the text color of the badge
+    fontSize: '12px', // Change font size of the count
+    width: '20px', // Set width of the badge
+    height: '20px', // Set height of the badge
+    borderRadius: '50%', // Make the badge circular
+     
+  }}>
+        </Badge>
+        {item.icon}
+        </>
+      ) : (
+        item.icon
+      )}
       <span className="text-xs mt-1">{item.name}</span>
     </motion.div>
   </Link>
