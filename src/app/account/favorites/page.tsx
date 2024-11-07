@@ -88,7 +88,7 @@ console.log(error.message)
   }
 
   return (
-    <div className="dark:bg-slate-900 py-4 bg-white w-full mt-[124px] px-4 transition-colors duration-300">
+    <div className="dark:bg-slate-900 py-4 bg-white w-full max-lg:mt-[64px] lg:mt-[124px]px-4 transition-colors duration-300">
       <h3 className="text-2xl font-bold text-center mb-4 dark:text-white text-black">Your Favorite Categories</h3>
       
         {favorites?.length > 0 ? (
