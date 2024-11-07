@@ -346,7 +346,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                         </div>
                       </div>
 
-                      <span className="sr-only">Loading...</span>
+                     
                     </div>
                   ) : subCategories?.length > 0 ? (
                     <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>

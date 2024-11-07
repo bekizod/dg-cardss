@@ -90,6 +90,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import PageBuilder from "../components/ui/Home UI/PageBuilder";
 import HomeHero from "@/components/ui/Home UI/HomeHero";
 import { fetchFirstFourParentCategories } from "@/redux/slices/parentCategoriesSlice";
+import Loader from "./loading";
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const { categories, isLoading, error } = useSelector((state: RootState) => state.parentCategoriesSlice as any);
@@ -128,7 +129,7 @@ export default function Home() {
           ))}
         </ul>
       </nav>
-      <div className="container mx-auto md:mt-10 mt-9 px-4">{isLoading ? "Loading..." : renderContent()}</div>
+      <div className="container mx-auto md:mt-10 mt-9 px-4">{isLoading ?  <Loader /> : renderContent()}</div>
       {error && <p className="text-red-500">{error}</p>}
     </main>
   );
