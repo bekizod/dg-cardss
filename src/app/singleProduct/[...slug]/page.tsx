@@ -87,6 +87,12 @@ const [Loading, setLoading] = useState(false);
     dispatch(fetchSingleProduct(productId) as any);
   }, [dispatch, productId]);
 
+  useEffect(() => {
+    // Ensure the product has images before accessing them
+    if (product && product.imageIds && product.imageIds.length > 0) {
+      setCurrentIndex(0); // Reset index if new product is loaded
+    }
+  }, [product]);
  useEffect(() => {
    if (existingItem) {
      // If the item exists, you could perform some action here
@@ -126,14 +132,19 @@ const [Loading, setLoading] = useState(false);
     );
   if (error) return <p>Error: {error}</p>;
 
+
+
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + product.imageIds?.length) % product.imageIds?.length);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? product.imageIds.length - 1 : prevIndex - 1
+    );
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % product.imageIds?.length);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === product.imageIds.length - 1 ? 0 : prevIndex + 1
+    );
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -274,42 +285,78 @@ const [Loading, setLoading] = useState(false);
             </div>
           )}
           <div>total product in stock : {product.stockQuantity}</div>
-          <div className="relative overflow-hidden rounded-lg  ">
-            {product.imageIds?.map((src: any, index: any) => (
-              <div
-                key={index}
-                className={`relative transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center" }} // Fixed height
-              >
-                <Image
-                  src={product.imageIds[index] as any}
-                  alt={`product ${index}`}
-                  layout="intrinsic" // Adjust layout to maintain original dimensions
-                  width={700} // Decrease the width as needed
-                  height={700} // Fixed height
-                  objectFit="contain" // Ensure the image scales without stretching
-                  className="  rounded-2xl px-10"
-                />
-              </div>
-            ))}
-          </div>
-          {/* Slider controls */}
-          <button type="button" className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToPrevious}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
-              </svg>
-              <span className="sr-only">Previous</span>
-            </span>
-          </button>
-          <button type="button" className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" onClick={goToNext}>
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full  bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
-              </svg>
-              <span className="sr-only">Next</span>
-            </span>
-          </button>
+          <div
+        className="relative transition-opacity duration-700 ease-in-out flex items-center justify-center"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {
+          product.stockQuantity &&  <Image
+          src={product?.imageIds[currentIndex]} // Show the current image only
+          alt={`product ${currentIndex}`}
+          layout="intrinsic"
+          width={700}
+          height={700}
+          objectFit="contain"
+          className="rounded-2xl px-10"
+        />
+        }
+       
+      </div>
+
+      {/* Slider Controls */}
+      <button
+        type="button"
+        className="absolute top-1 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        onClick={goToPrevious}
+      >
+        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg
+            className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+          <span className="sr-only">Previous</span>
+        </span>
+      </button>
+
+      <button
+        type="button"
+        className="absolute top-1 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        onClick={goToNext}
+      >
+        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg
+            className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <span className="sr-only">Next</span>
+        </span>
+      </button>
         </div>
 
         {/* Description Section */}
