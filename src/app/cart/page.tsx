@@ -192,8 +192,9 @@ const CartComponent = () => {
 
                     <div className="flex flex-col mt-4  gap-3">
 
-                      {item.discount > 0 ? (<> <div className="text-2xl  font-bold ">
-                        {item.unitPrice} SAR
+                      {item.discount > 0 ? (<> <div className="">
+                        <div className="line-through text-gray-500 dark:text-gray-400 ">{item.price - item.unitPrice} SAR</div>
+                        <div className="text-2xl  font-bold ">{item.unitPrice} SAR</div>
                       </div></>) : (<> <div className="text-2xl  font-bold ">
                         {item.price} SAR
                       </div></>)}
