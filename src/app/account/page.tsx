@@ -138,7 +138,7 @@ const AccountPage = () => {
             </p>
             <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
           </div>
-          <motion.div whileHover={{ rotate: 90 }} className="flex items-center cursor-pointer" onClick={() => setShowSettings(!showSettings)}>
+          <motion.div whileHover={{ scale:1.2 }} className="flex items-center cursor-pointer" onClick={() => setShowSettings(!showSettings)}>
             <p className="mr-2 text-blue-500 dark:text-blue-300">Settings</p>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
