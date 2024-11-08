@@ -168,7 +168,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
             <TfiAlignLeft className="text-[var(--color-primary)]" />
           </div>
           <Link href="/" >
-            <Image src={logoUrl} width={120} height={20} alt="logo" loading="lazy" className="h-16 object-cover w-[12rem]" />
+            <Image src={logoUrl} width={1000} height={1000} alt="logo" loading="lazy" className="h-16 object-cover w-[11rem]" />
           </Link>
         </div>
 
