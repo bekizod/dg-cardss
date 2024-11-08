@@ -1,28 +1,34 @@
 "use client";
 import { fetchFavorites, removeFavorite } from "@/redux/slices/favoriteSlice";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { Card, Button, notification } from "antd";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { fetchFavoriteProducts } from "@/redux/slices/favoriteProductsSlice";
 
 const { Meta } = Card;
 
  
 
 const FavoriteList: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { favorites, loading, error } = useSelector((state: RootState) => state.favorites as { favorites: any[]; loading: boolean; error: string });
+  const { favoriteProducts } = useSelector((state: RootState) => state.favoriteProducts as any);
+
+
+
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchFavorites() as any)
       .unwrap()
       .then(() => {
-        notification.success({
-          message: "Favorites loaded successfully",
-        });
+      
       })
       .catch((error : any) => {
         notification.error({

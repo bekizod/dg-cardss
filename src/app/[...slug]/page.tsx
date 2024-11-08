@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { fetchProductsByCategory } from "@/redux/slices/categorySlice";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import React, { useState, useEffect, useRef } from "react";
 import { BsChevronDown, BsChevronUp, BsSortDown, BsFilter } from "react-icons/bs";
 import Image from "next/image";
@@ -15,6 +15,7 @@ import { notification } from "antd";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
 import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
+import { addFavoriteLocally, fetchFavoriteProducts, removeFavoriteProduct, saveFavoriteProduct } from "@/redux/slices/favoriteProductsSlice";
 export default function ProductsAccordion({ params }: { params: { slug: string[] } }) {
   const { user, token } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -27,8 +28,9 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const sortModalRef = useRef<HTMLDivElement>(null);
   const filterModalRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { favorites, loading: favoritesLoading, error: favoritesError } = useSelector((state: RootState) => state.favorites);
+    const { favoriteProducts, loading, error } = useSelector((state: RootState) => state.favoriteProducts as any);
   const { products, loading: productsLoading, error: productsError } = useSelector((state: RootState) => state.categories as { products: any; loading: boolean; error: string });
   const [thisCategoryId, setThisCategoryId] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
@@ -159,6 +161,53 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
       }
     });
   };
+
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch]);
+
+  const handleFavoriteToggle = async (productId: string) => {
+    const isFavorite = favoriteProducts?.some((product : any) => product._id === productId);
+
+    try {
+      if (isFavorite) {
+        await dispatch(removeFavoriteProduct(productId)).unwrap();
+        notification.success({
+          message: 'Success',
+          description: 'Product removed from favorites!',
+        });
+      } else {
+        await dispatch(saveFavoriteProduct(productId)).unwrap();
+        dispatch(addFavoriteLocally({
+          _id: productId,
+          name: "",
+          description: "",
+          price: "",
+          signedUrls: []
+        }));
+        notification.success({
+          message: 'Success',
+          description: 'Product added to favorites!',
+        });
+      }
+      
+    } catch (error : any) {
+      let errorMessage = 'Failed to save favorite product.';
+
+    // Check if the error message contains "jwt malformed"
+    if (error == "jwt malformed") {
+      errorMessage = 'Authentication error: Please log in to save favorite products.';
+    } else {
+      errorMessage = 'Failed to save favorite product. Make sure you are logged in and have an internet connection.';
+    }
+
+      notification.error({
+      message: 'Error',
+      description: errorMessage,
+    });
+    }
+  };
+
   const handleAddFavorite = () => {
     // Logic to add or remove favorite
     if (isFavorited) {
@@ -565,70 +614,102 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           )}
           {/* Product Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {filteredProducts.map((product: any) => {
-              const productIdt = product?._id as any;
-              const buyerId = user?._id || "guest";
-              const productColor = product?.additionalInformation?.color || "default";
-              // Check if the product is already in the cart
-              const existingItem = cartItems.find(
-                (item) => 
-                  item.id === productIdt &&
-                  item.buyerId === buyerId &&
-                  item.color === productColor
-              );
-              
-              // If the item exists, get its quantity; otherwise, default to 0
-              const existingQuantity = existingItem ? existingItem.quantity : 0;
-              const BuyerId = existingItem ? existingItem.buyerId : "guest";
-              const ID = existingItem ? existingItem.id : "";
+      {filteredProducts.map((product: any) => {
+        const productId = product?._id;
+        const buyerId = user?._id || 'guest';
+        const productColor = product?.additionalInformation?.color || 'default';
 
-              return (
-                <motion.div key={product._id} className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden" whileHover={{ y: -10, transition: { duration: 0.3 } }}>
-                  {/* <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}> */}
-                    <div className="block relative   ">
-                      <div className="block relative p-2 sm:p-3 md:p-4">
-                        <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
-                        {
-                      product?.discount > 0 ? <p className="absolute top-0 right-0   text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{Math.round(product.discountPercentage)}% SAVE</p> :     ""
-                    }
-                        <div className="w-full  flex flex-1 justify-center items-center bg-transparent">
-                          <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                            <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-3/4 object-cover rounded-xl" />
-                          </motion.div>
-                        </div>
-                        <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">{product.name}</h2>
-                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
-                        <div className="mt-1 text-center">
-                        {
-                        product?.discount ? (<><p className="text-xl  font-bold text-green-500">{product.discount}</p>
+        const existingItem = cartItems.find(
+          (item) => item.id === productId && item.buyerId === buyerId && item.color === productColor
+        );
+        const existingQuantity = existingItem ? existingItem.quantity : 0;
+        const isFavorite = favoriteProducts?.some((favProduct : any) => favProduct._id === productId);
+
+        return (
+          <motion.div
+            key={productId}
+            className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden"
+            whileHover={{ y: -10, transition: { duration: 0.3 } }}
+          >
+            <div className="block relative p-2 sm:p-3 md:p-4">
+              {/* Heart icon to toggle favorite */}
+              <motion.div
+                className="z-30 cursor-pointer"
+                onClick={() => handleFavoriteToggle(productId)}
+                whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+              >
+                {isFavorite ? <GoHeartFill className="text-[var(--color-primary)]" size={27} /> : <GoHeart size={27} />}
+              </motion.div>
+
+              <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
+                {/* Discount Label */}
+                {product?.discount > 0 && (
+                  <p className="absolute top-0 right-0 text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+                    {Math.round(product.discountPercentage)}% SAVE
+                  </p>
+                )}
+                {/* Product Image */}
+                <div className="w-full flex flex-1 justify-center items-center bg-transparent">
+                  <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
+                    <Image
+                      src={product.imageIds[0]}
+                      alt={product.name}
+                      width={150}
+                      height={100}
+                      loading="eager"
+                      fetchPriority="high"
+                      className="w-full h-3/4 object-cover rounded-xl"
+                    />
+                  </motion.div>
+                </div>
+                {/* Product Details */}
+                <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">
+                  {product.name}
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
+                <div className="mt-1 text-center">
+                  {product.discount ? (
+                    <>
+                      <p className="text-xl font-bold text-green-500">{product.discount}</p>
                       <p className="text-sm line-through text-gray-500">{product.price}</p>
-                      <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p></>) : (<p className="py-2 text-xl font-bold text-green-500">{product.price}</p>)
-                      }
-                        </div>
-                        </Link>
-                        {/* Conditionally render the button */}
-                        {existingItem ? (
-                           <div className="flex flex-row items-center justify-center py-2 gap-2">
-                           <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
-                             -
-                           </button>
-                           <div className="dark:text-gray-200">{existingQuantity}</div>
-                           <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
-                             +
-                           </button>
-                         </div>
-                        ) : (
-                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                            Add to Cart
-                          </motion.button>
-                        )}
-                      </div>
-                    </div>
-                  {/* </Link> */}
-                </motion.div>
-              );
-            })}
-          </div>
+                      <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p>
+                    </>
+                  ) : (
+                    <p className="py-2 text-xl font-bold text-green-500">{product.price}</p>
+                  )}
+                </div>
+              </Link>
+              {/* Conditionally render Add to Cart button */}
+              {existingItem ? (
+                <div className="flex flex-row items-center justify-center py-2 gap-2">
+                  <button
+                    onClick={() => dispatch(decrementQuantity({ id: existingItem.id, buyerId: existingItem.buyerId }))}
+                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                  >
+                    -
+                  </button>
+                  <div className="dark:text-gray-200">{existingQuantity}</div>
+                  <button
+                    onClick={() => dispatch(incrementQuantity({ id: existingItem.id, buyerId: existingItem.buyerId }))}
+                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAddToCart(product)}
+                  className="mt-2 w-full bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+                >
+                  Add to Cart
+                </motion.button>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
         </div>
 
         {/* Left Column - Filter */}

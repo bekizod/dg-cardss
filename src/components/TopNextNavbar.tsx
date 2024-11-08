@@ -12,11 +12,13 @@ import { useAuth } from "@/context/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { fetchParentCategories, fetchSubCategories } from "@/redux/slices/categorySlice";
-import { SearchProducts} from "@/redux/slices/searchSlice";
+import { SearchProducts } from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
-import { notification,Badge } from "antd";  
+import { notification, Badge } from "antd";
 import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
 import Cookies from 'js-cookie';
+import { addFavoriteLocally, fetchFavoriteProducts, removeFavoriteProduct, saveFavoriteProduct } from "@/redux/slices/favoriteProductsSlice";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 
 
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
@@ -28,14 +30,14 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const { user, logout } = useAuth(); // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector((state: RootState) => state.categories as { parentCategories: any[]; subCategories: any[]; loading: boolean; error: string });
-   const { products,pages,total, status } = useSelector((state: RootState) => state.searchProducts as any); 
+  const { products, pages, total, status } = useSelector((state: RootState) => state.searchProducts as any);
   const cartItems = useSelector((state: RootState) => state.cart.items);
-const { totalItems  } = useSelector((state: RootState) => state.cart);
+  const { totalItems } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const [issearchModalOpen, setSearchIsModalOpen] = useState(false);
   const token = Cookies.get("token");
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
-
+  const { favoriteProducts } = useSelector((state: RootState) => state.favoriteProducts as any);
 
   useEffect(() => {
 
@@ -55,26 +57,26 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
   useEffect(() => {
     const fetchProducts = async () => {
       if (searchTerm) {
-         const queryParams = [
-  `page=`,
-  `size=`,
-  searchTerm ? `q=${searchTerm}` :  "q=", // Only add 'q' if searchTerm is not empty
-  `color=`,
-  `productSize=`,
-  `brand=`,
-  `material=`,
-  `minPrice=`,
-  `maxPrice=`,
-  `category=`,
-  `hasDiscount=`
-].filter(Boolean).join('&'); // Filter out any null values before joining
+        const queryParams = [
+          `page=`,
+          `size=`,
+          searchTerm ? `q=${searchTerm}` : "q=", // Only add 'q' if searchTerm is not empty
+          `color=`,
+          `productSize=`,
+          `brand=`,
+          `material=`,
+          `minPrice=`,
+          `maxPrice=`,
+          `category=`,
+          `hasDiscount=`
+        ].filter(Boolean).join('&'); // Filter out any null values before joining
 
 
         try {
           // Dispatch the action
           await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
-           
-        } catch (err : any) {
+
+        } catch (err: any) {
           // Error notification
           notification.error({
             message: 'Search Failed',
@@ -98,7 +100,7 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
-    
+
   };
 
   const filterCards = (tabId: number) => {
@@ -158,6 +160,53 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
       })
     );
   };
+
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch]);
+
+  const handleFavoriteToggle = async (productId: string) => {
+    const isFavorite = favoriteProducts?.some((product: any) => product._id === productId);
+
+    try {
+      if (isFavorite) {
+        await dispatch(removeFavoriteProduct(productId)).unwrap();
+        notification.success({
+          message: 'Success',
+          description: 'Product removed from favorites!',
+        });
+      } else {
+        await dispatch(saveFavoriteProduct(productId)).unwrap();
+        dispatch(addFavoriteLocally({
+          _id: productId,
+          name: "",
+          description: "",
+          price: "",
+          signedUrls: []
+        }));
+        notification.success({
+          message: 'Success',
+          description: 'Product added to favorites!',
+        });
+      }
+
+    } catch (error: any) {
+      let errorMessage = 'Failed to save favorite product.';
+
+    // Check if the error message contains "jwt malformed"
+    if (error == "jwt malformed") {
+      errorMessage = 'Authentication error: Please log in to save favorite products.';
+    } else {
+      errorMessage = 'Failed to save favorite product. Make sure you are logged in and have an internet connection.';
+    }
+
+      notification.error({
+      message: 'Error',
+      description: errorMessage,
+    });
+    }
+  };
+
   return (
     <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* For Large Devices: Logo, Search, User/Cart */}
@@ -218,10 +267,10 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
           )}
           <div className="hidden md:block">|</div>
           <Link href="/cart" className="flex items-center gap-2 text-sm cursor-pointer">
-            <Badge count={filteredCartItems?.length} offset={[3,-7]}  >
-             <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
+            <Badge count={filteredCartItems?.length} offset={[3, -7]}  >
+              <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
             </Badge>
-             <div className="hidden md:inline">Cart</div>
+            <div className="hidden md:inline">Cart</div>
           </Link>
         </div>
       </div>
@@ -229,8 +278,8 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
       {/* For Small/Medium Devices: Logo, Search, Favorite */}
       <div className="lg:hidden flex w-full justify-between items-center -mt-2">
         {/* Logo Section */}
-        <Link  href={"/"}  className="relative  ">
-        <Image src={logoUrl} width={1000} height={1000} alt="logo" loading="lazy" className="h-11 object-cover w-[4rem]" />
+        <Link href={"/"} className="relative  ">
+          <Image src={logoUrl} width={1000} height={1000} alt="logo" loading="lazy" className="h-11 object-cover w-[4rem]" />
         </Link>
 
         {/* Search Bar Section */}
@@ -345,18 +394,18 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                         </div>
                       </div>
 
-                     
+
                     </div>
                   ) : subCategories?.length > 0 ? (
                     <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                       {subCategories.map((subCategory) => (
-                       <Link
-                       onClick={() => setIsModalOpen(false)}
-                       href={`/${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`}
-                       passHref
-                       key={subCategory._id}
-                       className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"
-                     >
+                        <Link
+                          onClick={() => setIsModalOpen(false)}
+                          href={`/${parentName}/${subCategory.parentCategory}/${subCategory.categoryName}/${subCategory._id}`}
+                          passHref
+                          key={subCategory._id}
+                          className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"
+                        >
                           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}>
                             <Image src={subCategory.categoryLogo?.data} alt={subCategory.categoryName} width={150} height={150} className="w-full object-contain mb-4 rounded-md" />
                             <p className="hover:text-[var(--color-primary)]">{subCategory.categoryName}</p>
@@ -431,11 +480,19 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                         const existingQuantity = existingItem ? existingItem.quantity : 0;
                         const BuyerId = existingItem ? existingItem.buyerId : "guest";
                         const ID = existingItem ? existingItem.id : "";
+                        const isFavorite = favoriteProducts?.some((favProduct : any) => favProduct._id === productIdt);
                         return (
                           <div key={index} className="relative w-64 flex-shrink-0">
                             <div className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg" data-href={product.href}>
-                              
-                                <div>
+
+                              <div>
+                              <motion.div
+                className="z-30 pb-1 cursor-pointer"
+                onClick={() => handleFavoriteToggle(productIdt)}
+                whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+              >
+                  {isFavorite ? <GoHeartFill className="text-[var(--color-primary)]" size={27} /> : <GoHeart size={27} className="text-[var(--color-secondary)]"  />}
+                  </motion.div>
                                 <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`} onClick={searchcloseModal} passHref>
                                   <Image src={product.imageIds[0]} alt={product.alt} width={1000} height={1000} loading="eager" fetchPriority="high" className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl" />
                                   {product.discount && <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountPercentage}% OFF</p>}
@@ -454,25 +511,25 @@ const { totalItems  } = useSelector((state: RootState) => state.cart);
                                       <p className="text-xl font-bold text-green-500">{product.price}</p>
                                     )}
                                   </div>
-                                  </Link>
-                                  {/* <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button> */}
-                                  {existingItem ? (
-                           <div className="flex flex-row items-center justify-center py-2 gap-2">
-                           <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
-                             -
-                           </button>
-                           <div className="dark:text-gray-200">{existingQuantity}</div>
-                           <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
-                             +
-                           </button>
-                         </div>
-                        ) : (
-                          <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
-                            Add to Cart
-                          </motion.button>
-                        )}
-                                </div>
-                    
+                                </Link>
+                                {/* <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button> */}
+                                {existingItem ? (
+                                  <div className="flex flex-row items-center justify-center py-2 gap-2">
+                                    <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                                      -
+                                    </button>
+                                    <div className="dark:text-gray-200">{existingQuantity}</div>
+                                    <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                                      +
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                                    Add to Cart
+                                  </motion.button>
+                                )}
+                              </div>
+
                             </div>
                           </div>
                         );
