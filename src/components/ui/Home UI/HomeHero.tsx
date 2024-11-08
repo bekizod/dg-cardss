@@ -24,7 +24,6 @@ export default function HomeHero() {
         );
         // Directly set the response data as an array
         setCoverPictures(response.data.data); // Set the data when the request is successful
-        console.log(response.data); // Log the response to check its structure
       } catch (err: any) {
         setError(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
       } finally {

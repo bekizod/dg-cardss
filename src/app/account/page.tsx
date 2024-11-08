@@ -219,7 +219,6 @@ const AccountPage = () => {
 <button onClick={handleLogout} className="flex lg:hidden  items-center gap-2 text-sm cursor-pointer">
 <span className=" md:inline font-bold text-lg">Logout</span>
                 <FaSignOutAlt className="text-red-500" size={27} />
-                
               </button>
         </div>
       </div>

@@ -102,7 +102,7 @@ const [Loading, setLoading] = useState(false);
   
   if (loading)
     return (
-      <div className="flex flex-col gap-3   mt-[124px]  animate-pulse    rtl:space-x-reverse">
+      <div className="flex flex-col gap-3 max-lg:mt-[23px]  lg:mt-[124px]  animate-pulse    rtl:space-x-reverse">
         <div role="status" className="space-y-8 mt-[124px] px-4 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col  ">
           <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded dark:bg-gray-700">
             <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
@@ -231,7 +231,7 @@ const [Loading, setLoading] = useState(false);
     setAddComment(false); // Reset add comment option
   };
   return (
-    <div className="container mx-auto flex flex-col space-y-8 p-5 mt-[124px] max-w-screen-xl">
+    <div className="container mx-auto flex flex-col space-y-8 p-5  max-lg:mt-[55px]  lg:mt-[124px]  max-w-screen-xl">
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
@@ -277,8 +277,12 @@ const [Loading, setLoading] = useState(false);
                   </li>
                   <li>/</li>
                   <li className="text-gray-900 dark:text-gray-100">
-                    {" "}
-                    {subCategoryName} / {productName}
+                    <Link href={`/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}`}>
+                    {subCategoryName}
+                    </Link>
+                   
+                    
+                     / {productName}
                   </li>
                 </ol>
               </nav>
@@ -377,13 +381,13 @@ const [Loading, setLoading] = useState(false);
               {addComment && <Input.TextArea placeholder="Enter your comment" value={comment} onChange={(e) => setComment(e.target.value)} rows={3} style={{ marginTop: 10 }} />}
             </Modal>
           </div>
-          <motion.div className="flex p-1 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <motion.div className="flex gap-3 p-1 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-300" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="flex items-center space-x-2">
-              <Image src="/ic_return_static.png" alt="return icon" width="20" height="20" />
+              <Image src="/return.png" alt="return icon" width="20" height="20" />
               <p className="text-xs">{product.additionalInformation?.returnPolicy}</p>
             </div>
             <div className="flex items-center space-x-2">
-              <Image src="/ic_90_static.png" alt="90 icon" width="20" height="20" />
+              <Image src="/delevery.png" alt="90 icon" width="20" height="20" />
               <p className="text-xs">90% delivery in 2 days</p>
             </div>
             <div className="flex items-center space-x-2">
@@ -409,22 +413,26 @@ const [Loading, setLoading] = useState(false);
             <div>
               {/* Original Price and Discount */}
               <div className="flex justify-between items-center">
-                <p className="line-through text-gray-500 dark:text-gray-400">{product.price}</p>
-                <p className="text-red-600 dark:text-red-400 text-sm">SAVE 399 SAR</p>
+                { product?.discount > 0 && <><p className="line-through text-gray-500 dark:text-gray-400">{product.price}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm">SAVE {product.price - product.discount} SAR</p></>}
+                
               </div>
 
               {/* Final Price and Discount Percentage */}
               <div className="flex justify-between items-center">
-                <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">400 SAR</p>
-                <div className="flex items-center text-red-600 dark:text-red-400">
-                  <p className="text-lg font-bold">-50%</p>
+                {
+                   product?.discount > 0 ? (<p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">{product.discount}</p>) : (<><p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">{product.price}</p></>)
+                }
+                {product?.discount > 0 && <div className="flex items-center text-red-600 dark:text-red-400">
+                  <p className="text-lg font-bold">-{Math.round(product.discountPercentage)}%</p>
                   <svg className="ml-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z"
                       fill="#FF233F"
                     />
                   </svg>
-                </div>
+                </div>}
+                
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Tax included</p>
             </div>
@@ -478,7 +486,7 @@ const [Loading, setLoading] = useState(false);
               <span className="text-xs dark:text-gray-400">(Warning: Maximum value is 2000 SAR)</span>
             </div>
             <div>
-              <Image src="/MadfuLogo-new.png" alt="Madfu Logo" width={40} height={40} className="rounded-lg" />
+              <Image src="/madufu.png" alt="Madfu Logo" width={200} height={300} className="rounded-lg" />
             </div>
           </motion.div>
 

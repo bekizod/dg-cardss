@@ -17,37 +17,37 @@ const paymentMethods = [
   {
     id: 1,
     label: "Split into 6 payments with Madfu (Max 2000 SAR)",
-    imgSrc: "/MadfuLogo-new.png",
+    imgSrc: "/madufu.png",
     alt: "madfu_gateway icon",
   },
   {
     id: 2,
     label: "Credit/Debit Card Payment",
-    imgSrc: "/ic_checkoutcard.png",
+    imgSrc: "/credit.png",
     alt: "checkoutcom_card_payment icon",
   },
   {
     id: 3,
     label: "Split in up to 4 payments or Pay in full securely with Tamara",
-    imgSrc: "/ic_tamara.png",
+    imgSrc: "/tamara.png",
     alt: "tamara_pay_by_instalments_4 icon",
   },
   {
     id: 4,
     label: "4 interest-free payments",
-    imgSrc: "/ic_tabby.png",
+    imgSrc: "/tabby.png",
     alt: "tabby_installments icon",
   },
   {
     id: 5,
     label: "Pay With Cash (29 SAR + Shipping Fees)",
-    imgSrc: "/ic_cash.png",
+    imgSrc: "/cash.png",
     alt: "cashondelivery icon",
   },
   {
     id: 6,
     label: "Split into 3 payments, without fees with Tamara",
-    imgSrc: "/ic_tamara.png",
+    imgSrc: "/tamara.png",
     alt: "tamara_pay_by_instalments icon",
   },
 ];
