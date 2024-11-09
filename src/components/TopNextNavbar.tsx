@@ -294,7 +294,8 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
             }}
             >
 
-            <input type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)] dark:bg-slate-800" />
+            <input  value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)] dark:bg-slate-800" />
             </form>
           </div>
         </div>
