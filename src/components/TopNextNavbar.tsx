@@ -444,7 +444,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
               </button>
 
               <div className="text-2xl font-semibold mb-4">
-                Search Results <span>Total Products of {total}</span>
+                Search Results <div>Total Products of {total}</div>
               </div>
 
               {status === "loading" && <p>Loading products...</p>}
