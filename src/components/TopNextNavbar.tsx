@@ -225,6 +225,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         <div className="flex-1 mx-1">
           <div className="relative flex items-center">
             <AiOutlineSearch className="text-[var(--color-primary)] absolute left-3" />
+            
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -286,7 +287,15 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         <div className="flex-1 mx-3">
           <div className="relative flex items-center">
             <AiOutlineSearch className="absolute left-3 text-gray-500" />
+            <form 
+            onSubmit={(e) => {
+              e.preventDefault(); // Prevent form submission
+              setSearchIsModalOpen(true); // Open the modal when the form is submitted
+            }}
+            >
+
             <input type="text" placeholder="What are you looking for?" className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)] dark:bg-slate-800" />
+            </form>
           </div>
         </div>
 
