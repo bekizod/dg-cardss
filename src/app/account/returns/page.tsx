@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/UserContext";
 import { getOrders } from "@/redux/slices/orderSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -79,7 +80,9 @@ export default function OrderReturned() {
 
       {/* Render filtered order data */}
       {data.length === 0 && !loading ? (
-        <p className="text-gray-500 text-center">No returned orders found.</p>
+        <div className="text-gray-500  text-center flex justify-center">
+        <Image src={"/Empty_Order.gif"} className="h-72 w-72 rounded" alt={"order"} width={1000} height={1000}/>
+      </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((order) => {

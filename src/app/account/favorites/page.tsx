@@ -145,7 +145,9 @@ const FavoriteList: React.FC = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-2xl font-bold mt-6 dark:text-white text-black">No Favorite Categories</p>
+        <div className="text-gray-500  text-center flex justify-center">
+        <Image src={"/fav_gif.gif"} className="h-72 w-72 rounded" alt={"order"} width={1000} height={1000}/>
+      </div>
       )}
 
       <h3 className="text-2xl font-bold text-center my-8 dark:text-white text-black">Your Favorite Products</h3>
@@ -223,7 +225,9 @@ const FavoriteList: React.FC = () => {
           })}
         </div>
       ) : (
-        <p className="text-center text-2xl font-bold mt-6 dark:text-white text-black">No Favorite Products</p>
+        <div className="text-gray-500  text-center flex justify-center">
+        <Image src={"/fav_gif.gif"} className="h-72 w-72 rounded" alt={"order"} width={1000} height={1000}/>
+      </div>
       )}
     </div>
   );
