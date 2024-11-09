@@ -150,7 +150,7 @@ const FavoriteList: React.FC = () => {
 
       <h3 className="text-2xl font-bold text-center my-8 dark:text-white text-black">Your Favorite Products</h3>
       {favoriteProducts?.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 px-6 lg:grid-cols-4 gap-6">
           {favoriteProducts.map((product: any) => {
 
 
@@ -164,7 +164,7 @@ const FavoriteList: React.FC = () => {
             const ID = existingItem ? existingItem.id : "";
             const isFavorite = favoriteProducts?.some((favProduct: any) => favProduct._id === productIdt);
             return (
-              <div key={product._id} className="relative  flex-shrink-0">
+              <div key={product._id} className="relative   flex-shrink-0">
                 <div className="bg-white dark:bg-slate-700   p-4 rounded-lg shadow-lg">
                   <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
                   <div
