@@ -125,7 +125,7 @@ useEffect(() => {
       if (error == "jwt malformed") {
         errorMessage = 'Authentication error: Please log in to save favorite products.';
       } else {
-        errorMessage = 'Failed to save favorite product. Make sure you are logged in and have an internet connection.';
+        errorMessage = 'Failed,No internet connection.';
       }
   
         notification.error({

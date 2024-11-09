@@ -1,25 +1,24 @@
 "use client";
 import { fetchFavorites, removeFavorite } from "@/redux/slices/favoriteSlice";
+import { fetchFavoriteProducts, removeFavoriteProduct } from "@/redux/slices/favoriteProductsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
-import { Card, Button, notification } from "antd";
+import { Button, notification } from "antd";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { fetchFavoriteProducts } from "@/redux/slices/favoriteProductsSlice";
-
-const { Meta } = Card;
-
- 
+import { motion } from "framer-motion";
+import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
+import { useAuth } from "@/context/UserContext";
+import { MdDelete } from "react-icons/md";
 
 const FavoriteList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { favorites, loading, error } = useSelector((state: RootState) => state.favorites as { favorites: any[]; loading: boolean; error: string });
+  const { favorites, loading, error } = useSelector((state: RootState) => state.favorites as any);
   const { favoriteProducts } = useSelector((state: RootState) => state.favoriteProducts as any);
-
-
-
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { user } = useAuth();
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
@@ -27,14 +26,11 @@ const FavoriteList: React.FC = () => {
   useEffect(() => {
     dispatch(fetchFavorites() as any)
       .unwrap()
-      .then(() => {
-      
-      })
-      .catch((error : any) => {
+      .catch((error: any) => {
         notification.error({
           message: "Error loading favorites",
         });
-console.log(error.message)
+        console.log(error.message);
       });
   }, [dispatch]);
 
@@ -52,39 +48,54 @@ console.log(error.message)
         });
       });
   };
+  const handleRemoveFavProduct = async (productId: string) => {
+    try {
 
+      await dispatch(removeFavoriteProduct(productId)).unwrap();
+      notification.success({
+        message: 'Success',
+        description: 'Product removed from favorites!',
+      });
+    } catch (error: any) {
+      let errorMessage = 'Failed to save favorite product.';
+      // Check if the error message contains "jwt malformed"
+      if (error == "jwt malformed") {
+        errorMessage = 'Authentication error: Please log in to save favorite products.';
+      } else {
+        errorMessage = 'Failed,No internet connection.';
+      }
+      notification.error({
+        message: 'Error',
+        description: errorMessage,
+      });
+    }
+  };
+
+
+
+
+  const handleAddToCart = (product: any) => {
+    // Implement the logic to dispatch addToCart action with the product details
+    dispatch(
+      addToCart({
+        id: product._id,
+        buyerId: user?._id || "guest",
+        image: product.imageIds[0],
+        color: product.additionalInformation?.color,
+        name: product.name,
+        quantity: 1,
+        stockQuantity: product.stockQuantity,
+        price: product.price,
+        unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
+        discount: product.discountPercentage || 0,
+        test: "test",
+      })
+    );
+  };
   if (loading) {
     return (
-      <div role="status" className="space-y-8 mt-[124px] px-4 animate-pulse  rtl:space-x-reverse flex  flex-col  ">
-        <div className="flex justify-center">
-          <div className="md:w-2/3 w-full  h-10 bg-gray-300 rounded   dark:bg-gray-700"></div>
-        </div>
-        <div className="flex flex-col md:flex-row w-full gap-3">
-          <div className="flex items-center justify-center w-full h-56 bg-gray-300 rounded dark:bg-gray-700">
-            <svg className="w-10  h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-            </svg>
-          </div>
-
-          <div className="flex items-center justify-center w-full h-56 bg-gray-300 rounded   dark:bg-gray-700">
-            <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-            </svg>
-          </div>
-
-          <div className="flex items-center justify-center w-full h-56 bg-gray-300 rounded   dark:bg-gray-700">
-            <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-            </svg>
-          </div>
-
-          <div className="flex items-center justify-center w-full h-56 bg-gray-300 rounded   dark:bg-gray-700">
-            <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-            </svg>
-          </div>
-        </div>
-        <span className="sr-only">Loading...</span>
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loader" />
       </div>
     );
   }
@@ -93,48 +104,127 @@ console.log(error.message)
     return <p className="text-center text-2xl font-bold mt-[124px]">Error: {error}</p>;
   }
 
-  return (
-    <div className="dark:bg-slate-900 py-4 bg-white w-full max-lg:mt-[64px] lg:mt-[124px]px-4 transition-colors duration-300">
-      <h3 className="text-2xl font-bold text-center mb-4 dark:text-white text-black">Your Favorite Categories</h3>
-      
-        {favorites?.length > 0 ? (
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  
-          {favorites.map((category) => (
-            
-            <Card
-              key={category._id}
-              hoverable
-              cover={
-                <><Link key={category?._id} href={`/${category?.parentCategory?.categoryName}/${category?.parentCategory?._id}/${category?.categoryName}/${category?._id}`}><Image
-                  src={category.categoryLogo?.data as string} // Assuming it's a valid URL string
-                  alt={category.categoryName}
-                  width={1000}
-                  height={1000}
-                  className="object-cover" />
-                  </Link> 
-                  </>
-                
-              }
-              style={{ width: 200, margin: "auto" }}
-              className="dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-200  transition-colors duration-300"
-            >
-              <Meta title={category.categoryName} style={{ textAlign: "center" }} className="text-red-400 py-1 text-lg font-semibold" />
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
 
-              {/* Action button with background color styling */}
-              <div className="py-2 flex justify-center items-center rounded-b-lg">
-                <Button key={category._id} type="primary" danger icon={<DeleteOutlined />} onClick={() => handleRemoveFavorite(category._id)}>
-                  Remove
-                </Button>
-              </div>
-            </Card>
-       
+  return (
+    <div className="dark:bg-slate-900 py-8 bg-white px-4 max-lg:mt[64px] mt-[124px]">
+      <h3 className="text-2xl font-bold text-center mb-6 dark:text-white text-black">Your Favorite Categories</h3>
+      {favorites?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {favorites.map((category: any) => (
+            <motion.div
+              key={category._id}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              className="rounded-lg shadow-lg dark:bg-slate-800 dark:border-slate-700 bg-white border border-gray-200 p-4 flex flex-col items-center"
+            >
+              <Link href={`/${category.parentCategory.categoryName}/${category.parentCategory._id}/${category.categoryName}/${category._id}`}>
+                <Image
+                  src={category.categoryLogo?.data as string}
+                  alt={category.categoryName}
+                  width={250}
+                  height={250}
+                  className="rounded-lg object-cover w-full h-40"
+                />
+              </Link>
+              <h4 className="mt-4 text-lg font-semibold text-center text-red-400">{category.categoryName}</h4>
+              <Button
+                type="primary"
+                danger
+                icon={<DeleteOutlined />}
+                className="mt-4 w-full"
+                onClick={() => handleRemoveFavorite(category._id)}
+              >
+                Remove
+              </Button>
+            </motion.div>
           ))}
-</div>
-        ) : (
-          <p className="text-center flex items-center justify-center text-2xl font-bold  p-4 dark:text-white text-black">No Favorite Categories</p>
-        )}
-      
+        </div>
+      ) : (
+        <p className="text-center text-2xl font-bold mt-6 dark:text-white text-black">No Favorite Categories</p>
+      )}
+
+      <h3 className="text-2xl font-bold text-center my-8 dark:text-white text-black">Your Favorite Products</h3>
+      {favoriteProducts?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {favoriteProducts.map((product: any) => {
+
+
+            const productIdt = product?._id as any;
+            const buyerId = user?._id || "guest";
+            const productColor = product?.additionalInformation?.color || "default";
+            // Check if the product is already in the cart
+            const existingItem = cartItems.find((item) => item.id === productIdt && item.buyerId === buyerId && item.color === productColor);
+            const existingQuantity = existingItem ? existingItem.quantity : 0;
+            const BuyerId = existingItem ? existingItem.buyerId : "guest";
+            const ID = existingItem ? existingItem.id : "";
+            const isFavorite = favoriteProducts?.some((favProduct: any) => favProduct._id === productIdt);
+            return (
+              <div key={product._id} className="relative w-64   flex-shrink-0">
+                <div className="bg-white dark:bg-slate-700   p-4 rounded-lg shadow-lg">
+                  <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
+                  <div
+                        onClick={() => handleRemoveFavProduct(product._id)}
+                        className="  text-red-500 cursor-pointer hover:text-red-700 transition-colors duration-300"
+                        aria-label="Remove from favorites"
+                      >
+                        <MdDelete size={27} />
+                      </div>
+                    <motion.div
+                      className="z-30 pb-1 cursor-pointer"
+
+                      whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+                    >
+
+                      
+                    </motion.div>
+                    
+                    <Link href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}  >
+                      <Image src={product?.signedUrls[0]} alt={product.name} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-40  rounded-xl object-cover" />
+                      {
+                        product?.discount > 0 && <p className="absolute top-0 right-0 c text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{Math.round(product.discountPercentage)}% SAVE</p>
+                      }
+                      <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{product.additionalInformation.brand}</p>
+                      <div className="mt-2">
+                        {
+                          product?.discount ? (<><p className="text-xl  font-bold text-green-500">{product.discount}</p>
+                            <p className="text-sm line-through text-gray-500">{product.price}</p>
+                            <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p></>) : (<p className="py-5 text-xl font-bold text-green-500">{product.price}</p>)
+                        }
+
+                      </div>
+
+                    </Link>
+                    {existingItem ? (
+                      <div className="flex flex-row items-center justify-center py-2 gap-2">
+                        <button onClick={() => dispatch(decrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                          -
+                        </button>
+                        <div className=" text-gray-600 dark:text-gray-300">{existingQuantity}</div>
+                        <button onClick={() => dispatch(incrementQuantity({ id: ID, buyerId: BuyerId }))} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded">
+                          +
+                        </button>
+                      </div>
+                    ) : (
+                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl">
+                        Add to Cart
+                      </motion.button>
+                    )}
+                  </div>
+
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        <p className="text-center text-2xl font-bold mt-6 dark:text-white text-black">No Favorite Products</p>
+      )}
     </div>
   );
 };

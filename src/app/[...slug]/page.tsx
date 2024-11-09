@@ -198,7 +198,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     if (error == "jwt malformed") {
       errorMessage = 'Authentication error: Please log in to save favorite products.';
     } else {
-      errorMessage = 'Failed to save favorite product. Make sure you are logged in and have an internet connection.';
+      errorMessage = 'Failed,No internet connection.';
     }
 
       notification.error({
@@ -403,7 +403,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     );
   };
   return (
-    <div className="px-4 lg:px-32 p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className=" md:px-20 lg:px-24 xl:px-32 p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="flex flex-row justify-between">
         {slugLength === 2 && (
@@ -649,35 +649,33 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                   </p>
                 )}
                 {/* Product Image */}
-                <div className="w-full flex flex-1 justify-center items-center bg-transparent">
+               
                   <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                    <Image
-                      src={product.imageIds[0]}
-                      alt={product.name}
-                      width={150}
-                      height={100}
-                      loading="eager"
-                      fetchPriority="high"
-                      className="w-full h-3/4 object-cover rounded-xl"
-                    />
+                  <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-32  rounded-xl object-cover" />
                   </motion.div>
-                </div>
-                {/* Product Details */}
-                <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm dark:text-gray-100">
+                
+                <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm md:text-lg dark:text-gray-100">
                   {product.name}
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.brand}</p>
+                {/* Product Details */}
+
+<div className="flex flex-col justify-center items-center">
+                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.additionalInformation.brand}</div>
                 <div className="mt-1 text-center">
                   {product.discount ? (
                     <>
-                      <p className="text-xl font-bold text-green-500">{product.discount}</p>
-                      <p className="text-sm line-through text-gray-500">{product.price}</p>
-                      <p className="text-sm text-red-500">SAVE {product.price - product.discount}</p>
+                    <div className="flex flex-row justify-around gap-3 items-center">
+                      <div className="text-xl font-bold text-green-500">{product.discount}</div>
+                      <div className="text-sm line-through text-gray-500">{product.price}</div>
+                      </div>
+                      <div className="text-sm text-red-500">SAVE {product.price - product.discount}</div>
                     </>
                   ) : (
-                    <p className="py-2 text-xl font-bold text-green-500">{product.price}</p>
+                    <div className="py-2 text-xl font-bold text-green-500">{product.price}</div>
                   )}
                 </div>
+                </div>
+
               </Link>
               {/* Conditionally render Add to Cart button */}
               {existingItem ? (
