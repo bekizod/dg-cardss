@@ -110,7 +110,7 @@ const FavoriteList: React.FC = () => {
   };
 
   return (
-    <div className="dark:bg-slate-900 py-8 bg-white px-4 max-lg:mt[64px] mt-[124px]">
+    <div className="dark:bg-slate-900 py-8 bg-white px-4 max-lg:mt-[32px] lg:mt-[124px]">
       <h3 className="text-2xl font-bold text-center mb-6 dark:text-white text-black">Your Favorite Categories</h3>
       {favorites?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -164,7 +164,7 @@ const FavoriteList: React.FC = () => {
             const ID = existingItem ? existingItem.id : "";
             const isFavorite = favoriteProducts?.some((favProduct: any) => favProduct._id === productIdt);
             return (
-              <div key={product._id} className="relative w-64   flex-shrink-0">
+              <div key={product._id} className="relative  flex-shrink-0">
                 <div className="bg-white dark:bg-slate-700   p-4 rounded-lg shadow-lg">
                   <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
                   <div
