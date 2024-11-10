@@ -68,7 +68,7 @@ export default function Slider() {
               {advertisements.map((ad, index) => (
                 <motion.li key={ad._id} className="flex-shrink-0 w-full">
                   <Link href={ad.bannerLink || "#"}>
-                    <div className="relative w-full h-[500px]">
+                    <div className="relative w-full lg:h-[500px]">
                       {" "}
                       {/* Fixed height here */}
                       <Image
@@ -76,7 +76,9 @@ export default function Slider() {
                         alt={`Slide ${index + 1} - ${
                           ad.parentCategoryId?.categoryName || "Advertisement"
                         }`}
-                        layout="fill"
+                        width={1000}
+                        height={1000}
+                        layout="responsive"
                         objectFit="cover" // Ensures the image covers the container without stretching
                         className="rounded-2xl border border-gray-300"
                       />
