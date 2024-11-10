@@ -3,7 +3,12 @@
 import { fetchProductsByCategory } from "@/redux/slices/categorySlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import React, { useState, useEffect, useRef } from "react";
-import { BsChevronDown, BsChevronUp, BsSortDown, BsFilter } from "react-icons/bs";
+import {
+  BsChevronDown,
+  BsChevronUp,
+  BsSortDown,
+  BsFilter,
+} from "react-icons/bs";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -14,9 +19,22 @@ import { addFavorite, removeFavorite } from "@/redux/slices/favoriteSlice";
 import { notification } from "antd";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
-import { addToCart, decrementQuantity, incrementQuantity } from "@/redux/slices/cartSlice";
-import { addFavoriteLocally, fetchFavoriteProducts, removeFavoriteProduct, saveFavoriteProduct } from "@/redux/slices/favoriteProductsSlice";
-export default function ProductsAccordion({ params }: { params: { slug: string[] } }) {
+import {
+  addToCart,
+  decrementQuantity,
+  incrementQuantity,
+} from "@/redux/slices/cartSlice";
+import {
+  addFavoriteLocally,
+  fetchFavoriteProducts,
+  removeFavoriteProduct,
+  saveFavoriteProduct,
+} from "@/redux/slices/favoriteProductsSlice";
+export default function ProductsAccordion({
+  params,
+}: {
+  params: { slug: string[] };
+}) {
   const { user, token } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [isSizeOpen, setIsSizeOpen] = useState(false);
@@ -29,14 +47,27 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   const sortModalRef = useRef<HTMLDivElement>(null);
   const filterModalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const { favorites, loading: favoritesLoading, error: favoritesError } = useSelector((state: RootState) => state.favorites);
-    const { favoriteProducts, loading, error } = useSelector((state: RootState) => state.favoriteProducts as any);
-  const { products, loading: productsLoading, error: productsError } = useSelector((state: RootState) => state.categories as { products: any; loading: boolean; error: string });
+  const {
+    favorites,
+    loading: favoritesLoading,
+    error: favoritesError,
+  } = useSelector((state: RootState) => state.favorites);
+  const { favoriteProducts, loading, error } = useSelector(
+    (state: RootState) => state.favoriteProducts as any
+  );
+  const {
+    products,
+    loading: productsLoading,
+    error: productsError,
+  } = useSelector(
+    (state: RootState) =>
+      state.categories as { products: any; loading: boolean; error: string }
+  );
   const [thisCategoryId, setThisCategoryId] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
- 
+
   const buyerId = user?._id || "guest";
-   
+
   const [filterOptions, setFilterOptions] = useState({
     sizes: [] as string[],
     colors: [] as string[],
@@ -67,13 +98,11 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   if (slugLength === 2) {
     parentName = decodeURIComponent(params.slug[0]);
     parentId = decodeURIComponent(params.slug[1]);
-   
   } else if (slugLength === 4) {
     parentName = decodeURIComponent(params.slug[0]);
     parentId = decodeURIComponent(params.slug[1]);
     subCategoryName = decodeURIComponent(params.slug[2]);
     subcategoryId = decodeURIComponent(params.slug[3]);
- 
   } else {
     return (<Custom404 />) as any;
   }
@@ -84,7 +113,7 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
       dispatch(fetchProductsByCategory(subcategoryId) as any);
-         setThisCategoryId(subcategoryId);
+      setThisCategoryId(subcategoryId);
     }
   }, [slugLength, parentId, subcategoryId, dispatch]);
   useEffect(() => {
@@ -118,8 +147,6 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
         }
       });
 
-       
-
       setFilterOptions({
         sizes: Array.from(sizesSet),
         colors: Array.from(colorsSet),
@@ -139,13 +166,18 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     }
   }, [products]);
 
-  const toggleFilter = (filterSetter: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const toggleFilter = (
+    filterSetter: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
     filterSetter((prev) => !prev);
   };
   const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
   const toggleFilterModal = () => setFilterModalOpen(!filterModalOpen);
 
-  const handleCheckboxChange = (category: keyof typeof selectedFilters, value: string) => {
+  const handleCheckboxChange = (
+    category: keyof typeof selectedFilters,
+    value: string
+  ) => {
     setSelectedFilters((prev) => {
       const isSelected = prev[category].includes(value);
       if (isSelected) {
@@ -167,44 +199,48 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
   }, [dispatch]);
 
   const handleFavoriteToggle = async (productId: string) => {
-    const isFavorite = favoriteProducts?.some((product : any) => product._id === productId);
+    const isFavorite = favoriteProducts?.some(
+      (product: any) => product._id === productId
+    );
 
     try {
       if (isFavorite) {
         await dispatch(removeFavoriteProduct(productId)).unwrap();
         notification.success({
-          message: 'Success',
-          description: 'Product removed from favorites!',
+          message: "Success",
+          description: "Product removed from favorites!",
         });
       } else {
         await dispatch(saveFavoriteProduct(productId)).unwrap();
-        dispatch(addFavoriteLocally({
-          _id: productId,
-          name: "",
-          description: "",
-          price: "",
-          signedUrls: []
-        }));
+        dispatch(
+          addFavoriteLocally({
+            _id: productId,
+            name: "",
+            description: "",
+            price: "",
+            signedUrls: [],
+          })
+        );
         notification.success({
-          message: 'Success',
-          description: 'Product added to favorites!',
+          message: "Success",
+          description: "Product added to favorites!",
         });
       }
-      
-    } catch (error : any) {
-      let errorMessage = 'Failed to save favorite product.';
+    } catch (error: any) {
+      let errorMessage = "Failed to save favorite product.";
 
-    // Check if the error message contains "jwt malformed"
-    if (error == "jwt malformed") {
-      errorMessage = 'Authentication error: Please log in to save favorite products.';
-    } else {
-      errorMessage = 'Failed,No internet connection.';
-    }
+      // Check if the error message contains "jwt malformed"
+      if (error == "jwt malformed") {
+        errorMessage =
+          "Authentication error: Please log in to save favorite products.";
+      } else {
+        errorMessage = "Failed,No internet connection.";
+      }
 
       notification.error({
-      message: 'Error',
-      description: errorMessage,
-    });
+        message: "Error",
+        description: errorMessage,
+      });
     }
   };
 
@@ -220,13 +256,13 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           });
           setIsFavorited(false);
         })
-        .catch((error : any) => {
+        .catch((error: any) => {
           notification.error({
             message: error?.message || "Error removing category from favorites",
           });
         });
- 
-       // Call API or dispatch action to update favorites
+
+      // Call API or dispatch action to update favorites
     } else {
       // Logic to add favorite
       dispatch(addFavorite(thisCategoryId) as any)
@@ -237,9 +273,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           });
           setIsFavorited(true);
         })
-        .catch((error : any) => {
+        .catch((error: any) => {
           notification.error({
-            message: "Ooops!!, Make sure about your connection or make sure you have logged in",
+            message:
+              "Ooops!!, Make sure about your connection or make sure you have logged in",
           });
         });
 
@@ -301,23 +338,35 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
     let filtered = products;
 
     if (selectedFilters.size.length > 0) {
-      filtered = filtered.filter((product: any) => selectedFilters.size.includes(product.additionalInformation?.size));
+      filtered = filtered.filter((product: any) =>
+        selectedFilters.size.includes(product.additionalInformation?.size)
+      );
     }
 
     if (selectedFilters.color.length > 0) {
-      filtered = filtered.filter((product: any) => selectedFilters.color.includes(product.additionalInformation?.color));
+      filtered = filtered.filter((product: any) =>
+        selectedFilters.color.includes(product.additionalInformation?.color)
+      );
     }
 
     if (selectedFilters.brand.length > 0) {
-      filtered = filtered.filter((product: any) => selectedFilters.brand.includes(product.additionalInformation?.brand));
+      filtered = filtered.filter((product: any) =>
+        selectedFilters.brand.includes(product.additionalInformation?.brand)
+      );
     }
 
     if (selectedFilters.material.length > 0) {
-      filtered = filtered.filter((product: any) => selectedFilters.material.includes(product.additionalInformation?.material));
+      filtered = filtered.filter((product: any) =>
+        selectedFilters.material.includes(
+          product.additionalInformation?.material
+        )
+      );
     }
 
     // Filter by price range
-    filtered = filtered.filter((product: any) => product.price >= minValue && product.price <= maxValue);
+    filtered = filtered.filter(
+      (product: any) => product.price >= minValue && product.price <= maxValue
+    );
 
     setFilteredProducts(filtered);
   };
@@ -341,9 +390,18 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
 
   if (productsLoading)
     return (
-      <div role="status" className="space-y-8 py-3 px-5 mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center">
+      <div
+        role="status"
+        className="space-y-8 py-3 px-5 mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center"
+      >
         <div className="flex items-center justify-center w-full h-72 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-          <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+          <svg
+            className="w-10 h-10 text-gray-200 dark:text-gray-600"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 18"
+          >
             <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
           </svg>
         </div>
@@ -353,22 +411,46 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
           <div className="flex gap-3">
             <div className="flex items-center justify-center w-1/4 h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <svg
+                className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
               </svg>
             </div>
             <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <svg
+                className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
               </svg>
             </div>
             <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <svg
+                className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
               </svg>
             </div>
             <div className="flex items-center justify-center w-1/4  h-32 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-              <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+              <svg
+                className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
               </svg>
             </div>
@@ -378,9 +460,13 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
         <span className="sr-only">Loading...</span>
       </div>
     );
-  if (productsError) return <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>;
+  if (productsError)
+    return (
+      <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>
+    );
 
-  if (favoritesLoading) return <p className="mt-[124px] text-3xl">Favorite Loading...</p>;
+  if (favoritesLoading)
+    return <p className="mt-[124px] text-3xl">Favorite Loading...</p>;
   if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
   const handleAddToCart = (product: any) => {
@@ -417,7 +503,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                 </li>
                 <li>/</li>
                 <li>
-                  <Link href={`/${parentName}/${parentId}`} className="text-blue-500 underline">
+                  <Link
+                    href={`/${parentName}/${parentId}`}
+                    className="text-blue-500 underline"
+                  >
                     {parentName}
                   </Link>
                 </li>
@@ -437,12 +526,18 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                 </li>
                 <li>/</li>
                 <li>
-                  <Link href={`/${parentName}/${parentId}`} className="text-gray-600 dark:text-gray-300">
+                  <Link
+                    href={`/${parentName}/${parentId}`}
+                    className="text-gray-600 dark:text-gray-300"
+                  >
                     {parentName}
                   </Link>
                 </li>
                 <li>/</li>
-                <li className="text-gray-900 dark:text-gray-100"> {subCategoryName}</li>
+                <li className="text-gray-900 dark:text-gray-100">
+                  {" "}
+                  {subCategoryName}
+                </li>
               </ol>
             </nav>
           </div>
@@ -453,8 +548,15 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div> */}
 
-        <div className="flex items-center space-x-2 text-lg font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200" onClick={() => handleAddFavorite()}>
-          {isFavorited ? <GoHeartFill className="text-[var(--color-primary)]" /> : <GoHeart />}
+        <div
+          className="flex items-center space-x-2 text-lg font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200"
+          onClick={() => handleAddFavorite()}
+        >
+          {isFavorited ? (
+            <GoHeartFill className="text-[var(--color-primary)]" />
+          ) : (
+            <GoHeart />
+          )}
           <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
         </div>
       </div>
@@ -466,7 +568,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           {/* Title and Product Count */}
           <div className="mb-4">
             <h2 className="text-2xl font-bold">
-              Products <span className="font-serif px-10 text-sm">{filteredProducts.length} Products</span>
+              Products{" "}
+              <span className="font-serif px-10 text-sm">
+                {filteredProducts.length} Products
+              </span>
             </h2>
           </div>
 
@@ -475,11 +580,17 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           {/* Sort and Filter Buttons for Small Screens */}
 
           <div className="flex flex-row justify-between space-x-2 mb-4 lg:hidden">
-            <button onClick={() => toggleSortModal()} className="py-2 px-4 w-1/3 bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2">
+            <button
+              onClick={() => toggleSortModal()}
+              className="py-2 px-4 w-1/3 bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2"
+            >
               <BsSortDown className="text-gray-700 dark:text-gray-300" />
               <span>Sort</span>
             </button>
-            <button onClick={() => toggleFilterModal()} className="py-2 px-4 w-1/3 justify-center place-items-center text-center bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2">
+            <button
+              onClick={() => toggleFilterModal()}
+              className="py-2 px-4 w-1/3 justify-center place-items-center text-center bg-gray-200 dark:bg-gray-600 rounded flex items-center space-x-2"
+            >
               <BsFilter className="text-gray-700 dark:text-gray-300" />
               <span>Filter</span>
             </button>
@@ -488,23 +599,37 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           {/* Sort Modal */}
           {sortModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div ref={sortModalRef} className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg">
+              <div
+                ref={sortModalRef}
+                className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg"
+              >
                 <h3 className="text-lg font-bold mb-4">Sort by</h3>
                 <div className="flex flex-col space-y-2">
                   <label>
-                    <input type="radio" name="sort" value="price-asc" defaultChecked /> Price: Low to High
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="price-asc"
+                      defaultChecked
+                    />{" "}
+                    Price: Low to High
                   </label>
                   <label>
-                    <input type="radio" name="sort" value="price-desc" /> Price: High to Low
+                    <input type="radio" name="sort" value="price-desc" /> Price:
+                    High to Low
                   </label>
                   <label>
                     <input type="radio" name="sort" value="newest" /> Newest
                   </label>
                   <label>
-                    <input type="radio" name="sort" value="popularity" /> Popularity
+                    <input type="radio" name="sort" value="popularity" />{" "}
+                    Popularity
                   </label>
                 </div>
-                <button onClick={() => toggleSortModal()} className="mt-4 py-2 px-4 bg-blue-600 text-white dark:bg-blue-500 rounded">
+                <button
+                  onClick={() => toggleSortModal()}
+                  className="mt-4 py-2 px-4 bg-blue-600 text-white dark:bg-blue-500 rounded"
+                >
                   Close
                 </button>
               </div>
@@ -514,10 +639,16 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           {/* Filter Modal for Small Screens */}
           {filterModalOpen && (
             <div className="fixed inset-0 lg:hidden bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
-              <div ref={filterModalRef} className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg w-full max-w-lg max-h-full overflow-y-auto scrollbar-hidden">
+              <div
+                ref={filterModalRef}
+                className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg w-full max-w-lg max-h-full overflow-y-auto scrollbar-hidden"
+              >
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-bold">Filter by</h3>
-                  <button onClick={() => clearAllFilters()} className="text-sm text-red-600">
+                  <button
+                    onClick={() => clearAllFilters()}
+                    className="text-sm text-red-600"
+                  >
                     Clear All
                   </button>
                 </div>
@@ -554,15 +685,39 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                   },
                 ].map((filter, index) => (
                   <div key={index} className="mb-4">
-                    <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
-                      <span className="text-lg font-medium">{filter.label}</span>
+                    <button
+                      onClick={() => toggleFilter(filter.setter)}
+                      className="flex justify-between items-center w-full text-left"
+                    >
+                      <span className="text-lg font-medium">
+                        {filter.label}
+                      </span>
                       {filter.state ? <BsChevronUp /> : <BsChevronDown />}
                     </button>
                     {filter.state && (
                       <div className="mt-2">
                         <ul className="space-y-2">
                           {filter.options.map((option, idx) => (
-                            <li key={idx} className={`flex items-center justify-center mx-12 space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category as keyof typeof selectedFilters].includes(option) ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category as "size" | "color" | "brand" | "material", option)}>
+                            <li
+                              key={idx}
+                              className={`flex items-center justify-center mx-12 space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
+                                selectedFilters[
+                                  filter.category as keyof typeof selectedFilters
+                                ].includes(option)
+                                  ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600"
+                                  : "text-gray-700 dark:text-gray-300"
+                              }`}
+                              onClick={() =>
+                                handleCheckboxChange(
+                                  filter.category as
+                                    | "size"
+                                    | "color"
+                                    | "brand"
+                                    | "material",
+                                  option
+                                )
+                              }
+                            >
                               <span>{option}</span>
                             </li>
                           ))}
@@ -574,7 +729,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                 ))}
                 {/* Price Filter */}
                 <div className="mb-4">
-                  <button onClick={() => toggleFilter(setIsPriceOpen)} className="flex justify-between items-center w-full text-left">
+                  <button
+                    onClick={() => toggleFilter(setIsPriceOpen)}
+                    className="flex justify-between items-center w-full text-left"
+                  >
                     <span className="text-lg font-medium">Price</span>
                     {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
                   </button>
@@ -614,100 +772,153 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           )}
           {/* Product Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-      {filteredProducts.map((product: any) => {
-        const productId = product?._id;
-        const buyerId = user?._id || 'guest';
-        const productColor = product?.additionalInformation?.color || 'default';
+            {filteredProducts.map((product: any) => {
+              const productId = product?._id;
+              const buyerId = user?._id || "guest";
+              const productColor =
+                product?.additionalInformation?.color || "default";
 
-        const existingItem = cartItems.find(
-          (item) => item.id === productId && item.buyerId === buyerId && item.color === productColor
-        );
-        const existingQuantity = existingItem ? existingItem.quantity : 0;
-        const isFavorite = favoriteProducts?.some((favProduct : any) => favProduct._id === productId);
+              const existingItem = cartItems.find(
+                (item) =>
+                  item.id === productId &&
+                  item.buyerId === buyerId &&
+                  item.color === productColor
+              );
+              const existingQuantity = existingItem ? existingItem.quantity : 0;
+              const isFavorite = favoriteProducts?.some(
+                (favProduct: any) => favProduct._id === productId
+              );
 
-        return (
-          <motion.div
-            key={productId}
-            className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden"
-            whileHover={{ y: -10, transition: { duration: 0.3 } }}
-          >
-            <div className="block relative p-2 sm:p-3 md:p-4">
-              {/* Heart icon to toggle favorite */}
-              <motion.div
-                className="z-30 cursor-pointer"
-                onClick={() => handleFavoriteToggle(productId)}
-                whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-              >
-                {isFavorite ? <GoHeartFill className="text-[var(--color-primary)]" size={27} /> : <GoHeart size={27} />}
-              </motion.div>
-
-              <Link href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}>
-                {/* Discount Label */}
-                {product?.discount > 0 && (
-                  <p className="absolute top-0 right-0 text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                    {Math.round(product.discountPercentage)}% SAVE
-                  </p>
-                )}
-                {/* Product Image */}
-               
-                  <motion.div whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}>
-                  <Image src={product.imageIds[0]} alt={product.name} width={150} height={100} loading="eager" fetchPriority="high" className="w-full h-32  rounded-xl object-cover" />
-                  </motion.div>
-                
-                <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm md:text-lg dark:text-gray-100">
-                  {product.name}
-                </h2>
-                {/* Product Details */}
-
-<div className="flex flex-col justify-center items-center">
-                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">{product.additionalInformation.brand}</div>
-                <div className="mt-1 text-center">
-                  {product.discount ? (
-                    <>
-                    <div className="flex flex-row justify-around gap-3 items-center">
-                      <div className="text-xl font-bold text-green-500">{product.discount}</div>
-                      <div className="text-sm line-through text-gray-500">{product.price}</div>
-                      </div>
-                      <div className="text-sm text-red-500">SAVE {product.price - product.discount}</div>
-                    </>
-                  ) : (
-                    <div className="py-2 text-xl font-bold text-green-500">{product.price}</div>
-                  )}
-                </div>
-                </div>
-
-              </Link>
-              {/* Conditionally render Add to Cart button */}
-              {existingItem ? (
-                <div className="flex flex-row items-center justify-center py-2 gap-2">
-                  <button
-                    onClick={() => dispatch(decrementQuantity({ id: existingItem.id, buyerId: existingItem.buyerId }))}
-                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
-                  >
-                    -
-                  </button>
-                  <div className="dark:text-gray-200">{existingQuantity}</div>
-                  <button
-                    onClick={() => dispatch(incrementQuantity({ id: existingItem.id, buyerId: existingItem.buyerId }))}
-                    className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
-                  >
-                    +
-                  </button>
-                </div>
-              ) : (
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleAddToCart(product)}
-                  className="mt-2 w-full bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+              return (
+                <motion.div
+                  key={productId}
+                  className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden"
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 >
-                  Add to Cart
-                </motion.button>
-              )}
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
+                  <div className="block relative p-2 sm:p-3 md:p-4">
+                    {/* Heart icon to toggle favorite */}
+                    <motion.div
+                      className="z-30 cursor-pointer"
+                      onClick={() => handleFavoriteToggle(productId)}
+                      whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+                    >
+                      {isFavorite ? (
+                        <GoHeartFill
+                          className="text-[var(--color-primary)]"
+                          size={27}
+                        />
+                      ) : (
+                        <GoHeart size={27} />
+                      )}
+                    </motion.div>
+
+                    <Link
+                      href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
+                    >
+                      {/* Discount Label */}
+                      {product?.discount > 0 && (
+                        <p className="absolute top-0 right-0 text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
+                          {Math.round(product.discountPercentage)}% SAVE
+                        </p>
+                      )}
+                      {/* Product Image */}
+
+                      <motion.div
+                        whileHover={{
+                          scale: 1.1,
+                          transition: { duration: 0.3 },
+                        }}
+                      >
+                        <Image
+                          src={product.imageIds[0]}
+                          alt={product.name}
+                          width={150}
+                          height={100}
+                          loading="eager"
+                          fetchPriority="high"
+                          className="w-full h-32  rounded-xl object-cover"
+                        />
+                      </motion.div>
+
+                      <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm md:text-lg dark:text-gray-100">
+                        {product.name}
+                      </h2>
+                      {/* Product Details */}
+
+                      <div className="flex flex-col justify-center items-center">
+                        <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">
+                          {product.additionalInformation.brand}
+                        </div>
+                        <div className="mt-1 text-center">
+                          {product.discount ? (
+                            <>
+                              <div className="flex flex-row justify-around gap-3 items-center">
+                                <div className="text-xl font-bold text-green-500">
+                                  {product.discount}
+                                </div>
+                                <div className="text-sm line-through text-gray-500">
+                                  {product.price}
+                                </div>
+                              </div>
+                              <div className="text-sm text-red-500">
+                                SAVE {product.price - product.discount}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="py-2 text-xl font-bold text-green-500">
+                              {product.price}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                    {/* Conditionally render Add to Cart button */}
+                    {existingItem ? (
+                      <div className="flex flex-row items-center justify-center py-2 gap-2">
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              decrementQuantity({
+                                id: existingItem.id,
+                                buyerId: existingItem.buyerId,
+                              })
+                            )
+                          }
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                        >
+                          -
+                        </button>
+                        <div className="dark:text-gray-200">
+                          {existingQuantity}
+                        </div>
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              incrementQuantity({
+                                id: existingItem.id,
+                                buyerId: existingItem.buyerId,
+                              })
+                            )
+                          }
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                        >
+                          +
+                        </button>
+                      </div>
+                    ) : (
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleAddToCart(product)}
+                        className="mt-2 w-full bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+                      >
+                        Add to Cart
+                      </motion.button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Left Column - Filter */}
@@ -715,7 +926,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
           <div className="bg-white rounded shadow-lg p-5 dark:bg-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Filter by</h3>
-              <button onClick={() => clearAllFilters()} className="text-sm text-red-600">
+              <button
+                onClick={() => clearAllFilters()}
+                className="text-sm text-red-600"
+              >
                 Clear All
               </button>
             </div>
@@ -752,7 +966,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
               },
             ].map((filter, index) => (
               <div key={index} className="mb-4">
-                <button onClick={() => toggleFilter(filter.setter)} className="flex justify-between items-center w-full text-left">
+                <button
+                  onClick={() => toggleFilter(filter.setter)}
+                  className="flex justify-between items-center w-full text-left"
+                >
                   <span className="text-lg font-medium">{filter.label}</span>
                   {filter.state ? <BsChevronUp /> : <BsChevronDown />}
                 </button>
@@ -760,7 +977,26 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
                   <div className="mt-2">
                     <ul className="space-y-2">
                       {filter.options.map((option, idx) => (
-                        <li key={idx} className={`flex items-center justify-center mx-12 space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${selectedFilters[filter.category as keyof typeof selectedFilters].includes(option) ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600" : "text-gray-700 dark:text-gray-300"}`} onClick={() => handleCheckboxChange(filter.category as "size" | "color" | "brand" | "material", option)}>
+                        <li
+                          key={idx}
+                          className={`flex items-center justify-center mx-12 space-x-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
+                            selectedFilters[
+                              filter.category as keyof typeof selectedFilters
+                            ].includes(option)
+                              ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600"
+                              : "text-gray-700 dark:text-gray-300"
+                          }`}
+                          onClick={() =>
+                            handleCheckboxChange(
+                              filter.category as
+                                | "size"
+                                | "color"
+                                | "brand"
+                                | "material",
+                              option
+                            )
+                          }
+                        >
                           <span>{option}</span>
                         </li>
                       ))}
@@ -773,7 +1009,10 @@ export default function ProductsAccordion({ params }: { params: { slug: string[]
 
             {/* Price Filter */}
             <div className="mb-4">
-              <button onClick={() => toggleFilter(setIsPriceOpen)} className="flex justify-between items-center w-full text-left">
+              <button
+                onClick={() => toggleFilter(setIsPriceOpen)}
+                className="flex justify-between items-center w-full text-left"
+              >
                 <span className="text-lg font-medium">Price</span>
                 {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
               </button>
