@@ -82,7 +82,7 @@ export default function HomeHero() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {coverPictures.length === 0 ? (
           <div>No cover pictures available</div>
         ) : (
@@ -98,9 +98,11 @@ export default function HomeHero() {
                 <Image
                   width={1000}
                   height={1000}
+                  layout="responsive"
                   src={item?.coverPic?.data}
                   alt={item?.subCategory?.categoryName}
-                  className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80"
+                  objectFit="cover"
+                  className="  w-full   transition-opacity duration-300 hover:opacity-80"
                 />
               </motion.div>
             </Link>
