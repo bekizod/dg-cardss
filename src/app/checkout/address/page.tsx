@@ -34,38 +34,38 @@ export default function Address() {
   }, [user, router]);
 
   const fetchData = async () => {
-   
-    const token = Cookies.get('token');
-      try {
-        const response = await fetch('https://alsaifgallery.onrender.com/api/v1/user/getUserAddress', {
-          method: 'GET',
+    const token = Cookies.get("token");
+    try {
+      const response = await fetch(
+        "https://alsaifgallery.onrender.com/api/v1/user/getUserAddress",
+        {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        });
-  
-        // Check if the response is ok
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
         }
-  
-        const result = await response.json();
-  
-        // Check for data in the response
-        if (result.data && result.data.length > 0) {
-          setAddressMe(result.data); // Set the fetched addresses
-          setAddress(result.data[0]); // Set the first address as default
-        } else {
-          setAddressMe([]); // Set to empty if no addresses
-        }
-      } catch (error) {
-        console.error('Error fetching user addresses:', error);
-        // Optionally handle the error (e.g., show a notification)
+      );
+
+      // Check if the response is ok
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-     
+
+      const result = await response.json();
+
+      // Check for data in the response
+      if (result.data && result.data.length > 0) {
+        setAddressMe(result.data); // Set the fetched addresses
+        setAddress(result.data[0]); // Set the first address as default
+      } else {
+        setAddressMe([]); // Set to empty if no addresses
+      }
+    } catch (error) {
+      console.error("Error fetching user addresses:", error);
+      // Optionally handle the error (e.g., show a notification)
+    }
   };
-  
 
   // Fetch cities from the JSON file
   useEffect(() => {
@@ -81,11 +81,11 @@ export default function Address() {
 
     fetchCities();
     fetchData(); // Ensure address is set after user data is fetched
-  } ,[]);
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
-    console.log("the picked addess is " + city)
+    console.log("the picked addess is " + city);
     const token = Cookies.get("token");
     try {
       const response = await axios.post(
@@ -96,7 +96,7 @@ export default function Address() {
             Authorization: `Bearer ${token}`,
           },
         }
-      ) 
+      );
       if (response.status === 200) {
         notification.success({
           message: "Address Added",
@@ -188,52 +188,49 @@ export default function Address() {
                 </Button>
               </Form.Item>
             </Form>
-          
           </motion.div>
         </div>
       )}
 
-<div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-900 dark:text-white">
-  <div className="gap-4">
-    {addressMe?.length > 0 ? (
-      <div className="space-y-4">
-        {addressMe?.map((savedAddress, index) => (
-          <motion.div
-            key={index}
-            className={`p-4 cursor-pointer bg-gray-100 rounded-lg shadow-md w-full flex justify-between items-start dark:bg-gray-800 ${
-              address === savedAddress ? "border-2 border-green-500" : ""
-            }`}
-            onClick={() => setAddress(savedAddress)} // Selects the new address and deselects the previous
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center">
-              <p className="text-lg font-semibold">{savedAddress}</p>
-              {address === savedAddress ? ( // Show check mark only for the selected address
-                <FaCheck className="ml-2 text-green-500" />
-              ) : null}
+      <div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-900 dark:text-white">
+        <div className="gap-4">
+          {addressMe?.length > 0 ? (
+            <div className="space-y-4">
+              {addressMe?.map((savedAddress, index) => (
+                <motion.div
+                  key={index}
+                  className={`p-4 cursor-pointer bg-gray-100 rounded-lg shadow-md w-full flex justify-between items-start dark:bg-gray-800 ${
+                    address === savedAddress ? "border-2 border-green-500" : ""
+                  }`}
+                  onClick={() => setAddress(savedAddress)} // Selects the new address and deselects the previous
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center">
+                    <p className="text-lg font-semibold">{savedAddress}</p>
+                    {address === savedAddress ? ( // Show check mark only for the selected address
+                      <FaCheck className="ml-2 text-green-500" />
+                    ) : null}
+                  </div>
+                </motion.div>
+              ))}
+              <div className="flex justify-center">
+                <button
+                  className="p-2 rounded-lg text-white bg-[var(--color-primary)]"
+                  onClick={handleConfirmSelection}
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
-          </motion.div>
-        ))}
-        <div className="flex justify-center">
-          <button
-            className="p-2 rounded-lg text-white bg-[var(--color-primary)]"
-            onClick={handleConfirmSelection}
-          >
-            Confirm
-          </button>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400">
+              No saved address
+            </p>
+          )}
         </div>
       </div>
-    ) : (
-      <p className="text-center text-gray-500 dark:text-gray-400">
-        No saved address
-      </p>
-    )}
-  </div>
-</div>
-
-      
     </div>
   );
 }

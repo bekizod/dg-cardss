@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // Define the initial state
 interface OrderState {
@@ -23,15 +23,19 @@ const initialState: OrderState = {
 
 // Async actions
 export const createOrder = createAsyncThunk(
-  'orders/createOrder',
+  "orders/createOrder",
   async (orderData: any, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('token');
-      const response = await axios.post('https://alsaifgallery.onrender.com/api/v1/order/createOrder', orderData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("token");
+      const response = await axios.post(
+        "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -40,10 +44,12 @@ export const createOrder = createAsyncThunk(
 );
 
 export const getOrders = createAsyncThunk(
-  'orders/getOrders',
+  "orders/getOrders",
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://alsaifgallery.onrender.com/api/v1/order/getOrders/${userId}`);
+      const response = await axios.get(
+        `https://alsaifgallery.onrender.com/api/v1/order/getOrders/${userId}`
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -52,26 +58,29 @@ export const getOrders = createAsyncThunk(
 );
 
 export const getHighlyOrderedProducts = createAsyncThunk(
-  'orders/getHighlyOrderedProducts',
+  "orders/getHighlyOrderedProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('auth-token');
-      const response = await axios.get('https://alsaifgallery.onrender.com/api/v1/order/highlyOrderedProducts', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("auth-token");
+      const response = await axios.get(
+        "https://alsaifgallery.onrender.com/api/v1/order/highlyOrderedProducts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error: any) {
       // Optional: Check if error.response exists
-      const message = error.response?.data?.message || 'An error occurred';
+      const message = error.response?.data?.message || "An error occurred";
       return rejectWithValue(message);
     }
   }
 );
 
 const ordersSlice = createSlice({
-  name: 'orders',
+  name: "orders",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

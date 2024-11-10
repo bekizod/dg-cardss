@@ -68,24 +68,10 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
- 
+
 import { AppDispatch, RootState } from "@/redux/store";
 import PageBuilder from "../components/ui/Home UI/PageBuilder";
 import HomeHero from "@/components/ui/Home UI/HomeHero";
@@ -93,14 +79,18 @@ import { fetchFirstFourParentCategories } from "@/redux/slices/parentCategoriesS
 import Loader from "./loading";
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
-  const { categories, isLoading, error } = useSelector((state: RootState) => state.parentCategoriesSlice as any);
+  const { categories, isLoading, error } = useSelector(
+    (state: RootState) => state.parentCategoriesSlice as any
+  );
 
   useEffect(() => {
     dispatch(fetchFirstFourParentCategories());
   }, [dispatch]);
 
   const [activeTab, setActiveTab] = useState<string>("All");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
 
   const handleTabClick = (tab: string, categoryId: string | null = null) => {
     setActiveTab(tab);
@@ -110,7 +100,7 @@ export default function Home() {
 
   const renderContent = () => {
     if (activeTab === "All") {
-      return <HomeHero />;;
+      return <HomeHero />;
     }
     return <PageBuilder parentId={selectedCategoryId} />;
   };
@@ -119,17 +109,36 @@ export default function Home() {
     <main className=" pt-[28px] md:pt-[64px] lg:pt-[124px]">
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
         <ul className="hidden md:flex justify-center space-x-8 p-1">
-          <li className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === "All" ? "bg-[var(--color-primary)] dark:text-white text-white" : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"}`} onClick={() => handleTabClick("All")}>
+          <li
+            className={`cursor-pointer py-1 px-2 rounded-xl ${
+              activeTab === "All"
+                ? "bg-[var(--color-primary)] dark:text-white text-white"
+                : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"
+            }`}
+            onClick={() => handleTabClick("All")}
+          >
             All
           </li>
           {categories.map((category: any) => (
-            <li key={category._id} className={`cursor-pointer py-1 px-2 rounded-xl ${activeTab === category.categoryName ? "bg-[var(--color-primary)] dark:text-white text-white" : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"}`} onClick={() => handleTabClick(category.categoryName, category._id)}>
+            <li
+              key={category._id}
+              className={`cursor-pointer py-1 px-2 rounded-xl ${
+                activeTab === category.categoryName
+                  ? "bg-[var(--color-primary)] dark:text-white text-white"
+                  : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"
+              }`}
+              onClick={() =>
+                handleTabClick(category.categoryName, category._id)
+              }
+            >
               {category.categoryName}
             </li>
           ))}
         </ul>
       </nav>
-      <div className="container mx-auto md:mt-10 mt-9 px-4">{isLoading ?  <Loader /> : renderContent()}</div>
+      <div className="container mx-auto md:mt-10 mt-9 px-4">
+        {isLoading ? <Loader /> : renderContent()}
+      </div>
       {error && <p className="text-red-500">{error}</p>}
     </main>
   );

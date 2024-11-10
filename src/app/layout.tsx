@@ -12,7 +12,11 @@ import { AuthProvider } from "@/context/UserContext";
 import { fetchThemeFromAPI } from "@/redux/slices/themeSlice";
 import "./globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="{bg-white dark:bg-black ">
@@ -42,9 +46,18 @@ function ThemeFetcherAndApplier({ children }: { children: React.ReactNode }) {
   // Update CSS variables based on fetched theme
   useEffect(() => {
     if (theme.primaryColor) {
-      document.documentElement.style.setProperty("--color-primary", theme.primaryColor);
-      document.documentElement.style.setProperty("--color-secondary", theme.secondaryColor);
-      document.documentElement.style.setProperty("--color-tertiary", theme.tertiaryColor);
+      document.documentElement.style.setProperty(
+        "--color-primary",
+        theme.primaryColor
+      );
+      document.documentElement.style.setProperty(
+        "--color-secondary",
+        theme.secondaryColor
+      );
+      document.documentElement.style.setProperty(
+        "--color-tertiary",
+        theme.tertiaryColor
+      );
     }
   }, [theme.primaryColor, theme.secondaryColor, theme.tertiaryColor]);
 

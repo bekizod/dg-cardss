@@ -49,14 +49,21 @@ export default function PaymentMethods() {
   const [selectedMethod, setSelectedMethod] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalConfirmed, setModalConfirmed] = useState(false); // Track if the modal was confirmed
-  const [modalData, setModalData] = useState<{ cardNumber: string; expiryDate: string; cvv: string } | null>(null);
+  const [modalData, setModalData] = useState<{
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
+  } | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Handle clicks outside the modal
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         if (!modalConfirmed && selectedMethod === 2) {
           // Uncheck the radio button only if the modal was not confirmed for Credit/Debit Card Payment
           setSelectedMethod(null);
@@ -83,9 +90,15 @@ export default function PaymentMethods() {
     }
   };
 
-  const handleConfirm = (data: { cardNumber: string; expiryDate: string; cvv: string }) => {
+  const handleConfirm = (data: {
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
+  }) => {
     // Handle form confirmation for Credit/Debit Card Payment
-     alert(`Selected method ID: ${selectedMethod}\nCard Number: ${data.cardNumber}\nExpiry Date: ${data.expiryDate}\nCVV: ${data.cvv}`);
+    alert(
+      `Selected method ID: ${selectedMethod}\nCard Number: ${data.cardNumber}\nExpiry Date: ${data.expiryDate}\nCVV: ${data.cvv}`
+    );
     setModalData(data);
     setModalConfirmed(true); // Mark modal as confirmed
     setSelectedMethod(2); // Keep the radio button checked for Credit/Debit Card Payment
@@ -94,23 +107,51 @@ export default function PaymentMethods() {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-      <p className="text-lg text-center font-semibold mb-4 dark:text-white">Choose payment method</p>
+      <p className="text-lg text-center font-semibold mb-4 dark:text-white">
+        Choose payment method
+      </p>
       <div className="space-y-1">
         {paymentMethods.map((method) => (
-          <motion.div key={method.id} className={`flex items-center gap-1 p-1 rounded-lg shadow-md cursor-pointer transition-transform duration-300 ${selectedMethod === method.id ? "bg-gray-100 dark:bg-gray-700" : "bg-gray-50 dark:bg-gray-600"}`} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} onClick={() => handleMethodClick(method.id)}>
-            <input type="radio" name="payment_method" checked={selectedMethod === method.id} onChange={() => handleMethodClick(method.id)} className="mr-4" />
+          <motion.div
+            key={method.id}
+            className={`flex items-center gap-1 p-1 rounded-lg shadow-md cursor-pointer transition-transform duration-300 ${
+              selectedMethod === method.id
+                ? "bg-gray-100 dark:bg-gray-700"
+                : "bg-gray-50 dark:bg-gray-600"
+            }`}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            onClick={() => handleMethodClick(method.id)}
+          >
+            <input
+              type="radio"
+              name="payment_method"
+              checked={selectedMethod === method.id}
+              onChange={() => handleMethodClick(method.id)}
+              className="mr-4"
+            />
             <div className="flex-1">
               <p className="text-sm dark:text-gray-300">{method.label}</p>
             </div>
             <div className="w-12 h-12 relative">
-              <Image src={method.imgSrc} alt={method.alt} layout="fill" objectFit="contain" />
+              <Image
+                src={method.imgSrc}
+                alt={method.alt}
+                layout="fill"
+                objectFit="contain"
+              />
             </div>
           </motion.div>
         ))}
       </div>
 
       {/* Render the modal */}
-      <CardModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onConfirm={handleConfirm} />
+      <CardModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 }

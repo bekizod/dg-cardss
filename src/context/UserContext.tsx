@@ -2,7 +2,13 @@
 // AuthContext.tsx
 
 "use client";
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -21,9 +27,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const fetchUserInfo = async (token: string) => {
   // <- make this exportable
   try {
-    const response = await axios.get("https://alsaifgallery.onrender.com/api/v1/user/getUserInfo", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      "https://alsaifgallery.onrender.com/api/v1/user/getUserInfo",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data.data; // Assuming user info is in response.data.data
   } catch (error) {
     console.error("Error fetching user info:", error);
@@ -33,7 +42,9 @@ export const fetchUserInfo = async (token: string) => {
 
 // Provider component that wraps your app and makes auth object available to child components
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(Cookies.get("token") || null);
+  const [token, setToken] = useState<string | null>(
+    Cookies.get("token") || null
+  );
   const [user, setUser] = useState<any | null>(null);
 
   // Fetch user info if token exists
@@ -62,7 +73,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.location.reload(); // Refresh the page to clear the state
   };
 
-  return <AuthContext.Provider value={{ token, user, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ token, user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 // Hook for child components to get the auth object and re-render when it changes

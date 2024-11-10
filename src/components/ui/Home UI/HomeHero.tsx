@@ -25,7 +25,7 @@ export default function HomeHero() {
         // Directly set the response data as an array
         setCoverPictures(response.data.data); // Set the data when the request is successful
       } catch (err: any) {
-        setError(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
+        setError(err.response?.data || "An error occurred"); // Set error message if something goes wrong
       } finally {
         setLoading(false); // Stop loading once the request is complete
       }
@@ -44,7 +44,12 @@ export default function HomeHero() {
 
   return (
     <div className="">
-      <motion.div className="py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+      <motion.div
+        className="py-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <Image
           src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/Header-EN_1.jpg"
           width={1000}
@@ -58,9 +63,22 @@ export default function HomeHero() {
         <Slider />
       </div>
 
-      <motion.div className="relative w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+      <motion.div
+        className="relative w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <div className="shadow-none">
-          <Image width={1000} height={1000} src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-_-ENG_1_.png" alt="banner" loading="eager" fetchPriority="high" className="w-full" />
+          <Image
+            width={1000}
+            height={1000}
+            src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-_-ENG_1_.png"
+            alt="banner"
+            loading="eager"
+            fetchPriority="high"
+            className="w-full"
+          />
         </div>
       </motion.div>
 
@@ -69,9 +87,21 @@ export default function HomeHero() {
           <div>No cover pictures available</div>
         ) : (
           coverPictures.map((item: any) => (
-            <Link href={`/${item?.parentCategory?.categoryName}/${item?.parentCategory?._id}/${item?.subCategory?.categoryName}/${item?.subCategory?._id}`} key={item?._id}>
-              <motion.div className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105" whileHover={{ scale: 1.05 }}>
-                <Image width={1000} height={1000} src={item?.coverPic?.data} alt={item?.subCategory?.categoryName} className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80" />
+            <Link
+              href={`/${item?.parentCategory?.categoryName}/${item?.parentCategory?._id}/${item?.subCategory?.categoryName}/${item?.subCategory?._id}`}
+              key={item?._id}
+            >
+              <motion.div
+                className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+              >
+                <Image
+                  width={1000}
+                  height={1000}
+                  src={item?.coverPic?.data}
+                  alt={item?.subCategory?.categoryName}
+                  className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80"
+                />
               </motion.div>
             </Link>
           ))

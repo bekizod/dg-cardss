@@ -1,9 +1,9 @@
 // store/slices/categorySlice.ts
 "use client";
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // CategoryState interface for managing categories, subcategories, and products
 interface CategoryState {
@@ -26,78 +26,90 @@ const initialState: CategoryState = {
 
 // Thunk to fetch parent categories
 export const fetchParentCategories = createAsyncThunk(
-  'categories/fetchParentCategories',
+  "categories/fetchParentCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('token');
-      const response = await axios.get('https://alsaifgallery.onrender.com/api/v1/category/getParentCategories', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("token");
+      const response = await axios.get(
+        "https://alsaifgallery.onrender.com/api/v1/category/getParentCategories",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
-      return rejectWithValue('Failed to fetch parent categories');
+      return rejectWithValue("Failed to fetch parent categories");
     }
   }
 );
 
 // Thunk to fetch subcategories
 export const fetchSubCategories = createAsyncThunk(
-  'categories/fetchSubCategories',
+  "categories/fetchSubCategories",
   async (parentId: string, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('token');
-      const response = await axios.get(`https://alsaifgallery.onrender.com/api/v1/category/subCategories/${parentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("token");
+      const response = await axios.get(
+        `https://alsaifgallery.onrender.com/api/v1/category/subCategories/${parentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
-      return rejectWithValue('Failed to fetch subcategories');
+      return rejectWithValue("Failed to fetch subcategories");
     }
   }
 );
 
 // Thunk to fetch products by subcategory
 export const fetchProductsByCategory = createAsyncThunk(
-  'categories/fetchProductsByCategory',
+  "categories/fetchProductsByCategory",
   async (subcategoryId: string, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('token');
-      const response = await axios.get(`https://alsaifgallery.onrender.com/api/v1/product/getProductByCategories/${subcategoryId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("token");
+      const response = await axios.get(
+        `https://alsaifgallery.onrender.com/api/v1/product/getProductByCategories/${subcategoryId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
-      return rejectWithValue('Failed to fetch products');
+      return rejectWithValue("Failed to fetch products");
     }
   }
 );
 
 // Thunk to fetch a single product (new addition)
 export const fetchSingleProduct = createAsyncThunk(
-  'categories/fetchSingleProduct',
+  "categories/fetchSingleProduct",
   async (productId: string, { rejectWithValue }) => {
     try {
-      const token = Cookies.get('token');
-      const response = await axios.get(`https://alsaifgallery.onrender.com/api/v1/product/getSingleProduct/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = Cookies.get("token");
+      const response = await axios.get(
+        `https://alsaifgallery.onrender.com/api/v1/product/getSingleProduct/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
-      return rejectWithValue('Failed to fetch the product');
+      return rejectWithValue("Failed to fetch the product");
     }
   }
 );
 
 const categorySlice = createSlice({
-  name: 'categories',
+  name: "categories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

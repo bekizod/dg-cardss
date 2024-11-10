@@ -4,59 +4,63 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { getAdvertisements,resetAdvertisements } from "@/redux/slices/bannersSlice";
+import {
+  getAdvertisements,
+  resetAdvertisements,
+} from "@/redux/slices/bannersSlice";
 import Link from "next/link";
 import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
 import axios from "axios";
 import Loader from "@/app/loading";
 
-export default function PageBuilder({ parentId } : {parentId : any}) {
+export default function PageBuilder({ parentId }: { parentId: any }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
-  const { cache, status, error } = useSelector((state: RootState) => state.advertisement as any); // Access advertisements from the Redux state
+  const { cache, status, error } = useSelector(
+    (state: RootState) => state.advertisement as any
+  ); // Access advertisements from the Redux state
   // const totalSlides = cache[parentId]?.length || 0;
   const [pages, setPages] = useState<number>(0);
-  const { pictures, isFetching } = useSelector((state: RootState) => state.coverPictureSlice as any);
-  
-// useEffect(() => {
-//   // Fetch cover pictures when the component mounts
-//   if(parentId){
-//   dispatch(getAllCoverPictures({ parentId }));
-// }
-//   // Optionally reset the state when unmounting
-  
-// }, [dispatch, parentId]); 
-const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
+  const { pictures, isFetching } = useSelector(
+    (state: RootState) => state.coverPictureSlice as any
+  );
+
+  // useEffect(() => {
+  //   // Fetch cover pictures when the component mounts
+  //   if(parentId){
+  //   dispatch(getAllCoverPictures({ parentId }));
+  // }
+  //   // Optionally reset the state when unmounting
+
+  // }, [dispatch, parentId]);
+  const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
   const [loading, setLoading] = useState<boolean>(false); // Track loading state
   const [Cerror, setCerror] = useState<string | null>(null); // Store error message
-useEffect(() => {
-  const fetchCoverPictures = async () => {
-    setLoading(true);
-    setCerror(null); // Reset error before making the request
+  useEffect(() => {
+    const fetchCoverPictures = async () => {
+      setLoading(true);
+      setCerror(null); // Reset error before making the request
 
-    if(parentId){
-    try {
-      const response = await axios.get(
-        `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories/${parentId}`
-      );
-      // Directly set the response data as an array
-      setCoverPictures(response.data.data); // Set the data when the request is successful
-      console.log(response.data); // Log the response to check its structure
-    } catch (err: any) {
-      setCerror(err.response?.data || 'An error occurred'); // Set error message if something goes wrong
-    } finally {
-      setLoading(false); // Stop loading once the request is complete
-    }
-  };
+      if (parentId) {
+        try {
+          const response = await axios.get(
+            `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories/${parentId}`
+          );
+          // Directly set the response data as an array
+          setCoverPictures(response.data.data); // Set the data when the request is successful
+          console.log(response.data); // Log the response to check its structure
+        } catch (err: any) {
+          setCerror(err.response?.data || "An error occurred"); // Set error message if something goes wrong
+        } finally {
+          setLoading(false); // Stop loading once the request is complete
+        }
+      }
+    };
 
-}
+    fetchCoverPictures();
+  }, [parentId]);
 
-  fetchCoverPictures();
-}, [parentId]);
-
-
-
-useEffect(() => {
+  useEffect(() => {
     if (!cache[parentId]) {
       // Fetch advertisements only if they are not already cached
       dispatch(getAdvertisements(parentId));
@@ -74,21 +78,24 @@ useEffect(() => {
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [pages]);
 
-
-
   if (loading) {
     return <Loader />;
   }
-  
+
   if (error) {
     return <div>Error: {Cerror}</div>;
   }
-  
+
   return (
     <div className="space-y-4 py-10 px-4">
       {/* Slider Section */}
-      
-      <motion.div className="relative w-full overflow-hidden rounded-2xl border border-gray-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+
+      <motion.div
+        className="relative w-full overflow-hidden rounded-2xl border border-gray-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <motion.div className="relative w-full flex overflow-hidden">
           <motion.ul
             className="flex w-full"
@@ -104,7 +111,9 @@ useEffect(() => {
               cache[parentId]?.length > 0 &&
               cache[parentId]?.map((ad: any, index: number) => (
                 <motion.li key={index} className="flex-shrink-0 w-full">
-                  <Link href={`/${ad.parentCategoryId?.categoryName}/${ad.parentCategoryId?._id}/${ad.subCategoryId.categoryName}/${ad.subCategoryId._id}`}>
+                  <Link
+                    href={`/${ad.parentCategoryId?.categoryName}/${ad.parentCategoryId?._id}/${ad.subCategoryId.categoryName}/${ad.subCategoryId._id}`}
+                  >
                     {" "}
                     {/* Assuming 'link' is the URL to redirect */}
                     <Image
@@ -123,16 +132,37 @@ useEffect(() => {
           </motion.ul>
         </motion.div>
 
-        <button type="button" aria-label="previous slide" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + pages) % pages)}>
+        <button
+          type="button"
+          aria-label="previous slide"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+          onClick={() =>
+            setCurrentSlide((prevSlide) => (prevSlide - 1 + pages) % pages)
+          }
+        >
           ‹
         </button>
-        <button type="button" aria-label="next slide" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % pages)}>
+        <button
+          type="button"
+          aria-label="next slide"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+          onClick={() =>
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % pages)
+          }
+        >
           ›
         </button>
 
         <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
           {[...Array(pages)?.keys()].map((index) => (
-            <li key={index} className={`dot ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-gray-400"} w-2 h-2 rounded-full`} />
+            <li
+              key={index}
+              className={`dot ${
+                currentSlide === index
+                  ? " bg-[var(--color-primary)]"
+                  : "bg-gray-400"
+              } w-2 h-2 rounded-full`}
+            />
           ))}
         </ul>
       </motion.div>
@@ -331,9 +361,21 @@ useEffect(() => {
       {isFetching && <div>Cover Pics Are Fetching</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {coverPictures?.map((item: any) => (
-          <Link href={`/${item.parentCategory?.categoryName}/${item.parentCategory?._id}/${item.subCategory.categoryName}/${item.subCategory._id}`} key={item._id}>
-            <motion.div className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105" whileHover={{ scale: 1.05 }}>
-              <Image width={1000} height={1000} src={item.coverPic.data} alt={item.subCategory.categoryName} className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80" />
+          <Link
+            href={`/${item.parentCategory?.categoryName}/${item.parentCategory?._id}/${item.subCategory.categoryName}/${item.subCategory._id}`}
+            key={item._id}
+          >
+            <motion.div
+              className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Image
+                width={1000}
+                height={1000}
+                src={item.coverPic.data}
+                alt={item.subCategory.categoryName}
+                className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80"
+              />
               {/* <div className="p-4 bg-white">
                 <h3 className="text-lg font-semibold text-gray-800">{item.subCategory.categoryName}</h3>
                 <p className="text-sm text-gray-600">{item.parentCategory.categoryName}</p>

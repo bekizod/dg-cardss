@@ -21,7 +21,9 @@ export default function Slider() {
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {
-        const response = await fetch("https://alsaifgallery.onrender.com/api/v1/advertisement/getSampleAdd");
+        const response = await fetch(
+          "https://alsaifgallery.onrender.com/api/v1/advertisement/getSampleAdd"
+        );
         const data = await response.json();
         if (response.ok) {
           setAdvertisements(data.data);
@@ -43,8 +45,10 @@ export default function Slider() {
   }, [totalSlides]);
 
   const goToSlide = (slideIndex: number) => setCurrentSlide(slideIndex);
-  const handlePrevSlide = () => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
-  const handleNextSlide = () => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
+  const handlePrevSlide = () =>
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
+  const handleNextSlide = () =>
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
 
   return (
     <div className="relative w-full">
@@ -64,12 +68,16 @@ export default function Slider() {
               {advertisements.map((ad, index) => (
                 <motion.li key={ad._id} className="flex-shrink-0 w-full">
                   <Link href={ad.bannerLink || "#"}>
-                    <div className="relative w-full h-[500px]"> {/* Fixed height here */}
+                    <div className="relative w-full h-[500px]">
+                      {" "}
+                      {/* Fixed height here */}
                       <Image
                         src={ad.imageId?.data || ""}
-                        alt={`Slide ${index + 1} - ${ad.parentCategoryId?.categoryName || "Advertisement"}`}
+                        alt={`Slide ${index + 1} - ${
+                          ad.parentCategoryId?.categoryName || "Advertisement"
+                        }`}
                         layout="fill"
-                        objectFit="cover"  // Ensures the image covers the container without stretching
+                        objectFit="cover" // Ensures the image covers the container without stretching
                         className="rounded-2xl border border-gray-300"
                       />
                     </div>
@@ -99,7 +107,11 @@ export default function Slider() {
             {advertisements.map((_, index) => (
               <li
                 key={index}
-                className={`w-2 h-2 rounded-full cursor-pointer ${currentSlide === index ? " bg-[var(--color-primary)]" : "bg-white"}`}
+                className={`w-2 h-2 rounded-full cursor-pointer ${
+                  currentSlide === index
+                    ? " bg-[var(--color-primary)]"
+                    : "bg-white"
+                }`}
                 onClick={() => goToSlide(index)}
               />
             ))}

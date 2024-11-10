@@ -1,9 +1,10 @@
-import { CartItem } from '../redux/slices/cartSlice';
+import { CartItem } from "../redux/slices/cartSlice";
 
 export const loadCartFromLocalStorage = (): CartItem[] => {
-  if (typeof window !== 'undefined') { // Check if running in the browser
+  if (typeof window !== "undefined") {
+    // Check if running in the browser
     try {
-      const serializedCart = localStorage.getItem('cartItems');
+      const serializedCart = localStorage.getItem("cartItems");
       if (serializedCart === null) {
         return [];
       }
@@ -17,10 +18,11 @@ export const loadCartFromLocalStorage = (): CartItem[] => {
 };
 
 export const saveCartToLocalStorage = (cartItems: CartItem[]): void => {
-  if (typeof window !== 'undefined') { // Check if running in the browser
+  if (typeof window !== "undefined") {
+    // Check if running in the browser
     try {
       const serializedCart = JSON.stringify(cartItems);
-      localStorage.setItem('cartItems', serializedCart);
+      localStorage.setItem("cartItems", serializedCart);
     } catch (e) {
       console.error("Could not save cart items to local storage", e);
     }

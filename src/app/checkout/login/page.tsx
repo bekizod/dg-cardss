@@ -15,15 +15,14 @@ type NotificationType = "success" | "error" | "info" | "warning";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loging, setLoging] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const { login } = useAuth(); // Use the login function from AuthContext
   const { user } = useAuth();
   const token = Cookies.get("token");
-  
 
   useEffect(() => {
     if (user && token && !user.address) {
@@ -31,7 +30,11 @@ export default function Login() {
     }
   }, [router, token, user]);
   // Notification function with a 3-second duration
-  const openNotification = (type: NotificationType, message: string, description: string) => {
+  const openNotification = (
+    type: NotificationType,
+    message: string,
+    description: string
+  ) => {
     notification[type]({
       message,
       description,
@@ -44,16 +47,19 @@ export default function Login() {
     e.preventDefault();
     setLoging(true);
     try {
-      const response = await fetch("https://alsaifgallery.onrender.com/api/v1/user/signIn", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://alsaifgallery.onrender.com/api/v1/user/signIn",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -63,20 +69,32 @@ export default function Login() {
         login(token, user);
         dispatch(updateBuyerIdAfterLogin(user._id));
         // Display success notification
-        openNotification("success", "Login Successful", `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`);
+        openNotification(
+          "success",
+          "Login Successful",
+          `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`
+        );
         router.push("/checkout/address");
       } else {
         const errorData = await response.json();
         console.error("Login error", errorData);
 
         // Display error notification
-        openNotification("error", "Login Failed", "Email or password is incorrect. Please try again.");
+        openNotification(
+          "error",
+          "Login Failed",
+          "Email or password is incorrect. Please try again."
+        );
       }
     } catch (error) {
       console.error("An error occurred:", error);
 
       // Display error notification for exceptions
-      openNotification("error", "Login Error", "Something went wrong. Please try again later.");
+      openNotification(
+        "error",
+        "Login Error",
+        "Something went wrong. Please try again later."
+      );
     } finally {
       setLoging(false);
     }
@@ -96,19 +114,43 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
             <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
           <div className="relative">
-            <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <input
+              type="password"
+              required
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
-          <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.button
+            type="submit"
+            className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             {loging ? "Loging......." : "Log In"}
           </motion.button>
-          <Link href={"/forgotpassword"} className="text-blue py-1">forgot password?</Link>
+          <Link href={"/forgotpassword"} className="text-blue py-1">
+            forgot password?
+          </Link>
         </form>
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
           Did Not have Account?{" "}
-          <Link href="/checkout/register" className="text-[var(--color-primary)]">
+          <Link
+            href="/checkout/register"
+            className="text-[var(--color-primary)]"
+          >
             Sign Up.
           </Link>
         </div>
@@ -116,42 +158,6 @@ export default function Login() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 // import { useState, useRef, useEffect } from "react";
@@ -161,8 +167,6 @@ export default function Login() {
 // import Link from "next/link";
 
 // export default function Login() {
-   
-   
 
 //   return (
 //     <div className="flex justify-center items-center py-28 md:mt-[124px]  bg-gray-200 dark:bg-gray-800">

@@ -1,18 +1,34 @@
-"use client"
+"use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {  FaTag, FaList,  } from "react-icons/fa";
+import { FaTag, FaList } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaInfoCircle, FaWallet, FaShieldAlt, FaShippingFast, FaMoneyBillWave, FaShoppingCart, FaFileContract, FaQuestionCircle, FaPhone, FaArrowCircleRight } from "react-icons/fa";
-import { FaFacebookF, FaInstagram, FaSnapchatGhost, FaTwitter } from "react-icons/fa";
+import {
+  FaInfoCircle,
+  FaWallet,
+  FaShieldAlt,
+  FaShippingFast,
+  FaMoneyBillWave,
+  FaShoppingCart,
+  FaFileContract,
+  FaQuestionCircle,
+  FaPhone,
+  FaArrowCircleRight,
+} from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaSnapchatGhost,
+  FaTwitter,
+} from "react-icons/fa";
 import { FaHome, FaSearch, FaUser } from "react-icons/fa";
 import { Badge } from "antd";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "@/context/UserContext";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const Footer = () => {
   const pathname = usePathname();
@@ -31,23 +47,25 @@ const Footer = () => {
     { name: "Settings", icon: "settings-outline", dis: "translate-x-64" },
   ];
   const [active, setActive] = useState(0);
-  const { user, logout } = useAuth(); 
+  const { user, logout } = useAuth();
   const token = Cookies.get("token");
   const dispatch = useDispatch<AppDispatch>();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
 
   useEffect(() => {
-
-
     // Filter cart items based on buyerId (either user._id or 'guest')
     if (token && user) {
       // If user is logged in, filter by user's ID
-      const userCartItems = cartItems.filter((item) => item.buyerId === user?._id);
+      const userCartItems = cartItems.filter(
+        (item) => item.buyerId === user?._id
+      );
       setFilteredCartItems(userCartItems);
     } else {
       // If guest, filter by 'guest' ID
-      const guestCartItems = cartItems.filter((item) => item.buyerId === "guest");
+      const guestCartItems = cartItems.filter(
+        (item) => item.buyerId === "guest"
+      );
       setFilteredCartItems(guestCartItems);
     }
   }, [cartItems, user, token]);
@@ -57,28 +75,54 @@ const Footer = () => {
         <div className="flex flex-row justify-around ">
           <div className="flex flex-row gap-3 items-center">
             <div>
-              <Image src="/Reference_images/footer img/technology.png" className="h-20 py-3" alt="new technologies" width={60} height={20} />{" "}
+              <Image
+                src="/Reference_images/footer img/technology.png"
+                className="h-20 py-3"
+                alt="new technologies"
+                width={60}
+                height={20}
+              />{" "}
             </div>
             <div className="font-bold text-">New Technologies</div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
             <div>
-              <Image src="/Reference_images/footer img/badg.png" className="h-20 py-3" alt="Certified warranty" width={60} height={20} />{" "}
+              <Image
+                src="/Reference_images/footer img/badg.png"
+                className="h-20 py-3"
+                alt="Certified warranty"
+                width={60}
+                height={20}
+              />{" "}
             </div>
             <div className="font-bold text-">Certified Warranty</div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
             <div>
-              <Image src="/Reference_images/footer img/free-shipping.png" className="h-20 py-3" alt="Certified warranty" width={60} height={20} />{" "}
+              <Image
+                src="/Reference_images/footer img/free-shipping.png"
+                className="h-20 py-3"
+                alt="Certified warranty"
+                width={60}
+                height={20}
+              />{" "}
             </div>
-            <div className="font-bold text-">Free shipping for orders over 799 SAR</div>
+            <div className="font-bold text-">
+              Free shipping for orders over 799 SAR
+            </div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
             <div>
-              <Image src="/Reference_images/footer img/support.png" className="h-20 py-3" alt="Customer Service 24/7" width={60} height={20} />{" "}
+              <Image
+                src="/Reference_images/footer img/support.png"
+                className="h-20 py-3"
+                alt="Customer Service 24/7"
+                width={60}
+                height={20}
+              />{" "}
             </div>
             <div className="font-bold text-">Customer Service 24/7</div>
           </div>
@@ -104,11 +148,22 @@ const Footer = () => {
         <div className="flex justify-evenly pb-8 py-6 ">
           {/* First Column */}
           <div className="flex flex-col gap-3 z-10">
-            <h3 className="text-white font-bold border-b-2 pb-1 mx-16 flex justify-center">Questions and complaints</h3>
+            <h3 className="text-white font-bold border-b-2 pb-1 mx-16 flex justify-center">
+              Questions and complaints
+            </h3>
 
             {/* Whatsapp Section */}
-            <Link href="https://wa.me/966920009017" className="flex items-center ml-10">
-              <Image width={100} height={100} src="Reference_images/footer img/footer03.svg" alt="Whatsapp" className="h-6" />
+            <Link
+              href="https://wa.me/966920009017"
+              className="flex items-center ml-10"
+            >
+              <Image
+                width={100}
+                height={100}
+                src="Reference_images/footer img/footer03.svg"
+                alt="Whatsapp"
+                className="h-6"
+              />
               <div className="flex flex-col">
                 <span className="text-white">Whatsapp</span>
                 <span className="text-white">+966920009017</span>
@@ -117,7 +172,13 @@ const Footer = () => {
             <hr className="mx-28 bg-gray-50 flex justify-center" />
             {/* Call Us Section */}
             <Link href="tel:+966920009016" className="flex items-center ml-10">
-              <Image width={100} height={100} src="Reference_images/footer img/footer04.svg" alt="Call Us" className="h-6 mr-2" />
+              <Image
+                width={100}
+                height={100}
+                src="Reference_images/footer img/footer04.svg"
+                alt="Call Us"
+                className="h-6 mr-2"
+              />
               <div className="flex flex-col">
                 <span className="text-white">Call Us</span>
                 <span className="text-white">+966920009016</span>
@@ -127,7 +188,9 @@ const Footer = () => {
 
           {/* Second Column */}
           <div className="flex flex-col font-thin text-white z-10">
-            <h3 className="text-white font-bold border-b-2 pb-1 mx-20 text-md text-center">Need Help ?</h3>
+            <h3 className="text-white font-bold border-b-2 pb-1 mx-20 text-md text-center">
+              Need Help ?
+            </h3>
             <ul className="space-y-2 text-sm pt-3 flex flex-col items-center">
               <li className="flex items-center hover:text-slate-400">
                 <FaInfoCircle className="mr-2" />
@@ -147,7 +210,9 @@ const Footer = () => {
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaShippingFast className="mr-2" />
-                <Link href="/shipping-and-delivery-information">Shipping and Delivery Information</Link>
+                <Link href="/shipping-and-delivery-information">
+                  Shipping and Delivery Information
+                </Link>
               </li>
               <li className="flex items-center hover:text-slate-400">
                 <FaShoppingCart className="mr-2" />
@@ -174,8 +239,12 @@ const Footer = () => {
 
           {/* Third Column */}
           <div className="flex flex-col text-white z-10">
-            <h3 className="text-white font-bold text-center border-b-2 pb-1 mb-1 mx-24">Follow Us</h3>
-            <p className="text-xs text-center">You can follow us on social media</p>
+            <h3 className="text-white font-bold text-center border-b-2 pb-1 mb-1 mx-24">
+              Follow Us
+            </h3>
+            <p className="text-xs text-center">
+              You can follow us on social media
+            </p>
             <div className="flex justify-center space-x-4 mt-2">
               <Link href="https://www.facebook.com/alsaifgallery">
                 <FaFacebookF className="text-2xl cursor-pointer" />
@@ -190,8 +259,12 @@ const Footer = () => {
                 <FaSnapchatGhost className="text-2xl cursor-pointer" />
               </Link>
             </div>
-            <h3 className="text-white font-bold text-center mt-4">Download App</h3>
-            <p className="text-xs text-center">Download the app and enjoy exclusive offers</p>
+            <h3 className="text-white font-bold text-center mt-4">
+              Download App
+            </h3>
+            <p className="text-xs text-center">
+              Download the app and enjoy exclusive offers
+            </p>
             <div className="flex flex-col items-center mt-4 space-y-4">
               <Link href="https://apps.apple.com/sa/app/alsaif-gallery-السيف-غاليري/id1459530502">
                 <Image
@@ -250,45 +323,46 @@ const Footer = () => {
 
       <div className="lg:hidden  fixed bottom-0 left-0 right-0 z-50 bg-gray-300 border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="grid grid-cols-5 h-16 max-w-lg mx-auto">
-        {navItems.map((item) => (
-  <Link key={item.name} href={item.href}>
-    <motion.div
-      className={`flex flex-col items-center justify-center p-3 transition-transform duration-300 ${
-        pathname === item.href
-          ? "text-green-600 dark:text-green-400 bg-[#ffffff] dark:bg-slate-700 rounded-full shadow-2xl"
-          : "text-gray-500 dark:text-gray-400"
-      }`}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      animate={{
-        scale: pathname === item.href ? 1.05 : 1, // Slightly scale up the active tab
-        y: pathname === item.href ? -10 : 0, // Apply the y-axis translate effect on active tab
-      }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-    >
-      {item.name === "Cart" ? (
-        // Check if the current item is Cart and render the badge
-        <>
-        <Badge count={filteredCartItems?.length} offset={[23, -20]} style={{
-    backgroundColor: '#FF6347', // Change badge background color
-    color: 'white', // Set the text color of the badge
-    fontSize: '12px', // Change font size of the count
-    width: '20px', // Set width of the badge
-    height: '20px', // Set height of the badge
-    borderRadius: '50%', // Make the badge circular
-     
-  }}>
-        </Badge>
-        {item.icon}
-        </>
-      ) : (
-        item.icon
-      )}
-      <span className="text-xs mt-1">{item.name}</span>
-    </motion.div>
-  </Link>
-))}
-
+          {navItems.map((item) => (
+            <Link key={item.name} href={item.href}>
+              <motion.div
+                className={`flex flex-col items-center justify-center p-3 transition-transform duration-300 ${
+                  pathname === item.href
+                    ? "text-green-600 dark:text-green-400 bg-[#ffffff] dark:bg-slate-700 rounded-full shadow-2xl"
+                    : "text-gray-500 dark:text-gray-400"
+                }`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  scale: pathname === item.href ? 1.05 : 1, // Slightly scale up the active tab
+                  y: pathname === item.href ? -10 : 0, // Apply the y-axis translate effect on active tab
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                {item.name === "Cart" ? (
+                  // Check if the current item is Cart and render the badge
+                  <>
+                    <Badge
+                      count={filteredCartItems?.length}
+                      offset={[23, -20]}
+                      style={{
+                        backgroundColor: "#FF6347", // Change badge background color
+                        color: "white", // Set the text color of the badge
+                        fontSize: "12px", // Change font size of the count
+                        width: "20px", // Set width of the badge
+                        height: "20px", // Set height of the badge
+                        borderRadius: "50%", // Make the badge circular
+                      }}
+                    ></Badge>
+                    {item.icon}
+                  </>
+                ) : (
+                  item.icon
+                )}
+                <span className="text-xs mt-1">{item.name}</span>
+              </motion.div>
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

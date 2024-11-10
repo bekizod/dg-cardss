@@ -1,16 +1,20 @@
 "use client";
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/redux/store';
-import { postFeedback } from '@/redux/slices/postFeedbackSlice';
-import { notification } from 'antd'; // Import Ant Design notification
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { postFeedback } from "@/redux/slices/postFeedbackSlice";
+import { notification } from "antd"; // Import Ant Design notification
 
 const PostFeedback: React.FC = () => {
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   // Function to open notifications
-  const openNotification = (type: 'success' | 'error', message: string, description: string) => {
+  const openNotification = (
+    type: "success" | "error",
+    message: string,
+    description: string
+  ) => {
     notification[type]({
       message,
       description,
@@ -29,17 +33,19 @@ const PostFeedback: React.FC = () => {
         message: "Success",
         description: `Feedback set successfully! `,
       });
-    } catch (error: any ) {
-    
+    } catch (error: any) {
       notification.error({
         message: "Error",
-        description:   error?.message || 'Failed to set discount.',
+        description: error?.message || "Failed to set discount.",
       });
     }
   };
 
-  return  (
-    <form onSubmit={handleSubmit} className="flex flex-col w-1/2 justify-center gap-4 mt-[124px]">
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col w-1/2 justify-center gap-4 mt-[124px]"
+    >
       <textarea
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
@@ -47,9 +53,11 @@ const PostFeedback: React.FC = () => {
         className="p-2 border rounded w-full"
         rows={4}
         required
-
       />
-      <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+      <button
+        type="submit"
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
         Submit Feedback
       </button>
     </form>

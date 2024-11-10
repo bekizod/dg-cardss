@@ -18,7 +18,7 @@
 //   const filterModalRef = useRef<HTMLDivElement>(null);
 //   const [minValue, setMinValue] = useState(0);
 //   const [maxValue, setMaxValue] = useState(40000);
- 
+
 //   const [selectedFilters, setSelectedFilters] = useState({
 //     size: [] as string[],
 //     color: [] as string[],
@@ -332,17 +332,6 @@
 
 // export default ProductPage;
 
-
-
-
-
-
-
-
-
-
-
-
 // // "use client";
 // // import React, { useEffect } from 'react';
 // // import { useDispatch, useSelector } from 'react-redux';
@@ -405,12 +394,6 @@
 // // };
 
 // // export default Categories;
-
-
-
-
-
-
 
 // // // "use client"; // Make sure this is a Client Component
 // // // import React, { useEffect } from 'react';

@@ -36,7 +36,9 @@ export default function Register() {
   const [registering, setRegistering] = useState(false);
 
   // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -48,8 +50,14 @@ export default function Register() {
   const openNotification = (success: boolean, message: string) => {
     notification.open({
       message: success ? "Registration Successful" : "Registration Failed",
-      description: success ? "You have successfully registered. Welcome to the platform!" : `There was an error with your registration: ${message}`,
-      icon: success ? <SmileOutlined style={{ color: "#108ee9" }} /> : <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+      description: success
+        ? "You have successfully registered. Welcome to the platform!"
+        : `There was an error with your registration: ${message}`,
+      icon: success ? (
+        <SmileOutlined style={{ color: "#108ee9" }} />
+      ) : (
+        <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
+      ),
       duration: 3,
     });
   };
@@ -60,20 +68,32 @@ export default function Register() {
     setRegistering(true);
 
     // Validate that all fields are filled
-    if (!formData.userType || !formData.country || !formData.userName || !formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.mobile) {
+    if (
+      !formData.userType ||
+      !formData.country ||
+      !formData.userName ||
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.mobile
+    ) {
       openNotification(false, "Please fill all fields");
       setRegistering(false);
       return;
     }
 
     try {
-      const response = await fetch("https://alsaifgallery.onrender.com/api/v1/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://alsaifgallery.onrender.com/api/v1/user/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
@@ -108,52 +128,125 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">User Name</label>
-            <input type="text" name="userName" value={formData.userName} onChange={handleInputChange} required placeholder="User Name" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              User Name
+            </label>
+            <input
+              type="text"
+              name="userName"
+              value={formData.userName}
+              onChange={handleInputChange}
+              required
+              placeholder="User Name"
+              className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
-            <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required placeholder="First Name" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              First Name
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              required
+              placeholder="First Name"
+              className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
-            <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required placeholder="Last Name" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Last Name
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              required
+              placeholder="Last Name"
+              className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Country</label>
-            <CountryDropdown value={selectedCountry} onChange={(value) => setSelectedCountry(value)} />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Country
+            </label>
+            <CountryDropdown
+              value={selectedCountry}
+              onChange={(value) => setSelectedCountry(value)}
+            />
             {/* className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" */}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
-            <input type="text" name="mobile" value={formData.mobile} onChange={handleInputChange} required placeholder="Phone number" className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleInputChange}
+              required
+              placeholder="Phone number"
+              className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Email
+            </label>
             <div className="relative">
               <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input type="email" name="email" value={formData.email} onChange={handleInputChange} required placeholder="Email" className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700" />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder="Email"
+                className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
+              />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleInputChange} required placeholder="Password" className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" />
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              placeholder="Password"
+              className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
+            />
           </div>
-          
+
           <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
             By creating an account you accept our{" "}
-            <Link href="/privacy-policy" className="text-[var(--color-primary)]">
+            <Link
+              href="/privacy-policy"
+              className="text-[var(--color-primary)]"
+            >
               Privacy & Policy
             </Link>
           </p>
 
-          <motion.button type="submit" className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.button
+            type="submit"
+            className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             {registering ? "Registering..." : "Register"}
           </motion.button>
         </form>

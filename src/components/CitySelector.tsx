@@ -46,7 +46,9 @@ export default function CitySelector({ onCityChange }: CitySelectorProps) {
         onChange={handleCityChange}
         className="border rounded p-2"
       >
-        <option value="" disabled>Select a city</option>
+        <option value="" disabled>
+          Select a city
+        </option>
         {cities.map((city) => (
           <option key={city.id} value={city.name}>
             {city.name}
