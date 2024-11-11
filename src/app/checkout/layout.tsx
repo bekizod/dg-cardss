@@ -218,7 +218,7 @@ export default function CheckoutLayout({
                     <div
                       className={`relative p-3 rounded-full transition-all duration-300 ease-in-out ${
                         activeStep >= step.id
-                          ? "bg-green-100 dark:bg-green-800 shadow-lg"
+                          ? "bg-[var(--color-secondary)] shadow-lg"
                           : "bg-transparent"
                       }`}
                     >
@@ -226,7 +226,7 @@ export default function CheckoutLayout({
                       <div
                         className={`flex items-center justify-center z-10 w-10 h-10 lg:h-12 lg:w-12 rounded-full border-4 ${
                           activeStep >= step.id
-                            ? " bg-[var(--color-primary)] text-white border-green-600 shadow-lg"
+                            ? " bg-[var(--color-primary)] text-white border-green-200 shadow-lg"
                             : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-300 dark:border-gray-600"
                         } transition-all duration-300 ease-in-out cursor-pointer`}
                       >
@@ -238,7 +238,7 @@ export default function CheckoutLayout({
                     <div
                       className={`text-sm mt-2 font-medium ${
                         activeStep >= step.id
-                          ? "text-blue-600 dark:text-blue-400"
+                          ? "text-[var(--color-primary)]"
                           : "text-gray-500 dark:text-gray-400"
                       }`}
                     >
@@ -378,7 +378,7 @@ export default function CheckoutLayout({
                           type="text"
                           className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                         />
-                        <button className=" bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">
+                        <button className=" bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
                           Apply
                         </button>
                       </div>
@@ -398,7 +398,7 @@ export default function CheckoutLayout({
                           type="text"
                           className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                         />
-                        <button className=" bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">
+                        <button className=" bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
                           Apply
                         </button>
                       </div>
@@ -434,7 +434,7 @@ export default function CheckoutLayout({
             <Link href="/checkout" passHref>
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover:bg-[var(--color-primary)] dark:bg-green-700 dark:hover:bg-[var(--color-primary)]"
+                className="w-full mt-6  bg-[var(--color-primary)] text-white py-2 rounded-lg hover:bg-[var(--color-secondary)]"
               >
                 Order Now
               </motion.button>

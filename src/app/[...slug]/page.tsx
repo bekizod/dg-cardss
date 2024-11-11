@@ -647,7 +647,7 @@ export default function ProductsAccordion({
                   <h3 className="text-xl font-bold">Filter by</h3>
                   <button
                     onClick={() => clearAllFilters()}
-                    className="text-sm text-red-600"
+                    className="text-sm text-red-600 hover:underline"
                   >
                     Clear All
                   </button>
@@ -704,7 +704,7 @@ export default function ProductsAccordion({
                                 selectedFilters[
                                   filter.category as keyof typeof selectedFilters
                                 ].includes(option)
-                                  ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600"
+                                  ? "text-[var(--color-primary)] font-semibold bg-transparent"
                                   : "text-gray-700 dark:text-gray-300"
                               }`}
                               onClick={() =>
@@ -763,7 +763,7 @@ export default function ProductsAccordion({
                     applyFilters();
                     toggleFilterModal(); // Close the modal if needed
                   }}
-                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark:bg-[var(--color-primary)] rounded"
+                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] rounded"
                 >
                   Show Results
                 </button>
@@ -884,7 +884,7 @@ export default function ProductsAccordion({
                               })
                             )
                           }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
                         >
                           -
                         </button>
@@ -900,7 +900,7 @@ export default function ProductsAccordion({
                               })
                             )
                           }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
                         >
                           +
                         </button>
@@ -909,7 +909,7 @@ export default function ProductsAccordion({
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleAddToCart(product)}
-                        className="mt-2 w-full bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+                        className="mt-2 w-full bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
                       >
                         Add to Cart
                       </motion.button>
@@ -928,7 +928,7 @@ export default function ProductsAccordion({
               <h3 className="text-xl font-bold">Filter by</h3>
               <button
                 onClick={() => clearAllFilters()}
-                className="text-sm text-red-600"
+                className="text-sm text-red-600 hover:underline"
               >
                 Clear All
               </button>
@@ -983,7 +983,7 @@ export default function ProductsAccordion({
                             selectedFilters[
                               filter.category as keyof typeof selectedFilters
                             ].includes(option)
-                              ? "text-blue-600 font-semibold bg-slate-200 dark:bg-slate-600"
+                              ? "text-[var(--color-primary)] font-semibold bg-transparent"
                               : "text-gray-700 dark:text-gray-300"
                           }`}
                           onClick={() =>
@@ -1043,7 +1043,7 @@ export default function ProductsAccordion({
                 applyFilters();
                 toggleFilterModal(); // Close the modal if needed
               }}
-              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white dark:bg-[var(--color-primary)] rounded"
+              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] rounded"
             >
               Show Results
             </button>
