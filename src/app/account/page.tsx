@@ -153,7 +153,7 @@ const AccountPage = () => {
             className="flex items-center cursor-pointer"
             onClick={() => setShowSettings(!showSettings)}
           >
-            <p className="mr-2 text-blue-500 dark:text-blue-300">Settings</p>
+            <p className="mr-2 text-[var(--color-primary)]">Settings</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -232,7 +232,7 @@ const AccountPage = () => {
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.05 }}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-lg w-full"
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
                 >
                   Change Password
                 </motion.button>
@@ -309,7 +309,7 @@ const AccountPage = () => {
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.05 }}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-lg w-full"
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
                 >
                   Update Profile
                 </motion.button>
