@@ -128,7 +128,7 @@ export default function Address() {
     <div className="flex flex-col gap-4 p-4 dark:bg-gray-800 dark:text-white">
       <div className="flex justify-center mt-4">
         <motion.button
-          className="bg-[var(--color-primary)] text-white p-2 rounded-full justify-center items-center shadow-md hover:bg-[var(--color-primary)] transition duration-300 dark:bg-[var(--color-primary)] dark:hover:bg-green-700"
+          className="bg-[var(--color-primary)] text-white p-2 rounded-full justify-center items-center shadow-md hover:bg-[var(--color-secondary)] transition duration-300"
           onClick={() => setShowMap(!showMap)}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,6 +181,7 @@ export default function Address() {
                 <Button
                   type="primary"
                   htmlType="submit"
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
                   loading={loading}
                   disabled={!city}
                 >
@@ -200,7 +201,9 @@ export default function Address() {
                 <motion.div
                   key={index}
                   className={`p-4 cursor-pointer bg-gray-100 rounded-lg shadow-md w-full flex justify-between items-start dark:bg-gray-800 ${
-                    address === savedAddress ? "border-2 border-green-500" : ""
+                    address === savedAddress
+                      ? "border-2 border-[var(--color-primary)]"
+                      : ""
                   }`}
                   onClick={() => setAddress(savedAddress)} // Selects the new address and deselects the previous
                   initial={{ opacity: 0, y: -20 }}
@@ -210,14 +213,14 @@ export default function Address() {
                   <div className="flex items-center">
                     <p className="text-lg font-semibold">{savedAddress}</p>
                     {address === savedAddress ? ( // Show check mark only for the selected address
-                      <FaCheck className="ml-2 text-green-500" />
+                      <FaCheck className="ml-2 text-[var(--color-primary)]" />
                     ) : null}
                   </div>
                 </motion.div>
               ))}
               <div className="flex justify-center">
                 <button
-                  className="p-2 rounded-lg text-white bg-[var(--color-primary)]"
+                  className="p-2 rounded-lg text-white bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
                   onClick={handleConfirmSelection}
                 >
                   Confirm

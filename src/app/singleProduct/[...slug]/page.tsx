@@ -354,7 +354,7 @@ export default function SingleProductPage({
             className="absolute top-1 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             onClick={goToPrevious}
           >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
               <svg
                 className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
                 aria-hidden="true"
@@ -379,7 +379,7 @@ export default function SingleProductPage({
             className="absolute top-1 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
             onClick={goToNext}
           >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] group-hover:bg-green-300 dark:group-hover:bg-green-800 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
               <svg
                 className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
                 aria-hidden="true"
@@ -415,7 +415,7 @@ export default function SingleProductPage({
               value={rating || product.ratings?.averageRating}
               onChange={handleRateChange}
               disabled={Loading}
-              className="custom-rate bg-gray-50 rounded"
+              className="custom-rate bg-transparent rounded"
             />
             |
             <motion.p
@@ -585,7 +585,7 @@ export default function SingleProductPage({
               onClick={() => {
                 handleAddToCart();
               }}
-              className="mt-4 w-full py-2 px-4  bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-lg"
+              className="mt-4 w-full py-2 px-4  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white rounded-lg"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -732,9 +732,11 @@ export default function SingleProductPage({
               id="dt-description"
               className={`cursor-pointer text-sm lg:text-lg p-3 ${
                 activeTab === "description"
-                  ? "font-bold text-green-600"
+                  ? "font-bold text-[var(--color-primary)]"
                   : "text-gray-700 dark:text-gray-300"
-              } ${activeTab === "description" ? "dark:text-green-400" : ""}`}
+              } ${
+                activeTab === "description" ? "text-[var(--color-primary)]" : ""
+              }`}
               onClick={() => setActiveTab("description")}
             >
               Description
@@ -743,10 +745,12 @@ export default function SingleProductPage({
               id="dt-additional-info"
               className={`cursor-pointer text-sm lg:text-lg p-3 ${
                 activeTab === "additional-info"
-                  ? "font-bold text-green-600"
+                  ? "font-bold text-[var(--color-primary)]"
                   : "text-gray-700 dark:text-gray-300"
               } ${
-                activeTab === "additional-info" ? "dark:text-green-400" : ""
+                activeTab === "additional-info"
+                  ? "text-[var(--color-primary)]"
+                  : ""
               }`}
               onClick={() => setActiveTab("additional-info")}
             >
@@ -756,9 +760,11 @@ export default function SingleProductPage({
               id="dt-reviews"
               className={`cursor-pointer text-sm lg:text-lg p-3 ${
                 activeTab === "reviews"
-                  ? "font-bold text-green-600"
+                  ? "font-bold text-[var(--color-primary)]"
                   : "text-gray-700 dark:text-gray-300"
-              } ${activeTab === "reviews" ? "dark:text-green-400" : ""}`}
+              } ${
+                activeTab === "reviews" ? "text-[var(--color-primary)]" : ""
+              }`}
               onClick={() => setActiveTab("reviews")}
             >
               Ratings

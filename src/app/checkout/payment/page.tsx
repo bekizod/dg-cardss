@@ -220,7 +220,7 @@ export default function PaymentMethods() {
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div className="flex   justify-center">
         <button
-          className="p-2 rounded-lg bg-green-500"
+          className="p-2 rounded-lg bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-secondary)]"
           onClick={handleCreateOrder}
           disabled={loading}
         >

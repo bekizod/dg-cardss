@@ -268,7 +268,7 @@ const FavoriteList: React.FC = () => {
                               decrementQuantity({ id: ID, buyerId: BuyerId })
                             )
                           }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
                         >
                           -
                         </button>
@@ -281,7 +281,7 @@ const FavoriteList: React.FC = () => {
                               incrementQuantity({ id: ID, buyerId: BuyerId })
                             )
                           }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
                         >
                           +
                         </button>
@@ -290,7 +290,7 @@ const FavoriteList: React.FC = () => {
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleAddToCart(product)}
-                        className="mt-2 w-full  bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+                        className="mt-2 w-full  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
                       >
                         Add to Cart
                       </motion.button>

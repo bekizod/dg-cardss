@@ -54,7 +54,6 @@ const CartComponent = () => {
 
   const handleDelete = (id: string, buyerId: string) => {
     dispatch(removeFromCart({ id, buyerId }));
-    message.warning("Item removed from cart.");
   };
   if (!isMounted) {
     return (
@@ -345,7 +344,7 @@ const CartComponent = () => {
                             type="text"
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
-                          <button className="   bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">
+                          <button className="   bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
                             Apply
                           </button>
                         </div>
@@ -365,7 +364,7 @@ const CartComponent = () => {
                             type="text"
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
-                          <button className="  bg-[var(--color-primary)] dark:bg-green-700 text-white rounded-r-md">
+                          <button className="  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
                             Apply
                           </button>
                         </div>
