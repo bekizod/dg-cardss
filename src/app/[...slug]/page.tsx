@@ -30,6 +30,7 @@ import {
   removeFavoriteProduct,
   saveFavoriteProduct,
 } from "@/redux/slices/favoriteProductsSlice";
+import { FaStar } from "react-icons/fa";
 export default function ProductsAccordion({
   params,
 }: {
@@ -489,7 +490,7 @@ export default function ProductsAccordion({
     );
   };
   return (
-    <div className=" md:px-20 lg:px-24 xl:px-32 p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className=" md:px-20 lg:px-10   p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="flex flex-row justify-between">
         {slugLength === 2 && (
@@ -792,89 +793,123 @@ export default function ProductsAccordion({
               return (
                 <motion.div
                   key={productId}
-                  className="relative bg-white dark:bg-gray-700 rounded-2xl shadow-lg dark:shadow-gray-700 overflow-hidden"
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                  className="relative w-full bg-white dark:text-white dark:bg-slate-800 dark:border dark:border-slate-500 border shadow-xl rounded-[15px] p-3"
+                  whileHover={{
+                    scale: 1.03,
+                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div className="block relative p-2 sm:p-3 md:p-4">
-                    {/* Heart icon to toggle favorite */}
-                    <motion.div
-                      className="z-30 cursor-pointer"
-                      onClick={() => handleFavoriteToggle(productId)}
-                      whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-                    >
-                      {isFavorite ? (
-                        <GoHeartFill
-                          className="text-[var(--color-primary)]"
-                          size={27}
-                        />
-                      ) : (
-                        <GoHeart size={27} />
-                      )}
-                    </motion.div>
+                  <motion.div
+                    className="absolute cursor-pointer z-20 right-2 top-4 p-[10px] bg-black/5 dark:bg-black/50 rounded-full backdrop-blur-md flex justify-center items-center"
+                    whileHover={{ scale: 1.2 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    onClick={() => handleFavoriteToggle(productId)}
+                  >
+                    {isFavorite ? (
+                      <GoHeartFill
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)] "
+                        size={27}
+                      />
+                    ) : (
+                      <GoHeart
+                        className="text-[var(--color-primary)]"
+                        size={27}
+                      />
+                    )}
+                  </motion.div>
 
-                    <Link
-                      href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
-                    >
-                      {/* Discount Label */}
-                      {product?.discount > 0 && (
-                        <p className="absolute top-0 right-0 text-white text-xs sm:text-sm bg-[var(--color-primary)] font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                          {Math.round(product.discountPercentage)}% SAVE
-                        </p>
-                      )}
-                      {/* Product Image */}
-
+                  <Link
+                    href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
+                  >
+                    <div className="w-full flex justify-center items-center relative mt-4">
                       <motion.div
-                        whileHover={{
-                          scale: 1.1,
-                          transition: { duration: 0.3 },
-                        }}
+                        className="w-full flex justify-center items-center"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
                       >
                         <Image
+                          width={500}
+                          height={500}
+                          alt="Product Image"
+                          className="rounded-2xl xl:h-44"
                           src={product.imageIds[0]}
-                          alt={product.name}
-                          width={150}
-                          height={100}
-                          loading="eager"
-                          fetchPriority="high"
-                          className="w-full h-32  rounded-xl object-cover"
                         />
                       </motion.div>
+                    </div>
 
-                      <h2 className="font-semibold mt-1 text-center text-gray-900 text-xs sm:text-sm md:text-lg dark:text-gray-100">
-                        {product.name}
-                      </h2>
-                      {/* Product Details */}
-
-                      <div className="flex flex-col justify-center items-center">
-                        <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">
+                    <div className="w-full mt-4 justify-start items-start gap-1 py-2 inline-flex">
+                      <div className="flex-col justify-center items-start gap-1 inline-flex">
+                        <h1 className="text-2xl font-semibold font-['Geomanist']">
+                          {product.name}
+                        </h1>
+                        <h2 className="text-sm font-semibold font-['Geomanist'] tracking-wide text-gray-700 dark:text-gray-300">
                           {product.additionalInformation.brand}
-                        </div>
-                        <div className="mt-1 text-center">
-                          {product.discount ? (
+                        </h2>
+                        <p className="text-xs font-normal font-['Geomanist'] tracking-wide text-gray-500 dark:text-gray-400">
+                          {product.adjective}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="w-full py-3 flex justify-between items-center">
+                      <div className="flex flex-col items-start">
+                        <div className="flex flex-row items-baseline space-x-2">
+                          <span className="text-xl font-bold font-['Roboto'] text-gray-800 dark:text-gray-100">
+                            {/* ₹ */}
+                          </span>
+                          <div className="text-2xl font-bold font-['Geomanist']  ">
+                            {product?.discount > 0
+                              ? `${product.discount}`
+                              : `${product.price}`}
+                          </div>
+                          {product?.discount > 0 && (
                             <>
-                              <div className="flex flex-row justify-around gap-3 items-center">
-                                <div className="text-xl font-bold text-green-500">
-                                  {product.discount}
-                                </div>
-                                <div className="text-sm line-through text-gray-500">
-                                  {product.price}
-                                </div>
-                              </div>
-                              <div className="text-sm text-red-500">
-                                SAVE {product.price - product.discount}
-                              </div>
+                              <span className="text-sm font-semibold font-['Geomanist'] line-through text-gray-500">
+                                ₹{product.price - product.discount}
+                              </span>
                             </>
-                          ) : (
-                            <div className="py-2 text-xl font-bold text-green-500">
-                              {product.price}
-                            </div>
                           )}
                         </div>
+                        {product?.discount > 0 && (
+                          <>
+                            <span className="text-sm font-semibold font-['Geomanist'] text-green-600">
+                              {Math.round(product.discountPercentage)}% SAVE
+                            </span>
+                          </>
+                        )}
                       </div>
-                    </Link>
-                    {/* Conditionally render Add to Cart button */}
+
+                      <div className="flex flex-col items-center">
+                        <div className="bg-[#402000]/20 dark:bg-gray-200  rounded-full px-2 py-1 flex items-center space-x-1">
+                          <FaStar className="text-[var(--color-primary)]" />
+                          <span className="text-sm font-bold font-['Geomanist'] text-[var(--color-primary)]">
+                            {product.ratings.averageRating.toFixed(1)}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold font-['Geomanist'] text-gray-500 dark:text-gray-200">
+                          {product.ratings.numberOfRatings > 0
+                            ? product.ratings.numberOfRatings
+                            : "No "}{" "}
+                          reviews
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                  <motion.div
+                    className="flex justify-center items-center mt-2"
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* <button className="w-full h-9 border border-slate-500 rounded-full text-xs font-['Geomanist'] text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors">
+                      Add To Cart
+                    </button> */}
+
                     {existingItem ? (
-                      <div className="flex flex-row items-center justify-center py-2 gap-2">
+                      <div className="flex flex-row items-center justify-center  gap-2">
                         <button
                           onClick={() =>
                             dispatch(
@@ -909,12 +944,12 @@ export default function ProductsAccordion({
                       <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleAddToCart(product)}
-                        className="mt-2 w-full bg-[var(--color-primary)] dark:bg-green-700 text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
+                        className="w-full h-9 border border-slate-500 rounded-full text-xs font-['Geomanist'] text-gray-800 dark:text-gray-100 hover:text-white hover:bg-[var(--color-primary)] dark:hover:bg-slate-600 transition-colors"
                       >
                         Add to Cart
                       </motion.button>
                     )}
-                  </div>
+                  </motion.div>
                 </motion.div>
               );
             })}
