@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import { useAuth } from "@/context/UserContext";
 import { notification } from "antd";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import Loader from "../loading";
 
 const AccountPage = () => {
   const { user, logout, token } = useAuth(); // Fetch user info from context
@@ -132,7 +133,7 @@ const AccountPage = () => {
   if (!user) {
     return (
       <div className="mt-[124px] flex justify-center bg-slate-500 items-center h-screen">
-        Loading... <div>Check your Connection</div>
+        <Loader />
       </div>
     );
   }

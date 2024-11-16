@@ -31,6 +31,7 @@ import {
   saveFavoriteProduct,
 } from "@/redux/slices/favoriteProductsSlice";
 import { FaStar } from "react-icons/fa";
+import Loader from "../loading";
 export default function ProductsAccordion({
   params,
 }: {
@@ -456,9 +457,7 @@ export default function ProductsAccordion({
               </svg>
             </div>
           </div>
-        </div>
-
-        <span className="sr-only">Loading...</span>
+        </div> 
       </div>
     );
   if (productsError)
@@ -467,12 +466,11 @@ export default function ProductsAccordion({
     );
 
   if (favoritesLoading)
-    return <p className="mt-[124px] text-3xl">Favorite Loading...</p>;
+    return  <Loader />;
   if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
   const handleAddToCart = (product: any) => {
     // Implement the logic to dispatch addToCart action with the product details
-
     dispatch(
       addToCart({
         id: product._id,

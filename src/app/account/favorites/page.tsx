@@ -19,6 +19,7 @@ import {
 } from "@/redux/slices/cartSlice";
 import { useAuth } from "@/context/UserContext";
 import { MdDelete } from "react-icons/md";
+import Loader from "@/app/loading";
 
 const FavoriteList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -103,7 +104,7 @@ const FavoriteList: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <span className="loader" />
+        <Loader />
       </div>
     );
   }

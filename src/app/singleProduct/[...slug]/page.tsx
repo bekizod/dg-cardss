@@ -152,7 +152,7 @@ export default function SingleProductPage({
             </svg>
           </div>
 
-          <span className="sr-only">Loading...</span>
+         
         </div>
 
         <div className="h-24 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5 mx-4">
@@ -774,16 +774,15 @@ export default function SingleProductPage({
           <div className="p-6">
             {activeTab === "description" && (
               <div id="dt-description-content" className="space-y-2">
-                <p className="text-gray-800 dark:text-gray-200">
+                {/* <p className="text-gray-800 dark:text-gray-200">
                   A Turkish coffee maker gives you the perfect cup of coffee
                   filled with flavors and aromas that awaken your senses and
                   inspire your day.
-                </p>
+                </p> */}
                 <p className="text-gray-800 dark:text-gray-200">
-                  <strong>{product.description}</strong> Make your coffee to
-                  your liking by determining the amount in each cup.
+                  <strong>{product.description}</strong> 
                 </p>
-                <p className="text-gray-800 dark:text-gray-200">
+                {/* <p className="text-gray-800 dark:text-gray-200">
                   <strong>Double cup option:</strong> Choose between one or two
                   cups at a time for complete comfort.
                 </p>
@@ -805,7 +804,7 @@ export default function SingleProductPage({
                   <strong>3-year warranty:</strong> Enjoy peace of mind with a
                   generous 3-year warranty, a testament to durability and
                   quality.
-                </p>
+                </p> */}
               </div>
             )}
 

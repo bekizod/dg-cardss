@@ -5,13 +5,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { Button } from "antd";
+import { useAuth } from "@/context/UserContext";
 
 export default function TopHeader() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("saudi");
   const modalRef = useRef<HTMLDivElement>(null);
-
+const { user } = useAuth(); 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setOpen(false);
@@ -127,43 +128,54 @@ export default function TopHeader() {
         </AnimatePresence>
 
         <div className="flex flex-row gap-4">
-          <Link href="#" className="flex flex-row gap-3">
-            <span>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 14.25C11.6022 14.25 11.2206 14.092 10.9393 13.8107C10.658 13.5294 10.5 13.1478 10.5 12.75C10.5 12.3522 10.658 11.9706 10.9393 11.6893C11.2206 11.408 11.6022 11.25 12 11.25C12.3978 11.25 12.7794 11.408 13.0607 11.6893C13.342 11.9706 13.5 12.3522 13.5 12.75C13.5 13.1478 13.342 13.5294 13.0607 13.8107C12.7794 14.092 12.3978 14.25 12 14.25V14.25ZM4.5 14.25C4.10218 14.25 3.72064 14.092 3.43934 13.8107C3.15804 13.5294 3 13.1478 3 12.75C3 12.3522 3.15804 11.9706 3.43934 11.6893C3.72064 11.408 4.10218 11.25 4.5 11.25C4.89782 11.25 5.27936 11.408 5.56066 11.6893C5.84196 11.9706 6 12.3522 6 12.75C6 13.1478 5.84196 13.5294 5.56066 13.8107C5.27936 14.092 4.89782 14.25 4.5 14.25V14.25Z"
-                  stroke={theme === "dark" ? "#FFFFFF" : "var(--color-primary)"}
-                  strokeMiterlimit="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M10.4625 12.75H6.75V4.95C6.75 4.83065 6.79741 4.71619 6.8818 4.6318C6.96619 4.54741 7.08065 4.5 7.2 4.5H17.25M13.7625 12.75H15.3C15.3591 12.75 15.4176 12.7384 15.4722 12.7157C15.5268 12.6931 15.5764 12.66 15.6182 12.6182C15.66 12.5764 15.6931 12.5268 15.7157 12.4722C15.7384 12.4176 15.75 12.3591 15.75 12.3V8.625"
-                  stroke={theme === "dark" ? "#FFFFFF" : "var(--color-primary)"}
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M16.5 6.75H13.5"
-                  stroke="var(--color-primary)"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M6.75 6.75H2.5425C2.45552 6.75002 2.3704 6.77525 2.29746 6.82264C2.22452 6.87002 2.16687 6.93753 2.1315 7.017L0.789 10.038C0.763424 10.0954 0.750139 10.1574 0.75 10.22V12.75C0.75 12.8091 0.7623 12.8686 0.7875 12.9275C0.8127 12.9865 0.8514 13.0412 0.9025 13.0884C0.95361 13.1357 1.0166 13.1645 1.079 13.1725H2.625M6.75 12.75H6"
-                  stroke={theme === "dark" ? "#FFFFFF" : "var(--color-primary)"}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-            Follow my orders{" "}
-          </Link>
-          |
+          {user && (
+            <>
+              <Link href="/feedback" className="flex flex-row gap-3">
+                <span>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 14.25C11.6022 14.25 11.2206 14.092 10.9393 13.8107C10.658 13.5294 10.5 13.1478 10.5 12.75C10.5 12.3522 10.658 11.9706 10.9393 11.6893C11.2206 11.408 11.6022 11.25 12 11.25C12.3978 11.25 12.7794 11.408 13.0607 11.6893C13.342 11.9706 13.5 12.3522 13.5 12.75C13.5 13.1478 13.342 13.5294 13.0607 13.8107C12.7794 14.092 12.3978 14.25 12 14.25V14.25ZM4.5 14.25C4.10218 14.25 3.72064 14.092 3.43934 13.8107C3.15804 13.5294 3 13.1478 3 12.75C3 12.3522 3.15804 11.9706 3.43934 11.6893C3.72064 11.408 4.10218 11.25 4.5 11.25C4.89782 11.25 5.27936 11.408 5.56066 11.6893C5.84196 11.9706 6 12.3522 6 12.75C6 13.1478 5.84196 13.5294 5.56066 13.8107C5.27936 14.092 4.89782 14.25 4.5 14.25V14.25Z"
+                      stroke={
+                        theme === "dark" ? "#FFFFFF" : "var(--color-primary)"
+                      }
+                      strokeMiterlimit="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M10.4625 12.75H6.75V4.95C6.75 4.83065 6.79741 4.71619 6.8818 4.6318C6.96619 4.54741 7.08065 4.5 7.2 4.5H17.25M13.7625 12.75H15.3C15.3591 12.75 15.4176 12.7384 15.4722 12.7157C15.5268 12.6931 15.5764 12.66 15.6182 12.6182C15.66 12.5764 15.6931 12.5268 15.7157 12.4722C15.7384 12.4176 15.75 12.3591 15.75 12.3V8.625"
+                      stroke={
+                        theme === "dark" ? "#FFFFFF" : "var(--color-primary)"
+                      }
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M16.5 6.75H13.5"
+                      stroke="var(--color-primary)"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M6.75 6.75H2.5425C2.45552 6.75002 2.3704 6.77525 2.29746 6.82264C2.22452 6.87002 2.16687 6.93753 2.1315 7.017L0.789 10.038C0.763424 10.0954 0.750139 10.1574 0.75 10.22V12.75C0.75 12.8091 0.7623 12.8686 0.7875 12.9275C0.8127 12.9865 0.8514 13.0412 0.9025 13.0884C0.95361 13.1357 1.0166 13.1645 1.079 13.1725H2.625M6.75 12.75H6"
+                      stroke={
+                        theme === "dark" ? "#FFFFFF" : "var(--color-primary)"
+                      }
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+                Send FeedBack
+              </Link>
+              |
+            </>
+          )}
+
           <Link href="#" className="flex flex-row gap-2">
             <div>
               <svg

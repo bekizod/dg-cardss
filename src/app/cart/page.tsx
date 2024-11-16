@@ -78,7 +78,7 @@ const CartComponent = () => {
           </svg>
         </div>
 
-        <span className="sr-only">Loading...</span>
+         
       </div>
     );
   }

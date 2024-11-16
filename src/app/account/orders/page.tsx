@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/app/loading";
 import { useAuth } from "@/context/UserContext";
 import { getOrders } from "@/redux/slices/orderSlice";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -90,7 +91,7 @@ export default function Order() {
 
       {/* Loading and error handling */}
       {loading && (
-        <p className="text-gray-500 text-center">Loading orders...</p>
+       <Loader />
       )}
       {error && (
         <p className="text-red-600 text-center">
