@@ -12,7 +12,7 @@ export default function TopHeader() {
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("saudi");
   const modalRef = useRef<HTMLDivElement>(null);
-const { user } = useAuth(); 
+  const { user } = useAuth();
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setOpen(false);
@@ -176,7 +176,7 @@ const { user } = useAuth();
             </>
           )}
 
-          <Link href="#" className="flex flex-row gap-2">
+          <Link href="/all-offers" className="flex flex-row gap-2">
             <div>
               <svg
                 width="18"

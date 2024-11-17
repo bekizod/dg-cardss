@@ -36,7 +36,7 @@ const Footer = () => {
     { name: "Home", icon: <FaHome />, href: "/" },
     { name: "Categories", icon: <FaList />, href: "/menu" },
     { name: "Cart", icon: <FaShoppingCart />, href: "/cart" },
-    { name: "Offers", icon: <FaTag />, href: "/offers" },
+    { name: "Offers", icon: <FaTag />, href: "/all-offers" },
     { name: "Account", icon: <FaUser />, href: "/account" },
   ];
   const Menus = [
