@@ -89,7 +89,7 @@ const ProductCarousel = () => {
         averageRating: product.ratings.averageRating,
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
-  adjective: product.adjective,
+        adjective: product.adjective,
       })
     );
   };
@@ -188,7 +188,7 @@ const ProductCarousel = () => {
             return (
               <div
                 key={productIdt}
-                className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                className="flex flex-col w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
               >
                 {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="flex flex-row gap-1">

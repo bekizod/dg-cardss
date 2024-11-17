@@ -167,7 +167,7 @@ const CartComponent = () => {
                 className="rounded-xl shadow-xl bg-slate-100 dark:bg-slate-800 dark:text-white flex flex-col sm:flex-row p-3 relative"
               >
                 {/* Trash Icon */}
-                <div className="absolute z-30 -top-5 sm:top-0 right-2 sm:right-6 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
+                <div className="absolute z-30 top-0 sm:top-0 right-2 sm:right-6 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
                   <button
                     onClick={() => handleDelete(item.id, item.buyerId)}
                     className="text-red-500 self-start"
