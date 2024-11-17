@@ -12,7 +12,11 @@ export interface CartItem {
   price: number; // API-provided price (may already include discount)
   unitPrice: number; // API-provided unit price after discount
   discount: number; // API-provided discount percentage
-  test: string;
+  link: string;
+  averageRating: number;
+  numberOfRating: number;
+  brand: string;
+  adjective: string;
 }
 
 // Define CartState interface with total fields

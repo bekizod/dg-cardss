@@ -3,6 +3,7 @@
 import { fetchProductsByCategory } from "@/redux/slices/categorySlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import React, { useState, useEffect, useRef } from "react";
+import { BiChevronUp, BiChevronDown } from "react-icons/bi";
 import {
   BsChevronDown,
   BsChevronUp,
@@ -16,7 +17,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { useDispatch, useSelector } from "react-redux";
 import Custom404 from "../not-found";
 import { addFavorite, removeFavorite } from "@/redux/slices/favoriteSlice";
-import { notification } from "antd";
+import { notification, Rate } from "antd";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useAuth } from "@/context/UserContext";
 import {
@@ -30,7 +31,7 @@ import {
   removeFavoriteProduct,
   saveFavoriteProduct,
 } from "@/redux/slices/favoriteProductsSlice";
-import { FaStar } from "react-icons/fa";
+import { FaRegComment, FaShoppingCart, FaStar } from "react-icons/fa";
 import Loader from "../loading";
 export default function ProductsAccordion({
   params,
@@ -457,7 +458,7 @@ export default function ProductsAccordion({
               </svg>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     );
   if (productsError)
@@ -465,8 +466,7 @@ export default function ProductsAccordion({
       <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>
     );
 
-  if (favoritesLoading)
-    return  <Loader />;
+  if (favoritesLoading) return <Loader />;
   if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
   const handleAddToCart = (product: any) => {
@@ -483,7 +483,11 @@ export default function ProductsAccordion({
         price: product.price,
         unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
         discount: product.discountPercentage || 0,
-        test: "test",
+        link: `/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`,
+        averageRating: product.ratings.averageRating,
+        numberOfRating: product.ratings.numberOfRatings,
+        brand: product.additionalInformation.brand,
+        adjective: product.adjective,
       })
     );
   };
@@ -789,166 +793,153 @@ export default function ProductsAccordion({
               );
 
               return (
-                <motion.div
+                <div
                   key={productId}
-                  className="relative w-full bg-white dark:text-white dark:bg-slate-800 dark:border dark:border-slate-500 border shadow-xl rounded-[15px] p-3"
-                  whileHover={{
-                    scale: 1.03,
-                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
-                  }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
+                  className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                 >
-                  <motion.div
-                    className="absolute cursor-pointer z-20 right-2 top-4 p-[10px] bg-black/5 dark:bg-black/50 rounded-full backdrop-blur-md flex justify-center items-center"
-                    whileHover={{ scale: 1.2 }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 }}
-                    onClick={() => handleFavoriteToggle(productId)}
-                  >
-                    {isFavorite ? (
-                      <GoHeartFill
-                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)] "
-                        size={27}
+                  {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
+                  <div className="flex flex-row gap-1">
+                    <Link
+                      href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
+                      className="w-[95%]"
+                    >
+                      <Image
+                        src={product.imageIds[0]}
+                        alt="product"
+                        width={1000}
+                        height={1000}
+                        className="w-full h-44 rounded-md"
                       />
-                    ) : (
-                      <GoHeart
-                        className="text-[var(--color-primary)]"
-                        size={27}
-                      />
-                    )}
-                  </motion.div>
+                    </Link>
 
-                  <Link
-                    href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
-                  >
-                    <div className="w-full flex justify-center items-center relative mt-4">
+                    <div>
                       <motion.div
-                        className="w-full flex justify-center items-center"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
+                        className="rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                        whileHover={{ scale: 1.2 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 }}
+                        onClick={() => handleFavoriteToggle(productId)}
                       >
-                        <Image
-                          width={500}
-                          height={500}
-                          alt="Product Image"
-                          className="rounded-2xl xl:h-44"
-                          src={product.imageIds[0]}
-                        />
+                        {isFavorite ? (
+                          <GoHeartFill
+                            className="text-[var(--color-primary)] dark:text-[var(--color-secondary)] "
+                            size={17}
+                          />
+                        ) : (
+                          <GoHeart
+                            className="text-[var(--color-primary)]"
+                            size={17}
+                          />
+                        )}
                       </motion.div>
                     </div>
+                  </div>
 
-                    <div className="w-full mt-4 justify-start items-start gap-1 py-2 inline-flex">
-                      <div className="flex-col justify-center items-start gap-1 inline-flex">
-                        <h1 className="text-2xl font-semibold font-['Geomanist']">
-                          {product.name}
-                        </h1>
-                        <h2 className="text-sm font-semibold font-['Geomanist'] tracking-wide text-gray-700 dark:text-gray-300">
-                          {product.additionalInformation.brand}
-                        </h2>
-                        <p className="text-xs font-normal font-['Geomanist'] tracking-wide text-gray-500 dark:text-gray-400">
-                          {product.adjective}
-                        </p>
+                  <div className="flex w-full flex-col">
+                    <div className="text-start text-lg font-semibold flex justify-start">
+                      {product.name}
+                    </div>
+                    <div className="test-sm text-start font-semibold">
+                      {product.additionalInformation.brand}
+                    </div>
+                    <div className="flex flex-row gap-3">
+                      <div>
+                        <Rate
+                          value={product.ratings.averageRating.toFixed(1)}
+                          className="text-sm dark:text-yellow-400"
+                          disabled
+                        />
+                      </div>
+                      <div className="flex flex-row gap-1 items-center text-sm">
+                        <div>
+                          <FaRegComment />
+                        </div>
+                        <div>{product.ratings.numberOfRatings}</div>
                       </div>
                     </div>
 
-                    <div className="w-full py-3 flex justify-between items-center">
-                      <div className="flex flex-col items-start">
-                        <div className="flex flex-row items-baseline space-x-2">
-                          <span className="text-xl font-bold font-['Roboto'] text-gray-800 dark:text-gray-100">
-                            {/* ₹ */}
-                          </span>
-                          <div className="text-2xl font-bold font-['Geomanist']  ">
-                            {product?.discount > 0
-                              ? `${product.discount}`
-                              : `${product.price}`}
-                          </div>
+                    <div className="flex flex-row justify-between items-center mt-4">
+                      <div className="flex flex-col">
+                        <div className="flex flex-row gap-1 items-center">
                           {product?.discount > 0 && (
                             <>
-                              <span className="text-sm font-semibold font-['Geomanist'] line-through text-gray-500">
-                                ₹{product.price - product.discount}
-                              </span>
+                              <div className="font-mono line-through">
+                                {product.price - product.discount}
+                              </div>
+                              <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                                -{Math.round(product.discountPercentage)}%
+                              </div>
                             </>
                           )}
                         </div>
-                        {product?.discount > 0 && (
-                          <>
-                            <span className="text-sm font-semibold font-['Geomanist'] text-green-600">
-                              {Math.round(product.discountPercentage)}% SAVE
-                            </span>
-                          </>
+
+                        <div className="font-bold text-2xl">
+                          {product?.discount > 0
+                            ? `${product.discount}`
+                            : `${product.price}`}
+                        </div>
+                      </div>
+                      <div className="rounded-lg">
+                        {existingItem ? (
+                          <div className="flex flex-row items-center justify-center gap-2">
+                            {/* Decrement Button */}
+                            <button
+                              onClick={() =>
+                                dispatch(
+                                  decrementQuantity({
+                                    id: existingItem.id,
+                                    buyerId: existingItem.buyerId,
+                                  })
+                                )
+                              }
+                              className=""
+                              aria-label="Decrease Quantity"
+                            >
+                              <BiChevronDown
+                                className="text-[var(--color-secondary)] font-bold"
+                                size={30}
+                              />
+                            </button>
+
+                            {/* Quantity Display */}
+                            <div className="dark:text-gray-200">
+                              {existingQuantity}
+                            </div>
+
+                            {/* Increment Button */}
+                            <button
+                              onClick={() =>
+                                dispatch(
+                                  incrementQuantity({
+                                    id: existingItem.id,
+                                    buyerId: existingItem.buyerId,
+                                  })
+                                )
+                              }
+                              className=" "
+                              aria-label="Increase Quantity"
+                            >
+                              <BiChevronUp
+                                className="text-[var(--color-secondary)] font-bold"
+                                size={30}
+                              />
+                            </button>
+                          </div>
+                        ) : (
+                          <motion.div
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleAddToCart(product)}
+                            className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-800"
+                            aria-label="Add to Cart"
+                          >
+                            <FaShoppingCart color="white" />
+                          </motion.div>
                         )}
                       </div>
-
-                      <div className="flex flex-col items-center">
-                        <div className="bg-[#402000]/20 dark:bg-gray-200  rounded-full px-2 py-1 flex items-center space-x-1">
-                          <FaStar className="text-[var(--color-primary)]" />
-                          <span className="text-sm font-bold font-['Geomanist'] text-[var(--color-primary)]">
-                            {product.ratings.averageRating.toFixed(1)}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold font-['Geomanist'] text-gray-500 dark:text-gray-200">
-                          {product.ratings.numberOfRatings > 0
-                            ? product.ratings.numberOfRatings
-                            : "No "}{" "}
-                          reviews
-                        </span>
-                      </div>
                     </div>
-                  </Link>
-                  <motion.div
-                    className="flex justify-center items-center mt-2"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {/* <button className="w-full h-9 border border-slate-500 rounded-full text-xs font-['Geomanist'] text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors">
-                      Add To Cart
-                    </button> */}
-
-                    {existingItem ? (
-                      <div className="flex flex-row items-center justify-center  gap-2">
-                        <button
-                          onClick={() =>
-                            dispatch(
-                              decrementQuantity({
-                                id: existingItem.id,
-                                buyerId: existingItem.buyerId,
-                              })
-                            )
-                          }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
-                        >
-                          -
-                        </button>
-                        <div className="dark:text-gray-200">
-                          {existingQuantity}
-                        </div>
-                        <button
-                          onClick={() =>
-                            dispatch(
-                              incrementQuantity({
-                                id: existingItem.id,
-                                buyerId: existingItem.buyerId,
-                              })
-                            )
-                          }
-                          className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
-                        >
-                          +
-                        </button>
-                      </div>
-                    ) : (
-                      <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAddToCart(product)}
-                        className="w-full h-9 border border-slate-500 rounded-full text-xs font-['Geomanist'] text-gray-800 dark:text-gray-100 hover:text-white hover:bg-[var(--color-primary)] dark:hover:bg-slate-600 transition-colors"
-                      >
-                        Add to Cart
-                      </motion.button>
-                    )}
-                  </motion.div>
-                </motion.div>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -117,10 +117,10 @@ export default function SingleProductPage({
 
   if (loading)
     return (
-      <div className="flex flex-col gap-3 max-lg:mt-[23px]  lg:mt-[124px]  animate-pulse    rtl:space-x-reverse">
+      <div className="flex flex-col gap-3 max-lg:mt-[23px]  md:mt-[124px]  animate-pulse    rtl:space-x-reverse">
         <div
           role="status"
-          className="space-y-8 mt-[124px] px-4 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col  "
+          className="space-y-8   px-4 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col  "
         >
           <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded dark:bg-gray-700">
             <svg
@@ -197,7 +197,11 @@ export default function SingleProductPage({
           price: product.price,
           unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
           discount: product.discountPercentage || 0,
-          test: "test",
+          link: `/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`,
+          averageRating: product.ratings.averageRating,
+          numberOfRating: product.ratings.numberOfRatings,
+          brand: product.additionalInformation.brand,
+          adjective: product.adjective,
         })
       );
     }

@@ -83,7 +83,11 @@ const ProductCarousel = () => {
         price: product.price,
         unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
         discount: product.discountPercentage || 0,
-        test: "test",
+        link: `/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`,
+        averageRating: product.ratings.averageRating,
+        numberOfRating: product.ratings.numberOfRatings,
+        brand: product.additionalInformation.brand,
+  adjective: product.adjective,
       })
     );
   };

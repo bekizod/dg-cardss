@@ -1,12 +1,18 @@
 import { Rate } from "antd";
 import Image from "next/image";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaRegComment } from "react-icons/fa";
+
 import { FaTrashAlt } from "react-icons/fa";
 export default function UI() {
   return (
     <div className="mt-[124px] bg-slate-300 p-5 flex flex-col gap-32  ">
-      <div className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3">
-        <div className="flex font-thin justify-end">id: 12345789</div>
+      <div
+     
+        className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+      >
+        {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
         <div className="flex flex-row gap-2">
           <div className="w-[90%]">
             <Image
@@ -19,6 +25,7 @@ export default function UI() {
           </div>
 
           <div>
+            
             <div className="rounded-full p-2 bg-black dark:bg-slate-600">
               <GoHeart size={22} className="text-white" />
             </div>
@@ -29,12 +36,15 @@ export default function UI() {
           <div className="text-start font-semibold flex justify-start">
             Electric Boiler
           </div>
+          <div className="test-sm text-start font-semibold">Brand</div>
           <div className="flex flex-row gap-3">
             <div>
               <Rate value={5} className="text-xs dark:text-yellow-400" />
             </div>
             <div className="flex flex-row gap-1 items-center text-xs">
-              <div>✉</div>
+              <div>
+                <FaRegComment />
+              </div>
               <div>97</div>
             </div>
           </div>
@@ -52,7 +62,7 @@ export default function UI() {
             </div>
 
             <div className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg">
-              🛒
+              <FaShoppingCart />
             </div>
           </div>
         </div>
@@ -61,16 +71,18 @@ export default function UI() {
       <div className="flex flex-row gap-8 bg-white dark:bg-slate-800 dark:text-white p-3">
         {/* Left Section */}
         <div className="flex flex-col w-1/2">
-          <div className="font-semibold">Shopping Continue</div>
-          <hr className="border-gray-300 dark:border-slate-600" />
+          {/* <div className="font-semibold">Shopping Continue</div>
+          <hr className="border-gray-300 dark:border-slate-600" /> */}
 
           <div className="flex flex-col">
             <div className="flex flex-col">
-              <div className="text-lg font-bold">Favorite Products</div>
+              <div className="text-2xl text-center font-bold">
+                Favorite Products
+              </div>
               <div>You have 3 in your cart</div>
             </div>
 
-            <div className="flex flex-row bg-slate-50 dark:bg-slate-700 rounded-2xl shadow-lg gap-3 p-1 items-center">
+            <div className="flex flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-xl gap-3 p-1 items-center">
               <div>
                 <Image
                   src={"/side cards/side Coffee Lovers/CL1.png"}
@@ -83,6 +95,7 @@ export default function UI() {
               <div className="flex flex-col w-[60%]">
                 <div className="font-semibold">Italy Pizza</div>
                 <div>Extra Cheese and i do not know</div>
+                <div>Brand</div>
               </div>
               <div className="flex flex-col">
                 <div className="flex flex-row gap-1 items-center">
@@ -94,7 +107,7 @@ export default function UI() {
 
                 <div className="font-semibold text-xl">$899.00</div>
               </div>
-              <div className="px-3">
+              <div className="px-5">
                 <FaTrashAlt className="text-black dark:text-white" size={23} />
               </div>
             </div>
@@ -183,6 +196,7 @@ export default function UI() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
             suscipit voluptatem repudiandae pariatu.
           </div>
+          <div className="test-sm font-semibold">Adjective</div>
 
           {/* Ratings */}
           <div className="flex flex-row gap-2 items-center mb-3">

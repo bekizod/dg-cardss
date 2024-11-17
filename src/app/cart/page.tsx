@@ -11,7 +11,7 @@ import {
   incrementQuantity,
   decrementQuantity,
 } from "../../redux/slices/cartSlice";
-import { message } from "antd";
+import { message, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -201,7 +201,10 @@ const CartComponent = () => {
                 </div>
 
                 {/* Image Section */}
-                <div className="relative w-[100px] mt-2 sm:w-[136px] py-5 h-[100px] sm:h-[136px] flex-shrink-0">
+                <Link
+                  href={item.link}
+                  className="relative w-[100px] mt-2 sm:w-[136px] py-5 h-[100px] sm:h-[136px] flex-shrink-0"
+                >
                   <Image
                     width={1000}
                     height={1000}
@@ -209,7 +212,7 @@ const CartComponent = () => {
                     src={item.image}
                     alt={item.name}
                   />
-                </div>
+                </Link>
 
                 {/* Text Section */}
                 <div className="flex-1">
@@ -220,7 +223,12 @@ const CartComponent = () => {
                   </div>
                   <div className="  text-sm sm:text-lg    ">
                     Color:{item.color}
+                    Brand:{item.brand}
+                    Adjective: {item.adjective}
+                    <Rate value={item.averageRating} className="dark:text-white" />
+                    {item.numberOfRating} Reviews
                   </div>
+
                   <div className="mt-2 sm:mt-4 flex items-center gap-2   text-xs font-medium">
                     <span>Product features</span>
                     <div className="w-4 h-4"></div>
