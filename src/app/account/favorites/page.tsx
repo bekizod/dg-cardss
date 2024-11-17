@@ -320,9 +320,9 @@ const FavoriteList: React.FC = () => {
     // )}
     // </div>
 
-    <div className="flex flex-row gap-8 max-lg:mt-[32px] lg:mt-[124px] bg-white dark:bg-slate-800 dark:text-white p-3">
+    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[40px] lg:mt-[124px] bg-white dark:bg-slate-800 dark:text-white p-3">
       {/* Left Section */}
-      <div className="flex flex-col w-1/2">
+      <div className="flex flex-col lg:w-1/2 w-full">
         <div className="flex flex-col">
           <div className="flex flex-col">
             <div className="text-2xl text-center font-bold">
@@ -371,17 +371,18 @@ const FavoriteList: React.FC = () => {
                 return (
                   <div
                     key={product._id}
-                    className="flex flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 gap-3 p-1 items-center relative"
+                    className="flex flex-col sm:flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 gap-3 p-1 items-center relative"
                   >
                     {isInCart && (
                       <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-lg bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1 rounded-br-md">
                         In Cart
                       </div>
                     )}
+
                     <Link
                       href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                     >
-                      <div className="w-36 h-36 relative">
+                      <div className="w-36 h-36 sm:w-24 sm:h-24 relative">
                         <Image
                           src={product?.signedUrls[0]}
                           alt={product.name}
@@ -391,36 +392,38 @@ const FavoriteList: React.FC = () => {
                         />
                       </div>
                     </Link>
-                    <div className="flex flex-col w-[60%]">
+
+                    <div className="flex flex-col w-full sm:w-[60%] text-center sm:text-left">
                       <div className="font-semibold truncate">
-                        {" "}
                         {product.name}
                       </div>
-                      <div className="truncate"> {product.description}</div>
+                      <div className="truncate">{product.description}</div>
                       <div className="truncate">
                         {product.additionalInformation.brand}
                       </div>
                     </div>
 
-                    {product?.discount ? (
-                      <div className="flex flex-col gap-1">
-                        <div className="flex flex-row gap-1 items-center">
-                          <div className="font-mono line-through">
-                            {product.price}
+                    <div className="flex flex-col gap-1 w-full sm:w-auto text-center sm:text-left">
+                      {product?.discount ? (
+                        <>
+                          <div className="flex flex-row gap-1 items-center justify-center sm:justify-start">
+                            <div className="font-mono line-through">
+                              {product.price}
+                            </div>
+                            <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                              -{Math.round(product.discountPercentage)}%
+                            </div>
                           </div>
-                          <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
-                            -{Math.round(product.discountPercentage)}%
+                          <div className="font-semibold text-xl">
+                            ${product.discount}
                           </div>
-                        </div>
+                        </>
+                      ) : (
                         <div className="font-semibold text-xl">
-                          ${product.discount}
+                          {product.price}
                         </div>
-                      </div>
-                    ) : (
-                      <div className="font-semibold text-xl">
-                        {product.price}
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     <div
                       className="px-5"
@@ -452,7 +455,7 @@ const FavoriteList: React.FC = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex flex-col w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-indigo-800">
+      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-indigo-800">
         <div className="text-white text-2xl py-3 font-semibold text-center w-full">
           Favorite Categories
           <hr className="border-gray-300 dark:border-slate-600 w-full" />
@@ -463,7 +466,7 @@ const FavoriteList: React.FC = () => {
             {favorites.map((category: any) => (
               <div
                 key={category._id}
-                className="flex flex-row items-center w-full  p-3 rounded-lg shadow-lg"
+                className="flex flex-row items-center w-full p-3 rounded-lg shadow-lg"
               >
                 <div className="w-[20%]">
                   <Link
