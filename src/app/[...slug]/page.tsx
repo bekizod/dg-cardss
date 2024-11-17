@@ -775,173 +775,179 @@ export default function ProductsAccordion({
           )}
           {/* Product Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {filteredProducts.map((product: any) => {
-              const productId = product?._id;
-              const buyerId = user?._id || "guest";
-              const productColor =
-                product?.additionalInformation?.color || "default";
+            {filteredProducts && filteredProducts.length > 0 ? (
+              filteredProducts.map((product: any) => {
+                const productId = product?._id;
+                const buyerId = user?._id || "guest";
+                const productColor =
+                  product?.additionalInformation?.color || "default";
 
-              const existingItem = cartItems.find(
-                (item) =>
-                  item.id === productId &&
-                  item.buyerId === buyerId &&
-                  item.color === productColor
-              );
-              const existingQuantity = existingItem ? existingItem.quantity : 0;
-              const isFavorite = favoriteProducts?.some(
-                (favProduct: any) => favProduct._id === productId
-              );
+                const existingItem = cartItems.find(
+                  (item) =>
+                    item.id === productId &&
+                    item.buyerId === buyerId &&
+                    item.color === productColor
+                );
+                const existingQuantity = existingItem
+                  ? existingItem.quantity
+                  : 0;
+                const isFavorite = favoriteProducts?.some(
+                  (favProduct: any) => favProduct._id === productId
+                );
 
-              return (
-                <div
-                  key={productId}
-                  className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
-                >
-                  {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
-                  <div className="flex flex-row gap-1">
-                    <Link
-                      href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
-                      className="w-[95%]"
-                    >
-                      <Image
-                        src={product.imageIds[0]}
-                        alt="product"
-                        width={1000}
-                        height={1000}
-                        className="w-full h-44 rounded-md"
-                      />
-                    </Link>
-
-                    <div>
-                      <motion.div
-                        className="rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
-                        whileHover={{ scale: 1.2 }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 }}
-                        onClick={() => handleFavoriteToggle(productId)}
+                return (
+                  <div
+                    key={productId}
+                    className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                  >
+                    {/* Image and Favorite Button */}
+                    <div className="flex flex-row gap-1">
+                      <Link
+                        href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
+                        className="w-[95%]"
                       >
-                        {isFavorite ? (
-                          <GoHeartFill
-                            className="text-[var(--color-primary)] dark:text-[var(--color-secondary)] "
-                            size={17}
-                          />
-                        ) : (
-                          <GoHeart
-                            className="text-[var(--color-primary)]"
-                            size={17}
-                          />
-                        )}
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  <div className="flex w-full flex-col">
-                    <div className="text-start text-lg font-semibold flex justify-start">
-                      {product.name}
-                    </div>
-                    <div className="test-sm text-start font-semibold">
-                      {product.additionalInformation.brand}
-                    </div>
-                    <div className="flex flex-row gap-3">
-                      <div>
-                        <Rate
-                          value={product.ratings.averageRating.toFixed(1)}
-                          className="text-sm dark:text-yellow-400"
-                          disabled
+                        <Image
+                          src={product.imageIds[0]}
+                          alt="product"
+                          width={1000}
+                          height={1000}
+                          className="w-full h-44 rounded-md"
                         />
-                      </div>
-                      <div className="flex flex-row gap-1 items-center text-sm">
-                        <div>
-                          <FaRegComment />
-                        </div>
-                        <div>{product.ratings.numberOfRatings}</div>
+                      </Link>
+
+                      <div>
+                        <motion.div
+                          className="rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                          whileHover={{ scale: 1.2 }}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.1 }}
+                          onClick={() => handleFavoriteToggle(productId)}
+                        >
+                          {isFavorite ? (
+                            <GoHeartFill
+                              className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                              size={17}
+                            />
+                          ) : (
+                            <GoHeart
+                              className="text-[var(--color-primary)]"
+                              size={17}
+                            />
+                          )}
+                        </motion.div>
                       </div>
                     </div>
 
-                    <div className="flex flex-row justify-between items-center mt-4">
-                      <div className="flex flex-col">
-                        <div className="flex flex-row gap-1 items-center">
-                          {product?.discount > 0 && (
-                            <>
-                              <div className="font-mono line-through">
-                                {product.price - product.discount}
+                    {/* Product Details */}
+                    <div className="flex w-full flex-col">
+                      <div className="text-start text-lg font-semibold flex justify-start">
+                        {product.name}
+                      </div>
+                      <div className="test-sm text-start font-semibold">
+                        {product.additionalInformation.brand}
+                      </div>
+                      <div className="flex flex-row gap-3">
+                        <div>
+                          <Rate
+                            value={product.ratings.averageRating.toFixed(1)}
+                            className="text-sm dark:text-yellow-400"
+                            disabled
+                          />
+                        </div>
+                        <div className="flex flex-row gap-1 items-center text-sm">
+                          <FaRegComment />
+                          <div>{product.ratings.numberOfRatings}</div>
+                        </div>
+                      </div>
+
+                      {/* Pricing and Cart Buttons */}
+                      <div className="flex flex-row justify-between items-center mt-4">
+                        <div className="flex flex-col">
+                          <div className="flex flex-row gap-1 items-center">
+                            {product?.discount > 0 && (
+                              <>
+                                <div className="font-mono line-through">
+                                  {product.price - product.discount}
+                                </div>
+                                <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                                  -{Math.round(product.discountPercentage)}%
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                          <div className="font-bold text-2xl">
+                            {product?.discount > 0
+                              ? `${product.discount}`
+                              : `${product.price}`}
+                          </div>
+                        </div>
+                        <div className="rounded-lg">
+                          {existingItem ? (
+                            <div className="flex flex-row items-center justify-center gap-2">
+                              {/* Decrement Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    decrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                aria-label="Decrease Quantity"
+                              >
+                                <BiChevronDown
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+
+                              {/* Quantity Display */}
+                              <div className="dark:text-gray-200">
+                                {existingQuantity}
                               </div>
-                              <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
-                                -{Math.round(product.discountPercentage)}%
-                              </div>
-                            </>
+
+                              {/* Increment Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    incrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                aria-label="Increase Quantity"
+                              >
+                                <BiChevronUp
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+                            </div>
+                          ) : (
+                            <motion.div
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleAddToCart(product)}
+                              className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-800"
+                              aria-label="Add to Cart"
+                            >
+                              <FaShoppingCart color="white" />
+                            </motion.div>
                           )}
                         </div>
-
-                        <div className="font-bold text-2xl">
-                          {product?.discount > 0
-                            ? `${product.discount}`
-                            : `${product.price}`}
-                        </div>
-                      </div>
-                      <div className="rounded-lg">
-                        {existingItem ? (
-                          <div className="flex flex-row items-center justify-center gap-2">
-                            {/* Decrement Button */}
-                            <button
-                              onClick={() =>
-                                dispatch(
-                                  decrementQuantity({
-                                    id: existingItem.id,
-                                    buyerId: existingItem.buyerId,
-                                  })
-                                )
-                              }
-                              className=""
-                              aria-label="Decrease Quantity"
-                            >
-                              <BiChevronDown
-                                className="text-[var(--color-secondary)] font-bold"
-                                size={30}
-                              />
-                            </button>
-
-                            {/* Quantity Display */}
-                            <div className="dark:text-gray-200">
-                              {existingQuantity}
-                            </div>
-
-                            {/* Increment Button */}
-                            <button
-                              onClick={() =>
-                                dispatch(
-                                  incrementQuantity({
-                                    id: existingItem.id,
-                                    buyerId: existingItem.buyerId,
-                                  })
-                                )
-                              }
-                              className=" "
-                              aria-label="Increase Quantity"
-                            >
-                              <BiChevronUp
-                                className="text-[var(--color-secondary)] font-bold"
-                                size={30}
-                              />
-                            </button>
-                          </div>
-                        ) : (
-                          <motion.div
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => handleAddToCart(product)}
-                            className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-800"
-                            aria-label="Add to Cart"
-                          >
-                            <FaShoppingCart color="white" />
-                          </motion.div>
-                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="col-span-full text-center py-4 text-lg font-medium text-gray-500 dark:text-gray-300">
+                No products found.
+              </div>
+            )}
           </div>
         </div>
 
