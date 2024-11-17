@@ -155,7 +155,12 @@ const CartComponent = () => {
         <div className="flex flex-col md:flex-row gap-6 px-3 w-full">
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
-            <div>total quantity in cart : {filteredCartItems?.length}</div>
+            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md text-gray-800 dark:text-white font-medium">
+              <span>Total Quantity in Cart:</span>
+              <span className="text-lg font-semibold text-[var(--color-primary)]">
+                {filteredCartItems?.length}
+              </span>
+            </div>
             {filteredCartItems.map((item) => (
               <div
                 key={item.id}
@@ -184,6 +189,7 @@ const CartComponent = () => {
                       <Rate
                         value={item.averageRating}
                         className="dark:text-white"
+                        disabled
                       />
                     </div>
                     <div className="font-serif text-sm">
