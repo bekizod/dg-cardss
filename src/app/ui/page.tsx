@@ -8,10 +8,7 @@ import { FaTrashAlt } from "react-icons/fa";
 export default function UI() {
   return (
     <div className="mt-[124px] bg-slate-300 p-5 flex flex-col gap-32  ">
-      <div
-     
-        className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
-      >
+      <div className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3">
         {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
         <div className="flex flex-row gap-2">
           <div className="w-[90%]">
@@ -25,7 +22,6 @@ export default function UI() {
           </div>
 
           <div>
-            
             <div className="rounded-full p-2 bg-black dark:bg-slate-600">
               <GoHeart size={22} className="text-white" />
             </div>

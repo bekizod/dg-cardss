@@ -15,6 +15,7 @@ import { message, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 const CartComponent = () => {
   const { user } = useAuth();
@@ -77,8 +78,6 @@ const CartComponent = () => {
             <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
           </svg>
         </div>
-
-         
       </div>
     );
   }
@@ -160,104 +159,63 @@ const CartComponent = () => {
             {filteredCartItems.map((item) => (
               <div
                 key={item.id}
-                className="relative w-full max-w-[960px] h-auto mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-slate-50 dark:bg-slate-700 rounded-3xl shadow-lg p-3 sm:p-4"
+                className="rounded-xl shadow-xl bg-slate-100 dark:bg-slate-800 dark:text-white flex flex-col sm:flex-row p-3 relative"
               >
-                {/* Discount Badge */}
-
-                {item.discount > 0 && (
-                  <div className="absolute top-2 sm:top-0 left-4 sm:left-7 bg-slate-200 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
-                    <span className="text-white text-xs sm:text-sm font-bold">
-                      <div className="flex flex-row items-center  ">
-                        <div className="text-lg font-bold text-red-500">
-                          -{Math.round(item.discount)}%
-                        </div>
-                        <svg
-                          className="ml-2"
-                          width="21"
-                          height="21"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z"
-                            fill="#FF233F"
-                          />
-                        </svg>
-                      </div>
-                    </span>
-                    <div className="w-px h-4 bg-white mx-1 opacity-0"></div>
-                  </div>
-                )}
-
-                {/* Delete Badge */}
-                <div className="absolute top-2 sm:top-0 right-4 sm:right-6   rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
+                {/* Trash Icon */}
+                <div className="absolute z-30 -top-5 sm:top-0 right-2 sm:right-6 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
                   <button
                     onClick={() => handleDelete(item.id, item.buyerId)}
-                    className="   text-red-500 self-start"
+                    className="text-red-500 self-start"
                   >
                     <FaTrashAlt className="w-6 h-6" />
                   </button>
                 </div>
 
-                {/* Image Section */}
-                <Link
-                  href={item.link}
-                  className="relative w-[100px] mt-2 sm:w-[136px] py-5 h-[100px] sm:h-[136px] flex-shrink-0"
-                >
-                  <Image
-                    width={1000}
-                    height={1000}
-                    className="w-full h-full object-cover rounded"
-                    src={item.image}
-                    alt={item.name}
-                  />
-                </Link>
-
-                {/* Text Section */}
-                <div className="flex-1">
-                  <div className="flex items-center max-lg:justify-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                    <h2 className="  text-base sm:text-lg font-bold">
-                      {item.name}
-                    </h2>
+                {/* Product Info (Left) */}
+                <div className="flex flex-col flex-1 justify-between">
+                  {/* Product Name */}
+                  <div className="mb-3 font-light text-sm">{item.brand}</div>
+                  {/* Description */}
+                  <div className="text-xl font-bold   mb-3">{item.name}</div>
+                  <div className="test-sm font-semibold">{item.adjective}</div>
+                  {/* Ratings */}
+                  <div className="flex flex-row gap-2 items-center mb-3">
+                    <div>
+                      <Rate
+                        value={item.averageRating}
+                        className="dark:text-white"
+                      />
+                    </div>
+                    <div className="font-serif text-sm">
+                      {item.numberOfRating} reviews
+                    </div>
                   </div>
-                  <div className="  text-sm sm:text-lg    ">
-                    Color:{item.color}
-                    Brand:{item.brand}
-                    Adjective: {item.adjective}
-                    <Rate value={item.averageRating} className="dark:text-white" />
-                    {item.numberOfRating} Reviews
-                  </div>
-
-                  <div className="mt-2 sm:mt-4 flex items-center gap-2   text-xs font-medium">
-                    <span>Product features</span>
-                    <div className="w-4 h-4"></div>
-                  </div>
-                </div>
-
-                {/* Increment/Decrement Section */}
-                <div className="text-center">
-                  {item.discount > 0 ? (
-                    <>
-                      {" "}
-                      <div className="">
-                        <div className="line-through text-gray-500 dark:text-gray-400 ">
+                  {/* Pricing */}
+                  <div className="flex flex-row gap-2 items-center mb-3">
+                    {item.discount > 0 ? (
+                      <>
+                        {" "}
+                        <div className="font-bold text-lg line-through">
                           {item.price} SAR
                         </div>
-                        <div className="text-2xl  font-bold ">
+                        <div className="font-bold text-lg text-green-600">
                           {item.unitPrice} SAR
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {" "}
-                      <div className="text-2xl  font-bold ">
-                        {item.price} SAR
-                      </div>
-                    </>
-                  )}
-                  <div className="flex flex-row items-center justify-center gap-1 sm:gap-2 mt-4 sm:mt-0">
+                        <div className="p-1 bg-red-200 text-red-600 font-semibold rounded-2xl text-sm dark:bg-red-800 dark:text-red-400">
+                          -{Math.round(item.discount)}%% OFF
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-xl text-green-600">
+                          {item.price}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {/* Quantity Controls */}
+                  <div className="flex flex-row items-center gap-4">
+                    {/* Decrement Button */}
                     <button
                       onClick={() =>
                         dispatch(
@@ -267,11 +225,18 @@ const CartComponent = () => {
                           })
                         )
                       }
-                      className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                      className="flex items-center justify-center w-10 h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
+                      aria-label="Decrease Quantity"
                     >
-                      -
+                      <BiChevronDown size={20} />
                     </button>
-                    <div className="dark:text-gray-200">{item.quantity}</div>
+
+                    {/* Quantity Display */}
+                    <div className="text-xl font-bold text-black dark:text-white">
+                      {item.quantity}
+                    </div>
+
+                    {/* Increment Button */}
                     <button
                       onClick={() =>
                         dispatch(
@@ -281,21 +246,30 @@ const CartComponent = () => {
                           })
                         )
                       }
-                      className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded"
+                      className="flex items-center justify-center w-10 h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
+                      aria-label="Increase Quantity"
                     >
-                      +
+                      <BiChevronUp size={20} />
                     </button>
                   </div>
+                </div>
 
-                  {item.discount !== 0 && (
-                    <div className="">
-                      <div>{item.price - item.unitPrice} Save SAR</div>
-                    </div>
-                  )}
+                {/* Image (Right) */}
+                <div className="flex justify-center items-center mt-5 sm:mt-0 sm:ml-5">
+                  <Link href={item.link}>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={1000}
+                      height={1000}
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
+                    />
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
+
           <div className="md:w-1/3">
             {" "}
             {/* Order Summary */}
