@@ -931,7 +931,7 @@ export default function ProductsAccordion({
                             <motion.div
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleAddToCart(product)}
-                              className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-800"
+                              className="p-3 bg-[var(--color-primary)] dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
                               aria-label="Add to Cart"
                             >
                               <FaShoppingCart color="white" />
