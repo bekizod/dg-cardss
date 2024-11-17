@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TfiAlignLeft } from "react-icons/tfi";
-import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
+import { FaRegComment, FaRegUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
@@ -17,7 +17,7 @@ import {
 } from "@/redux/slices/categorySlice";
 import { SearchProducts } from "@/redux/slices/searchSlice";
 import { useRouter } from "next/navigation";
-import { notification, Badge } from "antd";
+import { notification, Badge, Rate } from "antd";
 import {
   addToCart,
   decrementQuantity,
@@ -31,6 +31,7 @@ import {
   saveFavoriteProduct,
 } from "@/redux/slices/favoriteProductsSlice";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
@@ -707,124 +708,159 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                         );
                         return (
                           <div
-                            key={index}
-                            className="relative w-64 flex-shrink-0"
+                            key={productIdt}
+                            className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                           >
-                            <div
-                              className="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-lg"
-                              data-href={product.href}
-                            >
+                            {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
+                            <div className="flex flex-row gap-1">
+                              <Link
+                                href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
+                                onClick={searchcloseModal}
+                                passHref
+                                className="w-[95%]"
+                              >
+                                <Image
+                                  src={product.imageIds[0]}
+                                  alt="product"
+                                  width={1000}
+                                  height={1000}
+                                  className="w-full h-44 rounded-md"
+                                />
+                              </Link>
+
                               <div>
                                 <motion.div
-                                  className="z-30 pb-1 cursor-pointer"
+                                  className="rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                                  whileHover={{ scale: 1.2 }}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.1 }}
                                   onClick={() =>
                                     handleFavoriteToggle(productIdt)
                                   }
-                                  whileHover={{
-                                    scale: 1.1,
-                                    transition: { duration: 0.3 },
-                                  }}
                                 >
                                   {isFavorite ? (
                                     <GoHeartFill
-                                      className="text-[var(--color-primary)]"
-                                      size={27}
+                                      className="text-[var(--color-primary)] dark:text-[var(--color-secondary)] "
+                                      size={17}
                                     />
                                   ) : (
                                     <GoHeart
-                                      size={27}
-                                      className="text-[var(--color-secondary)]"
+                                      className="text-[var(--color-primary)]"
+                                      size={17}
                                     />
                                   )}
                                 </motion.div>
-                                <Link
-                                  href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
-                                  onClick={searchcloseModal}
-                                  passHref
-                                >
-                                  <Image
-                                    src={product.imageIds[0]}
-                                    alt={product.alt}
-                                    width={1000}
-                                    height={1000}
-                                    loading="eager"
-                                    fetchPriority="high"
-                                    className="object-fit w-full h-48 transition-opacity duration-300 hover:opacity-80 rounded-xl"
+                              </div>
+                            </div>
+
+                            <div className="flex w-full flex-col">
+                              <div className="text-start text-lg font-semibold flex justify-start">
+                                {product.name}
+                              </div>
+                              <div className="test-sm text-start font-semibold">
+                                {product.additionalInformation.brand}
+                              </div>
+                              <div className="flex flex-row gap-3">
+                                <div>
+                                  <Rate
+                                    value={product.ratings.averageRating.toFixed(
+                                      1
+                                    )}
+                                    className="text-sm dark:text-yellow-400"
+                                    disabled
                                   />
-                                  {product.discount && (
-                                    <p className="absolute top-0 right-0  bg-[var(--color-primary)] text-white text-xs sm:text-sm font-bold text-center p-3 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">
-                                      {product.discountPercentage}% OFF
-                                    </p>
-                                  )}
-                                  <h2 className="mt-2 text-lg font-semibold">
-                                    {product.name}
-                                  </h2>
-                                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                                    {product.additionalInformation?.brand}
-                                  </p>
-                                  <div className="mt-2">
-                                    {product.discount ? (
+                                </div>
+                                <div className="flex flex-row gap-1 items-center text-sm">
+                                  <div>
+                                    <FaRegComment />
+                                  </div>
+                                  <div>{product.ratings.numberOfRatings}</div>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-row justify-between items-center mt-4">
+                                <div className="flex flex-col">
+                                  <div className="flex flex-row gap-1 items-center">
+                                    {product?.discount > 0 && (
                                       <>
-                                        <p className="text-xl font-bold text-green-500">
-                                          {product.price - product.discount}{" "}
-                                          {/* Assuming discount is subtracted from price */}
-                                        </p>
-                                        <p className="text-sm line-through text-gray-500">
-                                          {product.price}
-                                        </p>
-                                        <p className="text-sm text-red-500">
-                                          SAVE {product.discount}
-                                        </p>
+                                        <div className="font-mono line-through">
+                                          {product.price - product.discount}
+                                        </div>
+                                        <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                                          -
+                                          {Math.round(
+                                            product.discountPercentage
+                                          )}
+                                          %
+                                        </div>
                                       </>
-                                    ) : (
-                                      <p className="text-xl font-bold text-green-500">
-                                        {product.price}
-                                      </p>
                                     )}
                                   </div>
-                                </Link>
-                                {/* <button className="mt-2 w-full py-2  bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]">Add to Cart</button> */}
-                                {existingItem ? (
-                                  <div className="flex flex-row items-center justify-center py-2 gap-2">
-                                    <button
-                                      onClick={() =>
-                                        dispatch(
-                                          decrementQuantity({
-                                            id: ID,
-                                            buyerId: BuyerId,
-                                          })
-                                        )
-                                      }
-                                      className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
-                                    >
-                                      -
-                                    </button>
-                                    <div className="dark:text-gray-200">
-                                      {existingQuantity}
-                                    </div>
-                                    <button
-                                      onClick={() =>
-                                        dispatch(
-                                          incrementQuantity({
-                                            id: ID,
-                                            buyerId: BuyerId,
-                                          })
-                                        )
-                                      }
-                                      className="px-2 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] rounded"
-                                    >
-                                      +
-                                    </button>
+
+                                  <div className="font-bold text-2xl">
+                                    {product?.discount > 0
+                                      ? `${product.discount}`
+                                      : `${product.price}`}
                                   </div>
-                                ) : (
-                                  <motion.button
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => handleAddToCart(product)}
-                                    className="mt-2 w-full  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white font-bold text-xs sm:text-sm py-1 sm:py-2 rounded-xl"
-                                  >
-                                    Add to Cart
-                                  </motion.button>
-                                )}
+                                </div>
+                                <div className="rounded-lg">
+                                  {existingItem ? (
+                                    <div className="flex flex-row items-center justify-center gap-2">
+                                      {/* Decrement Button */}
+                                      <button
+                                        onClick={() =>
+                                          dispatch(
+                                            decrementQuantity({
+                                              id: existingItem.id,
+                                              buyerId: existingItem.buyerId,
+                                            })
+                                          )
+                                        }
+                                        className=""
+                                        aria-label="Decrease Quantity"
+                                      >
+                                        <BiChevronDown
+                                          className="text-[var(--color-secondary)] font-bold"
+                                          size={30}
+                                        />
+                                      </button>
+
+                                      {/* Quantity Display */}
+                                      <div className="dark:text-gray-200">
+                                        {existingQuantity}
+                                      </div>
+
+                                      {/* Increment Button */}
+                                      <button
+                                        onClick={() =>
+                                          dispatch(
+                                            incrementQuantity({
+                                              id: existingItem.id,
+                                              buyerId: existingItem.buyerId,
+                                            })
+                                          )
+                                        }
+                                        className=" "
+                                        aria-label="Increase Quantity"
+                                      >
+                                        <BiChevronUp
+                                          className="text-[var(--color-secondary)] font-bold"
+                                          size={30}
+                                        />
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <motion.div
+                                      whileTap={{ scale: 0.95 }}
+                                      onClick={() => handleAddToCart(product)}
+                                      className="p-3 bg-blue-500 dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-800"
+                                      aria-label="Add to Cart"
+                                    >
+                                      <FaShoppingCart color="white" />
+                                    </motion.div>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
