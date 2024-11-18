@@ -8,6 +8,7 @@ import Slider from "./Slider";
 import ProductCarousel from "./ProductCarousel";
 import axios from "axios";
 import Loader from "@/app/loading";
+import BestProducts from "./BestSellProduct";
 
 export default function HomeHero() {
   const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
@@ -81,6 +82,10 @@ export default function HomeHero() {
           />
         </div>
       </motion.div>
+
+      <div>
+        {/* <BestProducts /> */}
+      </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {coverPictures.length === 0 ? (

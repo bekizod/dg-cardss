@@ -173,6 +173,7 @@ export default function SingleProductPage({
       prevIndex === product.imageIds.length - 1 ? 0 : prevIndex + 1
     );
   };
+  const goToSlide = (slideIndex: number) => setCurrentIndex(slideIndex);
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -332,7 +333,7 @@ export default function SingleProductPage({
           )}
           <div>total product in stock : {product.stockQuantity}</div>
           <div
-            className="relative transition-opacity duration-700 ease-in-out flex items-center justify-center"
+            className="relative h-80 transition-opacity duration-700 ease-in-out flex items-center justify-center"
             style={{
               display: "flex",
               alignItems: "center",
@@ -344,64 +345,82 @@ export default function SingleProductPage({
                 src={product?.imageIds[currentIndex]} // Show the current image only
                 alt={`product ${currentIndex}`}
                 layout="intrinsic"
-                width={700}
-                height={700}
+                width={1000}
+                height={1000}
                 objectFit="contain"
-                className="rounded-2xl px-10"
+                className="rounded-2xl w-72 h-72  "
               />
             )}
           </div>
 
           {/* Slider Controls */}
-          <button
-            type="button"
-            className="absolute top-1 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            onClick={goToPrevious}
-          >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-              <svg
-                className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
+          {product?.imageIds?.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="absolute top-1 -left-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                onClick={goToPrevious}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 1 1 5l4 4"
-                />
-              </svg>
-              <span className="sr-only">Previous</span>
-            </span>
-          </button>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                  <svg
+                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 1 1 5l4 4"
+                    />
+                  </svg>
+                  <span className="sr-only">Previous</span>
+                </span>
+              </button>
 
-          <button
-            type="button"
-            className="absolute top-1 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            onClick={goToNext}
-          >
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-              <svg
-                className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
+              <button
+                type="button"
+                className="absolute top-1 -right-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                onClick={goToNext}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 9 4-4-4-4"
-                />
-              </svg>
-              <span className="sr-only">Next</span>
-            </span>
-          </button>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                  <svg
+                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 9 4-4-4-4"
+                    />
+                  </svg>
+                  <span className="sr-only">Next</span>
+                </span>
+              </button>
+
+              <ul className="absolute  left-1/2 transform -translate-x-1/2 flex gap-2">
+                {product?.imageIds.map((_ : any, index : any) => (
+                  <li
+                    key={index}
+                    className={`w-2 h-2 rounded-full cursor-pointer ${
+                      currentIndex === index
+                        ? " bg-[var(--color-primary)]"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => goToSlide(index)}
+                  />
+                ))}
+              </ul>
+            </>
+          )}
         </div>
 
         {/* Description Section */}
@@ -784,7 +803,7 @@ export default function SingleProductPage({
                   inspire your day.
                 </p> */}
                 <p className="text-gray-800 dark:text-gray-200">
-                  <strong>{product.description}</strong> 
+                  <strong>{product.description}</strong>
                 </p>
                 {/* <p className="text-gray-800 dark:text-gray-200">
                   <strong>Double cup option:</strong> Choose between one or two
