@@ -151,8 +151,6 @@ export default function SingleProductPage({
               <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
             </svg>
           </div>
-
-         
         </div>
 
         <div className="h-24 bg-gray-200 rounded-sm dark:bg-gray-700 mb-2.5 mx-4">
@@ -332,11 +330,15 @@ export default function SingleProductPage({
             </div>
           )}
           <div>
-            {
-              product.stockQuantity > 0 ? <span className="font-bold">total product in stock : {product.stockQuantity}</span>  : <span className="test-red-500 font-bold">Out Of Stock</span> 
-            }
+            {product.stockQuantity > 0 ? (
+              <span className="font-bold">
+                total product in stock : {product.stockQuantity}
+              </span>
+            ) : (
+              <span className="test-red-500 font-bold">Out Of Stock</span>
+            )}
           </div>
-          <div>total product in stock : {product.stockQuantity}</div>
+
           <div
             className="relative h-80 transition-opacity duration-700 ease-in-out flex items-center justify-center"
             style={{
@@ -386,7 +388,7 @@ export default function SingleProductPage({
                 </span>
               </button>
 
-              <button        
+              <button
                 type="button"
                 className="absolute top-1 -right-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                 onClick={goToNext}
@@ -412,7 +414,7 @@ export default function SingleProductPage({
               </button>
 
               <ul className="absolute  left-1/2 transform -translate-x-1/2 flex gap-2">
-                {product?.imageIds.map((_ : any, index : any) => (
+                {product?.imageIds.map((_: any, index: any) => (
                   <li
                     key={index}
                     className={`w-2 h-2 rounded-full cursor-pointer ${
@@ -609,16 +611,20 @@ export default function SingleProductPage({
             </div>
 
             {/* Add to Cart Button */}
-            <motion.button
-              onClick={() => {
-                handleAddToCart();
-              }}
-              className="mt-4 w-full py-2 px-4  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white rounded-lg"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {existingItem ? "Product in Cart, Go to Cart" : "Add to Cart"}
-            </motion.button>
+            {product.stockQuantity > 0 ? (
+              <motion.button
+                onClick={() => {
+                  handleAddToCart();
+                }}
+                className="mt-4 w-full py-2 px-4  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-white rounded-lg"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {existingItem ? "Product in Cart, Go to Cart" : "Add to Cart"}
+              </motion.button>
+            ) : (
+              <div className="font-bold text-red-500">Out Of Stock</div>
+            )}
           </motion.div>
           {/* Modal */}
           {isModalOpen && (
@@ -643,6 +649,7 @@ export default function SingleProductPage({
                     Added to cart
                   </p>
                 </Link>
+
                 <p className="mt-4 text-gray-600 dark:text-gray-300">
                   Product added successfully to cart
                 </p>

@@ -803,7 +803,7 @@ export default function ProductsAccordion({
                     {/* Image and Favorite Button */}
                     <div className="relative">
                       <Link
-                        href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
+                        href={`/singleProduct/${parentName}/${parentId}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                         className="block w-full"
                       >
                         <Image
