@@ -13,6 +13,7 @@ import {
 import React from "react";
 import {
   addFavoriteLocally,
+  fetchFavoriteProducts,
   removeFavoriteProduct,
   saveFavoriteProduct,
 } from "@/redux/slices/favoriteProductsSlice";
@@ -63,8 +64,8 @@ const BestProducts = () => {
   }, [user?.token]);
 
     useEffect(() => {
-       console.log(JSON.stringify(products,null,2))
-    }, [products])
+      dispatch(fetchFavoriteProducts());
+    }, [dispatch]);
     
   const handleAddToCart = (product: any) => {
     dispatch(
@@ -163,6 +164,7 @@ const BestProducts = () => {
           transition={{ duration: 0.5 }}
         >
           {products.map((product: any, index: any) => {
+
             const isFavorite = favoriteProducts?.some(
               (favProduct: any) => favProduct._id === product.productDetails._id
             );
