@@ -259,7 +259,7 @@ const ProductCarousel = () => {
                             <div className="font-mono line-through">
                               {product.price - product.discount}
                             </div>
-                            <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                            <div className="bg-[var(--color-secondary)] dark:bg-blue-900 px-1 rounded font-bold text-xs">
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </>

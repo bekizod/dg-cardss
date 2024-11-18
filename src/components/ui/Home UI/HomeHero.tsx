@@ -111,7 +111,7 @@ export default function HomeHero() {
       </div>
 
       <div>
-        <div>You May Also Like</div>
+        {/* <div>You May Also Like</div> */}
         <ProductCarousel />
       </div>
     </div>
