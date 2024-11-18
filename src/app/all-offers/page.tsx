@@ -111,7 +111,7 @@ export default function ProductsAccordion({
     const fetchProducts = async () => {
       const queryParams = [
         `page=`,
-        `size=`,
+        `size=100`,
         `q=`, // Only add 'q' if searchTerm is not empty
         `color=`,
         `productSize=`,

@@ -85,7 +85,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
       if (searchTerm) {
         const queryParams = [
           `page=`,
-          `size=`,
+          `size=100`,
           searchTerm ? `q=${searchTerm}` : "q=", // Only add 'q' if searchTerm is not empty
           `color=`,
           `productSize=`,
