@@ -88,32 +88,51 @@ const BestProducts = () => {
     );
   };
 
-  const handleFavoriteToggle = async (productId: string) => {
-    const isFavorite = favoriteProducts?.some(
-      (product: any) => product._id === productId
-    );
+   const handleFavoriteToggle = async (productId: string) => {
+     const isFavorite = favoriteProducts?.some(
+       (product: any) => product._id === productId
+     );
 
-    try {
-      if (isFavorite) {
-        await dispatch(removeFavoriteProduct(productId));
-        notification.success({
-          message: "Success",
-          description: "Product removed from favorites!",
-        });
-      } else {
-        await dispatch(saveFavoriteProduct(productId));
-        notification.success({
-          message: "Success",
-          description: "Product added to favorites!",
-        });
-      }
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: error?.message || "Failed to toggle favorite product.",
-      });
-    }
-  };
+     try {
+       if (isFavorite) {
+         await dispatch(removeFavoriteProduct(productId)).unwrap();
+         notification.success({
+           message: "Success",
+           description: "Product removed from favorites!",
+         });
+       } else {
+         await dispatch(saveFavoriteProduct(productId)).unwrap();
+         dispatch(
+           addFavoriteLocally({
+             _id: productId,
+             name: "",
+             description: "",
+             price: "",
+             signedUrls: [],
+           })
+         );
+         notification.success({
+           message: "Success",
+           description: "Product added to favorites!",
+         });
+       }
+     } catch (error: any) {
+       let errorMessage = "Failed to save favorite product.";
+
+       // Check if the error message contains "jwt malformed"
+       if (error == "jwt malformed") {
+         errorMessage =
+           "Authentication error: Please log in to save favorite products.";
+       } else {
+         errorMessage = "Failed,No internet connection.";
+       }
+
+       notification.error({
+         message: "Error",
+         description: errorMessage,
+       });
+     }
+   };
 
   const handleNavigation = (direction: number) => {
     const newIndex = currentIndex + direction;
@@ -131,8 +150,8 @@ const BestProducts = () => {
   }
 
   return (
-      <div className="relative">
-          <div>Top Selling Products</div>
+    <div className="relative">
+      <div className="font-bold text-xl ">Top Selling Products</div>
       <div
         ref={carouselRef}
         className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
@@ -155,7 +174,7 @@ const BestProducts = () => {
               >
                 <div className="relative">
                   <Link
-                    href={`/singleProduct/${product.productDetails.category}/${product.productDetails._id}`}
+                    href={`/#`}
                   >
                     <Image
                       src={product.productDetails.imageIds[0]}
@@ -184,31 +203,114 @@ const BestProducts = () => {
                 <div className="font-semibold">
                   {product.productDetails.additionalInformation.brand}
                 </div>
-                <Rate
-                  value={product.productDetails.ratings.averageRating}
-                  disabled
-                />
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex flex-row gap-3">
+                  <div>
+                    <Rate
+                      value={product.productDetails.ratings.averageRating.toFixed(
+                        1
+                      )}
+                      className="text-sm dark:text-yellow-400"
+                      disabled
+                    />
+                  </div>
+                  <div className="flex flex-row gap-1 items-center text-sm">
+                    <div>
+                      <FaRegComment />
+                    </div>
+                    <div>{product.productDetails.ratings.numberOfRatings}</div>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mt-4 text-green-500 font-bold text-lg">
                   <div>${product.productDetails.price}</div>
-                  <button
+
+                  {/* <button
                     onClick={() => handleAddToCart(product.productDetails)}
                   >
                     Add to Cart
-                  </button>
+                  </button> */}
                 </div>
               </div>
             );
           })}
         </motion.div>
       </div>
-      {products.length > 5 && (
-        <>
-          <button onClick={() => handleNavigation(-1)}>Prev</button>
-          <button onClick={() => handleNavigation(1)}>Next</button>
-        </>
+      {products?.length > 5 && (
+        <React.Fragment>
+          <button
+            className="absolute top-1/2 -translate-y-1/2 -left-12 p-2  bg-[var(--color-primary)] text-white rounded-full"
+            onClick={() => handleNavigation(-1)}
+            disabled={currentIndex === 0}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button
+            className="absolute top-1/2 -translate-y-1/2 -right-12 p-2  bg-[var(--color-primary)] text-white rounded-full"
+            onClick={() => handleNavigation(1)}
+            disabled={currentIndex === products.length - 1}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </React.Fragment>
       )}
     </div>
   );
 };
 
 export default BestProducts;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

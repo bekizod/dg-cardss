@@ -156,6 +156,7 @@ const ProductCarousel = () => {
 
   return (
     <div className="relative ">
+      <div className="font-bold text-xl ">Our Discount Products</div>
       <div
         ref={carouselRef}
         className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
@@ -273,60 +274,66 @@ const ProductCarousel = () => {
                       </div>
                     </div>
                     <div className="rounded-lg">
-                      {existingItem ? (
-                        <div className="flex flex-row items-center justify-center gap-2">
-                          {/* Decrement Button */}
-                          <button
-                            onClick={() =>
-                              dispatch(
-                                decrementQuantity({
-                                  id: existingItem.id,
-                                  buyerId: existingItem.buyerId,
-                                })
-                              )
-                            }
-                            className=""
-                            aria-label="Decrease Quantity"
-                          >
-                            <BiChevronDown
-                              className="text-[var(--color-secondary)] font-bold"
-                              size={30}
-                            />
-                          </button>
+                      {product.stockQuantity > 0 ? (
+                        <>
+                          {existingItem ? (
+                            <div className="flex flex-row items-center justify-center gap-2">
+                              {/* Decrement Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    decrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=""
+                                aria-label="Decrease Quantity"
+                              >
+                                <BiChevronDown
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
 
-                          {/* Quantity Display */}
-                          <div className="dark:text-gray-200">
-                            {existingQuantity}
-                          </div>
+                              {/* Quantity Display */}
+                              <div className="dark:text-gray-200">
+                                {existingQuantity}
+                              </div>
 
-                          {/* Increment Button */}
-                          <button
-                            onClick={() =>
-                              dispatch(
-                                incrementQuantity({
-                                  id: existingItem.id,
-                                  buyerId: existingItem.buyerId,
-                                })
-                              )
-                            }
-                            className=" "
-                            aria-label="Increase Quantity"
-                          >
-                            <BiChevronUp
-                              className="text-[var(--color-secondary)] font-bold"
-                              size={30}
-                            />
-                          </button>
-                        </div>
+                              {/* Increment Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    incrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=" "
+                                aria-label="Increase Quantity"
+                              >
+                                <BiChevronUp
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+                            </div>
+                          ) : (
+                            <motion.div
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleAddToCart(product)}
+                              className="p-3 bg-[var(--color-primary)] dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
+                              aria-label="Add to Cart"
+                            >
+                              <FaShoppingCart color="white" />
+                            </motion.div>
+                          )}
+                        </>
                       ) : (
-                        <motion.div
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleAddToCart(product)}
-                          className="p-3 bg-[var(--color-primary)] dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
-                          aria-label="Add to Cart"
-                        >
-                          <FaShoppingCart color="white" />
-                        </motion.div>
+                        <div>Out Of Stock</div>
                       )}
                     </div>
                   </div>

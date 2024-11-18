@@ -335,7 +335,7 @@ export default function SingleProductPage({
                 total product in stock : {product.stockQuantity}
               </span>
             ) : (
-              <span className="test-red-500 font-bold">Out Of Stock</span>
+              <span className="text-red-500 font-bold">Out Of Stock</span>
             )}
           </div>
 
@@ -347,7 +347,7 @@ export default function SingleProductPage({
               justifyContent: "center",
             }}
           >
-            {product.stockQuantity && (
+            {product.name && (
               <Image
                 src={product?.imageIds[currentIndex]} // Show the current image only
                 alt={`product ${currentIndex}`}
