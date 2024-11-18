@@ -173,9 +173,7 @@ const BestProducts = () => {
                 className="flex flex-col w-60 bg-white shadow-xl gap-1 border rounded-3xl p-3"
               >
                 <div className="relative">
-                  <Link
-                    href={`/#`}
-                  >
+                  <Link href={`/#`}>
                     <Image
                       src={product.productDetails.imageIds[0]}
                       alt="product"
@@ -191,9 +189,15 @@ const BestProducts = () => {
                     }
                   >
                     {isFavorite ? (
-                      <GoHeartFill size={17} />
+                      <GoHeartFill
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                        size={17}
+                      />
                     ) : (
-                      <GoHeart size={17} />
+                      <GoHeart
+                        className="text-[var(--color-primary)]"
+                        size={17}
+                      />
                     )}
                   </motion.div>
                 </div>
