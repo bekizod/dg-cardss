@@ -331,6 +331,11 @@ export default function SingleProductPage({
               </nav>
             </div>
           )}
+          <div>
+            {
+              product.stockQuantity > 0 ? <span className="font-bold">total product in stock : {product.stockQuantity}</span>  : <span className="test-red-500 font-bold">Out Of Stock</span> 
+            }
+          </div>
           <div>total product in stock : {product.stockQuantity}</div>
           <div
             className="relative h-80 transition-opacity duration-700 ease-in-out flex items-center justify-center"
@@ -381,7 +386,7 @@ export default function SingleProductPage({
                 </span>
               </button>
 
-              <button
+              <button        
                 type="button"
                 className="absolute top-1 -right-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                 onClick={goToNext}
