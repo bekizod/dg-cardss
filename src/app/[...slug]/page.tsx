@@ -801,42 +801,41 @@ export default function ProductsAccordion({
                     className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                   >
                     {/* Image and Favorite Button */}
-                    <div className="flex flex-row gap-1">
+                    <div className="relative">
                       <Link
-                        href={`/singleProduct/${parentName}/${parentId}/${subCategoryName}/${subcategoryId}/${product.name}/${product._id}`}
-                        className="w-[95%]"
+                        href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
+                        className="block w-full"
                       >
                         <Image
                           src={product.imageIds[0]}
                           alt="product"
                           width={1000}
                           height={1000}
-                          className="w-full h-44 rounded-md"
+                          className="w-full h-44 rounded-md object-cover"
                         />
                       </Link>
 
-                      <div>
-                        <motion.div
-                          className="rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
-                          whileHover={{ scale: 1.2 }}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.1 }}
-                          onClick={() => handleFavoriteToggle(productId)}
-                        >
-                          {isFavorite ? (
-                            <GoHeartFill
-                              className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
-                              size={17}
-                            />
-                          ) : (
-                            <GoHeart
-                              className="text-[var(--color-primary)]"
-                              size={17}
-                            />
-                          )}
-                        </motion.div>
-                      </div>
+                      {/* Favorite Icon */}
+                      <motion.div
+                        className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                        whileHover={{ scale: 1.2 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 }}
+                        onClick={() => handleFavoriteToggle(productId)}
+                      >
+                        {isFavorite ? (
+                          <GoHeartFill
+                            className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                            size={17}
+                          />
+                        ) : (
+                          <GoHeart
+                            className="text-[var(--color-primary)]"
+                            size={17}
+                          />
+                        )}
+                      </motion.div>
                     </div>
 
                     {/* Product Details */}

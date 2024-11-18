@@ -371,7 +371,7 @@ const FavoriteList: React.FC = () => {
                 return (
                   <div
                     key={product._id}
-                    className="flex flex-col sm:flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 gap-3 p-1 items-center relative"
+                    className="flex flex-col sm:flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 dark:shadow-lg gap-3 p-1 items-center relative"
                   >
                     {isInCart && (
                       <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-lg bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1 rounded-br-md">
@@ -379,7 +379,7 @@ const FavoriteList: React.FC = () => {
                       </div>
                     )}
 
-                    <Link
+                    <Link 
                       href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                     >
                       <div className="w-36 h-36 sm:w-24 sm:h-24 relative">
@@ -455,7 +455,7 @@ const FavoriteList: React.FC = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-indigo-800">
+      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-slate-900">
         <div className="text-white text-2xl py-3 font-semibold text-center w-full">
           Favorite Categories
           <hr className="border-gray-300 dark:border-slate-600 w-full" />
@@ -466,7 +466,7 @@ const FavoriteList: React.FC = () => {
             {favorites.map((category: any) => (
               <div
                 key={category._id}
-                className="flex flex-row items-center w-full p-3 rounded-lg shadow-lg"
+                className="flex flex-row items-center w-full p-3 rounded-lg shadow-lg dark:shadow-slate-950"
               >
                 <div className="w-[20%]">
                   <Link
