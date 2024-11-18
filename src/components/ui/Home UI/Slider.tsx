@@ -9,8 +9,8 @@ type Advertisement = {
   _id: string;
   imageId: { data: string };
   bannerLink: string;
-  parentCategoryId?: { categoryName: string };
-  subCategoryId?: { categoryName: string };
+  parentCategoryId?: { categoryName: string; _id: string };
+  subCategoryId?: { categoryName: string; _id: string };
 };
 
 export default function Slider() {
@@ -67,7 +67,9 @@ export default function Slider() {
             >
               {advertisements.map((ad, index) => (
                 <motion.li key={ad._id} className="flex-shrink-0 w-full">
-                  <Link href={ad.bannerLink || "#"}>
+                  <Link
+                    href={`/${ad?.parentCategoryId?.categoryName}/${ad?.parentCategoryId?._id}/${ad?.subCategoryId?.categoryName}/${ad?.subCategoryId?._id}`}
+                  >
                     <div className="relative w-full lg:h-[500px]">
                       {" "}
                       {/* Fixed height here */}
