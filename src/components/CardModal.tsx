@@ -113,7 +113,7 @@ const CardModal: React.FC<CardModalProps> = ({
           </div>
           <button
             id="add_card_info_button"
-            className="bg-blue-500 text-white p-2 rounded-lg shadow-md dark:bg-blue-600 dark:hover:bg-blue-700"
+            className="bg-[var(--color-primary)] text-white p-2 rounded-lg shadow-md  "
             onClick={handleConfirmClick}
           >
             Confirm

@@ -458,10 +458,6 @@ export default function ProductsAccordion({
             </ol>
           </nav>
         </div>
-
-         
-
-        
       </div>
 
       {/* Main Section */}
@@ -531,7 +527,7 @@ export default function ProductsAccordion({
                 </div>
                 <button
                   onClick={() => toggleSortModal()}
-                  className="mt-4 py-2 px-4 bg-blue-600 text-white dark:bg-blue-500 rounded"
+                  className="mt-4 py-2 px-4 bg-[var(--color-primary)] text-white   rounded"
                 >
                   Close
                 </button>
@@ -769,7 +765,7 @@ export default function ProductsAccordion({
                                 <div className="font-mono line-through">
                                   {product.price - product.discount}
                                 </div>
-                                <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                                <div className="bg-[var(--color-primary)] px-1 rounded font-semibold text-xs">
                                   -{Math.round(product.discountPercentage)}%
                                 </div>
                               </>
@@ -830,7 +826,7 @@ export default function ProductsAccordion({
                             <motion.div
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleAddToCart(product)}
-                              className="p-3 bg-[var(--color-primary)] dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
+                              className="p-3 bg-[var(--color-primary)]  rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
                               aria-label="Add to Cart"
                             >
                               <FaShoppingCart color="white" />

@@ -222,7 +222,7 @@ const ProductCarousel = () => {
                       />
                     ) : (
                       <GoHeart
-                        className="text-[var(--color-primary)]"
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
                         size={17}
                       />
                     )}
@@ -260,7 +260,7 @@ const ProductCarousel = () => {
                             <div className="font-mono line-through">
                               {product.price - product.discount}
                             </div>
-                            <div className="bg-[var(--color-secondary)] dark:bg-blue-900 px-1 rounded font-bold text-xs">
+                            <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </>
@@ -325,7 +325,7 @@ const ProductCarousel = () => {
                             <motion.div
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleAddToCart(product)}
-                              className="p-3 bg-[var(--color-primary)] dark:bg-blue-700 rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
+                              className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
                               aria-label="Add to Cart"
                             >
                               <FaShoppingCart color="white" />

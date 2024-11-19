@@ -131,11 +131,7 @@ const AccountPage = () => {
   };
 
   if (!user) {
-    return (
-      <div className="mt-[124px] flex justify-center bg-slate-500 items-center h-screen">
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

@@ -68,7 +68,7 @@ const Page = () => {
                 className={`flex items-center gap-2 py-2 justify-center ${
                   activeTab === tab._id
                     ? "bg-[var(--color-primary)] text-white"
-                    : "hover:bg-gray-200 dark:hover:bg-slate-600 bg-slate-100"
+                    : "  dark:hover:bg-[var(--color-primary)] bg-slate-900"
                 } rounded-md transition-colors`}
               >
                 <div className="grid gap-2 place-items-center text-center  ">
@@ -139,21 +139,20 @@ const Page = () => {
             transition={{ duration: 0.3 }}
           >
             {subCategories.map((card) => (
-              
-                <motion.div
-                  key={card.id}
-                  className={`bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950 ${
-                    activeTab === card.id ? "ring-2 ring-green-500" : ""
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Link
-                href={`/${parentName}/${card.parentCategory}/${card.categoryName}/${card._id}`}
-                key={card._id}
+              <motion.div
+                key={card.id}
+                className={`bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950 ${
+                  activeTab === card.id ? "ring-2 ring-green-500" : ""
+                }`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
               >
+                <Link
+                  href={`/${parentName}/${card.parentCategory}/${card.categoryName}/${card._id}`}
+                  key={card._id}
+                >
                   <Image
                     src={card.categoryLogo?.data}
                     alt={card.categoryName}
@@ -165,8 +164,8 @@ const Page = () => {
                   <div className="text-xs sm:text-sm flex justify-center items-center  ">
                     {card.categoryName}
                   </div>
-              </Link>
-                </motion.div>
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         ) : (

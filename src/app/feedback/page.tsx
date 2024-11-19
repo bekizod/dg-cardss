@@ -56,7 +56,7 @@ const PostFeedback: React.FC = () => {
       />
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="px-4 py-2 bg-[var(--color-primary)] text-white rounded  "
       >
         Submit Feedback
       </button>

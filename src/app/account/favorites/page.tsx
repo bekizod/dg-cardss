@@ -379,7 +379,7 @@ const FavoriteList: React.FC = () => {
                       </div>
                     )}
 
-                    <Link 
+                    <Link
                       href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                     >
                       <div className="w-36 h-36 sm:w-24 sm:h-24 relative">
@@ -410,7 +410,7 @@ const FavoriteList: React.FC = () => {
                             <div className="font-mono line-through">
                               {product.price}
                             </div>
-                            <div className="bg-blue-100 dark:bg-blue-900 px-1 rounded font-semibold text-xs">
+                            <div className="bg-[var(--color-primary)] px-1 rounded font-semibold text-xs">
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </div>
