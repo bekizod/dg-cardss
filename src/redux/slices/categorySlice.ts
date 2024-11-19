@@ -72,8 +72,8 @@ export const fetchProductsByCategory = createAsyncThunk(
   async (
     {
       subcategoryId,
-      page = 2,
-      size = 20,
+      page = 1,
+      size = 1000,
       sort = "",
     }: { subcategoryId: string; page?: number; size?: number; sort?: string },
     { rejectWithValue }

@@ -112,10 +112,12 @@ export default function ProductsAccordion({
 
   useEffect(() => {
     if (slugLength === 2 && parentId) {
-      dispatch(fetchProductsByCategory({ subcategoryId: parentId }) as any);
+      dispatch(
+        fetchProductsByCategory({ subcategoryId: parentId  }) as any
+      );
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
-      dispatch(fetchProductsByCategory({ subcategoryId: subcategoryId }) as any);
+      dispatch(fetchProductsByCategory({ subcategoryId: subcategoryId  }) as any);
       setThisCategoryId(subcategoryId);
     }
   }, [slugLength, parentId, subcategoryId, dispatch]);
@@ -589,6 +591,10 @@ const applySorting = () => {
           {/* Title and Product Count */}
           <div className="mb-4">
             <div className=" font-bold">
+              Products{" "}
+              <span className="font-serif px-10 text-sm">
+                {filteredProducts.length} Products
+              </span>
               <button
                 onClick={() => toggleSortModal()}
                 className="py-2 px-4   bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2"
@@ -596,10 +602,6 @@ const applySorting = () => {
                 <BsSortDown className="text-gray-700 dark:text-gray-300" />
                 <div>Sort</div>
               </button>
-              Products{" "}
-              <span className="font-serif px-10 text-sm">
-                {filteredProducts.length} Products
-              </span>
             </div>
           </div>
 
