@@ -90,7 +90,7 @@ const Page = () => {
       </div>
 
       {/* Subcategories Section */}
-      <div className="w-3/4 p-6 h-full overflow-y-auto scrollbar-hidden bg-white dark:bg-slate-900">
+      <div className="w-3/4 p-1 md:p-6 h-full overflow-y-auto scrollbar-hidden bg-white dark:bg-slate-900">
         {loading && !subCategories?.length ? (
           <Loader />
         ) : error && !subCategories?.length ? (
@@ -98,37 +98,65 @@ const Page = () => {
             Error fetching subcategories
           </div>
         ) : subCategories && subCategories?.length > 0 ? (
+          // <motion.div
+          //   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+          //   initial={{ opacity: 0 }}
+          //   animate={{ opacity: 1 }}
+          //   transition={{ duration: 0.3 }}
+          // >
+          //   {subCategories.map((card) => (
+          //     <Link
+          //       href={`/${parentName}/${card.parentCategory}/${card.categoryName}/${card._id}`}
+          //       key={card._id}
+          //     >
+          //       <motion.div
+          //         key={card._id}
+          //         className={`bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950 ${
+          //           activeTab === card.id ? "ring-2 ring-green-500" : ""
+          //         }`}
+          //         initial={{ opacity: 0, y: 20 }}
+          //         animate={{ opacity: 1, y: 0 }}
+          //         exit={{ opacity: 0, y: 20 }}
+          //         transition={{ duration: 0.3 }}
+          //       >
+          //         <Image
+          //           src={card.categoryLogo?.data}
+          //           alt={card.categoryName}
+          //           width={1000}
+          //           height={1000}
+          //           className="w-full object-contain mb-4 h-28 rounded-md"
+          //         />
+          //         <p className="text-sm">{card.categoryName}</p>
+          //       </motion.div>
+          //     </Link>
+          //   ))}
+          // </motion.div>
+
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4    lg:gap-6 gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
             {subCategories.map((card) => (
-              <Link
-                href={`/${parentName}/${card.parentCategory}/${card.categoryName}/${card._id}`}
-                key={card._id}
+              <motion.div
+                key={card.id}
+                className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
               >
-                <motion.div
-                  key={card._id}
-                  className={`bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md cursor-pointer hover:shadow-xl dark:hover:shadow-slate-950 ${
-                    activeTab === card.id ? "ring-2 ring-green-500" : ""
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Image
-                    src={card.categoryLogo?.data}
-                    alt={card.categoryName}
-                    width={1000}
-                    height={1000}
-                    className="w-full object-contain mb-4 h-28 rounded-md"
-                  />
-                  <p className="text-sm">{card.categoryName}</p>
-                </motion.div>
-              </Link>
+                <Image
+                  src={card.categoryLogo?.data}
+                  alt={card.categoryName}
+                  width={1000}
+                  height={1000}
+                  layout="responsive"
+                  className="w-36 object-contain mb-4 rounded-md"
+                />
+                <div className="text-xs sm:text-sm    flex justify-center items-center  ">{card.categoryName}</div>
+              </motion.div>
             ))}
           </motion.div>
         ) : (

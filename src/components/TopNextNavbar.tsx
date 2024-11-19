@@ -348,8 +348,8 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
 
         {/* Search Bar Section */}
         <div className="flex-1 mx-3">
-          <div className="relative flex items-center">
-            <AiOutlineSearch className="absolute left-3 text-gray-500" />
+          <div className="relative   w-full items-center">
+            <AiOutlineSearch className="absolute top-4 left-3 text-gray-500" />
             <form
               onSubmit={(e) => {
                 e.preventDefault(); // Prevent form submission
