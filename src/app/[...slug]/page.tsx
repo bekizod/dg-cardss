@@ -597,7 +597,7 @@ const applySorting = () => {
               </span>
               <button
                 onClick={() => toggleSortModal()}
-                className="py-2 px-4   bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2"
+                className="py-2 px-4      bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded lg:flex hidden items-center space-x-2"
               >
                 <BsSortDown className="text-gray-700 dark:text-gray-300" />
                 <div>Sort</div>
