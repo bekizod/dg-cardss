@@ -112,10 +112,10 @@ export default function ProductsAccordion({
 
   useEffect(() => {
     if (slugLength === 2 && parentId) {
-      dispatch(fetchProductsByCategory(parentId) as any);
+      dispatch(fetchProductsByCategory({ subcategoryId: parentId }) as any);
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
-      dispatch(fetchProductsByCategory(subcategoryId) as any);
+      dispatch(fetchProductsByCategory({ subcategoryId: subcategoryId }) as any);
       setThisCategoryId(subcategoryId);
     }
   }, [slugLength, parentId, subcategoryId, dispatch]);
@@ -197,6 +197,24 @@ export default function ProductsAccordion({
     });
   };
 
+  const [selectedSort, setSelectedSort] = useState(""); // Default to "Low to High"
+
+  // Handle sort selection
+  const handleSortChange = (event : any) => {
+    setSelectedSort(event.target.value);
+  };
+const applySorting = () => {
+  // Pass the selected sort value along with other parameters to the dispatch
+  dispatch(
+    fetchProductsByCategory({
+      subcategoryId,
+      page: 1,
+      size: 20,
+      sort: selectedSort,
+    }) as any
+  );
+  toggleSortModal(); // Close the modal after applying sort
+};
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
@@ -570,19 +588,26 @@ export default function ProductsAccordion({
         <div className="w-full lg:w-3/4">
           {/* Title and Product Count */}
           <div className="mb-4">
-            <h2 className="text-2xl font-bold">
+            <div className=" font-bold">
+              <button
+                onClick={() => toggleSortModal()}
+                className="py-2 px-4   bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2"
+              >
+                <BsSortDown className="text-gray-700 dark:text-gray-300" />
+                <div>Sort</div>
+              </button>
               Products{" "}
               <span className="font-serif px-10 text-sm">
                 {filteredProducts.length} Products
               </span>
-            </h2>
+            </div>
           </div>
 
           {/* Sort and Filter Buttons for Small Screens */}
           {/* ... (Sort and filter modal code remains the same) */}
           {/* Sort and Filter Buttons for Small Screens */}
 
-          <div className="flex flex-row justify-between space-x-2 mb-4 lg:hidden">
+          <div className="flex flex-row justify-between space-x-2 mb-4  lg:hidden">
             <button
               onClick={() => toggleSortModal()}
               className="py-2 px-4 w-1/3 bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded flex items-center space-x-2"
@@ -612,29 +637,57 @@ export default function ProductsAccordion({
                     <input
                       type="radio"
                       name="sort"
-                      value="price-asc"
-                      defaultChecked
+                      value="priceLowToHigh"
+                      defaultChecked={selectedSort === "priceLowToHigh"}
+                      onChange={handleSortChange}
                     />{" "}
                     Price: Low to High
                   </label>
                   <label>
-                    <input type="radio" name="sort" value="price-desc" /> Price:
-                    High to Low
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="priceHighToLow"
+                      checked={selectedSort === "priceHighToLow"}
+                      onChange={handleSortChange}
+                    />{" "}
+                    Price: High to Low
                   </label>
                   <label>
-                    <input type="radio" name="sort" value="newest" /> Newest
+                    <input
+                      type="radio"
+                      name="sort"
+                      value=""
+                      checked={selectedSort === ""}
+                      onChange={handleSortChange}
+                    />{" "}
+                    Newest
                   </label>
                   <label>
-                    <input type="radio" name="sort" value="popularity" />{" "}
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="popularity"
+                      checked={selectedSort === "popularity"}
+                      onChange={handleSortChange}
+                    />{" "}
                     Popularity
                   </label>
                 </div>
-                <button
-                  onClick={() => toggleSortModal()}
-                  className="mt-4 py-2 px-4 bg-[var(--color-primary)] text-white   rounded"
-                >
-                  Close
-                </button>
+                <div className="flex space-x-4 mt-4">
+                  <button
+                    onClick={applySorting}
+                    className="py-2 px-4 bg-[var(--color-primary)] text-white rounded"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    onClick={() => toggleSortModal()}
+                    className="py-2 px-4 bg-gray-500 text-white rounded"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}

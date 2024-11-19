@@ -69,12 +69,21 @@ export const fetchSubCategories = createAsyncThunk(
 // Thunk to fetch products by subcategory
 export const fetchProductsByCategory = createAsyncThunk(
   "categories/fetchProductsByCategory",
-  async (subcategoryId: string, { rejectWithValue }) => {
+  async (
+    {
+      subcategoryId,
+      page = 2,
+      size = 20,
+      sort = "",
+    }: { subcategoryId: string; page?: number; size?: number; sort?: string },
+    { rejectWithValue }
+  ) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
         `https://alsaifgallery.onrender.com/api/v1/product/getProductByCategories/${subcategoryId}`,
         {
+          params: { page, size, sort }, // Dynamically passing page, size, and sort
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -118,7 +118,7 @@ export default function Slider() {
                 className={`w-2 h-2 rounded-full cursor-pointer ${
                   currentSlide === index
                     ? " bg-[var(--color-primary)]"
-                    : "bg-white"
+                    : "bg-slate-300"
                 }`}
                 onClick={() => goToSlide(index)}
               />
