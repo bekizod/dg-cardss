@@ -150,7 +150,7 @@ export default function Slider() {
                       width={500}
                       height={300}
                       priority
-                      className="rounded-2xl border border-gray-300"
+                      className="rounded-2xl "
                       fetchPriority="high"
                     />
                   </Link>
@@ -161,7 +161,7 @@ export default function Slider() {
 
           <button
             aria-label="previous slide"
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full"
+            className="hidden md:block   absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full"
             onClick={handlePrevSlide}
           >
             ‹
@@ -169,13 +169,13 @@ export default function Slider() {
 
           <button
             aria-label="next slide"
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full"
+            className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-700 p-2 rounded-full"
             onClick={handleNextSlide}
           >
             ›
           </button>
 
-          <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <ul className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
             {advertisements.map((_, index) => (
               <li
                 key={index}
