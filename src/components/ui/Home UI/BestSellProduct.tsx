@@ -172,7 +172,7 @@ const BestProducts = () => {
             return (
               <div
                 key={product.productDetails._id}
-                className="flex flex-col w-60 bg-white shadow-xl gap-1 border rounded-3xl p-3"
+                className="flex flex-col w-60 bg- dark:bg-slate-900 shadow-xl gap-1 border border-slate-600 rounded-3xl p-3"
               >
                 <div className="relative">
                   <Link href={`/#`}>

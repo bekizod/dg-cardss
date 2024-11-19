@@ -107,7 +107,7 @@ export default function HomeHero() {
                   src={item?.coverPic?.data}
                   alt={item?.subCategory?.categoryName}
                   objectFit="cover"
-                  className="  w-full   transition-opacity duration-300 hover:opacity-80"
+                  className="  w-full h-36  transition-opacity duration-300 hover:opacity-80"
                 />
               </motion.div>
             </Link>
