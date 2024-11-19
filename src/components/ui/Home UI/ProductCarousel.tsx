@@ -344,7 +344,7 @@ const ProductCarousel = () => {
         </motion.div>
       </div>
       {products?.length > 5 && (
-        <React.Fragment>
+        <div className="hidden md:block">
           <button
             className="absolute top-1/2 -translate-y-1/2 -left-12 p-2  bg-[var(--color-primary)] text-white rounded-full"
             onClick={() => handleNavigation(-1)}
@@ -385,7 +385,7 @@ const ProductCarousel = () => {
               />
             </svg>
           </button>
-        </React.Fragment>
+        </div>
       )}
     </div>
   );
