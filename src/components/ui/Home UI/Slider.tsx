@@ -97,7 +97,7 @@ export default function Slider() {
 
           <button
             aria-label="previous slide"
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+            className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
             onClick={handlePrevSlide}
           >
             ‹
@@ -105,7 +105,7 @@ export default function Slider() {
 
           <button
             aria-label="next slide"
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+            className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
             onClick={handleNextSlide}
           >
             ›
