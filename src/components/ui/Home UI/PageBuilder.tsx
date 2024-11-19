@@ -1,64 +1,174 @@
 "use client"; // Ensures this component is client-side
-
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import {
+  getAdvertisements,
+  resetAdvertisements,
+} from "@/redux/slices/bannersSlice";
 import Link from "next/link";
+import { getAllCoverPictures } from "@/redux/slices/coverPictureSlice";
+import axios from "axios";
+import Loader from "@/app/loading";
 
-export default function PageBuilder() {
+export default function PageBuilder({ parentId }: { parentId: any }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 2; // Number of slides
+  const dispatch = useDispatch<AppDispatch>();
+  const { cache, status, error } = useSelector(
+    (state: RootState) => state.advertisement as any
+  ); // Access advertisements from the Redux state
+  // const totalSlides = cache[parentId]?.length || 0;
+  const [pages, setPages] = useState<number>(0);
+  const { pictures, isFetching } = useSelector(
+    (state: RootState) => state.coverPictureSlice as any
+  );
+
+  // useEffect(() => {
+  //   // Fetch cover pictures when the component mounts
+  //   if(parentId){
+  //   dispatch(getAllCoverPictures({ parentId }));
+  // }
+  //   // Optionally reset the state when unmounting
+
+  // }, [dispatch, parentId]);
+  const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
+  const [loading, setLoading] = useState<boolean>(false); // Track loading state
+  const [Cerror, setCerror] = useState<string | null>(null); // Store error message
+  useEffect(() => {
+    const fetchCoverPictures = async () => {
+      setLoading(true);
+      setCerror(null); // Reset error before making the request
+
+      if (parentId) {
+        try {
+          const response = await axios.get(
+            `https://alsaifgallery.onrender.com/api/v1/category/getCoverPicturesOfSubCategories/${parentId}`
+          );
+          // Directly set the response data as an array
+          setCoverPictures(response.data.data); // Set the data when the request is successful
+          console.log(response.data); // Log the response to check its structure
+        } catch (err: any) {
+          setCerror(err.response?.data || "An error occurred"); // Set error message if something goes wrong
+        } finally {
+          setLoading(false); // Stop loading once the request is complete
+        }
+      }
+    };
+
+    fetchCoverPictures();
+  }, [parentId]);
+
+  useEffect(() => {
+    if (!cache[parentId]) {
+      // Fetch advertisements only if they are not already cached
+      dispatch(getAdvertisements(parentId));
+      setPages(cache[parentId]?.length);
+    } else {
+      setPages(cache[parentId]?.length);
+    }
+  }, [dispatch, parentId, cache]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-    }, 3000); // Change slide every 3 seconds
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % pages);
+    }, 5000); // Change slide every 3 seconds
 
     return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [totalSlides]);
+  }, [pages]);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <div>Error: {Cerror}</div>;
+  }
 
   return (
     <div className="space-y-4 py-10 px-4">
       {/* Slider Section */}
-      <motion.div className="relative w-full overflow-hidden rounded-2xl border border-gray-300" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+
+      <motion.div
+        className="relative w-full overflow-hidden rounded-2xl border border-gray-300"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <motion.div className="relative w-full flex overflow-hidden">
           <motion.ul
-            className="flex"
+            className="flex w-full"
             style={{
-              width: "100%",
+              display: "flex",
               padding: 0,
               margin: 0,
               transition: "transform 0.35s ease-in-out",
               transform: `translateX(-${currentSlide * 100}%)`,
             }}
           >
-            <motion.li className="flex-shrink-0 w-full">
-              <Link href="/SA_en/electrical-appliances/air-fryers.html">
-                <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-_eng_21.jpg" alt="slide 0" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
-              </Link>
-            </motion.li>
-            <motion.li className="flex-shrink-0 w-full">
-              <Link href="/SA_en/electrical-appliances/air-fryers.html">
-                <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/_-_eng_21.jpg" alt="slide 1" layout="responsive" width={500} height={300} priority className="rounded-2xl border border-gray-300" fetchPriority="high" />
-              </Link>
-            </motion.li>
+            {cache[parentId] &&
+              cache[parentId]?.length > 0 &&
+              cache[parentId]?.map((ad: any, index: number) => (
+                <motion.li key={index} className="flex-shrink-0 w-full">
+                  <Link
+                    href={`/${ad.parentCategoryId?.categoryName}/${ad.parentCategoryId?._id}/${ad.subCategoryId.categoryName}/${ad.subCategoryId._id}`}
+                  >
+                    {" "}
+                    {/* Assuming 'link' is the URL to redirect */}
+                    <Image
+                      src={ad.imageId?.data} // Assuming 'imageUrl' holds the image link
+                      alt={`slide ${index}`}
+                      layout="responsive"
+                      width={1200}
+                      height={500}
+                      priority
+                      className="rounded-2xl border border-gray-300"
+                      fetchPriority="high"
+                    />
+                  </Link>
+                </motion.li>
+              ))}
           </motion.ul>
         </motion.div>
-        <button aria-label="previous slide / item" className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides)}>
+
+        <button
+          type="button"
+          aria-label="previous slide"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+          onClick={() =>
+            setCurrentSlide((prevSlide) => (prevSlide - 1 + pages) % pages)
+          }
+        >
           ‹
         </button>
-        <button aria-label="next slide / item" className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-green-500 p-2 rounded-full" onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides)}>
+        <button
+          type="button"
+          aria-label="next slide"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+          onClick={() =>
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % pages)
+          }
+        >
           ›
         </button>
+
         <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {[...Array(totalSlides).keys()].map((index) => (
-            <li key={index} className={`dot ${currentSlide === index ? "bg-green-500" : "bg-gray-400"} w-2 h-2 rounded-full`} />
+          {[...Array(pages)?.keys()].map((index) => (
+            <li
+              key={index}
+              className={`dot ${
+                currentSlide === index
+                  ? " bg-[var(--color-primary)]"
+                  : "bg-gray-400"
+              } w-2 h-2 rounded-full`}
+            />
           ))}
         </ul>
       </motion.div>
 
       {/* Banner Sections */}
-      <motion.div className="relative w-full space-y-4" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      {/* <motion.div className="relative w-full space-y-4" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="w-full">
           <Link href="/SA_en/electrical-appliances/pressure-cookers.html">
             <Image src="https://pwa-cdn.alsaifgallery.com/media/wysiwyg/eng_-_-_1.jpg" alt="banner" layout="responsive" width={1200} height={800} priority className="rounded-2xl" fetchPriority="high" />
@@ -247,7 +357,33 @@ export default function PageBuilder() {
             </Link>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
+      {isFetching && <div>Cover Pics Are Fetching</div>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {coverPictures?.map((item: any) => (
+          <Link
+            href={`/${item.parentCategory?.categoryName}/${item.parentCategory?._id}/${item.subCategory.categoryName}/${item.subCategory._id}`}
+            key={item._id}
+          >
+            <motion.div
+              className="shadow-xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Image
+                width={1000}
+                height={1000}
+                src={item.coverPic.data}
+                alt={item.subCategory.categoryName}
+                className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80"
+              />
+              {/* <div className="p-4 bg-white">
+                <h3 className="text-lg font-semibold text-gray-800">{item.subCategory.categoryName}</h3>
+                <p className="text-sm text-gray-600">{item.parentCategory.categoryName}</p>
+              </div> */}
+            </motion.div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

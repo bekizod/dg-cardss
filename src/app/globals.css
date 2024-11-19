@@ -24,7 +24,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #006d21;
+  background-color: var(--color-primary);
   /* Light green color for the scrollbar */
   border-radius: 10px;
   /* Rounded edges for the scrollbar thumb */
@@ -59,13 +59,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #046e04;
+  background-color: var(--color-primary);
   border-radius: 10px;
   border: 3px solid #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #035226;
+  background-color: var(--color-primary);
   width: 14px;
 }
 

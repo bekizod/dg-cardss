@@ -1,80 +1,98 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-const products = [
-  {
-    href: "/SA_en/6285360150099.html",
-    discountLabel: "50% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150099-1.jpg?width=200",
-    alt: "إديسون قدر ضغط كهربائي برو بوعاء جرانيت بيد 6 لتر 1000 واط product image",
-    name: "إديسون قدر ضغط كهربائي برو بوعاء جرانيت بيد 6 لتر 1000 واط",
-    brand: "إديسون",
-    finalPrice: "250 SAR",
-    regularPrice: "499 SAR",
-    save: "SAVE 249 SAR"
-  },
-  {
-    href: "/SA_en/6285360150100.html",
-    discountLabel: "30% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150100-1.jpg?width=200",
-    alt: "إديسون محضر طعام كهربائي بوعاء زجاجي 1.5 لتر 600 واط product image",
-    name: "إديسون محضر طعام كهربائي بوعاء زجاجي 1.5 لتر 600 واط",
-    brand: "إديسون",
-    finalPrice: "150 SAR",
-    regularPrice: "215 SAR",
-    save: "SAVE 65 SAR"
-  },
-  {
-    href: "/SA_en/6285360150101.html",
-    discountLabel: "40% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150101-1.jpg?width=200",
-    alt: "إديسون خلاط كهربائي بوعاء بلاستيكي 2 لتر 700 واط product image",
-    name: "إديسون خلاط كهربائي بوعاء بلاستيكي 2 لتر 700 واط",
-    brand: "إديسون",
-    finalPrice: "120 SAR",
-    regularPrice: "200 SAR",
-    save: "SAVE 80 SAR"
-  },
-  {
-    href: "/SA_en/6285360150102.html",
-    discountLabel: "20% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150102-1.jpg?width=200",
-    alt: "إديسون غلاية كهربائية 1.7 لتر 1800 واط product image",
-    name: "إديسون غلاية كهربائية 1.7 لتر 1800 واط",
-    brand: "إديسون",
-    finalPrice: "90 SAR",
-    regularPrice: "112 SAR",
-    save: "SAVE 22 SAR"
-  },
-  {
-    href: "/SA_en/6285360150103.html",
-    discountLabel: "10% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150103-1.jpg?width=200",
-    alt: "إديسون ماكينة قهوة كهربائية 1.2 لتر 850 واط product image",
-    name: "إديسون ماكينة قهوة كهربائية 1.2 لتر 850 واط",
-    brand: "إديسون",
-    finalPrice: "110 SAR",
-    regularPrice: "122 SAR",
-    save: "SAVE 12 SAR"
-  },
-  {
-    href: "/SA_en/6285360150104.html",
-    discountLabel: "25% OFF",
-    imageSrc: "https://pwa-cdn.alsaifgallery.com/media/catalog/product/cache/b703357423ed99b4488b77e979847b90/6/2/6285360150104-1.jpg?width=200",
-    alt: "إديسون مقلاة كهربائية 1.5 لتر 900 واط product image",
-    name: "إديسون مقلاة كهربائية 1.5 لتر 900 واط",
-    brand: "إديسون",
-    finalPrice: "130 SAR",
-    regularPrice: "175 SAR",
-    save: "SAVE 45 SAR"
-  }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { SearchProducts } from "@/redux/slices/searchSlice";
+import { notification, Rate } from "antd";
+import { useAuth } from "@/context/UserContext";
+import {
+  addToCart,
+  decrementQuantity,
+  incrementQuantity,
+} from "@/redux/slices/cartSlice";
+import React from "react";
+import {
+  addFavoriteLocally,
+  fetchFavoriteProducts,
+  removeFavoriteProduct,
+  saveFavoriteProduct,
+} from "@/redux/slices/favoriteProductsSlice";
+import { GoHeart, GoHeartFill } from "react-icons/go";
+import { FaRegComment, FaShoppingCart } from "react-icons/fa";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 const ProductCarousel = () => {
+  // Get user and logout function from context
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, pages, total, status } = useSelector(
+    (state: RootState) => state.searchProducts as any
+  );
   const carouselRef = useRef<HTMLDivElement | null>(null);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { user } = useAuth();
+  const { favoriteProducts, loading, error } = useSelector(
+    (state: RootState) => state.favoriteProducts as any
+  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const queryParams = [
+        `page=`,
+        `size=`,
+        `q=`, // Only add 'q' if searchTerm is not empty
+        `color=`,
+        `productSize=`,
+        `brand=`,
+        `material=`,
+        `minPrice=`,
+        `maxPrice=`,
+        `category=`,
+        `hasDiscount=true`,
+      ]
+        .filter(Boolean)
+        .join("&"); // Filter out any null values before joining
 
+      try {
+        // Dispatch the action
+        await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
+      } catch (err: any) {
+        // Error notification
+        notification.error({
+          message: "Search Failed",
+          description:
+            err?.message || "Failed to fetch products. Please try again.",
+        });
+      }
+    };
+
+    fetchProducts(); // Call the async function inside the useEffect
+  }, [dispatch]);
+
+  const handleAddToCart = (product: any) => {
+    // Implement the logic to dispatch addToCart action with the product details
+
+    dispatch(
+      addToCart({
+        id: product._id,
+        buyerId: user?._id || "guest",
+        image: product.imageIds[0],
+        color: product.additionalInformation?.color,
+        name: product.name,
+        quantity: 1,
+        stockQuantity: product.stockQuantity,
+        price: product.price,
+        unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
+        discount: product.discountPercentage || 0,
+        link: `/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`,
+        averageRating: product.ratings.averageRating,
+        numberOfRating: product.ratings.numberOfRatings,
+        brand: product.additionalInformation.brand,
+        adjective: product.adjective,
+      })
+    );
+  };
   const handleNavigation = (direction: number) => {
     const newIndex = currentIndex + direction;
     if (newIndex >= 0 && newIndex < products.length && carouselRef.current) {
@@ -86,46 +104,291 @@ const ProductCarousel = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch]);
+
+  const handleFavoriteToggle = async (productId: string) => {
+    const isFavorite = favoriteProducts?.some(
+      (product: any) => product._id === productId
+    );
+
+    try {
+      if (isFavorite) {
+        await dispatch(removeFavoriteProduct(productId)).unwrap();
+        notification.success({
+          message: "Success",
+          description: "Product removed from favorites!",
+        });
+      } else {
+        await dispatch(saveFavoriteProduct(productId)).unwrap();
+        dispatch(
+          addFavoriteLocally({
+            _id: productId,
+            name: "",
+            description: "",
+            price: "",
+            signedUrls: [],
+          })
+        );
+        notification.success({
+          message: "Success",
+          description: "Product added to favorites!",
+        });
+      }
+    } catch (error: any) {
+      let errorMessage = "Failed to save favorite product.";
+
+      // Check if the error message contains "jwt malformed"
+      if (error == "jwt malformed") {
+        errorMessage =
+          "Authentication error: Please log in to save favorite products.";
+      } else {
+        errorMessage = "Failed,No internet connection.";
+      }
+
+      notification.error({
+        message: "Error",
+        description: errorMessage,
+      });
+    }
+  };
+
   return (
     <div className="relative ">
-      <div ref={carouselRef} className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide">
-        <motion.div className="flex gap-2 py-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          {products.map((product, index) => (
-            <div key={index} className="relative w-64 flex-shrink-0">
-              <div className="bg-white  p-4 rounded-lg shadow-lg" data-href={product.href}>
-                <Link href={product.href} passHref>
-                  <div onMouseDown={(e) => e.preventDefault()} onClick={(e) => e.preventDefault()}>
-                    <Image src={product.imageSrc} alt={product.alt} width={200} height={200} loading="eager" fetchPriority="high" className="w-full h-auto rounded-xl object-cover" />
-                    <p className="absolute top-0 right-0 bg-green-500 text-white text-xs sm:text-sm font-bold text-center p-1 sm:p-2 rounded-bl-lg rounded-tr-lg z-20">{product.discountLabel}</p>
-                    <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
-                    <p className="text-sm text-gray-600">{product.brand}</p>
-                    <div className="mt-2">
-                      <p className="text-xl font-bold text-green-500">{product.finalPrice}</p>
-                      <p className="text-sm line-through text-gray-500">{product.regularPrice}</p>
-                      <p className="text-sm text-red-500">SAVE {product.save}</p>
-                    </div>
-                    <button className="mt-2 w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Add to Cart</button>
+      <div className="font-bold text-xl ">Our Discount Products</div>
+      <div
+        ref={carouselRef}
+        className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
+      >
+        <motion.div
+          className="flex gap-2 py-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {products.map((product: any, index: any) => {
+            const productIdt = product?._id as any;
+            const buyerId = user?._id || "guest";
+            const productColor =
+              product?.additionalInformation?.color || "default";
+            // Check if the product is already in the cart
+            const existingItem = cartItems.find(
+              (item) =>
+                item.id === productIdt &&
+                item.buyerId === buyerId &&
+                item.color === productColor
+            );
+            const existingQuantity = existingItem ? existingItem.quantity : 0;
+            const BuyerId = existingItem ? existingItem.buyerId : "guest";
+            const ID = existingItem ? existingItem.id : "";
+            const isFavorite = favoriteProducts?.some(
+              (favProduct: any) => favProduct._id === productIdt
+            );
+
+            return (
+              <div
+                key={productIdt}
+                className="flex flex-col w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+              >
+                {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
+                <div className="relative">
+                  <Link
+                    href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
+                    className="block w-full"
+                  >
+                    <Image
+                      src={product.imageIds[0]}
+                      alt="product"
+                      width={1000}
+                      height={1000}
+                      className="w-full h-44 rounded-md object-cover"
+                    />
+                  </Link>
+
+                  {/* Favorite Icon */}
+                  <motion.div
+                    className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                    whileHover={{ scale: 1.2 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    onClick={() => handleFavoriteToggle(productIdt)}
+                  >
+                    {isFavorite ? (
+                      <GoHeartFill
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                        size={17}
+                      />
+                    ) : (
+                      <GoHeart
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                        size={17}
+                      />
+                    )}
+                  </motion.div>
+                </div>
+
+                <div className="flex w-full flex-col">
+                  <div className="text-start text-lg font-semibold flex justify-start">
+                    {product.name}
                   </div>
-                </Link>
+                  <div className="test-sm text-start font-semibold">
+                    {product.additionalInformation.brand}
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div>
+                      <Rate
+                        value={product.ratings.averageRating.toFixed(1)}
+                        className="text-sm dark:text-yellow-400"
+                        disabled
+                      />
+                    </div>
+                    <div className="flex flex-row gap-1 items-center text-sm">
+                      <div>
+                        <FaRegComment />
+                      </div>
+                      <div>{product.ratings.numberOfRatings}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row justify-between items-center mt-4">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row gap-1 items-center">
+                        {product?.discount > 0 && (
+                          <>
+                            <div className="font-mono line-through">
+                              {product.price - product.discount}
+                            </div>
+                            <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
+                              -{Math.round(product.discountPercentage)}%
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="font-bold text-2xl">
+                        {product?.discount > 0
+                          ? `${product.discount}`
+                          : `${product.price}`}
+                      </div>
+                    </div>
+                    <div className="rounded-lg">
+                      {product.stockQuantity > 0 ? (
+                        <>
+                          {existingItem ? (
+                            <div className="flex flex-row items-center justify-center gap-2">
+                              {/* Decrement Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    decrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=""
+                                aria-label="Decrease Quantity"
+                              >
+                                <BiChevronDown
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+
+                              {/* Quantity Display */}
+                              <div className="dark:text-gray-200">
+                                {existingQuantity}
+                              </div>
+
+                              {/* Increment Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    incrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=" "
+                                aria-label="Increase Quantity"
+                              >
+                                <BiChevronUp
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+                            </div>
+                          ) : (
+                            <motion.div
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleAddToCart(product)}
+                              className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
+                              aria-label="Add to Cart"
+                            >
+                              <FaShoppingCart color="white" />
+                            </motion.div>
+                          )}
+                        </>
+                      ) : (
+                        <div>Out Of Stock</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
-      <button className="absolute top-1/2 -translate-y-1/2 left-2 p-2 bg-green-500 text-white rounded-full" onClick={() => handleNavigation(-1)} disabled={currentIndex === 0}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </button>
-      <button className="absolute top-1/2 -translate-y-1/2 right-2 p-2 bg-green-500 text-white rounded-full" onClick={() => handleNavigation(1)} disabled={currentIndex === products.length - 1}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </button>
+      {products?.length > 5 && (
+        <div className="hidden md:block">
+          <button
+            className="absolute top-1/2 -translate-y-1/2 -left-12 p-2  bg-[var(--color-primary)] text-white rounded-full"
+            onClick={() => handleNavigation(-1)}
+            disabled={currentIndex === 0}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button
+            className="absolute top-1/2 -translate-y-1/2 -right-12 p-2  bg-[var(--color-primary)] text-white rounded-full"
+            onClick={() => handleNavigation(1)}
+            disabled={currentIndex === products.length - 1}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ProductCarousel;
-
-

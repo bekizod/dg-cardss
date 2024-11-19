@@ -9,7 +9,10 @@ interface CustomThemeProviderProps {
   enableSystem: boolean;
 }
 
-const ThemeProvider: React.FC<CustomThemeProviderProps> = ({ children, ...props }) => {
+const ThemeProvider: React.FC<CustomThemeProviderProps> = ({
+  children,
+  ...props
+}) => {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 };
 

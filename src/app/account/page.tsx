@@ -1,116 +1,357 @@
-// app/components/AccountPage.tsx
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaUndoAlt,
+  FaHeart,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import Cookies from "js-cookie";
+import { useAuth } from "@/context/UserContext";
+import { notification } from "antd";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import Loader from "../loading";
 
 const AccountPage = () => {
-  // Example state for demonstrating interactivity (optional)
+  const { user, logout, token } = useAuth(); // Fetch user info from context
+  const router = useRouter(); // Use router for redirection
   const [showSettings, setShowSettings] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  useEffect(() => {
+    const tokenInCookie = Cookies.get("token");
+    if (!tokenInCookie) {
+      router.push("/login"); // Redirect to login if no token is found
+    }
+  }, [router]);
+
+  // State for profile update
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [country, setCountry] = useState("");
+
+  useEffect(() => {
+    // Update state when user data becomes available
+    if (user) {
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setMobile(user.mobile);
+      setCountry(user.country);
+    }
+  }, [user]); // Dependency on user
+
+  const handleLogout = () => {
+    logout(); // Call logout function from the context
+  };
+
+  const handlePasswordChange = async (e: any) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      notification.error({
+        message: "Error",
+        description: "New Password and Confirm Password do not match!",
+      });
+      return;
+    }
+
+    try {
+      const token = Cookies.get("token");
+      const response = await fetch(
+        "https://alsaifgallery.onrender.com/api/v1/user/changePassword",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ oldPassword, newPassword }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.status) {
+        notification.success({
+          message: "Success",
+          description: data.message,
+        });
+      } else {
+        notification.error({
+          message: "Error",
+          description: data.message,
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: "Failed to change password. Please try again.",
+      });
+    }
+  };
+
+  const handleProfileUpdate = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const token = Cookies.get("token");
+      const response = await fetch(
+        "https://alsaifgallery.onrender.com/api/v1/user/updateProfile",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ firstName, lastName, mobile, country }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.status) {
+        notification.success({
+          message: "Success",
+          description: data.message,
+        });
+      } else {
+        notification.error({
+          message: "Error",
+          description: data.message,
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: "Failed to update profile. Please try again.",
+      });
+    }
+  };
+
+  if (!user) {
+    return <Loader />;
+  }
 
   return (
-    <div className="page-container h-screen p-5 flex justify-center w-full dark:bg-gray-900 mt-[124px] dark:text-white">
+    <div className="page-container p-5 flex justify-center w-full dark:bg-gray-900 lg:mt-[124px] mt-[68px] dark:text-white">
       <div className="content max-w-7xl w-full bg-white dark:bg-gray-800 px-6 py-8 rounded-2xl shadow-lg mx-4">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
           <div className="welcome-text">
-            <p className="text-xl font-semibold">Welcome, bbb nnn</p>
-            <p className="text-gray-500 dark:text-gray-400">bekizodcancer@gmail.com</p>
+            <p className="text-xl font-semibold">
+              Welcome, {user.firstName} {user.lastName}
+            </p>
+            <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
           </div>
-          <motion.div whileHover={{ rotate: 90 }} className="flex items-center cursor-pointer" onClick={() => setShowSettings(!showSettings)}>
-            <p className="mr-2 text-blue-500 dark:text-blue-300">Settings</p>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            className="flex items-center cursor-pointer"
+            onClick={() => setShowSettings(!showSettings)}
+          >
+            <p className="mr-2 text-[var(--color-primary)]">Settings</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              className="w-6 h-6 text-blue-500 dark:text-blue-300"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
             </svg>
           </motion.div>
         </div>
 
-        {/* Settings Dropdown (Example of Interactivity) */}
+        {/* Settings Dropdown with Password Change Form */}
         {showSettings && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-            <p className="text-gray-700 dark:text-gray-200">Settings content goes here.</p>
-          </motion.div>
+          <div className="flex flex-col md:flex-row p-2 gap-5">
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="w-full md:w-1/2 mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
+            >
+              <p className="text-lg font-semibold mb-4">Change Password</p>
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="old-password"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    Old Password
+                  </label>
+                  <input
+                    id="old-password"
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="new-password"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    New Password
+                  </label>
+                  <input
+                    id="new-password"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="confirm-password"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    Confirm New Password
+                  </label>
+                  <input
+                    id="confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
+                >
+                  Change Password
+                </motion.button>
+              </form>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="w-full md:w-1/2 mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
+            >
+              <p className="text-lg font-semibold mb-4">Update Profile</p>
+              <form onSubmit={handleProfileUpdate} className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="first-name"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    First Name
+                  </label>
+                  <input
+                    id="first-name"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="last-name"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    id="last-name"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="mobile"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    Mobile
+                  </label>
+                  <input
+                    id="mobile"
+                    type="tel"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="country"
+                    className="block mb-1 text-sm font-medium"
+                  >
+                    Country
+                  </label>
+                  <CountryDropdown
+                    value={country}
+                    onChange={(value) => setCountry(value)}
+                  />
+                  {/* <input id="country" type="text" value={country} onChange={(e) => setCountry(e.target.value)} required className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600" /> */}
+                </div>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
+                >
+                  Update Profile
+                </motion.button>
+              </form>
+            </motion.div>
+          </div>
         )}
 
         {/* Utilities Section */}
-        <div className="utilities flex justify-evenly mb-6">
+        <div className="flex flex-col sm:flex-row justify-evenly gap-4 mb-6">
           {[
-            { href: "/SA_en/account/orders", imgSrc: "/orders.png", label: "Orders" },
-            { href: "/SA_en/account/returns", imgSrc: "/return.png", label: "Returns" },
-            { href: "/SA_en/account/favourite", imgSrc: "/favourite.png", label: "Favourite" },
+            {
+              href: "/account/orders",
+              icon: <FaShoppingCart size={32} />,
+              label: "Orders",
+            },
+            {
+              href: "/account/returns",
+              icon: <FaUndoAlt size={32} />,
+              label: "Returns",
+            },
+            {
+              href: "/account/favorites",
+              icon: <FaHeart size={32} />,
+              label: "Favorite",
+            },
           ].map((utility, index) => (
             <Link key={index} href={utility.href}>
-              <motion.div className="utility p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex flex-col items-center cursor-pointer" whileHover={{ scale: 1.1 }}>
-                <Image src={utility.imgSrc} alt={`${utility.label} icon`} width={24} height={24} />
-                <p className="mt-2">{utility.label}</p>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="  p-4 flex flex-col items-center bg-gray-100 dark:bg-gray-700   rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                {utility.icon}
+                <p className="mt-2 text-lg font-semibold">{utility.label}</p>
               </motion.div>
             </Link>
           ))}
-        </div>
 
-        {/* Saved Addresses Section */}
-        <Link href="/SA_en/account/address" className="block mb-4">
-          <motion.div whileHover={{ x: 15 }} className="flex items-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer ">
-            <div className="flex justify-evenly items-center space-x-2 w-full ">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300 bg-red-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
-              </svg>
-              <p className="text-center  ">Saved Addresses</p>
-            </div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300 ">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-          </motion.div>
-        </Link>
-
-        <div className="lg:hidden">
-          {/* Static Pages Section */}
-          <div className="static-pages space-y-4">
-            {[
-              { href: "/SA_ar/account", label: "تغيير الى العربية" },
-              {
-                label: "Country",
-                customContent: (
-                  <div className="flex items-center">
-                    <span>المملكة العربية السعودية</span>
-                    <Image src="https://pwa-cdn.alsaifgallery.com/media/alsaifgallery/app/Flag-Saudi-Arabia.jpg" alt="Saudi Arabia flag" width={32} height={24} />
-                  </div>
-                ),
-              },
-              { href: "/SA_en/contact-us", label: "Contact Us" },
-              { href: "/SA_en/our-story", label: "Our Story" },
-              { href: "/SA_en/loyalty-points-policy", label: "Loyalty Points Policy" },
-              { href: "/SA_en/privacy-policy", label: "Privacy Policy" },
-              { href: "/SA_en/faq", label: "FAQ" },
-            ].map((item, index) => (
-              <Link key={index} href={item.href || "#"}>
-                <motion.div whileHover={{ x: 15 }} className="flex justify-between items-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer">
-                  <p>{item.label}</p>
-                  {item.customContent || (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" className="w-6 h-6 text-blue-500 dark:text-blue-300">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                  )}
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Social Media Section */}
-          <div className="social-media mt-6 flex justify-center space-x-4">
-            <a href="https://www.facebook.com/alsaifgallery" target="_blank" rel="noopener noreferrer">
-              <FaFacebookF size={32} className="text-blue-600 hover:text-blue-700 transition-colors" />
-            </a>
-            <a href="https://twitter.com/alsaifgallery" target="_blank" rel="noopener noreferrer">
-              <FaTwitter size={32} className="text-blue-400 hover:text-blue-500 transition-colors" />
-            </a>
-            <a href="https://www.instagram.com/alsaifgallery38" target="_blank" rel="noopener noreferrer">
-              <FaInstagram size={32} className="text-pink-600 hover:text-pink-700 transition-colors" />
-            </a>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="flex lg:hidden  items-center gap-2 text-sm cursor-pointer"
+          >
+            <span className=" md:inline font-bold text-lg">Logout</span>
+            <FaSignOutAlt className="text-red-500" size={27} />
+          </button>
         </div>
       </div>
     </div>

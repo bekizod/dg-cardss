@@ -13,7 +13,10 @@ const Navigation: React.FC = () => {
   return (
     <div className="navigation text-black dark:text-white bg-black dark:bg-gray-100 fixed bottom-0 left-0 right-0">
       <ul>
-        <li className={`list ${activeIndex === 0 ? "active" : ""}`} onClick={() => handleClick(0)}>
+        <li
+          className={`list ${activeIndex === 0 ? "active" : ""}`}
+          onClick={() => handleClick(0)}
+        >
           <a href="#">
             <span className="icon">
               <FaHome />
@@ -21,7 +24,10 @@ const Navigation: React.FC = () => {
             <span className="text">Home</span>
           </a>
         </li>
-        <li className={`list ${activeIndex === 1 ? "active" : ""}`} onClick={() => handleClick(1)}>
+        <li
+          className={`list ${activeIndex === 1 ? "active" : ""}`}
+          onClick={() => handleClick(1)}
+        >
           <a href="#">
             <span className="icon">
               <FaUser />
@@ -29,7 +35,10 @@ const Navigation: React.FC = () => {
             <span className="text">Profile</span>
           </a>
         </li>
-        <li className={`list ${activeIndex === 2 ? "active" : ""}`} onClick={() => handleClick(2)}>
+        <li
+          className={`list ${activeIndex === 2 ? "active" : ""}`}
+          onClick={() => handleClick(2)}
+        >
           <a href="#">
             <span className="icon">
               <FaComments />
@@ -37,7 +46,10 @@ const Navigation: React.FC = () => {
             <span className="text">Messages</span>
           </a>
         </li>
-        <li className={`list ${activeIndex === 3 ? "active" : ""}`} onClick={() => handleClick(3)}>
+        <li
+          className={`list ${activeIndex === 3 ? "active" : ""}`}
+          onClick={() => handleClick(3)}
+        >
           <a href="#">
             <span className="icon">
               <FaCamera />
@@ -45,7 +57,10 @@ const Navigation: React.FC = () => {
             <span className="text">Photos</span>
           </a>
         </li>
-        <li className={`list ${activeIndex === 4 ? "active" : ""}`} onClick={() => handleClick(4)}>
+        <li
+          className={`list ${activeIndex === 4 ? "active" : ""}`}
+          onClick={() => handleClick(4)}
+        >
           <a href="#">
             <span className="icon">
               <FaCog />

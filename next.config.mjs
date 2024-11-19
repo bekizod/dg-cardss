@@ -5,7 +5,7 @@ const nextConfig = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["via.placeholder.com", "/", "pwa-cdn.alsaifgallery.com"],
+    domains: ["via.placeholder.com", "/", "pwa-cdn.alsaifgallery.com","alsaifimages.s3.eu-north-1.amazonaws.com"],
   },
 };
 
