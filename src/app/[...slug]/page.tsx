@@ -415,7 +415,7 @@ const applySorting = () => {
     return (
       <div
         role="status"
-        className="space-y-8 py-3 px-5 2xl:mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center"
+        className="space-y-8 py-3 px-5   animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center"
       >
         <div className="flex items-center justify-center w-full h-72 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
           <svg
@@ -512,7 +512,7 @@ const applySorting = () => {
     );
   };
   return (
-    <div className=" md:px-20 lg:px-10   p-2  2xl:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className=" md:px-20 lg:px-10   p-2  max-lg:mt-[34px]    dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="flex flex-row justify-between">
         {slugLength === 2 && (
