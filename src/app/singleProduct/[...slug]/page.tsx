@@ -260,7 +260,7 @@ export default function SingleProductPage({
     setAddComment(false); // Reset add comment option
   };
   return (
-    <div className="container mx-auto flex flex-col space-y-8 p-5  mt-[34px] 2xl:mt-[124px]  max-w-screen-xl">
+    <div className="container mx-auto flex flex-col space-y-8 p-5  max-lg:mt-[34px]    max-w-screen-xl">
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
