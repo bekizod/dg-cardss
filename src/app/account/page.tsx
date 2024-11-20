@@ -135,7 +135,7 @@ const AccountPage = () => {
   }
 
   return (
-    <div className="page-container p-5 flex justify-center w-full   max-lg:mt-[34px]  2xl:mt-[124px]   dark:text-white">
+    <div className="page-container p-5 flex justify-center w-full   max-lg:mt-[34px]  2xl:mt-[100px]   dark:text-white">
       <div className="content max-w-7xl w-full bg-white dark:bg-gray-800 px-6 py-8 rounded-2xl shadow-lg mx-4">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
