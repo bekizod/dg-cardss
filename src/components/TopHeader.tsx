@@ -4,15 +4,18 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
-import { Button } from "antd";
 import { useAuth } from "@/context/UserContext";
+import PostFeedback from "@/components/PostFeedback"; // Import the PostFeedback component
+import { Button, Modal } from "antd"; // Import Ant Design Modal
 
 export default function TopHeader() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("saudi");
+  const [isFeedbackModalOpen, setFeedbackModalOpen] = useState(false); // Modal state
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setOpen(false);
@@ -36,7 +39,6 @@ export default function TopHeader() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return (
     <div className="hidden lg:block">
       {" "}
@@ -130,7 +132,10 @@ export default function TopHeader() {
         <div className="flex flex-row gap-4">
           {user && (
             <>
-              <Link href="/feedback" className="flex flex-row gap-3">
+              <div
+                className="flex flex-row gap-3 cursor-pointer"
+                onClick={() => setFeedbackModalOpen(true)}
+              >
                 <span>
                   <svg
                     width="18"
@@ -171,7 +176,7 @@ export default function TopHeader() {
                   </svg>
                 </span>
                 Send FeedBack
-              </Link>
+              </div>
               |
             </>
           )}
@@ -214,6 +219,16 @@ export default function TopHeader() {
           </Link>
         </div>
       </div>
+      <Modal
+        title="Send Feedback"
+        centered
+        open={isFeedbackModalOpen}
+        onCancel={() => setFeedbackModalOpen(false)} // Close modal on cancel
+        footer={null} // No footer for form
+        width={600}
+      >
+        <PostFeedback />
+      </Modal>
     </div>
   );
 }

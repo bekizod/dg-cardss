@@ -409,7 +409,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
               {/* Modal Content */}
               <div className="flex w-full h-full">
                 {/* Tabs Section (Parent Categories) */}
-                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r justify-evenly border-gray-300 dark:border-slate-600">
+                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r  gap-10 border-gray-300 dark:border-slate-600">
                   <>
                     {parentCategories.map((category) => (
                       <button
