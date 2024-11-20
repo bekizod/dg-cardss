@@ -2,7 +2,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TfiAlignLeft } from "react-icons/tfi";
-import { FaRegComment, FaRegUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaRegComment,
+  FaRegUser,
+  FaShoppingCart,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
@@ -32,6 +37,7 @@ import {
 } from "@/redux/slices/favoriteProductsSlice";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import ThemeSwitcher from "./ui/ThemeSwitcher";
 
 export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
   const router = useRouter();
@@ -366,7 +372,9 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
             </form>
           </div>
         </div>
-
+        <div>
+          <ThemeSwitcher />
+        </div>
         {/* Favorite Icon Section */}
         <Link href={"/account/favorites"} className="flex items-center">
           <MdFavoriteBorder className="text-[var(--color-primary)] text-2xl cursor-pointer" />

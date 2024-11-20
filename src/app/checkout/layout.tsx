@@ -162,7 +162,7 @@ export default function CheckoutLayout({
   }, [pathname]);
 
   return (
-    <div className="flex flex-col md:flex-row justify-center lg:mt-[124px] mt-[68px]      lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
+    <div className="flex flex-col md:flex-row justify-center 2xl:mt-[124px]       lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
       <AnimatePresence>
         {cartEmpty && (
           <motion.div

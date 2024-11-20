@@ -87,7 +87,7 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
   }
 
   return (
-    <div className="space-y-4 py-10 px-4">
+    <div className="space-y-4 py-20 px-4">
       {/* Slider Section */}
 
       <motion.div

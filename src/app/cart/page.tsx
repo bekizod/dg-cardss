@@ -110,7 +110,7 @@ const CartComponent = () => {
   //    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
   //  };
   return (
-    <div className="flex justify-center  lg:mt-[124px] mt-[68px]   lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
+    <div className="flex justify-center max-lg:mt-[34px]  2xl:mt-[124px]     py-3  items-center  md:px-12 lg:px-16  ">
       <AnimatePresence>
         {filteredCartItems.length === 0 && (
           <motion.div
@@ -208,7 +208,7 @@ const CartComponent = () => {
                           {item.unitPrice} SAR
                         </div>
                         <div className="p-1 bg-red-200 text-red-600 font-semibold rounded-2xl text-sm dark:bg-red-800 dark:text-red-400">
-                          -{Math.round(item.discount)}%% OFF
+                          -{Math.round(item.discount)}% OFF
                         </div>
                       </>
                     ) : (

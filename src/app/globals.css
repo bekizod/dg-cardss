@@ -4,12 +4,13 @@
 
 
 
-body {
+html, body {
   margin: 0;
-    padding: 0;
-    width: 100vw;
-    overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
+
 /* Base styling for the scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

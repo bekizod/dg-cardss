@@ -84,15 +84,13 @@ export default function Order() {
   };
 
   return (
-    <div className="order-list max-lg:mt-[64px] lg:mt-[124px] p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <div className="order-list   2xl:mt-[124px]  p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
         Order History
       </h2>
 
       {/* Loading and error handling */}
-      {loading && (
-       <Loader />
-      )}
+      {loading && <Loader />}
       {error && (
         <p className="text-red-600 text-center">
           Error loading orders: {error}
@@ -118,7 +116,7 @@ export default function Order() {
             return (
               <div
                 key={order.itemCode}
-                className="border border-gray-300 dark:border-slate-600 p-4 rounded-lg shadow-lg bg-white dark:bg-slate-700 transition-transform transform hover:scale-105"
+                className="border border-gray-300 dark:border-slate-600 p-4 rounded-lg shadow-lg bg-white dark:bg-slate-700 transition-transform transform "
               >
                 <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
                   {order.item}

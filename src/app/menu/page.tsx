@@ -48,7 +48,7 @@ const Page = () => {
   }, [parentCategories, activeTab, dispatch]);
 
   return (
-    <div className="flex overflow-hidden h-screen mt-[64px] bg-gray-100 dark:bg-slate-900">
+    <div className="flex overflow-hidden h-screen max-lg:mt-[34px] bg-gray-100 dark:bg-slate-900">
       {/* Parent Categories Section */}
       <div className="w-1/4 h-full border-r border-gray-300 dark:border-slate-600 relative overflow-y-auto scrollbar-hidden">
         <div className="grid gap-2">

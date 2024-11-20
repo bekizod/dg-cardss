@@ -44,7 +44,7 @@ export default function HomeHero() {
   }
 
   return (
-    <div className="">
+    <div className="pt-[40px]">
       <motion.div
         className="py-2"
         initial={{ opacity: 0 }}

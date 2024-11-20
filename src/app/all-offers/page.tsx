@@ -443,7 +443,7 @@ export default function ProductsAccordion({
     );
   };
   return (
-    <div className=" md:px-20 lg:px-10   p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className=" md:px-20 lg:px-10   p-2  2xl:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
       <div className="flex flex-row justify-between">
         <div className="mb-4">

@@ -115,7 +115,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28 lg:mt-[124px] bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 2xl:mt-[124px] bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">Register</h2>

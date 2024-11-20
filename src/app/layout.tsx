@@ -105,20 +105,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white dark:bg-black">
+      <body className="bg-white dark:bg-slate-950">
         <Provider store={store}>
           <AuthProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <div className="flex flex-col ">
+              <div className="flex flex-col min-h-screen">
                 {/* Fixed header section */}
                 <div className="fixed top-0 left-0 right-0 z-50">
                   <TopHeader />
-                  <ThemeSwitcher />
+                  <div className="hidden md:block">
+                    <ThemeSwitcher />
+                  </div>
+
                   <ThemeFetcherAndApplier />
                 </div>
 
                 {/* Main content */}
-                <main className="flex-grow ">{children}</main>
+                <main className="flex-grow mt-[24px] lg:mt-[124px]">
+                  {children}
+                </main>
 
                 {/* Footer always at the bottom */}
                 <Footer />
