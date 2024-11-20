@@ -133,7 +133,7 @@ export default function Home() {
   // Don't render the page until the currentLocale is set to avoid flicker
   if (!currentLocale) {
     <Loader /> // or a loading spinner can be shown
-  }
+  }             
 
   return (
     <main className=" pt-[28px] md:pt-[64px] lg:pt-[124px]">
