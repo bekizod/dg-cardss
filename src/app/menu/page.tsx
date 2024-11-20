@@ -68,7 +68,7 @@ const Page = () => {
                 className={`flex items-center gap-2 py-2 justify-center ${
                   activeTab === tab._id
                     ? "bg-[var(--color-primary)] text-white"
-                    : "  dark:hover:bg-[var(--color-primary)] dark:bg-slate-900"
+                    : " dark:bg-slate-900"
                 } rounded-md transition-colors`}
               >
                 <div className="grid gap-2 place-items-center text-center  ">
