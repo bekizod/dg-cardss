@@ -83,7 +83,7 @@ export default function HomeHero() {
         </div>
       </motion.div>
 
-      <div>
+      <div className="px-7">
         <BestProducts />
       </div>
 
