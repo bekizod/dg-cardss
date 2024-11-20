@@ -372,9 +372,11 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
               <Image
                 width={1000}
                 height={1000}
+                objectFit="cover"
+                layout="responsive"
                 src={item.coverPic.data}
                 alt={item.subCategory.categoryName}
-                className="object-fit w-full h-60 transition-opacity duration-300 hover:opacity-80"
+                className=" w-full h-60 transition-opacity duration-300 hover:opacity-80"
               />
               {/* <div className="p-4 bg-white">
                 <h3 className="text-lg font-semibold text-gray-800">{item.subCategory.categoryName}</h3>
