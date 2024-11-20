@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-green-100/30 dark:bg-green-900/30 backdrop-blur-md">
+    <div className="flex items-center justify-center h-screen  backdrop-blur-md">
      
 
       {/* Image for medium and larger screens */}
