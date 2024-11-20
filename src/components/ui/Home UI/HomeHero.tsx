@@ -115,7 +115,7 @@ export default function HomeHero() {
         )}
       </div>
 
-      <div>
+      <div className="px-7">
         {/* <div>You May Also Like</div> */}
         <ProductCarousel />
       </div>
