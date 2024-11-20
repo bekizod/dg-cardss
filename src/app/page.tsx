@@ -70,18 +70,17 @@
 
 "use client";
 
-import { useEffect, useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, RootState } from "@/redux/store";
 import PageBuilder from "../components/ui/Home UI/PageBuilder";
 import HomeHero from "@/components/ui/Home UI/HomeHero";
-import KitchenWare from "@/components/ui/Home UI/KitchenWare";
-import Serveware from "@/components/ui/Home UI/Serveware";
-import HomeAppliance from "@/components/ui/Home UI/HomeAppliance";
+ 
 import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
 import Loader from "./loading";
+import { fetchFirstFourParentCategories } from "@/redux/slices/parentCategoriesSlice";
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -139,7 +138,7 @@ export default function Home() {
   return (
     <main className=" pt-[28px] md:pt-[64px] lg:pt-[124px]">
       <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
-        <ul className="hidden md:flex justify-center space-x-8 p-1">
+        <ul className="hidden md:flex justify-center gap-8 p-1">
           <li
             className={`cursor-pointer py-1 px-2 rounded-xl ${
               activeTab === "All"

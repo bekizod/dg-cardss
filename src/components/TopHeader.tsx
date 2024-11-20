@@ -94,8 +94,7 @@ export default function TopHeader() {
                         readOnly
                         className="h-5 w-5 cursor-pointer text-blue-600 focus:ring-blue-500"
                       />
-                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "Saudi Arabia" : "
-                        المملكة العربية السعودية"}
+                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "Saudi Arabia" : "  المملكة العربية السعودية"}
                       </p>
                     </div>
                     <Image
@@ -118,8 +117,7 @@ export default function TopHeader() {
                         readOnly
                         className="h-5 w-5 cursor-pointer text-blue-600 focus:ring-blue-500"
                       />
-                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "United Arab Emirates" : "
-                        الإمارات العربية المتحدة"}
+                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "United Arab Emirates" : " الإمارات العربية المتحدة"}
                       </p>
                     </div>
                     <Image

@@ -33,7 +33,7 @@ import {
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
-export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
+export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: string, onLanguageToggle : any }) {
   const router = useRouter();
   const [parentName, setParentName] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
