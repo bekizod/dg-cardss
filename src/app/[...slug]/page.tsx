@@ -924,7 +924,7 @@ const applySorting = () => {
                                 <div className="font-mono line-through">
                                   {product.price - product.discount}
                                 </div>
-                                <div className="bg-[var(--color-secondary)]    px-1 rounded font-bold text-xs">
+                                <div className="bg-[var(--color-secondary)]  text-black  px-1 rounded font-bold text-xs">
                                   -{Math.round(product.discountPercentage)}%
                                 </div>
                               </>
