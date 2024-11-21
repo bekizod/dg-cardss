@@ -879,7 +879,9 @@ dispatch(
                           alt="product"
                           width={1000}
                           height={1000}
-                          className="w-full h-44 rounded-md object-cover"
+                          layout="responsive"
+                          objectFit="cover"
+                          className="w-full h-44 rounded-md "
                         />
                       </Link>
 
@@ -935,7 +937,7 @@ dispatch(
                             {product?.discount > 0 && (
                               <>
                                 <div className="font-mono line-through">
-                                  {product.price - product.discount}
+                                  {product.price}
                                 </div>
                                 <div className="bg-[var(--color-secondary)]  text-black  px-1 rounded font-bold text-xs">
                                   -{Math.round(product.discountPercentage)}%
