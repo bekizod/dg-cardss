@@ -207,14 +207,27 @@ export default function ProductsAccordion({
   };
 const applySorting = () => {
   // Pass the selected sort value along with other parameters to the dispatch
-  dispatch(
-    fetchProductsByCategory({
-      subcategoryId,
-      page: 1,
-      size: 20,
-      sort: selectedSort,
-    }) as any
-  );
+  if (slugLength === 2 && parentId) {
+dispatch(
+  fetchProductsByCategory({
+    subcategoryId: parentId,
+    page: 1,
+    size: 20,
+    sort: selectedSort,
+  }) as any
+);
+  } else {
+
+    dispatch(
+      fetchProductsByCategory({
+        subcategoryId,
+        page: 1,
+        size: 20,
+        sort: selectedSort,
+      }) as any
+    );
+  }
+
   toggleSortModal(); // Close the modal after applying sort
 };
   useEffect(() => {
