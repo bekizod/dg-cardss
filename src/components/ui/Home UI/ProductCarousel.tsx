@@ -33,7 +33,8 @@ const ProductCarousel = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { user } = useAuth();
-  const { favoriteProducts, loading, error } = useSelector(
+ const [loading, setLoading] = useState(false)
+  const { favoriteProducts,   error } = useSelector(
     (state: RootState) => state.favoriteProducts as any
   );
   useEffect(() => {
@@ -55,6 +56,7 @@ const ProductCarousel = () => {
         .join("&"); // Filter out any null values before joining
 
       try {
+        setLoading(true)
         // Dispatch the action
         await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
       } catch (err: any) {
@@ -64,6 +66,8 @@ const ProductCarousel = () => {
           description:
             err?.message || "Failed to fetch products. Please try again.",
         });
+      } finally{
+setLoading(false)
       }
     };
 
@@ -156,7 +160,10 @@ const ProductCarousel = () => {
 
   return (
     <div className="relative ">
-      <div className="font-bold text-xl ">Our Discount Products</div>
+      {!loading && (
+        <div className="font-bold text-xl ">Our Discount Products</div>
+      )}
+
       <div
         ref={carouselRef}
         className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"

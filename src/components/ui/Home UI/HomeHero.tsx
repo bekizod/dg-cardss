@@ -83,13 +83,13 @@ export default function HomeHero() {
         </div>
       </motion.div>
 
-      <div className="px-7">
+       <div className="px-7">
         <BestProducts />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {coverPictures.length === 0 ? (
-          <div>No cover pictures available</div>
+          <div>{" "}</div>
         ) : (
           coverPictures.map((item: any) => (
             <Link

@@ -146,13 +146,14 @@ const BestProducts = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+ 
 
   return (
     <div className="relative">
-      <div className="font-bold text-xl ">Top Selling Products</div>
+      {
+        !loading && <div className="font-bold text-xl ">Top Selling Products</div>
+      }
+      
       <div
         ref={carouselRef}
         className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
