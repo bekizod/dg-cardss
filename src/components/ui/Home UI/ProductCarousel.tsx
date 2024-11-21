@@ -112,6 +112,11 @@ setLoading(false)
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log("Favorite Products:", favoriteProducts);
+  }, [favoriteProducts]);
+
+
   const handleFavoriteToggle = async (productId: string) => {
     const isFavorite = favoriteProducts?.some(
       (product: any) => product._id === productId

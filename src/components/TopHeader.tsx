@@ -219,16 +219,47 @@ export default function TopHeader() {
           </Link>
         </div>
       </div>
-      <Modal
-        title="Send Feedback"
-        centered
-        open={isFeedbackModalOpen}
-        onCancel={() => setFeedbackModalOpen(false)} // Close modal on cancel
-        footer={null} // No footer for form
-        width={600}
-      >
-        <PostFeedback />
-      </Modal>
+      {isFeedbackModalOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-xl p-6"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Send Feedback</h2>
+              <button
+                onClick={() => setFeedbackModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <PostFeedback />
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }

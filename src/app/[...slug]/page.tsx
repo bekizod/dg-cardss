@@ -112,12 +112,12 @@ export default function ProductsAccordion({
 
   useEffect(() => {
     if (slugLength === 2 && parentId) {
-      dispatch(
-        fetchProductsByCategory({ subcategoryId: parentId  }) as any
-      );
+      dispatch(fetchProductsByCategory({ subcategoryId: parentId }) as any);
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
-      dispatch(fetchProductsByCategory({ subcategoryId: subcategoryId  }) as any);
+      dispatch(
+        fetchProductsByCategory({ subcategoryId: subcategoryId }) as any
+      );
       setThisCategoryId(subcategoryId);
     }
   }, [slugLength, parentId, subcategoryId, dispatch]);
@@ -202,34 +202,33 @@ export default function ProductsAccordion({
   const [selectedSort, setSelectedSort] = useState(""); // Default to "Low to High"
 
   // Handle sort selection
-  const handleSortChange = (event : any) => {
+  const handleSortChange = (event: any) => {
     setSelectedSort(event.target.value);
   };
-const applySorting = () => {
-  // Pass the selected sort value along with other parameters to the dispatch
-  if (slugLength === 2 && parentId) {
-dispatch(
-  fetchProductsByCategory({
-    subcategoryId: parentId,
-    page: 1,
-    size: 20,
-    sort: selectedSort,
-  }) as any
-);
-  } else {
+  const applySorting = () => {
+    // Pass the selected sort value along with other parameters to the dispatch
+    if (slugLength === 2 && parentId) {
+      dispatch(
+        fetchProductsByCategory({
+          subcategoryId: parentId,
+          page: 1,
+          size: 20,
+          sort: selectedSort,
+        }) as any
+      );
+    } else {
+      dispatch(
+        fetchProductsByCategory({
+          subcategoryId,
+          page: 1,
+          size: 20,
+          sort: selectedSort,
+        }) as any
+      );
+    }
 
-    dispatch(
-      fetchProductsByCategory({
-        subcategoryId,
-        page: 1,
-        size: 20,
-        sort: selectedSort,
-      }) as any
-    );
-  }
-
-  toggleSortModal(); // Close the modal after applying sort
-};
+    toggleSortModal(); // Close the modal after applying sort
+  };
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
@@ -531,17 +530,22 @@ dispatch(
         {slugLength === 2 && (
           <div className="mb-4">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 text-sm">
+              <ol className="flex space-x-2 items-center text-sm text-gray-600 dark:text-gray-300">
                 <li>
-                  <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                  <Link
+                    href={`/`}
+                    className="hover:text-blue-500 transition duration-200"
+                  >
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
                 <li>
                   <Link
                     href={`/${parentName}/${parentId}`}
-                    className="text-blue-500 underline"
+                    className="hover:text-blue-500 text-blue-500 underline transition duration-200"
                   >
                     {parentName}
                   </Link>
@@ -554,24 +558,30 @@ dispatch(
         {slugLength === 4 && (
           <div className="mb-4">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 text-sm">
+              <ol className="flex space-x-2 items-center text-sm text-gray-600 dark:text-gray-300">
                 <li>
-                  <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                  <Link
+                    href={`/`}
+                    className="hover:text-blue-500 transition duration-200"
+                  >
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
                 <li>
                   <Link
                     href={`/${parentName}/${parentId}`}
-                    className="text-gray-600 dark:text-gray-300"
+                    className="hover:text-blue-500 transition duration-200"
                   >
                     {parentName}
                   </Link>
                 </li>
-                <li>/</li>
-                <li className="text-gray-900 dark:text-gray-100">
-                  {" "}
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
+                <li className="text-gray-900 dark:text-gray-100 font-semibold">
                   {subCategoryName}
                 </li>
               </ol>
@@ -879,9 +889,8 @@ dispatch(
                           alt="product"
                           width={1000}
                           height={1000}
-                          layout="responsive"
-                          objectFit="cover"
-                          className="w-full h-44 rounded-md "
+                          
+                          className="w-full h-44 rounded-md object-cover"
                         />
                       </Link>
 

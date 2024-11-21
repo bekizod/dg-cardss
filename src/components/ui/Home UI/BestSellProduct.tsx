@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { SearchProducts } from "@/redux/slices/searchSlice";
 import { notification, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
 import {
@@ -21,26 +23,26 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { FaRegComment, FaShoppingCart } from "react-icons/fa";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import axios from "axios";
-import { AppDispatch } from "@/redux/store";
 
 const BestProducts = () => {
+  // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
+
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const cartItems = useSelector((state: any) => state.cart.items);
-  const { user } = useAuth();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const favoriteProducts = useSelector(
-    (state: any) => state.favoriteProducts.products
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { favoriteProducts, error } = useSelector(
+    (state: RootState) => state.favoriteProducts as any
   );
+  const [products, setProducts] = useState<any>([]);
 
   useEffect(() => {
     const fetchHighlyOrderedProducts = async () => {
       try {
         const response = await axios.get(
-          "https://alsaifgallery.onrender.com/api/v1/order/highlyOrderedProducts",
-           
+          "https://alsaifgallery.onrender.com/api/v1/order/highlyOrderedProducts"
         );
         if (response.data?.status) {
           setProducts(response.data.mostSoldProducts);
@@ -63,11 +65,9 @@ const BestProducts = () => {
     fetchHighlyOrderedProducts();
   }, [user?.token]);
 
-    useEffect(() => {
-      dispatch(fetchFavoriteProducts());
-    }, [dispatch]);
-    
   const handleAddToCart = (product: any) => {
+    // Implement the logic to dispatch addToCart action with the product details
+
     dispatch(
       addToCart({
         id: product._id,
@@ -78,9 +78,9 @@ const BestProducts = () => {
         quantity: 1,
         stockQuantity: product.stockQuantity,
         price: product.price,
-        unitPrice: product.discount ? product.discount : product.price,
+        unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
         discount: product.discountPercentage || 0,
-        link: `/singleProduct/${product.category}/${product._id}`,
+        link: `/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`,
         averageRating: product.ratings.averageRating,
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
@@ -88,53 +88,6 @@ const BestProducts = () => {
       })
     );
   };
-
-   const handleFavoriteToggle = async (productId: string) => {
-     const isFavorite = favoriteProducts?.some(
-       (product: any) => product._id === productId
-     );
-
-     try {
-       if (isFavorite) {
-         await dispatch(removeFavoriteProduct(productId)).unwrap();
-         notification.success({
-           message: "Success",
-           description: "Product removed from favorites!",
-         });
-       } else {
-         await dispatch(saveFavoriteProduct(productId)).unwrap();
-         dispatch(
-           addFavoriteLocally({
-             _id: productId,
-             name: "",
-             description: "",
-             price: "",
-             signedUrls: [],
-           })
-         );
-         notification.success({
-           message: "Success",
-           description: "Product added to favorites!",
-         });
-       }
-     } catch (error: any) {
-       let errorMessage = "Failed to save favorite product.";
-
-       // Check if the error message contains "jwt malformed"
-       if (error == "jwt malformed") {
-         errorMessage =
-           "Authentication error: Please log in to save favorite products.";
-       } else {
-         errorMessage = "Failed,No internet connection.";
-       }
-
-       notification.error({
-         message: "Error",
-         description: errorMessage,
-       });
-     }
-   };
-
   const handleNavigation = (direction: number) => {
     const newIndex = currentIndex + direction;
     if (newIndex >= 0 && newIndex < products.length && carouselRef.current) {
@@ -146,17 +99,73 @@ const BestProducts = () => {
     }
   };
 
- 
+   useEffect(() => {
+     console.log(JSON.stringify(products,null,2))
+   }, [products]);
+
+  useEffect(() => {
+    dispatch(fetchFavoriteProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("Favorite Products:", favoriteProducts);
+  }, [favoriteProducts]);
+
+  const handleFavoriteToggle = async (productId: string) => {
+    const isFavorite = favoriteProducts?.some(
+      (product: any) => product._id === productId
+    );
+
+    try {
+      if (isFavorite) {
+        await dispatch(removeFavoriteProduct(productId)).unwrap();
+        notification.success({
+          message: "Success",
+          description: "Product removed from favorites!",
+        });
+      } else {
+        await dispatch(saveFavoriteProduct(productId)).unwrap();
+        dispatch(
+          addFavoriteLocally({
+            _id: productId,
+            name: "",
+            description: "",
+            price: "",
+            signedUrls: [],
+          })
+        );
+        notification.success({
+          message: "Success",
+          description: "Product added to favorites!",
+        });
+      }
+    } catch (error: any) {
+      let errorMessage = "Failed to save favorite product.";
+
+      // Check if the error message contains "jwt malformed"
+      if (error == "jwt malformed") {
+        errorMessage =
+          "Authentication error: Please log in to save favorite products.";
+      } else {
+        errorMessage = "Failed,No internet connection.";
+      }
+
+      notification.error({
+        message: "Error",
+        description: errorMessage,
+      });
+    }
+  };
 
   return (
-    <div className="relative">
-      {
-        !loading && <div className="font-bold text-xl">Top Selling Products</div>
-      }
-      
+    <div className="relative ">
+      {!loading && (
+        <div className="font-bold text-xl ">Top Selling Products</div>
+      )}
+
       <div
         ref={carouselRef}
-        className="flex gap-2 overflow-x-auto   select-none scrollbar-hide"
+        className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
       >
         <motion.div
           className="flex gap-2 py-3"
@@ -165,31 +174,53 @@ const BestProducts = () => {
           transition={{ duration: 0.5 }}
         >
           {products.map((product: any, index: any) => {
-
+            const productIdt = product?.productDetails?._id as any;
+            const buyerId = user?._id || "guest";
+            const productColor =
+              product?.productDetails?.additionalInformation?.color ||
+              "default";
+            // Check if the product is already in the cart
+            const existingItem = cartItems.find(
+              (item) =>
+                item.id === productIdt &&
+                item.buyerId === buyerId &&
+                item.color === productColor
+            );
+            const existingQuantity = existingItem ? existingItem.quantity : 0;
+            const BuyerId = existingItem ? existingItem.buyerId : "guest";
+            const ID = existingItem ? existingItem.id : "";
             const isFavorite = favoriteProducts?.some(
-              (favProduct: any) => favProduct._id === product.productDetails._id
+              (favProduct: any) => favProduct._id === productIdt
             );
 
             return (
               <div
-                key={product.productDetails._id}
-                className="flex flex-col w-60 transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 dark:bg-slate-900 shadow-xl gap-1 border border-slate-600 rounded-3xl p-3"
+                key={productIdt}
+                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5  w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
               >
+                {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="relative">
-                  <Link href={`/#`}>
+                  <Link
+                    href={`/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`}
+                    className="block w-full"
+                  >
                     <Image
-                      src={product.productDetails.imageIds[0]}
+                      src={product.productDetails?.imageIds[0]}
                       alt="product"
                       width={1000}
                       height={1000}
                       className="w-full h-44 rounded-md object-cover"
                     />
                   </Link>
+
+                  {/* Favorite Icon */}
                   <motion.div
-                    className="absolute top-2 right-2 rounded-full p-2 bg-gray-200 cursor-pointer"
-                    onClick={() =>
-                      handleFavoriteToggle(product.productDetails._id)
-                    }
+                    className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                    whileHover={{ scale: 1.2 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    onClick={() => handleFavoriteToggle(productIdt)}
                   >
                     {isFavorite ? (
                       <GoHeartFill
@@ -198,43 +229,131 @@ const BestProducts = () => {
                       />
                     ) : (
                       <GoHeart
-                        className="text-[var(--color-primary)]"
+                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
                         size={17}
                       />
                     )}
                   </motion.div>
                 </div>
-                <div className="text-lg font-semibold">
-                  {product.productDetails.name}
-                </div>
-                <div className="font-semibold">
-                  {product.productDetails.additionalInformation.brand}
-                </div>
-                <div className="flex flex-row gap-3">
-                  <div>
-                    <Rate
-                      value={product.productDetails.ratings.averageRating.toFixed(
-                        1
-                      )}
-                      className="text-sm dark:text-yellow-400"
-                      disabled
-                    />
-                  </div>
-                  <div className="flex flex-row gap-1 items-center text-sm">
-                    <div>
-                      <FaRegComment />
-                    </div>
-                    <div>{product.productDetails.ratings.numberOfRatings}</div>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center mt-4 text-green-500 font-bold text-lg">
-                  <div>${product.productDetails.price}</div>
 
-                  {/* <button
-                    onClick={() => handleAddToCart(product.productDetails)}
-                  >
-                    Add to Cart
-                  </button> */}
+                <div className="flex w-full flex-col">
+                  <div className="text-start text-lg font-semibold flex justify-start">
+                    {product.productDetails?.name}
+                  </div>
+                  <div className="test-sm text-start font-semibold">
+                    {product.productDetails?.additionalInformation.brand}
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <div>
+                      <Rate
+                        value={product.productDetails?.ratings.averageRating.toFixed(
+                          1
+                        )}
+                        className="text-sm dark:text-yellow-400"
+                        disabled
+                      />
+                    </div>
+                    <div className="flex flex-row gap-1 items-center text-sm">
+                      <div>
+                        <FaRegComment />
+                      </div>
+                      <div>
+                        {product.productDetails?.ratings.numberOfRatings}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row justify-between items-center mt-4">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row gap-1 items-center">
+                        {product?.productDetails?.discount > 0 && (
+                          <>
+                            <div className="font-mono line-through">
+                              {product.productDetails?.price}
+                            </div>
+                            <div className="bg-[var(--color-secondary)] text-black  px-1 rounded font-bold text-xs">
+                              -
+                              {Math.round(
+                                product.productDetails?.discountPercentage
+                              )}
+                              %
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="font-bold text-2xl">
+                        {product?.productDetails?.discount > 0
+                          ? `${product.productDetails?.discount}`
+                          : `${product.productDetails?.price}`}
+                      </div>
+                    </div>
+                    <div className="rounded-lg">
+                      {product.productDetails?.stockQuantity > 0 ? (
+                        <>
+                          {existingItem ? (
+                            <div className="flex flex-row items-center justify-center gap-2">
+                              {/* Decrement Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    decrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=""
+                                aria-label="Decrease Quantity"
+                              >
+                                <BiChevronDown
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+
+                              {/* Quantity Display */}
+                              <div className="dark:text-gray-200">
+                                {existingQuantity}
+                              </div>
+
+                              {/* Increment Button */}
+                              <button
+                                onClick={() =>
+                                  dispatch(
+                                    incrementQuantity({
+                                      id: existingItem.id,
+                                      buyerId: existingItem.buyerId,
+                                    })
+                                  )
+                                }
+                                className=" "
+                                aria-label="Increase Quantity"
+                              >
+                                <BiChevronUp
+                                  className="text-[var(--color-secondary)] font-bold"
+                                  size={30}
+                                />
+                              </button>
+                            </div>
+                          ) : (
+                            <motion.div
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() =>
+                                handleAddToCart(product.productDetails)
+                              }
+                              className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
+                              aria-label="Add to Cart"
+                            >
+                              <FaShoppingCart color="white" />
+                            </motion.div>
+                          )}
+                        </>
+                      ) : (
+                        <div>Out Of Stock</div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             );
@@ -290,34 +409,3 @@ const BestProducts = () => {
 };
 
 export default BestProducts;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
