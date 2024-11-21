@@ -51,7 +51,7 @@ export default function CheckoutLayout({
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
   const router = useRouter();
-
+ 
   useEffect(() => {
     setIsMounted(true);
 

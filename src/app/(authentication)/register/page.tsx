@@ -7,7 +7,8 @@ import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector"; // Import country library
-
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 // TypeScript types
 interface RegisterForm {
   firstName: string;
@@ -114,6 +115,13 @@ export default function Register() {
     }
   };
 
+  const handlePhoneChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      mobile: value,
+    }));
+  };
+
   return (
     <div className="flex justify-center items-center py-28 2xl:mt-[124px] bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
@@ -182,7 +190,7 @@ export default function Register() {
             />
             {/* className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" */}
           </div>
-
+          {/* 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone Number
@@ -195,6 +203,22 @@ export default function Register() {
               required
               placeholder="Phone number"
               className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full"
+            />
+          </div> */}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Phone Number
+            </label>
+            <PhoneInput
+              country={"us"}
+              value={formData.mobile}
+              onChange={handlePhoneChange}
+              containerClass="w-full   text-gray-700 dark:text-gray-300 dark:bg-transparent rounded border dark:border-gray-700" // Custom styles for the input field
+              dropdownClass="custom-dropdown" // Custom class for the dropdown
+              dropdownStyle={{
+                borderColor: "var(--color-primary)", // Inline styling for dropdown
+              }}
             />
           </div>
 
