@@ -635,13 +635,13 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
       <AnimatePresence>
         {issearchModalOpen && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-[10000000000] "
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gray-200 dark:bg-slate-900 p-6 rounded-lg shadow-lg md:w-[85vw] relative"
+              className="bg-gray-200 dark:bg-slate-900 md:p-6 p-1 rounded-lg shadow-lg  relative"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
@@ -666,7 +666,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                   {" "}
                   {/* Set max height and enable scrolling */}
                   {products.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2   sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-1">
                       {/* {products.map((product) => (
                   <div
                     key={product._id}
@@ -729,6 +729,8 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                   src={product.imageIds[0]}
                                   alt="product"
                                   width={1000}
+                                  layout="responsive"
+                                  objectFit="cover"
                                   height={1000}
                                   className="w-full h-44 rounded-md object-cover"
                                 />
@@ -788,7 +790,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                     {product?.discount > 0 && (
                                       <>
                                         <div className="font-mono line-through">
-                                          {product.price - product.discount}
+                                          {product.price}
                                         </div>
                                         <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
                                           -
