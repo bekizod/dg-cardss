@@ -658,7 +658,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                 Search Results <div>Total Products of {total}</div>
               </div>
 
-              {status === "loading" && <p>Loading products...</p>}
+              {/* {status === "loading" && <p>Loading products...</p>} */}
               {status === "failed" && <p>Error fetching products: {error}</p>}
 
               {status === "succeeded" && (
