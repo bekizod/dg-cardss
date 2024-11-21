@@ -6,7 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-    darkMode: 'class',
+  darkMode: "class",
   theme: {
     extend: {
       backgroundImage: {
@@ -15,12 +15,12 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: 'var(--color-primary)',
-        secondary: 'var(--color-secondary)',
-        tertiary: 'var(--color-tertiary)',
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        tertiary: "var(--color-tertiary)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 export default config;

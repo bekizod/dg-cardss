@@ -156,7 +156,7 @@ const BestProducts = () => {
       
       <div
         ref={carouselRef}
-        className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
+        className="flex gap-2 overflow-x-auto   select-none scrollbar-hide"
       >
         <motion.div
           className="flex gap-2 py-3"
