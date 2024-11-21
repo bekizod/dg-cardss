@@ -114,7 +114,7 @@ export default function HomeHero() {
           ))
         )}
       </div>
-      <div>
+      <div className="pb-2">
         <Slider />
       </div>
       <div className="px-7">
