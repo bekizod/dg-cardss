@@ -54,7 +54,7 @@ const Page = () => {
         <div className="grid gap-2 py-3">
           {loading && !parentCategories.length ? (
             <div className="flex justify-center items-center py-4">
-              Loading parent categories...
+               {""}
             </div>
           ) : error && !parentCategories.length ? (
             <div className="flex justify-center items-center py-4 text-red-500">

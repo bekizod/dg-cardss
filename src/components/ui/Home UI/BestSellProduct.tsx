@@ -151,7 +151,7 @@ const BestProducts = () => {
   return (
     <div className="relative">
       {
-        !loading && <div className="font-bold text-xl ">Top Selling Products</div>
+        !loading && <div className="font-bold text-xl">Top Selling Products</div>
       }
       
       <div
