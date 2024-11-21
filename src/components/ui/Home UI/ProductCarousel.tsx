@@ -196,7 +196,7 @@ setLoading(false)
             return (
               <div
                 key={productIdt}
-                className="flex flex-col w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                className="flex flex-col transform max-md:scale-75 w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
               >
                 {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="relative">

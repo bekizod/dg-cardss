@@ -7,8 +7,8 @@ import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector"; // Import country library
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/style.css";
 // TypeScript types
 interface RegisterForm {
   firstName: string;
@@ -190,7 +190,7 @@ export default function Register() {
             />
             {/* className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700" */}
           </div>
-          {/* 
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone Number
@@ -204,8 +204,8 @@ export default function Register() {
               placeholder="Phone number"
               className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full"
             />
-          </div> */}
-
+          </div>
+{/* 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone Number
@@ -220,7 +220,7 @@ export default function Register() {
                 borderColor: "var(--color-primary)", // Inline styling for dropdown
               }}
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
