@@ -520,6 +520,7 @@ export default function ProductsAccordion({
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
       })
     );
   };

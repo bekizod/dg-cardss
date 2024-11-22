@@ -193,6 +193,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
       })
     );
   };

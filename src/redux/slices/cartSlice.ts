@@ -17,6 +17,7 @@ export interface CartItem {
   numberOfRating: number;
   brand: string;
   adjective: string;
+  size: string;
 }
 
 // Define CartState interface with total fields

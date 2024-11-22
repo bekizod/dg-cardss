@@ -201,6 +201,7 @@ export default function SingleProductPage({
           numberOfRating: product.ratings.numberOfRatings,
           brand: product.additionalInformation.brand,
           adjective: product.adjective,
+          size: product.additionalInformation.size,
         })
       );
     }

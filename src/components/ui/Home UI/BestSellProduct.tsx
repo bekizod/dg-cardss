@@ -65,7 +65,7 @@ const BestProducts = () => {
     fetchHighlyOrderedProducts();
   }, [user?.token]);
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: any , link:any) => {
     // Implement the logic to dispatch addToCart action with the product details
 
     dispatch(
@@ -80,11 +80,12 @@ const BestProducts = () => {
         price: product.price,
         unitPrice: product.discount ? product.discount : product.price, // Pass unit price based on discount
         discount: product.discountPercentage || 0,
-        link: `/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`,
+        link: link,
         averageRating: product.ratings.averageRating,
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
       })
     );
   };
@@ -160,7 +161,7 @@ const BestProducts = () => {
   return (
     <div className="relative ">
       {!loading && (
-        <div className="font-bold text-xl ">Top Selling Products</div>
+        <div className="font-bold text-xl">Top Selling Products</div>
       )}
 
       <div
@@ -340,7 +341,10 @@ const BestProducts = () => {
                             <motion.div
                               whileTap={{ scale: 0.95 }}
                               onClick={() =>
-                                handleAddToCart(product.productDetails)
+                                handleAddToCart(
+                                  product.productDetails,
+                                  `/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`
+                                )
                               }
                               className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
                               aria-label="Add to Cart"

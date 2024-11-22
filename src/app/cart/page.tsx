@@ -196,7 +196,7 @@ const CartComponent = () => {
                     <div>
                       <Rate
                         value={item.averageRating}
-                        className="dark:text-white"
+                        className=""
                         disabled
                       />
                     </div>
