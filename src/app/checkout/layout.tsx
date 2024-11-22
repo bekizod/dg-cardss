@@ -45,8 +45,8 @@ export default function CheckoutLayout({
   // const [quantity, setQuantity] = useState(1);
   const [showCouponFields, setShowCouponFields] = useState(false);
   const { user } = useAuth();
-    const [loading, setLoading] = useState(false);
-   const pathname = usePathname();
+  const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
   const token = Cookies.get("token");
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
@@ -82,8 +82,8 @@ export default function CheckoutLayout({
   // };
 
   // Ensure component is mounted before rendering cart items (client-side rendering)
-const searchParams = useSearchParams();
-const [address, setAddress] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const [address, setAddress] = useState<string | null>(null);
 
   useEffect(() => {
     // Retrieve the address query parameter and decode it
@@ -102,8 +102,7 @@ const [address, setAddress] = useState<string | null>(null);
     if (pathname !== "/checkout/payment") {
       dispatch(setPaymentSelected(false)); // Set payment selected to true
     }
-  }, [pathname, dispatch]); 
-
+  }, [pathname, dispatch]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -199,7 +198,7 @@ const [address, setAddress] = useState<string | null>(null);
         return null;
     }
   };
-   // Initialize useRouter
+  // Initialize useRouter
 
   useEffect(() => {
     if (
@@ -214,53 +213,52 @@ const [address, setAddress] = useState<string | null>(null);
     }
   }, [pathname]);
 
+  const handleCreateOrder = async () => {
+    setLoading(true);
+    const token = Cookies.get("token"); // Retrieve Bearer token from cookies
+    // Example orderedBy ID
+    const cart = filteredCartItems?.map((item: any) => ({
+      productId: item.id, // Replace with your product ID property
+      quantity: item.quantity, // Adjust based on your item structure
+      unitPrice: Math.floor(item.unitPrice), // Convert unitPrice to an integer
+    }));
+    try {
+      const response = await axios.post(
+        "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
+        {
+          orderedBy: user._id,
+          cart,
+          address: selectedAddress,
+          totalAmount: totalQuantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add Bearer token to header
+            "Content-Type": "application/json", // Set content type
+          },
+        }
+      );
 
-   const handleCreateOrder = async () => {
-     setLoading(true);
-     const token = Cookies.get("token"); // Retrieve Bearer token from cookies
-     // Example orderedBy ID
-     const cart = filteredCartItems?.map((item:any) => ({
-       productId: item.id, // Replace with your product ID property
-       quantity: item.quantity, // Adjust based on your item structure
-       unitPrice: Math.floor(item.unitPrice), // Convert unitPrice to an integer
-     }));
-     try {
-       const response = await axios.post(
-         "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
-         {
-           orderedBy: user._id,
-           cart,
-           address: selectedAddress ,
-           totalAmount: totalQuantity,
-         },
-         {
-           headers: {
-             Authorization: `Bearer ${token}`, // Add Bearer token to header
-             "Content-Type": "application/json", // Set content type
-           },
-         }
-       );
-
-       if (response.status === 200) {
-         notification.success({
-           message: "Order Created",
-           description: response.data.message || "Order created successfully",
-         });
-         dispatch(clearCartByBuyerId(user?._id));
-         router.push("/account/orders");
-       }
-     } catch (error) {
-       console.error(error);
-       notification.error({
-         message: "Order Creation Failed",
-         description: "Failed to create order. Please try again.",
-       });
-     } finally {
-       setLoading(false);
-     }
-   };
+      if (response.status === 200) {
+        notification.success({
+          message: "Order Created",
+          description: response.data.message || "Order created successfully",
+        });
+        dispatch(clearCartByBuyerId(user?._id));
+        router.push("/account/orders");
+      }
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: "Order Creation Failed",
+        description: "Failed to create order. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <div className="flex flex-col md:flex-row justify-center 2xl:mt-[124px]       lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
+    <div className="flex flex-col md:flex-row justify-center   lg:h-full py-3  items-center  md:px-12 lg:px-16 ">
       <AnimatePresence>
         {cartEmpty && (
           <motion.div
@@ -355,12 +353,12 @@ const [address, setAddress] = useState<string | null>(null);
             <div className="p-5 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-xl">
               {/* Cart Products */}
 
-              
-              {selectedAddress || address && (
-                <div className="py-1 px-2 bg-gray-100 dark:bg-slate-900  font-semibold rounded-lg">
-                  Delivered To: {selectedAddress || address}
-                </div>
-              )}
+              {selectedAddress ||
+                (address && (
+                  <div className="py-1 px-2 bg-gray-100 dark:bg-slate-950  font-semibold rounded-lg">
+                    {selectedAddress || address}
+                  </div>
+                ))}
 
               {/* Order Summary Title */}
               <div className="text-xl font-semibold dark:text-gray-200">
