@@ -275,7 +275,7 @@ const CartComponent = () => {
                       alt={item.name}
                       width={500}
                       height={500}
-                      className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-lg"
+                      className=" w-24  h-24 object-cover rounded-lg"
                     />
                   </Link>
                 </div>
