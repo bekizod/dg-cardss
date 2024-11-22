@@ -126,8 +126,8 @@ export default function Address() {
   const handleConfirmSelection = () => {
       dispatch(setSelectedAddress(address));
     // Pass selected city as a query parameter to the payment route
-    // router.push(`/checkout/payment?address=${encodeURIComponent(address)}`);
-    router.push(`/checkout/payment`);
+    router.push(`/checkout/payment?address=${encodeURIComponent(address)}`);
+    // router.push(`/checkout/payment`);
   };
 
   return (

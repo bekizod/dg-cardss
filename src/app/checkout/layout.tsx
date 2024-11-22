@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 // import { FaTrashAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
@@ -61,27 +61,39 @@ export default function CheckoutLayout({
     (state: RootState) => state.payment.isPaymentSelected
   );
 
-   useEffect(() => {
-    // This effect runs whenever `isPaymentSelected` changes
-    if (isPaymentSelected) {
-      // Example of a data fetch function (replace with actual fetch call)
-      fetchData();
-    }
-  }, [isPaymentSelected]); // Dependency array ensures the effect runs when `isPaymentSelected` changes
+  //  useEffect(() => {
+  //   // This effect runs whenever `isPaymentSelected` changes
+  //   if (isPaymentSelected) {
+  //     // Example of a data fetch function (replace with actual fetch call)
+  //     fetchData();
+  //   }
+  // }, [isPaymentSelected]); // Dependency array ensures the effect runs when `isPaymentSelected` changes
 
-  const fetchData = async () => {
-    try {
-      // Simulating a fetch call to an API
-      const response = await fetch("https://api.example.com/order-details");
-      const data = await response.json();
-      console.log("Fetched data:", data);
-      // Here, you can dispatch an action or update the state with the fetched data
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     // Simulating a fetch call to an API
+  //     const response = await fetch("https://api.example.com/order-details");
+  //     const data = await response.json();
+  //     console.log("Fetched data:", data);
+  //     // Here, you can dispatch an action or update the state with the fetched data
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
   // Ensure component is mounted before rendering cart items (client-side rendering)
+const searchParams = useSearchParams();
+const [address, setAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Retrieve the address query parameter and decode it
+    const queryAddress = searchParams.get("address");
+    if (queryAddress) {
+      const decodedAddress = decodeURIComponent(queryAddress);
+      setAddress(decodedAddress); // Set the decoded address in the state
+    }
+  }, [searchParams]);
+
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
   const router = useRouter();
 
@@ -91,6 +103,8 @@ export default function CheckoutLayout({
       dispatch(setPaymentSelected(false)); // Set payment selected to true
     }
   }, [pathname, dispatch]); 
+
+
   useEffect(() => {
     setIsMounted(true);
 
@@ -341,9 +355,10 @@ export default function CheckoutLayout({
             <div className="p-5 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-xl">
               {/* Cart Products */}
 
-              {selectedAddress && (
-                <div className="py-1 px-2 bg-gray-100 font-semibold rounded-lg">
-                  Delivered To: {selectedAddress}
+              
+              {selectedAddress || address && (
+                <div className="py-1 px-2 bg-gray-100 dark:bg-slate-900  font-semibold rounded-lg">
+                  Delivered To: {selectedAddress || address}
                 </div>
               )}
 

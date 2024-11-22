@@ -154,7 +154,7 @@ export default function PaymentMethods() {
   }, [handleClickOutside]);
 
   const handleMethodClick = (id: number) => {
-    if (pathname === "/checkout/payment" && address) {
+    if (pathname === "/checkout/payment" && (selectedAddress || address)) {
       dispatch(setPaymentSelected(true));
     } else {
       dispatch(setPaymentSelected(false));
