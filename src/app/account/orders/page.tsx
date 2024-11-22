@@ -84,7 +84,7 @@ export default function Order() {
   };
 
   return (
-    <div className="order-list max-lg:mt-[34px]     p-4 bg-white   transition-colors duration-300">
+    <div className="order-list max-lg:mt-[34px]     p-4   transition-colors duration-300">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
         Order History
       </h2>

@@ -321,7 +321,7 @@ const FavoriteList: React.FC = () => {
     // )}
     // </div>
 
-    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]   bg-white   dark:text-white p-3">
+    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]     dark:text-white p-3">
       {/* Left Section */}
       <div className="flex flex-col lg:w-1/2 w-full">
         <div className="flex flex-col">
@@ -458,7 +458,7 @@ const FavoriteList: React.FC = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-slate-900">
+      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)]">
         <div className="text-white text-2xl py-3 font-semibold text-center w-full">
           Favorite Categories
           <hr className="border-gray-300 dark:border-slate-600 w-full" />
