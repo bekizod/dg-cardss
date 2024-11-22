@@ -10,6 +10,7 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
+  updateSelectedSize,
 } from "../../redux/slices/cartSlice";
 import { message, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
@@ -27,6 +28,9 @@ const CartComponent = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const [isMounted, setIsMounted] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(
+    "" // Default to the first size, or set to an empty string if no sizes
+  );
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
   const { totalItems, totalPrice, totalDiscount } = useSelector(
@@ -109,6 +113,23 @@ const CartComponent = () => {
 
   //    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
   //  };
+
+
+  const handleSizeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    productId: any,
+    buyerId : any
+  ) => {
+    const newSize = event.target.value;
+    setSelectedSize(newSize);
+    dispatch(
+      updateSelectedSize({
+        id: productId,
+        buyerId: buyerId,
+        selectedSize: newSize,
+      })
+    );
+  };
   return (
     <div className="flex justify-center max-lg:mt-[34px]       py-3  items-center  md:px-12 lg:px-16  ">
       <AnimatePresence>
@@ -266,6 +287,23 @@ const CartComponent = () => {
                     >
                       <BiChevronUp size={16} />
                     </button>
+                    {Array.isArray(item.size) && item.size.length > 1 ? (
+                      <div>
+                        Choose your size
+                        <select
+                          onChange={(e)=>handleSizeChange(e,item.id,item.buyerId)}
+                          value={item.selectedSize}
+                        >
+                          {item.size.map((size: any, index: any) => (
+                            <option key={index} value={size}>
+                              {size}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <span></span>
+                    )}
                   </div>
                 </div>
 

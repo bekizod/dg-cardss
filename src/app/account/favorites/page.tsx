@@ -103,7 +103,8 @@ const FavoriteList: React.FC = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size
+        size: product.additionalInformation.size,
+        selectedSize: product.additionalInformation.size[0],
       })
     );
   };

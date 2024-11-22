@@ -18,6 +18,7 @@ export interface CartItem {
   brand: string;
   adjective: string;
   size: string;
+  selectedSize: string;
 }
 
 // Define CartState interface with total fields
@@ -120,6 +121,23 @@ const cartSlice = createSlice({
       state.items = state.items.filter((item) => item.buyerId !== buyerId);
       calculateTotals(state, buyerId); // Recalculate totals to update state after clearing
     },
+
+    updateSelectedSize: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        buyerId: string;
+        selectedSize: string;
+      }>
+    ) => {
+      const { id, buyerId, selectedSize } = action.payload;
+      const item = state.items.find(
+        (item) => item.id === id && item.buyerId === buyerId
+      );
+      if (item) {
+        item.selectedSize = selectedSize;
+      }
+    },
   },
 });
 
@@ -130,5 +148,6 @@ export const {
   decrementQuantity,
   updateBuyerIdAfterLogin,
   clearCartByBuyerId,
+  updateSelectedSize,
 } = cartSlice.actions;
 export default cartSlice.reducer;
