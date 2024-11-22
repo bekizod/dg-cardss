@@ -773,7 +773,9 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                     value={product.ratings.averageRating.toFixed(
                                       1
                                     )}
-                                    className="text-sm dark:text-yellow-400"
+                                    className={`text-sm ${
+                                      product.ratings.averageRating > 0 ? "" : "rate-empty"
+                                    }`}
                                     disabled
                                   />
                                 </div>

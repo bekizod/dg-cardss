@@ -250,7 +250,9 @@ const BestProducts = () => {
                         value={product.productDetails?.ratings.averageRating.toFixed(
                           1
                         )}
-                        className="text-sm dark:text-yellow-400"
+                        className={`text-sm ${
+                          product.productDetails?.ratings.averageRating > 0 ? "" : "rate-empty"
+                        }`}
                         disabled
                       />
                     </div>

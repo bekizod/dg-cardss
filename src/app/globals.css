@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.rate-empty .ant-rate-star {
+  color: #d9d9d9; /* Light gray for empty stars */
+}
+.rate-empty .ant-rate-star svg {
+  fill: #d9d9d9;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -103,3 +110,5 @@ html, body {
     -moz-appearance: textfield; /* Firefox */
   }
 }
+
+

@@ -196,7 +196,9 @@ const CartComponent = () => {
                     <div>
                       <Rate
                         value={item.averageRating}
-                        className=""
+                        className={`text-sm ${
+                          item.averageRating > 0 ? "" : "rate-empty"
+                        }`}
                         disabled
                       />
                     </div>

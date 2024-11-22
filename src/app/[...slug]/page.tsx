@@ -527,11 +527,11 @@ export default function ProductsAccordion({
   return (
     <div className=" md:px-20 lg:px-10   p-2  max-lg:mt-[34px]    dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-center justify-between">
         {slugLength === 2 && (
-          <div className="mb-4">
+          <div className="py-3">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 items-center text-sm text-gray-600 dark:text-gray-300">
+              <ol className="flex w-full md:space-x-2 max-md:space-x-1 items-center md:text-lg text-xs text-gray-600 dark:text-gray-300">
                 <li>
                   <Link
                     href={`/`}
@@ -557,9 +557,9 @@ export default function ProductsAccordion({
         )}
 
         {slugLength === 4 && (
-          <div className="mb-4">
+          <div className=" py-3">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 items-center text-sm text-gray-600 dark:text-gray-300">
+              <ol className="flex w-full md:space-x-2 max-md:space-x-1   items-center text-xs md:text-lg text-gray-600 dark:text-gray-300">
                 <li>
                   <Link
                     href={`/`}
@@ -596,7 +596,7 @@ export default function ProductsAccordion({
         </div> */}
 
         <div
-          className="flex items-center space-x-2 text-lg font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200"
+          className="flex items-center space-x-2 text-lg max-md:text-sm font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200"
           onClick={() => handleAddFavorite()}
         >
           {isFavorited ? (
@@ -604,7 +604,7 @@ export default function ProductsAccordion({
           ) : (
             <GoHeart />
           )}
-          <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
+          <span>{isFavorited ? "Favored" : "Unfavored"}</span>
         </div>
       </div>
 
@@ -614,17 +614,17 @@ export default function ProductsAccordion({
         <div className="w-full lg:w-3/4">
           {/* Title and Product Count */}
           <div className="mb-4">
-            <div className=" font-bold">
+            <div className="text-lg font-bold">
               Products{" "}
-              <span className="font-serif px-10 text-sm">
+              <span className="font-serif px-10 text-lg">
                 {filteredProducts.length} Products
               </span>
               <button
                 onClick={() => toggleSortModal()}
-                className="py-2 px-4      bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded lg:flex hidden items-center space-x-2"
+                className="py-1 px-3  max     bg-gray-100 justify-center place-items-center dark:bg-gray-800 rounded lg:flex hidden items-center space-x-2"
               >
                 <BsSortDown className="text-gray-700 dark:text-gray-300" />
-                <div>Sort</div>
+                <div className="text-sm">Sort</div>
               </button>
             </div>
           </div>
@@ -890,7 +890,6 @@ export default function ProductsAccordion({
                           alt="product"
                           width={1000}
                           height={1000}
-                          
                           className="w-full h-44 rounded-md object-cover"
                         />
                       </Link>
@@ -930,7 +929,11 @@ export default function ProductsAccordion({
                         <div>
                           <Rate
                             value={product.ratings.averageRating.toFixed(1)}
-                            className="text-sm dark:text-yellow-400"
+                            className={`text-sm ${
+                              product.ratings.averageRating > 0
+                                ? ""
+                                : "rate-empty"
+                            }`}
                             disabled
                           />
                         </div>
