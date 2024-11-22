@@ -321,7 +321,7 @@ const FavoriteList: React.FC = () => {
     // )}
     // </div>
 
-    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]  2xl:mt-[124px] bg-white dark:bg-slate-800 dark:text-white p-3">
+    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]   bg-white   dark:text-white p-3">
       {/* Left Section */}
       <div className="flex flex-col lg:w-1/2 w-full">
         <div className="flex flex-col">
