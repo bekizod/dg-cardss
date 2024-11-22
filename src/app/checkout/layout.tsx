@@ -220,15 +220,25 @@ export default function CheckoutLayout({
     const cart = filteredCartItems?.map((item: any) => ({
       productId: item.id, // Replace with your product ID property
       quantity: item.quantity, // Adjust based on your item structure
-      unitPrice: Math.floor(item.unitPrice), // Convert unitPrice to an integer
+      unitPrice: Math.floor(item.unitPrice),
+      size:item.size,// Convert unitPrice to an integer
     }));
+
+     const orderList = {
+       orderedBy: user._id,
+       cart: cart,
+       address: selectedAddress || address,
+       totalAmount: totalQuantity, // Implement a function to calculate total amount
+     };
+
+     console.log(JSON.stringify(orderList, null, 4));
     try {
       const response = await axios.post(
         "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
         {
           orderedBy: user._id,
           cart,
-          address: selectedAddress,
+          address: selectedAddress || address,
           totalAmount: totalQuantity,
         },
         {
@@ -247,11 +257,11 @@ export default function CheckoutLayout({
         dispatch(clearCartByBuyerId(user?._id));
         router.push("/account/orders");
       }
-    } catch (error) {
+    } catch (error : any) {
       console.error(error);
       notification.error({
         message: "Order Creation Failed",
-        description: "Failed to create order. Please try again.",
+        description: error || "Failed to create order. Please try again.",
       });
     } finally {
       setLoading(false);

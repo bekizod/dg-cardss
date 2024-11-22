@@ -85,7 +85,7 @@ const BestProducts = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size,
+        size: product.additionalInformation.size[0],
       })
     );
   };
