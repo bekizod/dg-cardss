@@ -155,9 +155,12 @@ export default function ProductsAccordion({
       const pricesSet = new Set<number>();
 
       products.forEach((product: any) => {
-        if (product.additionalInformation?.size) {
-          sizesSet.add(product.additionalInformation.size);
+        if (product.additionalInformation?.size?.length) {
+          product.additionalInformation.size.forEach((size : any) => {
+            sizesSet.add(size);
+          });
         }
+
         if (product.additionalInformation?.color) {
           colorsSet.add(product.additionalInformation.color);
         }
@@ -289,11 +292,14 @@ export default function ProductsAccordion({
   const applyFilters = () => {
     let filtered = products;
 
-    if (selectedFilters.size.length > 0) {
-      filtered = filtered.filter((product: any) =>
-        selectedFilters.size.includes(product.additionalInformation?.size)
-      );
-    }
+   if (selectedFilters.size.length > 0) {
+     filtered = filtered.filter((product: any) => {
+       const productSizes = product.additionalInformation?.size || [];
+       return productSizes.some((size: string) =>
+         selectedFilters.size.includes(size)
+       );
+     });
+   }
 
     if (selectedFilters.color.length > 0) {
       filtered = filtered.filter((product: any) =>
