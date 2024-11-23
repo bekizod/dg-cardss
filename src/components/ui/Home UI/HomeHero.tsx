@@ -118,7 +118,7 @@ const isRTL = currentLocale === "ar";
         )}
       </div>
       <div className="pb-2">
-        <Slider />
+        <Slider isRTL={isRTL} />
       </div>
       <div className="px-7">
         {/* <div>You May Also Like</div> */}
