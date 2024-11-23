@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
-
+import Cookies from "js-cookie";
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
 
@@ -20,8 +20,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loging, setLoging] = useState(false);
   const router = useRouter();
-  const { login } = useAuth(); // Use the login function from AuthContext
-
+  const { user,login } = useAuth(); // Use the login function from AuthContext
+  const token = Cookies.get("token");
+  
+  useEffect(() => {
+    if (user && token) {
+      router.push("/account")
+    }
+  }, [user,token,router])
+  
   // Notification function with a 3-second duration
   const openNotification = (
     type: NotificationType,

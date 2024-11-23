@@ -724,6 +724,7 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                             {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                             <div className="relative">
                               <Link
+                                onClick={searchcloseModal}  
                                 href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                                 className="block w-full"
                               >
@@ -775,7 +776,9 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                       1
                                     )}
                                     className={`text-sm ${
-                                      product.ratings.averageRating > 0 ? "" : "rate-empty"
+                                      product.ratings.averageRating > 0
+                                        ? ""
+                                        : "rate-empty"
                                     }`}
                                     disabled
                                   />
