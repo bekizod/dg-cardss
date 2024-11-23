@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
+// Type definitions
 type Advertisement = {
   _id: string;
   imageId: { data: string };
@@ -13,10 +14,11 @@ type Advertisement = {
   subCategoryId?: { categoryName: string; _id: string };
 };
 
-export default function Slider() {
+export default function Slider({ isRTL }: { isRTL: boolean }) {
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Fetch advertisements
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {
@@ -37,6 +39,7 @@ export default function Slider() {
     fetchAdvertisements();
   }, []);
 
+  // Automatic slide transition
   useEffect(() => {
     if (advertisements.length === 0) return;
 
@@ -44,9 +47,10 @@ export default function Slider() {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % advertisements.length);
     }, 3000);
 
-    return () => clearInterval(interval); // Clear the interval on unmount or when ads change
+    return () => clearInterval(interval);
   }, [advertisements]);
 
+  // Handlers
   const goToSlide = (slideIndex: number) => setCurrentSlide(slideIndex);
   const handlePrevSlide = () =>
     setCurrentSlide(
@@ -68,7 +72,9 @@ export default function Slider() {
                 padding: 0,
                 margin: 0,
                 transition: "transform 0.35s ease-in-out",
-                transform: `translateX(-${currentSlide * 100}%)`,
+                transform: isRTL
+                  ? `translateX(${currentSlide * 100}%)` // Reverse for RTL
+                  : `translateX(-${currentSlide * 100}%)`,
               }}
             >
               {advertisements.map((ad, index) => (
@@ -97,7 +103,7 @@ export default function Slider() {
 
           <button
             aria-label="previous slide"
-            className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+            className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full"
             onClick={handlePrevSlide}
           >
             ‹
@@ -105,7 +111,7 @@ export default function Slider() {
 
           <button
             aria-label="next slide"
-            className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 text-white  bg-[var(--color-primary)] p-2 rounded-full"
+            className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full"
             onClick={handleNextSlide}
           >
             ›
@@ -117,7 +123,7 @@ export default function Slider() {
                 key={index}
                 className={`w-2 h-2 rounded-full cursor-pointer ${
                   currentSlide === index
-                    ? " bg-[var(--color-primary)]"
+                    ? "bg-[var(--color-primary)]"
                     : "bg-slate-300"
                 }`}
                 onClick={() => goToSlide(index)}

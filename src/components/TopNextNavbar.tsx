@@ -32,6 +32,9 @@ import {
 } from "@/redux/slices/favoriteProductsSlice";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
+import enTranslations from "@/locales/en.json";
+import arTranslations from "@/locales/ar.json";
 
 export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: string, onLanguageToggle : any }) {
   const router = useRouter();
@@ -40,6 +43,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
   const [activeTab, setActiveTab] = useState<string>("");
   const [filteredCards, setFilteredCards] = useState(cardData);
   const { user, logout } = useAuth(); // Get user and logout function from context
+  
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector(
     (state: RootState) =>
@@ -53,6 +57,9 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
   const { products, pages, total, status } = useSelector(
     (state: RootState) => state.searchProducts as any
   );
+    const { currentLocale, translations } = useSelector(
+      (state: RootState) => state.locale
+    );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const { totalItems } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
@@ -332,7 +339,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
             <Badge count={filteredCartItems?.length} offset={[3, -7]}>
               <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
             </Badge>
-            <div className="hidden md:inline">Cart</div>
+            <div className="hidden md:inline"> {translations.cart}</div>
           </Link>
         </div>
       </div>

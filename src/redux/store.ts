@@ -9,6 +9,7 @@ import parentCategoriesSliceReducer from "./slices/parentCategoriesSlice";
 import advertisementReducer from "./slices/bannersSlice";
 import coverPictureSliceReducer from "./slices/coverPictureSlice";
 import orderReducer from "./slices/orderSlice";
+import localeReducer from "./slices/localeSlice";
 import favoriteProductsReducer from "./slices/favoriteProductsSlice";
 import localStorageMiddleware from "./localStorageMiddleware";
 import { loadCartFromLocalStorage } from "../utils/localStorage";
@@ -49,6 +50,7 @@ export const store = configureStore({
     searchProducts: searchSliceReducer,
     orders: orderReducer,
     favoriteProducts: favoriteProductsReducer,
+    locale: localeReducer,
   },
   preloadedState: {
     cart: initialCartState, // Set initial state for the cart

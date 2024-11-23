@@ -1,11 +1,10 @@
 {
-  
   "welcome": "مرحبًا بكم في معرض السيف العالمي",
   "follow_orders": "تتبع طلباتي",
   "english": "English",
   "arabic": "العربية",
-  "all_offers": "جميع العروض"
-,
+  "all_offers": "جميع العروض",
+  "cart": "جميع",
   "tabs": {
     "All": "الكل",
     "ElectricalAppliance": "الأجهزة الكهربائية",
