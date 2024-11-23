@@ -732,8 +732,6 @@ export default function TopNextNavbar({ logoUrl }: { logoUrl: string }) {
                                   src={product.imageIds[0]}
                                   alt="product"
                                   width={1000}
-                                  layout="responsive"
-                                  objectFit="cover"
                                   height={1000}
                                   className="w-full h-44 rounded-md object-cover"
                                 />
