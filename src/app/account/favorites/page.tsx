@@ -103,6 +103,8 @@ const FavoriteList: React.FC = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
+        selectedSize: product.additionalInformation.size[0],
       })
     );
   };
@@ -320,7 +322,7 @@ const FavoriteList: React.FC = () => {
     // )}
     // </div>
 
-    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[40px] lg:mt-[124px] bg-white dark:bg-slate-800 dark:text-white p-3">
+    <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]     dark:text-white p-3">
       {/* Left Section */}
       <div className="flex flex-col lg:w-1/2 w-full">
         <div className="flex flex-col">
@@ -329,11 +331,11 @@ const FavoriteList: React.FC = () => {
               Favorite Products
             </div>
             <div className="font-bold py-2 text-center">
-              You have{" "}
+              {/* You have{" "}
               <span className="text-[var(--color-primary)] font-serif">
                 {favoriteProducts?.length}
               </span>{" "}
-              in your favorites and{" "}
+              in your favorites and{" "} */}
               <span className="text-[var(--color-primary)] text-lg font-serif">
                 {favoriteProducts?.reduce((acc: any, product: any) => {
                   const productIdt = product?._id as any;
@@ -346,10 +348,10 @@ const FavoriteList: React.FC = () => {
                       item.buyerId === buyerId &&
                       item.color === productColor
                   );
-                  return acc + (existingItem ? existingItem.quantity : 0);
+                  return acc + (existingItem ? 1 : 0);
                 }, 0)}
               </span>{" "}
-              in your cart.
+              Favorite Products in your cart.
             </div>
           </div>
 
@@ -371,7 +373,7 @@ const FavoriteList: React.FC = () => {
                 return (
                   <div
                     key={product._id}
-                    className="flex flex-col sm:flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 dark:shadow-lg gap-3 p-1 items-center relative"
+                    className="flex    flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 dark:shadow-lg gap-3 max-sm:gap-1 p-1 max-sm:py-5 items-center relative"
                   >
                     {isInCart && (
                       <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-lg bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1 rounded-br-md">
@@ -382,7 +384,7 @@ const FavoriteList: React.FC = () => {
                     <Link
                       href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                     >
-                      <div className="w-36 h-36 sm:w-24 sm:h-24 relative">
+                      <div className="w-36 h-36 max-md:w-20 max-md:h-20 relative">
                         <Image
                           src={product?.signedUrls[0]}
                           alt={product.name}
@@ -393,17 +395,19 @@ const FavoriteList: React.FC = () => {
                       </div>
                     </Link>
 
-                    <div className="flex flex-col w-full sm:w-[60%] text-center sm:text-left">
+                    <div className="flex flex-col w-full max-sm:text-xs  text-center sm:text-left">
                       <div className="font-semibold truncate">
                         {product.name}
                       </div>
-                      <div className="truncate">{product.description}</div>
+                      <div className="truncate max-sm:hidden">
+                        {product.description}
+                      </div>
                       <div className="truncate">
                         {product.additionalInformation.brand}
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 w-full sm:w-auto text-center sm:text-left">
+                    <div className="flex flex-col  max-sm:text-xs gap-1 w-full sm:w-auto text-center sm:text-left">
                       {product?.discount ? (
                         <>
                           <div className="flex flex-row gap-1 items-center justify-center sm:justify-start">
@@ -414,19 +418,19 @@ const FavoriteList: React.FC = () => {
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </div>
-                          <div className="font-semibold text-xl">
+                          <div className="font-semibold  max-sm:text-sm text-xl">
                             ${product.discount}
                           </div>
                         </>
                       ) : (
-                        <div className="font-semibold text-xl">
+                        <div className="font-semibold  max-sm:text-sm text-xl">
                           {product.price}
                         </div>
                       )}
                     </div>
 
                     <div
-                      className="px-5"
+                      className="px-5 max-sm:px-1"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={(e) => e.preventDefault()}
                     >
@@ -455,7 +459,7 @@ const FavoriteList: React.FC = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)] dark:bg-slate-900">
+      <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)]">
         <div className="text-white text-2xl py-3 font-semibold text-center w-full">
           Favorite Categories
           <hr className="border-gray-300 dark:border-slate-600 w-full" />
@@ -468,7 +472,7 @@ const FavoriteList: React.FC = () => {
                 key={category._id}
                 className="flex flex-row items-center w-full p-3 rounded-lg shadow-lg dark:shadow-slate-950"
               >
-                <div className="w-[20%]">
+                <div className="md:w-[20%] max-sm:px-2 ">
                   <Link
                     href={`/${category.parentCategory.categoryName}/${category.parentCategory._id}/${category.categoryName}/${category._id}`}
                   >
@@ -477,7 +481,7 @@ const FavoriteList: React.FC = () => {
                       alt={category.categoryName}
                       width={1000}
                       height={1000}
-                      className="w-24 h-24 rounded-lg"
+                      className="w-24 h-24 max-sm:w-20 max-sm:h-20 rounded-lg"
                     />
                   </Link>
                 </div>

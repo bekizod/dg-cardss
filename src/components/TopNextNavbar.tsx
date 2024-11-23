@@ -2,7 +2,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TfiAlignLeft } from "react-icons/tfi";
-import { FaRegComment, FaRegUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaRegComment,
+  FaRegUser,
+  FaShoppingCart,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
@@ -35,6 +40,7 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
+import ThemeSwitcher from "./ui/ThemeSwitcher";
 
 export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: string, onLanguageToggle : any }) {
   const router = useRouter();
@@ -194,6 +200,8 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
+        selectedSize: product.additionalInformation.size[0],
       })
     );
   };
@@ -377,7 +385,9 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
             </form>
           </div>
         </div>
-
+        <div>
+          <ThemeSwitcher />
+        </div>
         {/* Favorite Icon Section */}
         <Link href={"/account/favorites"} className="flex items-center">
           <MdFavoriteBorder className="text-[var(--color-primary)] text-2xl cursor-pointer" />
@@ -412,7 +422,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
               {/* Modal Content */}
               <div className="flex w-full h-full">
                 {/* Tabs Section (Parent Categories) */}
-                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r justify-evenly border-gray-300 dark:border-slate-600">
+                <div className="w-1/4 bg-gray-100 dark:bg-slate-800 flex flex-col border-r  gap-10 py-3 border-gray-300 dark:border-slate-600">
                   <>
                     {parentCategories.map((category) => (
                       <button
@@ -638,13 +648,13 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
       <AnimatePresence>
         {issearchModalOpen && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-[10000000000] "
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gray-200 dark:bg-slate-900 p-6 rounded-lg shadow-lg md:w-[85vw] relative"
+              className="bg-gray-200 dark:bg-slate-900 md:p-6 p-1 rounded-lg shadow-lg  relative"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
@@ -661,7 +671,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                 Search Results <div>Total Products of {total}</div>
               </div>
 
-              {status === "loading" && <p>Loading products...</p>}
+              {/* {status === "loading" && <p>Loading products...</p>} */}
               {status === "failed" && <p>Error fetching products: {error}</p>}
 
               {status === "succeeded" && (
@@ -669,7 +679,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                   {" "}
                   {/* Set max height and enable scrolling */}
                   {products.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2   sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-1">
                       {/* {products.map((product) => (
                   <div
                     key={product._id}
@@ -725,6 +735,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                             {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                             <div className="relative">
                               <Link
+                                onClick={searchcloseModal}  
                                 href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                                 className="block w-full"
                               >
@@ -773,7 +784,11 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                                     value={product.ratings.averageRating.toFixed(
                                       1
                                     )}
-                                    className="text-sm dark:text-yellow-400"
+                                    className={`text-sm ${
+                                      product.ratings.averageRating > 0
+                                        ? ""
+                                        : "rate-empty"
+                                    }`}
                                     disabled
                                   />
                                 </div>
@@ -791,7 +806,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                                     {product?.discount > 0 && (
                                       <>
                                         <div className="font-mono line-through">
-                                          {product.price - product.discount}
+                                          {product.price}
                                         </div>
                                         <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
                                           -

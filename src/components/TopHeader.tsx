@@ -7,15 +7,19 @@ import { useTheme } from "next-themes";
 import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
 import { useAuth } from "@/context/UserContext";
+import PostFeedback from "@/components/PostFeedback"; // Import the PostFeedback component
+import { Button, Modal } from "antd"; // Import Ant Design Modal
 
 export default function TopHeader() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("saudi");
+  const [isFeedbackModalOpen, setFeedbackModalOpen] = useState(false); // Modal state
   const [currentLocale, setCurrentLocale] = useState<string | null>(null);
   const [translations, setTranslations] = useState(enTranslations); // Default to English translations
   const modalRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setOpen(false);
@@ -51,7 +55,6 @@ export default function TopHeader() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return (
     <div className="hidden lg:block">
       <div className="bg-gray-100 dark:bg-slate-900 text-sm font-serif py-2 flex justify-around items-center gap-8">
@@ -137,7 +140,10 @@ export default function TopHeader() {
         <div className="flex flex-row gap-4">
           {user && (
             <>
-              <Link href="/feedback" className="flex flex-row gap-3">
+              <div
+                className="flex flex-row gap-3 cursor-pointer"
+                onClick={() => setFeedbackModalOpen(true)}
+              >
                 <span>
                   <svg
                     width="18"
@@ -178,7 +184,7 @@ export default function TopHeader() {
                   </svg>
                 </span>
                 Send FeedBack
-              </Link>
+              </div>
               |
             </>
           )}
@@ -221,6 +227,47 @@ export default function TopHeader() {
           </Link>
         </div>
       </div>
+      {isFeedbackModalOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-xl p-6"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Send Feedback</h2>
+              <button
+                onClick={() => setFeedbackModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <PostFeedback />
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }

@@ -112,12 +112,12 @@ export default function ProductsAccordion({
 
   useEffect(() => {
     if (slugLength === 2 && parentId) {
-      dispatch(
-        fetchProductsByCategory({ subcategoryId: parentId  }) as any
-      );
+      dispatch(fetchProductsByCategory({ subcategoryId: parentId }) as any);
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
-      dispatch(fetchProductsByCategory({ subcategoryId: subcategoryId  }) as any);
+      dispatch(
+        fetchProductsByCategory({ subcategoryId: subcategoryId }) as any
+      );
       setThisCategoryId(subcategoryId);
     }
   }, [slugLength, parentId, subcategoryId, dispatch]);
@@ -135,9 +135,12 @@ export default function ProductsAccordion({
       const pricesSet = new Set<number>();
 
       products.forEach((product: any) => {
-        if (product.additionalInformation?.size) {
-          sizesSet.add(product.additionalInformation.size);
-        }
+       if (product.additionalInformation?.size?.length) {
+         product.additionalInformation.size.forEach((size : any) => {
+           sizesSet.add(size);
+         });
+       }
+
         if (product.additionalInformation?.color) {
           colorsSet.add(product.additionalInformation.color);
         }
@@ -202,21 +205,33 @@ export default function ProductsAccordion({
   const [selectedSort, setSelectedSort] = useState(""); // Default to "Low to High"
 
   // Handle sort selection
-  const handleSortChange = (event : any) => {
+  const handleSortChange = (event: any) => {
     setSelectedSort(event.target.value);
   };
-const applySorting = () => {
-  // Pass the selected sort value along with other parameters to the dispatch
-  dispatch(
-    fetchProductsByCategory({
-      subcategoryId,
-      page: 1,
-      size: 20,
-      sort: selectedSort,
-    }) as any
-  );
-  toggleSortModal(); // Close the modal after applying sort
-};
+  const applySorting = () => {
+    // Pass the selected sort value along with other parameters to the dispatch
+    if (slugLength === 2 && parentId) {
+      dispatch(
+        fetchProductsByCategory({
+          subcategoryId: parentId,
+          page: 1,
+          size: 20,
+          sort: selectedSort,
+        }) as any
+      );
+    } else {
+      dispatch(
+        fetchProductsByCategory({
+          subcategoryId,
+          page: 1,
+          size: 20,
+          sort: selectedSort,
+        }) as any
+      );
+    }
+
+    toggleSortModal(); // Close the modal after applying sort
+  };
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
@@ -361,10 +376,14 @@ const applySorting = () => {
     let filtered = products;
 
     if (selectedFilters.size.length > 0) {
-      filtered = filtered.filter((product: any) =>
-        selectedFilters.size.includes(product.additionalInformation?.size)
-      );
+      filtered = filtered.filter((product: any) => {
+        const productSizes = product.additionalInformation?.size || [];
+        return productSizes.some((size: string) =>
+          selectedFilters.size.includes(size)
+        );
+      });
     }
+
 
     if (selectedFilters.color.length > 0) {
       filtered = filtered.filter((product: any) =>
@@ -415,7 +434,7 @@ const applySorting = () => {
     return (
       <div
         role="status"
-        className="space-y-8 py-3 px-5 mt-[124px] animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center"
+        className="space-y-8 py-3 px-5   animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex flex  justify-center"
       >
         <div className="flex items-center justify-center w-full h-72 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
           <svg
@@ -508,27 +527,34 @@ const applySorting = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
+        selectedSize: product.additionalInformation.size[0],
       })
     );
   };
   return (
-    <div className=" md:px-20 lg:px-10   p-2 max-lg:mt-[64px] lg:mt-[124px] dark:bg-slate-900 dark:text-white lg:mx-auto">
+    <div className=" md:px-20 lg:px-10 p-2 max-lg:mt-[34px] dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-center justify-between">
         {slugLength === 2 && (
-          <div className="mb-4">
+          <div className="py-3">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 text-sm">
+              <ol className="flex w-full md:space-x-2 max-md:space-x-1 items-center md:text-lg text-xs text-gray-600 dark:text-gray-300">
                 <li>
-                  <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                  <Link
+                    href={`/`}
+                    className="hover:text-blue-500 transition duration-200"
+                  >
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
                 <li>
                   <Link
                     href={`/${parentName}/${parentId}`}
-                    className="text-blue-500 underline"
+                    className="hover:text-blue-500 text-blue-500 underline transition duration-200"
                   >
                     {parentName}
                   </Link>
@@ -539,26 +565,32 @@ const applySorting = () => {
         )}
 
         {slugLength === 4 && (
-          <div className="mb-4">
+          <div className=" py-3">
             <nav aria-label="breadcrumb">
-              <ol className="flex space-x-2 text-sm">
+              <ol className="flex w-full md:space-x-2 max-md:space-x-1   items-center text-xs md:text-lg text-gray-600 dark:text-gray-300">
                 <li>
-                  <Link href={`/`} className="text-gray-600 dark:text-gray-300">
+                  <Link
+                    href={`/`}
+                    className="hover:text-blue-500 transition duration-200"
+                  >
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
                 <li>
                   <Link
                     href={`/${parentName}/${parentId}`}
-                    className="text-gray-600 dark:text-gray-300"
+                    className="hover:text-blue-500 transition duration-200"
                   >
                     {parentName}
                   </Link>
                 </li>
-                <li>/</li>
-                <li className="text-gray-900 dark:text-gray-100">
-                  {" "}
+                <li>
+                  <span className="text-gray-400">/</span>
+                </li>
+                <li className="text-gray-900 dark:text-gray-100 font-semibold">
                   {subCategoryName}
                 </li>
               </ol>
@@ -572,7 +604,7 @@ const applySorting = () => {
         </div> */}
 
         <div
-          className="flex items-center space-x-2 text-lg font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200"
+          className="flex items-center space-x-2 text-lg max-md:text-sm font-medium text-[var(--color-primary)] dark:text-slate-400 cursor-pointer hover:text-slate-500 transition-colors duration-200"
           onClick={() => handleAddFavorite()}
         >
           {isFavorited ? (
@@ -580,7 +612,7 @@ const applySorting = () => {
           ) : (
             <GoHeart />
           )}
-          <span>{isFavorited ? "Favorited" : "Favorite this category"}</span>
+          <span>Category</span>
         </div>
       </div>
 
@@ -590,17 +622,17 @@ const applySorting = () => {
         <div className="w-full lg:w-3/4">
           {/* Title and Product Count */}
           <div className="mb-4">
-            <div className=" font-bold">
+            <div className="text-lg font-bold">
               Products{" "}
-              <span className="font-serif px-10 text-sm">
+              <span className="font-serif px-10 text-lg">
                 {filteredProducts.length} Products
               </span>
               <button
                 onClick={() => toggleSortModal()}
-                className="py-2 px-4      bg-gray-200 justify-center place-items-center dark:bg-gray-600 rounded lg:flex hidden items-center space-x-2"
+                className="py-1 px-3  max     bg-gray-100 justify-center place-items-center dark:bg-gray-800 rounded lg:flex hidden items-center space-x-2"
               >
                 <BsSortDown className="text-gray-700 dark:text-gray-300" />
-                <div>Sort</div>
+                <div className="text-sm">Sort</div>
               </button>
             </div>
           </div>
@@ -905,7 +937,11 @@ const applySorting = () => {
                         <div>
                           <Rate
                             value={product.ratings.averageRating.toFixed(1)}
-                            className="text-sm dark:text-yellow-400"
+                            className={`text-sm ${
+                              product.ratings.averageRating > 0
+                                ? ""
+                                : "rate-empty"
+                            }`}
                             disabled
                           />
                         </div>
@@ -922,9 +958,9 @@ const applySorting = () => {
                             {product?.discount > 0 && (
                               <>
                                 <div className="font-mono line-through">
-                                  {product.price - product.discount}
+                                  {product.price}
                                 </div>
-                                <div className="bg-[var(--color-secondary)]    px-1 rounded font-bold text-xs">
+                                <div className="bg-[var(--color-secondary)]  text-black  px-1 rounded font-bold text-xs">
                                   -{Math.round(product.discountPercentage)}%
                                 </div>
                               </>

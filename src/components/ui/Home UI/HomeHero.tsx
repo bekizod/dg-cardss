@@ -47,7 +47,7 @@ const isRTL = currentLocale === "ar";
   }
 
   return (
-    <div className="">
+    <div className="pt-[40px]">
       <motion.div
         className="py-2"
         initial={{ opacity: 0 }}
@@ -86,13 +86,13 @@ const isRTL = currentLocale === "ar";
         </div>
       </motion.div>
 
-      <div>
+      <div className="px-7">
         <BestProducts />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {coverPictures.length === 0 ? (
-          <div>No cover pictures available</div>
+          <div> </div>
         ) : (
           coverPictures.map((item: any) => (
             <Link
@@ -117,8 +117,10 @@ const isRTL = currentLocale === "ar";
           ))
         )}
       </div>
-
-      <div>
+      <div className="pb-2">
+        <Slider />
+      </div>
+      <div className="px-7">
         {/* <div>You May Also Like</div> */}
         <ProductCarousel />
       </div>

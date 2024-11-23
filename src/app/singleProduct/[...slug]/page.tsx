@@ -17,7 +17,7 @@ import axios from "axios";
 import { message, notification, Modal, Input, Button, Rate } from "antd";
 import "./stars.css";
 import Custom404 from "@/app/not-found";
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart, updateSelectedSize } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
 
@@ -61,6 +61,9 @@ export default function SingleProductPage({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addComment, setAddComment] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(
+    "" // Default to the first size, or set to an empty string if no sizes
+  );
   // Now use useSelector to get cart items and perform the logic outside of the hook
   const existingItem = useSelector((state: RootState) =>
     state.cart.items.find(
@@ -102,6 +105,12 @@ export default function SingleProductPage({
     dispatch(fetchSingleProduct(productId) as any);
   }, [dispatch, productId]);
 
+  useEffect(()=> {
+    if (product) {
+      setSelectedSize(product?.additionalInformation?.size[0]);
+    }
+  },[product])
+
   useEffect(() => {
     // Ensure the product has images before accessing them
     if (product && product.imageIds && product.imageIds.length > 0) {
@@ -117,7 +126,7 @@ export default function SingleProductPage({
 
   if (loading)
     return (
-      <div className="flex flex-col gap-3 max-lg:mt-[23px]  md:mt-[124px]  animate-pulse    rtl:space-x-reverse">
+      <div className="flex flex-col gap-3    2xl:mt-[124px]  animate-pulse    rtl:space-x-reverse">
         <div
           role="status"
           className="space-y-8   px-4 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse flex md:flex-row flex-col  "
@@ -201,9 +210,23 @@ export default function SingleProductPage({
           numberOfRating: product.ratings.numberOfRatings,
           brand: product.additionalInformation.brand,
           adjective: product.adjective,
+          size: product.additionalInformation.size,
+          selectedSize: product.additionalInformation.size[0],
         })
       );
     }
+  };
+
+  const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSize = event.target.value;
+    setSelectedSize(newSize);
+    dispatch(
+      updateSelectedSize({
+        id: productIdt,
+        buyerId: buyerId,
+        selectedSize: newSize,
+      })
+    );
   };
 
   const handleRate = async () => {
@@ -259,8 +282,9 @@ export default function SingleProductPage({
     setComment(""); // Reset comment if user cancels
     setAddComment(false); // Reset add comment option
   };
+
   return (
-    <div className="container mx-auto flex flex-col space-y-8 p-5  max-lg:mt-[55px]  lg:mt-[124px]  max-w-screen-xl">
+    <div className="container mx-auto flex flex-col space-y-8 p-5  max-lg:mt-[34px]    max-w-screen-xl">
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
@@ -538,8 +562,6 @@ export default function SingleProductPage({
           {/* Pricing Information Card */}
           <motion.div
             className="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg space-y-4"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -596,7 +618,6 @@ export default function SingleProductPage({
                 Tax included
               </p>
             </div>
-
             {/* Purchase Option */}
             <div className="flex items-center space-x-2">
               <input
@@ -607,9 +628,31 @@ export default function SingleProductPage({
                 onChange={() => setPurchaseOption("purchase-now")}
                 className="form-radio h-4 w-4 text-blue-600 dark:text-blue-400 transition duration-150 ease-in-out"
               />
+
               <p className="text-gray-900 dark:text-gray-100">Purchase now</p>
             </div>
-
+            Choose Your Size
+            {Array.isArray(product.additionalInformation?.size) &&
+            product.additionalInformation.size.length > 1 ? (
+              <select
+                onChange={handleSizeChange}
+                value={
+                  existingItem?.selectedSize
+                    ? existingItem?.selectedSize
+                    : selectedSize
+                }
+              >
+                {product.additionalInformation.size.map(
+                  (size: any, index: any) => (
+                    <option key={index} value={size}>
+                      {size}
+                    </option>
+                  )
+                )}
+              </select>
+            ) : (
+              <span></span>
+            )}
             {/* Add to Cart Button */}
             {product.stockQuantity > 0 ? (
               <motion.button
@@ -645,6 +688,7 @@ export default function SingleProductPage({
                     size={40}
                     className="text-green-500 dark:text-green-400"
                   />
+
                   <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                     Added to cart
                   </p>
@@ -851,7 +895,10 @@ export default function SingleProductPage({
                   <li>Brand: {product.additionalInformation?.brand}</li>
                   <li>Color: {product.additionalInformation?.color}</li>
                   <li>Material: {product.additionalInformation?.material}</li>
-                  <li>Size: {product.additionalInformation?.size}</li>
+                  <li>
+                    Size: {product.additionalInformation?.size?.join(", ")}
+                  </li>
+
                   <li>warranty: {product.additionalInformation?.warranty}</li>
                 </ul>
               </div>

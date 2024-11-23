@@ -9,6 +9,9 @@ import { FaPlus, FaMinus, FaCheck } from "react-icons/fa";
 import { Button, Form, Input, Select, notification } from "antd";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { setSelectedAddress } from "@/redux/slices/addressSlice";
 
 interface City {
   id: number;
@@ -16,6 +19,7 @@ interface City {
 }
 
 export default function Address() {
+   const dispatch = useDispatch();
   const [showMap, setShowMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState("");
@@ -24,7 +28,7 @@ export default function Address() {
   const router = useRouter();
   const { user, token } = useAuth();
   const [addressMe, setAddressMe] = useState<string[]>([]);
-
+  
   useEffect(() => {
     const token = Cookies.get("token");
     setAddressMe(user?.savedAddress || []);
@@ -120,8 +124,10 @@ export default function Address() {
   };
 
   const handleConfirmSelection = () => {
+      dispatch(setSelectedAddress(address));
     // Pass selected city as a query parameter to the payment route
     router.push(`/checkout/payment?address=${encodeURIComponent(address)}`);
+    // router.push(`/checkout/payment`);
   };
 
   return (

@@ -136,9 +136,9 @@ export default function Home() {
   }             
 
   return (
-    <main className=" pt-[28px] md:pt-[64px] lg:pt-[124px]">
-      <nav className="fixed w-full bg-gray-100 dark:bg-slate-800 shadow-md z-30">
-        <ul className="hidden md:flex justify-center gap-8 p-1">
+    <main className="    ">
+      <nav className="fixed w-full  bg-gray-100 dark:bg-slate-800 shadow-md z-30">
+        <ul className="hidden lg:flex justify-center gap-8 p-1">
           <li
             className={`cursor-pointer py-1 px-2 rounded-xl ${
               activeTab === "All"
@@ -166,7 +166,7 @@ export default function Home() {
           ))}
         </ul>
       </nav>
-      <div className="container mx-auto md:mt-10 mt-9 px-4">
+      <div className="container mx-auto   ">
         {isLoading ? <Loader /> : renderContent()}
       </div>
       {error && <p className="text-red-500">{error}</p>}

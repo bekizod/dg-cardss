@@ -9,10 +9,11 @@ import CardModal from "@/components/CardModal"; // Update the import path as nec
 import Cookies from "js-cookie";
 import { notification } from "antd";
 import { useAuth } from "@/context/UserContext";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clearCartByBuyerId } from "@/redux/slices/cartSlice";
+import { setPaymentSelected } from "@/redux/slices/paymentSlice";
 const paymentMethods = [
   {
     id: 1,
@@ -56,6 +57,7 @@ export default function PaymentMethods() {
   const dispatch = useDispatch();
   const [selectedMethod, setSelectedMethod] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const pathname = usePathname();
   const [modalConfirmed, setModalConfirmed] = useState(false); // Track if the modal was confirmed
   const [modalData, setModalData] = useState<{
     cardNumber: string;
@@ -72,7 +74,9 @@ export default function PaymentMethods() {
   );
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
   const token = Cookies.get("token");
-
+  const selectedAddress = useSelector(
+    (state: RootState) => state.address.selectedAddress
+  );
   const searchParams = useSearchParams();
   const [address, setAddress] = useState<string | null>(null);
 
@@ -150,6 +154,12 @@ export default function PaymentMethods() {
   }, [handleClickOutside]);
 
   const handleMethodClick = (id: number) => {
+    if (pathname === "/checkout/payment" && (selectedAddress || address)) {
+      dispatch(setPaymentSelected(true));
+    } else {
+      dispatch(setPaymentSelected(false));
+    }
+
     if (id === 2) {
       setModalOpen(true); // Open modal for Credit/Debit Card Payment
       setModalConfirmed(false); // Reset confirmation state when modal opens
@@ -218,19 +228,10 @@ export default function PaymentMethods() {
   };
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
-      <div className="flex   justify-center">
-        <button
-          className="p-2 rounded-lg bg-[var(--color-primary)] text-white shadow-md hover:bg-[var(--color-secondary)]"
-          onClick={handleCreateOrder}
-          disabled={loading}
-        >
-          {loading ? "Creating Order..." : "Create Order"}
-        </button>
-      </div>
       <p className="text-lg text-center font-semibold mb-4 dark:text-white">
         Choose payment method
       </p>
-      <div>selected Address {address}</div>
+       
       <div className="space-y-1">
         {paymentMethods.map((method) => (
           <motion.div

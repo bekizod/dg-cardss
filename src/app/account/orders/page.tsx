@@ -5,6 +5,7 @@ import { useAuth } from "@/context/UserContext";
 import { getOrders } from "@/redux/slices/orderSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -69,13 +70,13 @@ export default function Order() {
   const getStatusClass = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-200 text-green-800"; // Light green background with dark green text
+        return "bg-green-500 text-green-800"; // Light green background with dark green text
       case "delayed":
-        return "bg-yellow-200 text-yellow-800"; // Light yellow background with dark yellow text
+        return "bg-yellow-500 text-yellow-800"; // Light yellow background with dark yellow text
       case "canceled":
-        return "bg-red-200 text-red-800"; // Light red background with dark red text
+        return "bg-red-500 text-red-800"; // Light red background with dark red text
       default:
-        return "bg-gray-200 text-gray-800"; // Default light gray background
+        return "bg-gray-500 text-gray-800"; // Default light gray background
     }
   };
 
@@ -84,15 +85,13 @@ export default function Order() {
   };
 
   return (
-    <div className="order-list max-lg:mt-[64px] lg:mt-[124px] p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <div className="order-list max-lg:mt-[34px]     p-4   transition-colors duration-300">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
         Order History
       </h2>
 
       {/* Loading and error handling */}
-      {loading && (
-       <Loader />
-      )}
+      {loading && <Loader />}
       {error && (
         <p className="text-red-600 text-center">
           Error loading orders: {error}
@@ -116,78 +115,81 @@ export default function Order() {
             const isVisible = showCartItems[order.itemCode];
 
             return (
-              <div
-                key={order.itemCode}
-                className="border border-gray-300 dark:border-slate-600 p-4 rounded-lg shadow-lg bg-white dark:bg-slate-700 transition-transform transform hover:scale-105"
-              >
-                <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
-                  {order.item}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Order Code:{" "}
-                  <span className="font-medium">{order.itemCode}</span>
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Amount: <span className="font-medium">${order.price}</span>
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Total Quantity:{" "}
-                  <span className="font-medium">{order.amount}</span>
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Date: <span className="font-medium">{order.date}</span>
-                </p>
-                <p
-                  className={`p-2 rounded mt-2 text-center ${getStatusClass(
-                    order.status
-                  )} text-white`}
-                >
-                  Status: {order.status}
-                </p>
+              <div key={order.itemCode} className=" ">
+                <div className="  p-4 rounded-lg shadow-lg  transition-transform transform border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700">
+                  <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
+                    {order.item}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Order Code:{" "}
+                    <span className="font-medium">{order.itemCode}</span>
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Amount: <span className="font-medium">${order.price}</span>
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Total Quantity:{" "}
+                    <span className="font-medium">{order.amount}</span>
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Date: <span className="font-medium">{order.date}</span>
+                  </p>
+                  <p
+                    className={`p-2 rounded mt-2 text-center ${getStatusClass(
+                      order.status
+                    )} text-white`}
+                  >
+                    Status: {order.status}
+                  </p>
 
-                {/* Button to toggle cart items visibility for the specific order */}
-                <button
-                  onClick={() => toggleCartItemsVisibility(order.itemCode)}
-                  className="mt-4 bg-[var(--color-primary)]   text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
-                >
-                  {isVisible ? "Hide Cart Items" : "View Cart Items"}
-                </button>
+                  {/* Button to toggle cart items visibility for the specific order */}
+                  <button
+                    onClick={() => toggleCartItemsVisibility(order.itemCode)}
+                    className="mt-4 bg-[var(--color-primary)]   text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
+                  >
+                    {isVisible ? "Hide Cart Items" : "View Cart Items"}
+                  </button>
 
-                {/* Conditionally render cart items */}
-                {isVisible && (
-                  <div className="mt-4">
-                    <h4 className="font-semibold mb-1 text-gray-800 dark:text-white">
-                      Cart Items:
-                    </h4>
-                    <div className="flex flex-col space-y-2">
-                      {order.cart.map((cartItem: any) => (
-                        <div
-                          key={cartItem?.productId?._id}
-                          className="flex justify-between p-2 bg-gray-100 dark:bg-gray-600 rounded-md"
-                        >
-                          <div className="flex flex-col">
-                            <span className="font-medium">
-                              Product ID: {cartItem?.productId?._id}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-300">
-                              Product Name: {cartItem?.productId?.name}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-300">
-                              Quantity: {cartItem?.quantity}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-300">
-                              Price: ${cartItem?.productId?.price}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-300">
-                              Category:{" "}
-                              {cartItem?.productId?.category.categoryName}
-                            </span>
+                  {/* Conditionally render cart items */}
+                  {isVisible && (
+                    <div className="mt-4">
+                      <h4 className="font-semibold mb-1 text-gray-800 dark:text-white">
+                        Cart Items:
+                      </h4>
+                      <div className="flex flex-col space-y-2">
+                        {order.cart.map((cartItem: any) => (
+                          <div
+                            key={cartItem?.productId?._id}
+                            className="flex justify-between p-2 bg-gray-100 dark:bg-gray-600 rounded-md"
+                          >
+                            <Link
+                              href={`/singleProduct/${cartItem?.productId?.category?.categoryName}/${cartItem?.productId?.category?._id}/${cartItem?.productId?.name}/${cartItem?.productId?._id}`}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  Product ID: {cartItem?.productId?._id}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Product Name: {cartItem?.productId?.name}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Quantity: {cartItem?.quantity}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Price: ${cartItem?.productId?.price}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Category:{" "}
+                                  {cartItem?.productId?.category.categoryName}
+                                </span>
+                              </div>
+                            </Link>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}

@@ -11,6 +11,8 @@ import coverPictureSliceReducer from "./slices/coverPictureSlice";
 import orderReducer from "./slices/orderSlice";
 import localeReducer from "./slices/localeSlice";
 import favoriteProductsReducer from "./slices/favoriteProductsSlice";
+import paymentReducer from "./slices/paymentSlice";
+import addressReducer from "./slices/addressSlice";
 import localStorageMiddleware from "./localStorageMiddleware";
 import { loadCartFromLocalStorage } from "../utils/localStorage";
 
@@ -50,6 +52,8 @@ export const store = configureStore({
     searchProducts: searchSliceReducer,
     orders: orderReducer,
     favoriteProducts: favoriteProductsReducer,
+    payment: paymentReducer,
+    address: addressReducer,
     locale: localeReducer,
   },
   preloadedState: {

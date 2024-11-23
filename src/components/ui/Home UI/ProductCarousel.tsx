@@ -33,7 +33,8 @@ const ProductCarousel = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { user } = useAuth();
-  const { favoriteProducts, loading, error } = useSelector(
+ const [loading, setLoading] = useState(false)
+  const { favoriteProducts,   error } = useSelector(
     (state: RootState) => state.favoriteProducts as any
   );
   useEffect(() => {
@@ -55,6 +56,7 @@ const ProductCarousel = () => {
         .join("&"); // Filter out any null values before joining
 
       try {
+        setLoading(true)
         // Dispatch the action
         await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
       } catch (err: any) {
@@ -64,6 +66,8 @@ const ProductCarousel = () => {
           description:
             err?.message || "Failed to fetch products. Please try again.",
         });
+      } finally{
+setLoading(false)
       }
     };
 
@@ -90,6 +94,8 @@ const ProductCarousel = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
+        size: product.additionalInformation.size,
+        selectedSize: product.additionalInformation.size[0],
       })
     );
   };
@@ -107,6 +113,11 @@ const ProductCarousel = () => {
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log("Favorite Products:", favoriteProducts);
+  }, [favoriteProducts]);
+
 
   const handleFavoriteToggle = async (productId: string) => {
     const isFavorite = favoriteProducts?.some(
@@ -156,7 +167,10 @@ const ProductCarousel = () => {
 
   return (
     <div className="relative ">
-      <div className="font-bold text-xl ">Our Discount Products</div>
+      {!loading && (
+        <div className="font-bold text-xl ">Our Discount Products</div>
+      )}
+
       <div
         ref={carouselRef}
         className="flex gap-2 overflow-x-auto scroll-smooth select-none scrollbar-hide"
@@ -189,7 +203,7 @@ const ProductCarousel = () => {
             return (
               <div
                 key={productIdt}
-                className="flex flex-col w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5  w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
               >
                 {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="relative">
@@ -240,7 +254,9 @@ const ProductCarousel = () => {
                     <div>
                       <Rate
                         value={product.ratings.averageRating.toFixed(1)}
-                        className="text-sm dark:text-yellow-400"
+                        className={`text-sm ${
+                          product.ratings.averageRating > 0 ? "" : "rate-empty"
+                        }`}
                         disabled
                       />
                     </div>
@@ -258,9 +274,9 @@ const ProductCarousel = () => {
                         {product?.discount > 0 && (
                           <>
                             <div className="font-mono line-through">
-                              {product.price - product.discount}
+                              {product.price}
                             </div>
-                            <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
+                            <div className="bg-[var(--color-secondary)] text-black  px-1 rounded font-bold text-xs">
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </>

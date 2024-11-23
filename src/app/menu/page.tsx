@@ -48,13 +48,13 @@ const Page = () => {
   }, [parentCategories, activeTab, dispatch]);
 
   return (
-    <div className="flex overflow-hidden h-screen mt-[64px] bg-gray-100 dark:bg-slate-900">
+    <div className="flex overflow-hidden h-screen max-lg:mt-[39px] bg-gray-100 dark:bg-slate-900">
       {/* Parent Categories Section */}
       <div className="w-1/4 h-full border-r border-gray-300 dark:border-slate-600 relative overflow-y-auto scrollbar-hidden">
-        <div className="grid gap-2">
+        <div className="grid gap-2 py-3">
           {loading && !parentCategories.length ? (
             <div className="flex justify-center items-center py-4">
-              Loading parent categories...
+               {""}
             </div>
           ) : error && !parentCategories.length ? (
             <div className="flex justify-center items-center py-4 text-red-500">
@@ -65,7 +65,7 @@ const Page = () => {
               <button
                 key={tab._id}
                 onClick={() => handleTabClick(tab._id, tab.categoryName)}
-                className={`flex items-center gap-2 py-2 justify-center ${
+                className={`flex items-center gap-2 py-3 justify-center ${
                   activeTab === tab._id
                     ? "bg-[var(--color-primary)] text-white"
                     : " dark:bg-slate-900"
@@ -75,8 +75,8 @@ const Page = () => {
                   <Image
                     src={tab?.categoryLogo?.data}
                     alt={tab.categoryName}
-                    width={20}
-                    height={20}
+                    width={40}
+                    height={40}
                     className="text-green-500"
                   />
                   <span className="text-xs text-center">

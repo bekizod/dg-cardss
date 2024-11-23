@@ -10,6 +10,7 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
+  updateSelectedSize,
 } from "../../redux/slices/cartSlice";
 import { message, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
@@ -27,6 +28,9 @@ const CartComponent = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const [isMounted, setIsMounted] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(
+    "" // Default to the first size, or set to an empty string if no sizes
+  );
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
   const { totalItems, totalPrice, totalDiscount } = useSelector(
@@ -109,8 +113,25 @@ const CartComponent = () => {
 
   //    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
   //  };
+
+
+  const handleSizeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    productId: any,
+    buyerId : any
+  ) => {
+    const newSize = event.target.value;
+    setSelectedSize(newSize);
+    dispatch(
+      updateSelectedSize({
+        id: productId,
+        buyerId: buyerId,
+        selectedSize: newSize,
+      })
+    );
+  };
   return (
-    <div className="flex justify-center  lg:mt-[124px] mt-[68px]   lg:h-full py-3  items-center  md:px-12 lg:px-16 dark:bg-gray-900">
+    <div className="flex justify-center max-lg:mt-[34px]       py-3  items-center  md:px-12 lg:px-16  ">
       <AnimatePresence>
         {filteredCartItems.length === 0 && (
           <motion.div
@@ -164,63 +185,72 @@ const CartComponent = () => {
             {filteredCartItems.map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl shadow-xl bg-slate-100 dark:bg-slate-800 dark:text-white flex flex-col sm:flex-row p-3 relative"
+                className="rounded-xl transform max-md:scale-75 max-md:-my-7 max-md:-mx-11  shadow-xl bg-slate-100 dark:bg-slate-800 dark:text-white flex   sm:flex-row p-2 sm:p-3 relative text-xs sm:text-sm"
               >
                 {/* Trash Icon */}
-                <div className="absolute z-30 top-0 sm:top-0 right-2 sm:right-6 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
+                <div className="absolute z-30 top-1 right-2 sm:top-2 sm:right-4 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
                   <button
                     onClick={() => handleDelete(item.id, item.buyerId)}
                     className="text-red-500 self-start"
                   >
-                    <FaTrashAlt className="w-6 h-6" />
+                    <FaTrashAlt className="w-4 h-4 sm:w-6 sm:h-6" />
                   </button>
                 </div>
 
                 {/* Product Info (Left) */}
                 <div className="flex flex-col flex-1 justify-between">
                   {/* Product Name */}
-                  <div className="mb-3 font-light text-sm">{item.brand}</div>
+                  <div className="mb-1 sm:mb-3 font-light text-xs sm:text-sm">
+                    {item.brand}
+                  </div>
+
                   {/* Description */}
-                  <div className="text-xl font-bold   mb-3">{item.name}</div>
-                  <div className="test-sm font-semibold">{item.adjective}</div>
+                  <div className="text-base sm:text-xl font-bold mb-1 sm:mb-3">
+                    {item.name}
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold">
+                    {item.adjective}
+                  </div>
+
                   {/* Ratings */}
-                  <div className="flex flex-row gap-2 items-center mb-3">
+                  <div className="flex flex-row gap-2 items-center mb-2 sm:mb-3">
                     <div>
                       <Rate
                         value={item.averageRating}
-                        className="dark:text-white"
+                        className={`text-sm ${
+                          item.averageRating > 0 ? "" : "rate-empty"
+                        }`}
                         disabled
                       />
                     </div>
-                    <div className="font-serif text-sm">
+                    <div className="font-serif text-xs sm:text-sm">
                       {item.numberOfRating} reviews
                     </div>
                   </div>
+
                   {/* Pricing */}
-                  <div className="flex flex-row gap-2 items-center mb-3">
+                  <div className="flex flex-row gap-2 items-center mb-2 sm:mb-3">
                     {item.discount > 0 ? (
                       <>
-                        {" "}
-                        <div className="font-bold text-lg line-through">
+                        <div className="font-bold text-sm sm:text-lg line-through">
                           {item.price} SAR
                         </div>
-                        <div className="font-bold text-lg text-green-600">
+                        <div className="font-bold text-sm sm:text-lg text-green-600">
                           {item.unitPrice} SAR
                         </div>
-                        <div className="p-1 bg-red-200 text-red-600 font-semibold rounded-2xl text-sm dark:bg-red-800 dark:text-red-400">
-                          -{Math.round(item.discount)}%% OFF
+                        <div className="p-1 bg-red-200 text-red-600 font-semibold rounded-2xl text-xs sm:text-sm dark:bg-red-800 dark:text-red-400">
+                          -{Math.round(item.discount)}% OFF
                         </div>
                       </>
                     ) : (
-                      <>
-                        <div className="font-bold text-xl text-green-600">
-                          {item.price}
-                        </div>
-                      </>
+                      <div className="font-bold text-base sm:text-xl text-green-600">
+                        {item.price}
+                      </div>
                     )}
                   </div>
+
                   {/* Quantity Controls */}
-                  <div className="flex flex-row items-center gap-4">
+                  <div className="flex flex-row items-center gap-2 sm:gap-4">
                     {/* Decrement Button */}
                     <button
                       onClick={() =>
@@ -231,14 +261,14 @@ const CartComponent = () => {
                           })
                         )
                       }
-                      className="flex items-center justify-center w-10 h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
+                      className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
                       aria-label="Decrease Quantity"
                     >
-                      <BiChevronDown size={20} />
+                      <BiChevronDown size={16} />
                     </button>
 
                     {/* Quantity Display */}
-                    <div className="text-xl font-bold text-black dark:text-white">
+                    <div className="text-base sm:text-xl font-bold text-black dark:text-white">
                       {item.quantity}
                     </div>
 
@@ -252,23 +282,40 @@ const CartComponent = () => {
                           })
                         )
                       }
-                      className="flex items-center justify-center w-10 h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
+                      className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-slate-600 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-slate-500 shadow-md"
                       aria-label="Increase Quantity"
                     >
-                      <BiChevronUp size={20} />
+                      <BiChevronUp size={16} />
                     </button>
+                    {Array.isArray(item.size) && item.size.length > 1 ? (
+                      <div>
+                        Choose your size
+                        <select
+                          onChange={(e)=>handleSizeChange(e,item.id,item.buyerId)}
+                          value={item.selectedSize}
+                        >
+                          {item.size.map((size: any, index: any) => (
+                            <option key={index} value={size}>
+                              {size}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <span></span>
+                    )}
                   </div>
                 </div>
 
                 {/* Image (Right) */}
-                <div className="flex justify-center items-center mt-5 sm:mt-0 sm:ml-5">
+                <div className="flex justify-center items-center mt-3 sm:mt-0 sm:ml-5">
                   <Link href={item.link}>
                     <Image
                       src={item.image}
                       alt={item.name}
-                      width={1000}
-                      height={1000}
-                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
+                      width={500}
+                      height={500}
+                      className=" w-24  h-24 object-cover rounded-lg"
                     />
                   </Link>
                 </div>
