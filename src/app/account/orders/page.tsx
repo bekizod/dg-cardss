@@ -5,6 +5,7 @@ import { useAuth } from "@/context/UserContext";
 import { getOrders } from "@/redux/slices/orderSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -161,24 +162,28 @@ export default function Order() {
                             key={cartItem?.productId?._id}
                             className="flex justify-between p-2 bg-gray-100 dark:bg-gray-600 rounded-md"
                           >
-                            <div className="flex flex-col">
-                              <span className="font-medium">
-                                Product ID: {cartItem?.productId?._id}
-                              </span>
-                              <span className="text-gray-600 dark:text-gray-300">
-                                Product Name: {cartItem?.productId?.name}
-                              </span>
-                              <span className="text-gray-600 dark:text-gray-300">
-                                Quantity: {cartItem?.quantity}
-                              </span>
-                              <span className="text-gray-600 dark:text-gray-300">
-                                Price: ${cartItem?.productId?.price}
-                              </span>
-                              <span className="text-gray-600 dark:text-gray-300">
-                                Category:{" "}
-                                {cartItem?.productId?.category.categoryName}
-                              </span>
-                            </div>
+                            <Link
+                              href={`/singleProduct/${cartItem?.productId?.category?.categoryName}/${cartItem?.productId?.category?._id}/${cartItem?.productId?.name}/${cartItem?.productId?._id}`}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  Product ID: {cartItem?.productId?._id}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Product Name: {cartItem?.productId?.name}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Quantity: {cartItem?.quantity}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Price: ${cartItem?.productId?.price}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-300">
+                                  Category:{" "}
+                                  {cartItem?.productId?.category.categoryName}
+                                </span>
+                              </div>
+                            </Link>
                           </div>
                         ))}
                       </div>
