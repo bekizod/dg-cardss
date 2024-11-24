@@ -582,7 +582,7 @@ export default function ProductsAccordion({
                   <button
                     onClick={() => {
                       applySorting();
-                      toggleFilterModal();
+                      toggleSortModal();
                     }}
                     className="py-2 px-4 bg-[var(--color-primary)] text-white rounded"
                   >
