@@ -115,6 +115,7 @@ export default function Home() {
 
   const handleTabClick = (tab: string, categoryId: string | null = null) => {
     setActiveTab(tab);
+    setSelectedCategoryId(categoryId);
     window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top
   };
 
