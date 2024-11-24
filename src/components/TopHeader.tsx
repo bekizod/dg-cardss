@@ -89,7 +89,7 @@ export default function TopHeader() {
                     className="flex items-center justify-between px-6 py-4 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md cursor-pointer"
                     onClick={() => handleCountryChange("saudi")}
                   >
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-4">
                       <input
                         type="radio"
                         name="country"
@@ -112,7 +112,7 @@ export default function TopHeader() {
                     className="flex items-center justify-between px-6 py-4 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md cursor-pointer"
                     onClick={() => handleCountryChange("uae")}
                   >
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-4">
                       <input
                         type="radio"
                         name="country"

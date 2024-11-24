@@ -237,46 +237,46 @@ const Footer = () => {
               Need Help ?
             </h3>
             <ul className="space-y-2 text-sm pt-3 flex flex-col items-center">
-              <li className="flex items-center hover:text-slate-400">
-                <FaInfoCircle className="mr-2" />
+              <li className="flex flex-row gap-2 items-center  hover:text-slate-400">
+                <FaInfoCircle className=" " />
                 <Link href="/our-story">Our Story</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaWallet className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaWallet className="" />
                 <Link href="/loyalty-points-policy">Loyalty Points Policy</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaShieldAlt className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaShieldAlt className="" />
                 <Link href="/privacy-policy">Privacy Policy</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaMoneyBillWave className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaMoneyBillWave className="" />
                 <Link href="/payment-method">Payment Method</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaShippingFast className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaShippingFast className="" />
                 <Link href="/shipping-and-delivery-information">
                   Shipping and Delivery Information
                 </Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaShoppingCart className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaShoppingCart className="" />
                 <Link href="/how-to-buy">How to Buy</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaFileContract className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaFileContract className="" />
                 <Link href="/terms-and-conditions">Terms and Conditions</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaQuestionCircle className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaQuestionCircle className="" />
                 <Link href="/faqs">FAQs</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaArrowCircleRight className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaArrowCircleRight className="" />
                 <Link href="/return-policy">Return Policy</Link>
               </li>
-              <li className="flex items-center hover:text-slate-400">
-                <FaPhone className="mr-2" />
+              <li className="flex flex-row gap-2 items-center hover:text-slate-400">
+                <FaPhone className="" />
                 <Link href="/warranty">Warranty</Link>
               </li>
             </ul>
@@ -290,7 +290,7 @@ const Footer = () => {
             <p className="text-xs text-center">
               You can follow us on social media
             </p>
-            <div className="flex justify-center space-x-4 mt-2">
+            <div className="flex justify-center gap-4 mt-2">
               <Link href="https://www.facebook.com/alsaifgallery">
                 <FaFacebookF className="text-2xl cursor-pointer" />
               </Link>
