@@ -67,7 +67,8 @@ export default function Login() {
 
         // Store the token and user information in the context and cookies
         login(token, user);
-        router.push("/account");
+        window.location.reload();
+        // router.push("/account");
         // Display success notification
         openNotification(
           "success",
