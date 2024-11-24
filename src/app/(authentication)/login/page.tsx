@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
 import Cookies from "js-cookie";
+import axios from "axios"; // Import axios
+
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
 
@@ -20,15 +22,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loging, setLoging] = useState(false);
   const router = useRouter();
-  const { user,login } = useAuth(); // Use the login function from AuthContext
+  const { user, login } = useAuth(); // Use the login function from AuthContext
   const token = Cookies.get("token");
-  
+
   useEffect(() => {
     if (user && token) {
-      router.push("/account")
+      router.push("/account");
     }
-  }, [user,token,router])
-  
+  }, [user, token, router]);
+
   // Notification function with a 3-second duration
   const openNotification = (
     type: NotificationType,
@@ -47,39 +49,34 @@ export default function Login() {
     e.preventDefault();
     setLoging(true);
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://alsaifgallery.onrender.com/api/v1/user/signIn",
         {
-          method: "POST",
+          email,
+          password,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        const { token, user } = data.data;
+      if (response.status === 200) {
+        const { token, user } = response.data.data;
 
         // Store the token and user information in the context and cookies
         login(token, user);
-
+        window.location.reload();
+        // router.push("/account");
         // Display success notification
         openNotification(
           "success",
           "Login Successful",
           `Name: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nMobile: ${user.mobile}`
         );
-        router.push("/account");
       } else {
-        const errorData = await response.json();
-        console.error("Login error", errorData);
-
-        // Display error notification
+        // In case of an error response
         openNotification(
           "error",
           "Login Failed",
@@ -101,7 +98,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28  h-screen    bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 h-screen bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">LOG IN</div>
@@ -139,7 +136,7 @@ export default function Login() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {loging ? "Loging......." : "Log In"}
+            {loging ? "Logging......." : "Log In"}
           </motion.button>
           <Link
             href={"/forgotpassword"}
