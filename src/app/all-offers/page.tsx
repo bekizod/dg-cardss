@@ -106,7 +106,7 @@ export default function ProductsAccordion({
   //   } else {
   //     return (<Custom404 />) as any;
   //   }
-const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
+  const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
   const toggleFilterModal = () => setFilterModalOpen(!filterModalOpen);
   const [selectedSort, setSelectedSort] = useState(""); // Default to "Low to High"
 
@@ -114,39 +114,39 @@ const toggleSortModal = () => setSortModalOpen(!sortModalOpen);
   const handleSortChange = (event: any) => {
     setSelectedSort(event.target.value);
   };
-const applySorting = async () => {
-  // Pass the selected sort value along with other parameters to the dispatch
-  const queryParams = [
-    `page=`,
-    `size=100`,
-    `q=`, // Only add 'q' if searchTerm is not empty
-    `color=`,
-    `productSize=`,
-    `brand=`,
-    `material=`,
-    `minPrice=`,
-    `maxPrice=`,
-    `category=`,
-    `hasDiscount=true`,
-    `sort=${selectedSort}`,
-  ]
-    .filter(Boolean)
-    .join("&"); // Filter out any null values before joining
+  const applySorting = async () => {
+    // Pass the selected sort value along with other parameters to the dispatch
+    const queryParams = [
+      `page=`,
+      `size=100`,
+      `q=`, // Only add 'q' if searchTerm is not empty
+      `color=`,
+      `productSize=`,
+      `brand=`,
+      `material=`,
+      `minPrice=`,
+      `maxPrice=`,
+      `category=`,
+      `hasDiscount=true`,
+      `sort=${selectedSort}`,
+    ]
+      .filter(Boolean)
+      .join("&"); // Filter out any null values before joining
 
-  try {
-    // Dispatch the action
-    await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
-  } catch (err: any) {
-    // Error notification
-    notification.error({
-      message: "Search Failed",
-      description:
-        err?.message || "Failed to fetch products. Please try again.",
-    });
-  }
+    try {
+      // Dispatch the action
+      await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
+    } catch (err: any) {
+      // Error notification
+      notification.error({
+        message: "Search Failed",
+        description:
+          err?.message || "Failed to fetch products. Please try again.",
+      });
+    }
 
-  toggleSortModal(); // Close the modal after applying sort
-};
+    toggleSortModal(); // Close the modal after applying sort
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       const queryParams = [
@@ -196,7 +196,7 @@ const applySorting = async () => {
 
       products.forEach((product: any) => {
         if (product.additionalInformation?.size?.length) {
-          product.additionalInformation.size.forEach((size : any) => {
+          product.additionalInformation.size.forEach((size: any) => {
             sizesSet.add(size);
           });
         }
@@ -239,7 +239,6 @@ const applySorting = async () => {
   ) => {
     filterSetter((prev) => !prev);
   };
-  
 
   const handleCheckboxChange = (
     category: keyof typeof selectedFilters,
@@ -331,14 +330,14 @@ const applySorting = async () => {
   const applyFilters = () => {
     let filtered = products;
 
-   if (selectedFilters.size.length > 0) {
-     filtered = filtered.filter((product: any) => {
-       const productSizes = product.additionalInformation?.size || [];
-       return productSizes.some((size: string) =>
-         selectedFilters.size.includes(size)
-       );
-     });
-   }
+    if (selectedFilters.size.length > 0) {
+      filtered = filtered.filter((product: any) => {
+        const productSizes = product.additionalInformation?.size || [];
+        return productSizes.some((size: string) =>
+          selectedFilters.size.includes(size)
+        );
+      });
+    }
 
     if (selectedFilters.color.length > 0) {
       filtered = filtered.filter((product: any) =>
@@ -581,7 +580,10 @@ const applySorting = async () => {
                 </div>
                 <div className="flex space-x-4 mt-4">
                   <button
-                    onClick={applySorting}
+                    onClick={() => {
+                      applySorting();
+                      toggleFilterModal();
+                    }}
                     className="py-2 px-4 bg-[var(--color-primary)] text-white rounded"
                   >
                     Apply
