@@ -488,6 +488,13 @@ export default function SingleProductPage({
               okText="Submit"
               cancelText="Cancel"
               confirmLoading={Loading}
+              okButtonProps={{
+                style: {
+                  backgroundColor: "var(--color-primary)",
+                  borderColor: "var(--color-secondary)",
+                  color: "white",
+                },
+              }}
             >
               <p>Do you want to add a comment with your rating?</p>
               <Button onClick={() => setAddComment(true)}>Yes</Button>
@@ -705,7 +712,7 @@ export default function SingleProductPage({
                     Continue Shopping
                   </button>
                   <Link href="/cart">
-                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)] dark:bg-green-700 text-white dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-green-700 dark:hover:bg-[var(--color-primary)] transition">
+                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)]   text-white dark:text-gray-200 px-4 py-2 rounded-xl   dark:hover:bg-[var(--color-primary)] transition">
                       Complete Purchase
                     </button>
                   </Link>

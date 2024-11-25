@@ -373,7 +373,7 @@ const Footer = () => {
               <motion.div
                 className={`flex flex-col items-center justify-center p-3 transition-transform duration-300 ${
                   pathname === item.href
-                    ? "text-green-600 dark:text-green-400 bg-[#ffffff] dark:bg-slate-700 rounded-full shadow-2xl"
+                    ? "text-[var(--color-primary)] bg-[#ffffff] dark:bg-slate-700 rounded-full shadow-2xl"
                     : "text-gray-500 dark:text-gray-400"
                 }`}
                 whileHover={{ scale: 1.1 }}

@@ -365,8 +365,8 @@ const FavoriteList: React.FC = () => {
                 const existingItem = cartItems.find(
                   (item) =>
                     item.id === productIdt &&
-                    item.buyerId === buyerId &&
-                    item.color === productColor
+                    item.buyerId === buyerId 
+                    // item.color === productColor
                 );
                 const isInCart = !!existingItem;
 
@@ -399,9 +399,9 @@ const FavoriteList: React.FC = () => {
                       <div className="font-semibold truncate">
                         {product.name}
                       </div>
-                      <div className="truncate max-sm:hidden">
+                      {/* <div className="truncate max-sm:hidden">
                         {product.description}
-                      </div>
+                      </div> */}
                       <div className="truncate">
                         {product.additionalInformation.brand}
                       </div>
