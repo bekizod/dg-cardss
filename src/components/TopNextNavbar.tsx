@@ -357,7 +357,7 @@ export default function TopNextNavbar({
             <Badge count={filteredCartItems?.length} offset={[3, -7]}>
               <MdOutlineShoppingCart className="text-[var(--color-primary)]" />
             </Badge>
-            <div className="hidden md:inline"> {translations.cart}</div>
+            <div className="hidden md:inline"> {translations.tnn.cart}</div>
           </Link>
         </div>
       </div>
@@ -920,3 +920,6 @@ export default function TopNextNavbar({
     </div>
   );
 }
+
+
+

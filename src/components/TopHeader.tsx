@@ -97,7 +97,7 @@ export default function TopHeader() {
                 exit={{ y: "100vh" }}
               >
                 <h1 className="text-center font-bold text-3xl text-gray-800 dark:text-gray-100 mb-4">
-                  Choose Country
+                  {translations.account.chooseCountry}
                 </h1>
                 <div className="space-y-4">
                   <div
@@ -204,7 +204,7 @@ export default function TopHeader() {
                     />
                   </svg>
                 </span>
-                Send FeedBack
+                {translations.tn.sendFeedback}
               </div>
               |
             </>
@@ -412,3 +412,4 @@ export default function TopHeader() {
 //     </div>
 //   );
 // }
+

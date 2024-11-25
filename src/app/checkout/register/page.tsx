@@ -7,7 +7,8 @@ import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector"; // Import country library
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 // TypeScript types
 interface RegisterForm {
   firstName: string;
@@ -33,6 +34,10 @@ export default function Register() {
     country: selectedCountry,
     userType: "web", // Initialize userType
   });
+   const dispatch = useDispatch<AppDispatch>();
+  const { currentLocale, translations } = useSelector(
+   (state: RootState) => state.locale
+ );
   const [registering, setRegistering] = useState(false);
 
   // Handle form input changes
@@ -115,13 +120,15 @@ export default function Register() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28  bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 2xl:mt-[124px] bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold">Register</h2>
+          <h2 className="text-2xl font-bold">
+            {translations.register.register}
+          </h2>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <p className="text-sm mx-2">Don&apos;t know Us, Join Today</p>
+            <p className="text-sm mx-2">{translations.register.dontKnowUs},  {translations.register.joinToday}</p>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
@@ -129,7 +136,7 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              User Name
+              {translations.register.userName}
             </label>
             <input
               type="text"
@@ -137,14 +144,14 @@ export default function Register() {
               value={formData.userName}
               onChange={handleInputChange}
               required
-              placeholder="User Name"
+              placeholder={translations.register.userName}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              First Name
+              {translations.register.firstName}
             </label>
             <input
               type="text"
@@ -152,14 +159,14 @@ export default function Register() {
               value={formData.firstName}
               onChange={handleInputChange}
               required
-              placeholder="First Name"
+              placeholder={translations.register.firstName}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Last Name
+              {translations.register.lastName}
             </label>
             <input
               type="text"
@@ -167,14 +174,14 @@ export default function Register() {
               value={formData.lastName}
               onChange={handleInputChange}
               required
-              placeholder="Last Name"
+              placeholder={translations.register.lastName}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Country
+              {translations.register.country}
             </label>
             <CountryDropdown
               value={selectedCountry}
@@ -185,7 +192,7 @@ export default function Register() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Phone Number
+              {translations.register.phoneNumber}
             </label>
             <input
               type="text"
@@ -193,14 +200,30 @@ export default function Register() {
               value={formData.mobile}
               onChange={handleInputChange}
               required
-              placeholder="Phone number"
+              placeholder={translations.register.phoneNumber}
               className="text-xs bg-slate-100 md:text-lg py-3 border rounded dark:bg-gray-800 dark:border-gray-700 w-full"
             />
           </div>
+          {/* 
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Phone Number
+            </label>
+            <PhoneInput
+              country={"us"}
+              value={formData.mobile}
+              onChange={handlePhoneChange}
+              containerClass="w-full   text-gray-700 dark:text-gray-300 dark:bg-transparent rounded border dark:border-gray-700" // Custom styles for the input field
+              dropdownClass="custom-dropdown" // Custom class for the dropdown
+              dropdownStyle={{
+                borderColor: "var(--color-primary)", // Inline styling for dropdown
+              }}
+            />
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Email
+              {translations.register.email}
             </label>
             <div className="relative">
               <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -210,7 +233,7 @@ export default function Register() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                placeholder="Email"
+                placeholder={translations.register.email}
                 className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
               />
             </div>
@@ -218,7 +241,7 @@ export default function Register() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Password
+              {translations.register.password}
             </label>
             <input
               type="password"
@@ -226,18 +249,18 @@ export default function Register() {
               value={formData.password}
               onChange={handleInputChange}
               required
-              placeholder="Password"
+              placeholder={translations.register.password}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
 
           <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
-            By creating an account you accept our{" "}
+             {translations.register.acceptTerms}
             <Link
               href="/privacy-policy"
               className="text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
             >
-              Privacy & Policy
+             {translations.register.privacyPolicy}
             </Link>
           </p>
 
@@ -247,20 +270,25 @@ export default function Register() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {registering ? "Registering..." : "Register"}
+            {registering
+              ? `${translations.register.registering}`
+              : `${translations.register.register}`}
           </motion.button>
         </form>
 
         <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
-          Already have an account?{" "}
+          {translations.register.alreadyAccount}{" "}
           <Link
             href="/checkout/login"
             className="text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
           >
-            Login now.
+            {translations.register.loginNow}
           </Link>
         </p>
       </div>
     </div>
   );
 }
+
+
+

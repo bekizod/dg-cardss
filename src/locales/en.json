@@ -50,14 +50,16 @@
   },
   "tn": {
     "welcome_to_digital_card": "Welcome To Digital Card",
-    "all_offers": "All Offers"
+    "all_offers": "All Offers",
+    "sendFeedback": "Send Feedback"
   },
   "tnn": {
     "what_are_you_looking_for": "What are you looking for?",
     "logout": "Logout",
     "account_login": "Account/Login",
     "search_results": "Search Results",
-    "total_products": "Total Products of"
+    "total_products": "Total Products of",
+    "cart": "Cart"
   },
   "bestSellingProducts": {
     "top_selling_products": "Top Selling Products",
@@ -79,7 +81,7 @@
     "enterGiftCard": "Enter Gift Card",
     "applyCoupon": "Apply"
   },
-  "checkout":{
+  "checkout": {
     "orderSummary": "Order Summary",
     "subtotal": "Subtotal",
     "discount": "Discount",
@@ -90,14 +92,14 @@
     "enterCoupon": "Enter Coupon",
     "enterGiftCard": "Enter Gift Card",
     "applyCoupon": "Apply",
-    "login":"Login",
-    "address" : "Address",
+    "login": "Login",
+    "address": "Address",
     "payment": "Payment",
-    "tax":"Tax included",
-    "creating" : "Creating Order...,",
-    "create" :"Create Order"
+    "tax": "Tax included",
+    "creating": "Creating Order...,",
+    "create": "Create Order"
   },
-  "CheckPay":{
+  "CheckPay": {
     "login": "Login",
     "address": "Address",
     "payment": "Payment",
@@ -111,7 +113,7 @@
     "pay_with_cash": "Pay With Cash (29 SAR + Shipping Fees)",
     "split_into_3_payments_without_fees_with_tamara": "Split into 3 payments, without fees with Tamara"
   },
-   "address": {
+  "address": {
     "selectCity": "Select City",
     "submitAddress": "Submit Address",
     "noSavedAddress": "No saved address",
@@ -169,9 +171,12 @@
     "email": "Email",
     "password": "Password",
     "registering": "Registering...",
-    "privacyPolicy": "By creating an account you accept our Privacy & Policy.",
     "alreadyAccount": "Already have an account?",
-    "loginNow": "Login now"
+    "loginNow": "Login now",
+    "dontKnowUs": "Don't know Us?",
+    "joinToday": "Join Today",
+    "acceptTerms": "By creating an account you accept our",
+    "privacyPolicy": "Privacy & Policy"
   },
   "account": {
     "welcome": "Welcome,",
@@ -183,7 +188,13 @@
     "logout": "Logout",
     "orders": "Orders",
     "returns": "Returns",
-    "favorites": "Favorites"
+    "favorites": "Favorites",
+    "settings": "Settings",
+    "chooseCountry": "Choose Country",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "mobile": "Mobile",
+    "country": "Country"
   },
   "fav": {
     "favoriteProducts": "Favorite Products",

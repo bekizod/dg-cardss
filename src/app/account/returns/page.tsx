@@ -34,9 +34,9 @@ export default function OrderReturned() {
   const { orders, loading, error } = useSelector(
     (state: RootState) => state.orders as any
   );
-const { currentLocale, translations } = useSelector(
-  (state: RootState) => state.locale
-);
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   // State to track visibility of cart items for each order
   const [showCartItems, setShowCartItems] = useState<{
     [key: string]: boolean;
@@ -131,14 +131,16 @@ const { currentLocale, translations } = useSelector(
                     <span className="font-medium">{order.itemCode}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    {translations.return.amount}: <span className="font-medium">${order.price}</span>
+                    {translations.return.amount}:{" "}
+                    <span className="font-medium">${order.price}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
                     {translations.return.totalQuantity}:{" "}
                     <span className="font-medium">{order.amount}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                   {translations.return.date}: <span className="font-medium">{order.date}</span>
+                    {translations.return.date}:{" "}
+                    <span className="font-medium">{order.date}</span>
                   </p>
                   <p
                     className={`p-2 rounded mt-2 text-center ${getStatusClass(
@@ -153,7 +155,9 @@ const { currentLocale, translations } = useSelector(
                     onClick={() => toggleCartItemsVisibility(order.itemCode)}
                     className="mt-4 bg-[var(--color-primary)] text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
                   >
-                    {isVisible ? "Hide Cart Items" : "View Cart Items"}
+                    {isVisible
+                      ? `${translations.return.hideCartItems}`
+                      : `${translations.return.viewCartItems}`}
                   </button>
 
                   {/* Conditionally render cart items */}
@@ -173,16 +177,20 @@ const { currentLocale, translations } = useSelector(
                             >
                               <div className="flex flex-col">
                                 <span className="font-medium">
-                                   {translations.return.productID}: {cartItem?.productId?._id}
+                                  {translations.return.productID}:{" "}
+                                  {cartItem?.productId?._id}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                   {translations.return.productName}: {cartItem?.productId?.name}
+                                  {translations.return.productName}:{" "}
+                                  {cartItem?.productId?.name}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  {translations.return.quantity}: {cartItem?.quantity}
+                                  {translations.return.quantity}:{" "}
+                                  {cartItem?.quantity}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  {translations.return.price}: ${cartItem?.productId?.price}
+                                  {translations.return.price}: $
+                                  {cartItem?.productId?.price}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
                                   {translations.return.category}:{" "}

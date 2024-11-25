@@ -23,14 +23,16 @@
   },
   "tn": {
     "welcome_to_digital_card": "مرحباً بكم في البطاقة الرقمية",
-    "all_offers": "جميع العروض"
+    "all_offers": "جميع العروض",
+    "sendFeedback": "إرسال الملاحظات"
   },
   "tnn": {
     "what_are_you_looking_for": "ماذا تبحث عنه؟",
     "logout": "تسجيل الخروج",
     "account_login": "الحساب / تسجيل الدخول",
     "search_results": "نتائج البحث",
-    "total_products": "إجمالي المنتجات من"
+    "total_products": "إجمالي المنتجات من",
+    "cart": "سلة التسوق"
   },
   "footer": {
     "new_technologies": "التقنيات الجديدة",
@@ -98,7 +100,7 @@
     "create": "إنشاء الطلب"
   },
   "CheckPay": {
-   "login": "تسجيل الدخول",
+    "login": "تسجيل الدخول",
     "address": "العنوان",
     "payment": "الدفع",
     "order_summary": "ملخص الطلب",
@@ -169,9 +171,12 @@
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
     "registering": "جارٍ التسجيل...",
-    "privacyPolicy": "بإنشاء حساب، فإنك توافق على سياسة الخصوصية الخاصة بنا.",
     "alreadyAccount": "هل لديك حساب بالفعل؟",
-    "loginNow": "سجل الدخول الآن"
+    "loginNow": "سجل الدخول الآن",
+    "dontKnowUs": "لا تعرفنا؟",
+    "joinToday": "انضم اليوم",
+    "acceptTerms": "بإنشاء حساب، فإنك توافق على",
+    "privacyPolicy": "سياسة الخصوصية"
   },
   "account": {
     "welcome": "مرحباً،",
@@ -183,7 +188,13 @@
     "logout": "تسجيل الخروج",
     "orders": "الطلبات",
     "returns": "الإرجاع",
-    "favorites": "المفضلة"
+    "favorites": "المفضلة",
+    "settings": "الإعدادات",
+    "chooseCountry": "اختر البلد",
+    "firstName": "الاسم الأول",
+    "lastName": "الاسم الأخير",
+    "mobile": "رقم الجوال",
+    "country": "البلد"
   },
   "fav": {
     "favoriteProducts": "المنتجات المفضلة",

@@ -6,8 +6,8 @@ import { notification } from "antd";
 import Link from "next/link";
 import { useAuth } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
 import Cookies from "js-cookie";
 // Define a type for notification types
@@ -16,6 +16,9 @@ type NotificationType = "success" | "error" | "info" | "warning";
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
 
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loging, setLoging] = useState(false);
@@ -101,13 +104,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28 bg-gray-200 dark:bg-gray-800">
+    <div className="flex justify-center items-center py-28 h-screen bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
-          <div className="text-2xl font-bold">LOG IN</div>
+          <div className="text-2xl font-bold">{translations.login.title}</div>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <div className="text-sm mx-2">Login Make your Shopping Easy</div>
+            <div className="text-sm mx-2">{translations.login.subtitle}</div>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
@@ -117,7 +120,7 @@ export default function Login() {
             <input
               type="email"
               required
-              placeholder="Email"
+              placeholder={translations.login.emailPlaceholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
@@ -127,7 +130,7 @@ export default function Login() {
             <input
               type="password"
               required
-              placeholder="Password"
+              placeholder={translations.login.passwordPlaceholder}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
@@ -139,22 +142,24 @@ export default function Login() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {loging ? "Loging......." : "Log In"}
+            {loging
+              ? `${translations.login.loadingButton}`
+              : `${translations.login.loginButton}`}
           </motion.button>
           <Link
             href={"/forgotpassword"}
             className="hover:text-[var(--color-secondary)] py-1"
           >
-            Forgot password?
+            {translations.login.forgotPassword}
           </Link>
         </form>
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
-          Did Not have Account?{" "}
+          {translations.login.forgotPassword}{" "}
           <Link
             href="/checkout/register"
             className="text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
           >
-            Sign Up.
+            {translations.login.signup}
           </Link>
         </div>
       </div>

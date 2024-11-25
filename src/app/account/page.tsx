@@ -154,7 +154,9 @@ const AccountPage = () => {
             className="flex items-center cursor-pointer"
             onClick={() => setShowSettings(!showSettings)}
           >
-            <p className="mr-2 text-[var(--color-primary)]">Settings</p>
+            <p className="mr-2 text-[var(--color-primary)]">
+              {translations.account.settings}
+            </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -257,7 +259,7 @@ const AccountPage = () => {
                     htmlFor="first-name"
                     className="block mb-1 text-sm font-medium"
                   >
-                    First Name
+                    {translations.account.firstName}
                   </label>
                   <input
                     id="first-name"
@@ -273,7 +275,7 @@ const AccountPage = () => {
                     htmlFor="last-name"
                     className="block mb-1 text-sm font-medium"
                   >
-                    Last Name
+                    {translations.account.lastName}
                   </label>
                   <input
                     id="last-name"
@@ -288,7 +290,7 @@ const AccountPage = () => {
                     htmlFor="mobile"
                     className="block mb-1 text-sm font-medium"
                   >
-                    Mobile
+                    {translations.account.mobile}
                   </label>
                   <input
                     id="mobile"
@@ -303,7 +305,7 @@ const AccountPage = () => {
                     htmlFor="country"
                     className="block mb-1 text-sm font-medium"
                   >
-                    Country
+                    {translations.account.country}
                   </label>
                   <CountryDropdown
                     value={country}

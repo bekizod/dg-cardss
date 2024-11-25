@@ -37,10 +37,10 @@ export default function Register() {
     userType: "web", // Initialize userType
   });
   const [registering, setRegistering] = useState(false);
- const dispatch = useDispatch<AppDispatch>();
- const { currentLocale, translations } = useSelector(
-   (state: RootState) => state.locale
- );
+  const dispatch = useDispatch<AppDispatch>();
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   // Handle form input changes
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -136,7 +136,11 @@ export default function Register() {
           </h2>
           <div className="flex items-center justify-center mt-2">
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
-            <p className="text-sm mx-2">Don&apos;t know Us, Join Today</p>
+            <p className="text-sm mx-2">
+              {" "}
+              {translations.register.dontKnowUs},{" "}
+              {translations.register.joinToday}
+            </p>
             <hr className="border-t border-gray-300 dark:border-gray-700 w-1/4" />
           </div>
         </div>
@@ -263,12 +267,13 @@ export default function Register() {
           </div>
 
           <p className="text-center mt-6 text-gray-500 dark:text-gray-400">
-            By creating an account you accept our{" "}
+            {translations.register.acceptTerms}
+            {"  "}
             <Link
               href="/privacy-policy"
               className="text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
             >
-              Privacy & Policy
+              {translations.register.privacyPolicy}
             </Link>
           </p>
 

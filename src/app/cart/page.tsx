@@ -117,11 +117,10 @@ const CartComponent = () => {
   //    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
   //  };
 
-
   const handleSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
     productId: any,
-    buyerId : any
+    buyerId: any
   ) => {
     const newSize = event.target.value;
     setSelectedSize(newSize);
@@ -461,7 +460,7 @@ const CartComponent = () => {
               <div onClick={() => handleBuyNow()}>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
-                  className="w-full mt-6 hover:bg-[var(--color-primary)] bg-[var(--color-secondary)] text-white py-2 rounded-lg"
+                  className="w-full mt-6 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] text-white py-2 rounded-lg"
                 >
                   {translations.Cart.buyNow}
                 </motion.button>
