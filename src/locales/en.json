@@ -73,7 +73,11 @@
     "discount": "Discount",
     "shipping": "Shipping",
     "total": "Total",
-    "buyNow": "Buy Now"
+    "buyNow": "Buy Now",
+    "doYouHaveCouponOrGiftCard": "Do you have a coupon or gift card?",
+    "enterCoupon": "Enter Coupon",
+    "enterGiftCard": "Enter Gift Card",
+    "applyCoupon": "Apply"
   },
   "login": {
     "title": "LOG IN",
@@ -149,7 +153,9 @@
     "price": "Price",
     "discount": "Discount",
     "brand": "Brand",
-    "description": "Description"
+    "description": "Description",
+    "Favorite_Categories": "Favorite Categories",
+    "Fav_in": "Favorite Products in your cart."
   },
   "order": {
     "orderHistory": "Order History",
@@ -170,25 +176,25 @@
     "price": "Price",
     "category": "Category"
   },
-  "return":{
+  "return": {
     "returnedOrdersHistory": "Returned Orders History",
-  "loadingOrders": "Loading orders...",
-  "errorLoadingOrders": "Error loading orders: {{error}}",
-  "orderCode": "Order Code",
-  "amount": "Amount",
-  "totalQuantity": "Total Quantity",
-  "date": "Date",
-  "status": "Status",
-  "hideCartItems": "Hide Cart Items",
-  "viewCartItems": "View Cart Items",
-  "cartItems": "Cart Items",
-  "productID": "Product ID",
-  "productName": "Product Name",
-  "quantity": "Quantity",
-  "price": "Price",
-  "category": "Category"
+    "loadingOrders": "Loading orders...",
+    "errorLoadingOrders": "Error loading orders: {{error}}",
+    "orderCode": "Order Code",
+    "amount": "Amount",
+    "totalQuantity": "Total Quantity",
+    "date": "Date",
+    "status": "Status",
+    "hideCartItems": "Hide Cart Items",
+    "viewCartItems": "View Cart Items",
+    "cartItems": "Cart Items",
+    "productID": "Product ID",
+    "productName": "Product Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "category": "Category"
   },
-  "slug":{
+  "slug": {
     "products": "Products",
     "zero_products": "0 Products",
     "sort": "Sort",
@@ -208,7 +214,9 @@
     "newest": "Newest",
     "popularity": "Popularity",
     "apply": "Apply",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "all_offers": "All Offers",
+    "all_offer_products": "All Offer Products"
   },
   "tabs": {
     "All": "All",

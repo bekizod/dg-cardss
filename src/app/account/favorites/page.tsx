@@ -151,18 +151,14 @@ const FavoriteList: React.FC = () => {
                 {favoriteProducts?.reduce((acc: any, product: any) => {
                   const productIdt = product?._id as any;
                   const buyerId = user?._id || "guest";
-                  const productColor =
-                    product?.additionalInformation?.color || "default";
+                  const productColor = product?.additionalInformation?.color;
                   const existingItem = cartItems.find(
-                    (item) =>
-                      item.id === productIdt &&
-                      item.buyerId === buyerId &&
-                      item.color === productColor
+                    (item) => item.id === productIdt && item.buyerId === buyerId
                   );
                   return acc + (existingItem ? 1 : 0);
                 }, 0)}
               </span>{" "}
-              Favorite Products in your cart.
+              {translations.fav.Fav_in}
             </div>
           </div>
 
@@ -174,12 +170,9 @@ const FavoriteList: React.FC = () => {
                 const productColor =
                   product?.additionalInformation?.color || "default";
                 const existingItem = cartItems.find(
-                  (item) =>
-                    item.id === productIdt &&
-                    item.buyerId === buyerId &&
-                    item.color === productColor
+                  (item) => item.id === productIdt && item.buyerId === buyerId
                 );
-                const isInCart = !!existingItem;
+                const isInCart = existingItem;
 
                 return (
                   <div
@@ -187,7 +180,13 @@ const FavoriteList: React.FC = () => {
                     className="flex    flex-row bg-slate-100 dark:bg-slate-700 rounded-2xl shadow-lg shadow-slate-300 dark:shadow-lg gap-3 max-sm:gap-1 p-1 max-sm:py-5 items-center relative"
                   >
                     {isInCart && (
-                      <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-lg bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1 rounded-br-md">
+                      <div
+                        className={`absolute ${
+                          currentLocale === "ar"
+                            ? "top-0 left-0 rounded-tl-xl rounded-br-lg" // Arabic: Top-left corner
+                            : "top-0 right-0 rounded-tr-xl rounded-bl-lg" // English: Top-right corner
+                        } bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1`}
+                      >
                         {translations.fav.inCart}
                       </div>
                     )}
@@ -210,9 +209,9 @@ const FavoriteList: React.FC = () => {
                       <div className="font-semibold truncate">
                         {product.name}
                       </div>
-                      <div className="truncate max-sm:hidden">
+                      {/* <div className="truncate max-sm:hidden">
                         {product.description}
-                      </div>
+                      </div> */}
                       <div className="truncate">
                         {product.additionalInformation.brand}
                       </div>
@@ -272,7 +271,7 @@ const FavoriteList: React.FC = () => {
       {/* Right Section */}
       <div className="flex flex-col lg:w-1/2 gap-3 px-5 justify-start items-start text-white rounded-2xl bg-[var(--color-tertiary)]">
         <div className="text-white text-2xl py-3 font-semibold text-center w-full">
-          Favorite Categories
+          {translations.fav.Favorite_Categories}
           <hr className="border-gray-300 dark:border-slate-600 w-full" />
         </div>
 
@@ -285,7 +284,7 @@ const FavoriteList: React.FC = () => {
               >
                 <div className="md:w-[20%] max-sm:px-2 ">
                   <Link
-                    href={`/${category.parentCategory.categoryName}/${category.parentCategory._id}/${category.categoryName}/${category._id}`}
+                    href={`/${category?.parentCategory?.categoryName}/${category?.parentCategory?._id}/${category?.categoryName}/${category?._id}`}
                   >
                     <Image
                       src={category.categoryLogo?.data as string}

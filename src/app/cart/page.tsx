@@ -191,7 +191,13 @@ const CartComponent = () => {
                 className="rounded-xl transform max-md:scale-75 max-md:-my-7 max-md:-mx-11  shadow-xl bg-slate-100 dark:bg-slate-800 dark:text-white flex   sm:flex-row p-2 sm:p-3 relative text-xs sm:text-sm"
               >
                 {/* Trash Icon */}
-                <div className="absolute z-30 top-1 right-2 sm:top-2 sm:right-4 rounded-bl-lg rounded-br-lg py-1 px-2 flex items-center">
+                <div
+                  className={`absolute z-30 top-1 sm:top-2 py-1 px-2 flex items-center ${
+                    currentLocale === "ar"
+                      ? "left-2 sm:left-4 rounded-tr-lg rounded-tl-lg" // Arabic: Top-left corner
+                      : "right-2 sm:right-4 rounded-bl-lg rounded-br-lg" // Default: Top-right corner
+                  }`}
+                >
                   <button
                     onClick={() => handleDelete(item.id, item.buyerId)}
                     className="text-red-500 self-start"
@@ -343,7 +349,7 @@ const CartComponent = () => {
                   className="flex items-center justify-between dark:text-gray-300 cursor-pointer"
                   onClick={toggleCouponFields}
                 >
-                  <span>Do you have a coupon or gift card?</span>
+                  <span> {translations.Cart.doYouHaveCouponOrGiftCard}</span>
                   <svg
                     id="coupon_gift_card_arrow"
                     xmlns="http://www.w3.org/2000/svg"
@@ -379,7 +385,7 @@ const CartComponent = () => {
                           htmlFor="coupon_code"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                          Enter Coupon
+                          {translations.Cart.enterCoupon}
                         </label>
                         <div className="flex w-full mt-1">
                           <input
@@ -387,8 +393,14 @@ const CartComponent = () => {
                             type="text"
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
-                          <button className="   bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
-                            Apply
+                          <button
+                            className={`bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md ${
+                              currentLocale === "ar"
+                                ? "rounded-l-md"
+                                : "rounded-r-md"
+                            } `}
+                          >
+                            {translations.Cart.applyCoupon}
                           </button>
                         </div>
                       </div>
@@ -399,7 +411,7 @@ const CartComponent = () => {
                           htmlFor="gift_card_code"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                          Enter Gift Card
+                          {translations.Cart.enterGiftCard}
                         </label>
                         <div className="flex mt-1">
                           <input
@@ -407,8 +419,14 @@ const CartComponent = () => {
                             type="text"
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
-                          <button className="  bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
-                            Apply
+                          <button
+                            className={`bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md ${
+                              currentLocale === "ar"
+                                ? "rounded-l-md"
+                                : "rounded-r-md"
+                            } `}
+                          >
+                            {translations.Cart.applyCoupon}
                           </button>
                         </div>
                       </div>
