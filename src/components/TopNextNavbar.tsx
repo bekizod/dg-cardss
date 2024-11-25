@@ -423,7 +423,9 @@ export default function TopNextNavbar({
             >
               {/* Close Button */}
               <button
-                className="absolute top-4 right-4 text-2xl text-gray-600 dark:text-gray-300"
+                className={`absolute top-4  ${
+                  currentLocale === "ar" ? "left-4" : "right-4"
+                } text-2xl text-gray-600 dark:text-gray-300`}
                 onClick={handleModalToggle}
               >
                 &times;
@@ -672,7 +674,9 @@ export default function TopNextNavbar({
             >
               <button
                 onClick={searchcloseModal}
-                className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+                className={` absolute top-3   ${
+                  currentLocale === "ar" ? "left-3" : "right-3"
+                } text-red-500 hover:text-red-700`}
               >
                 &#10005; {/* X icon to close */}
               </button>

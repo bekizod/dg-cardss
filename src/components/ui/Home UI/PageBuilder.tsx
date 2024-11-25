@@ -24,7 +24,9 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
   const { pictures, isFetching } = useSelector(
     (state: RootState) => state.coverPictureSlice as any
   );
-
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   // useEffect(() => {
   //   // Fetch cover pictures when the component mounts
   //   if(parentId){
@@ -104,7 +106,10 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
               padding: 0,
               margin: 0,
               transition: "transform 0.35s ease-in-out",
-              transform: `translateX(-${currentSlide * 100}%)`,
+              transform:
+                currentLocale === "en"
+                  ? `translateX(${currentSlide * 100}%)` // Reverse for RTL
+                  : `translateX(-${currentSlide * 100}%)`,
             }}
           >
             {cache[parentId] &&
