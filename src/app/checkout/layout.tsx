@@ -60,7 +60,15 @@ export default function CheckoutLayout({
   const isPaymentSelected = useSelector(
     (state: RootState) => state.payment.isPaymentSelected
   );
+const { currentLocale, translations } = useSelector(
+  (state: RootState) => state.locale
+);
 
+const steps = [
+  { id: 1, label: "Step 1", svg: "check", name: translations.checkout.login },
+  { id: 2, label: "Step 2", svg: "user", name: translations.checkout.address },
+  { id: 3, label: "Step 3", svg: "file", name: translations.checkout.payment },
+];
   //  useEffect(() => {
   //   // This effect runs whenever `isPaymentSelected` changes
   //   if (isPaymentSelected) {
@@ -372,7 +380,7 @@ export default function CheckoutLayout({
 
               {/* Order Summary Title */}
               <div className="text-xl font-semibold dark:text-gray-200">
-                Order Summary
+                {translations.checkout.orderSummary}
               </div>
 
               <div>
@@ -448,7 +456,7 @@ export default function CheckoutLayout({
                   className="flex items-center justify-between dark:text-gray-300 cursor-pointer"
                   onClick={toggleCouponFields}
                 >
-                  <span>Do you have a coupon or gift card?</span>
+                  <span>{translations.checkout.doYouHaveCouponOrGiftCard}</span>
                   <svg
                     id="coupon_gift_card_arrow"
                     xmlns="http://www.w3.org/2000/svg"
@@ -484,7 +492,7 @@ export default function CheckoutLayout({
                           htmlFor="coupon_code"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                          Enter Coupon
+                          {translations.checkout.enterCoupon}
                         </label>
                         <div className="flex w-full mt-1">
                           <input
@@ -493,7 +501,7 @@ export default function CheckoutLayout({
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
                           <button className=" bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
-                            Apply
+                            {translations.checkout.applyCoupon}
                           </button>
                         </div>
                       </div>
@@ -504,7 +512,7 @@ export default function CheckoutLayout({
                           htmlFor="gift_card_code"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >
-                          Enter Gift Card
+                          {translations.checkout.enterGiftCard}
                         </label>
                         <div className="flex mt-1">
                           <input
@@ -513,7 +521,7 @@ export default function CheckoutLayout({
                             className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-md dark:bg-gray-700 dark:text-gray-300"
                           />
                           <button className=" bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] p-2 text-white rounded-r-md">
-                            Apply
+                            {translations.checkout.applyCoupon}
                           </button>
                         </div>
                       </div>
@@ -525,22 +533,22 @@ export default function CheckoutLayout({
               {/* Money Totals */}
               <div className="mt-6 space-y-2 dark:text-gray-300">
                 <div className="flex justify-between">
-                  <div>Subtotal</div>
+                  <div>{translations.checkout.subtotal}</div>
                   <div>{totalPrice} SAR</div>
                 </div>
                 <div className="flex justify-between text-red-500 dark:text-red-400">
-                  <div>Discount</div>
+                  <div>{translations.checkout.discount}</div>
                   <div>-{totalDiscount} SAR</div>
                 </div>
                 <div className="flex justify-between">
-                  <div>Shipping</div>
+                  <div>{translations.checkout.shipping}</div>
                   <div>0 SAR</div>
                 </div>
               </div>
 
               {/* Total */}
               <div className="flex justify-between text-lg font-bold mt-4 dark:text-gray-200">
-                <div>Total</div>
+                <div>{translations.checkout.total}</div>
                 <div>{totalPrice} SAR</div>
               </div>
 
@@ -552,7 +560,9 @@ export default function CheckoutLayout({
                     onClick={handleCreateOrder}
                     disabled={loading}
                   >
-                    {loading ? "Creating Order..." : "Create Order"}
+                    {loading
+                      ? `${translations.checkout.creating}`
+                      : `${translations.checkout.create}`}
                   </button>
                 </div>
               )}

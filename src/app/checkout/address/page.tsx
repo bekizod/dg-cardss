@@ -19,7 +19,7 @@ interface City {
 }
 
 export default function Address() {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [showMap, setShowMap] = useState(false);
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState("");
@@ -28,7 +28,9 @@ export default function Address() {
   const router = useRouter();
   const { user, token } = useAuth();
   const [addressMe, setAddressMe] = useState<string[]>([]);
-  
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   useEffect(() => {
     const token = Cookies.get("token");
     setAddressMe(user?.savedAddress || []);
@@ -103,7 +105,7 @@ export default function Address() {
       );
       if (response.status === 200) {
         notification.success({
-          message: "Address Added",
+          message: `${translations.address.addressAdded}`,
           description: response.data.message,
         });
         setAddress("");
@@ -115,8 +117,8 @@ export default function Address() {
     } catch (error) {
       console.error(error);
       notification.error({
-        message: "Submission Failed",
-        description: "Failed to add the address. Please try again.",
+        message: `${translations.address.submissionFailed}`,
+        description:  `${translations.address.submissionFailedDescription}`,
       });
     } finally {
       setLoading(false);
@@ -124,7 +126,7 @@ export default function Address() {
   };
 
   const handleConfirmSelection = () => {
-      dispatch(setSelectedAddress(address));
+    dispatch(setSelectedAddress(address));
     // Pass selected city as a query parameter to the payment route
     router.push(`/checkout/payment?address=${encodeURIComponent(address)}`);
     // router.push(`/checkout/payment`);
@@ -170,9 +172,9 @@ export default function Address() {
               </svg>
             </button>
             <Form layout="vertical" onFinish={handleSubmit}>
-              <Form.Item label="Select City" required>
+              <Form.Item label={translations.address.selectCity} required>
                 <Select
-                  placeholder="Select a city"
+                  placeholder={translations.address.selectCity}
                   value={city}
                   onChange={(value) => setCity(value)}
                 >
@@ -191,7 +193,7 @@ export default function Address() {
                   loading={loading}
                   disabled={!city}
                 >
-                  Submit Address
+                  {translations.address.submitAddress}
                 </Button>
               </Form.Item>
             </Form>
@@ -229,13 +231,13 @@ export default function Address() {
                   className="p-2 rounded-lg text-white bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
                   onClick={handleConfirmSelection}
                 >
-                  Confirm
+                   {translations.address.confirm}
                 </button>
               </div>
             </div>
           ) : (
             <p className="text-center text-gray-500 dark:text-gray-400">
-              No saved address
+              {translations.address.noSavedAddress}
             </p>
           )}
         </div>

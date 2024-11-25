@@ -79,6 +79,47 @@
     "enterGiftCard": "Enter Gift Card",
     "applyCoupon": "Apply"
   },
+  "checkout":{
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "total": "Total",
+    "buyNow": "Buy Now",
+    "doYouHaveCouponOrGiftCard": "Do you have a coupon or gift card?",
+    "enterCoupon": "Enter Coupon",
+    "enterGiftCard": "Enter Gift Card",
+    "applyCoupon": "Apply",
+    "login":"Login",
+    "address" : "Address",
+    "payment": "Payment",
+    "tax":"Tax included",
+    "creating" : "Creating Order...,",
+    "create" :"Create Order"
+  },
+  "CheckPay":{
+    "login": "Login",
+    "address": "Address",
+    "payment": "Payment",
+    "order_summary": "Order Summary",
+    "confirm": "Confirm",
+    "choose_payment_method": "Choose payment method",
+    "split_into_6_payments_with_madfu": "Split into 6 payments with Madfu (Max 2000 SAR)",
+    "credit_debit_card_payment": "Credit/Debit Card Payment",
+    "split_in_up_to_4_payments_or_pay_in_full_securely_with_tamara": "Split in up to 4 payments or Pay in full securely with Tamara",
+    "interest_free_payments": "4 interest-free payments",
+    "pay_with_cash": "Pay With Cash (29 SAR + Shipping Fees)",
+    "split_into_3_payments_without_fees_with_tamara": "Split into 3 payments, without fees with Tamara"
+  },
+   "address": {
+    "selectCity": "Select City",
+    "submitAddress": "Submit Address",
+    "noSavedAddress": "No saved address",
+    "confirm": "Confirm",
+    "addressAdded": "Address Added",
+    "submissionFailed": "Submission Failed",
+    "submissionFailedDescription": "Failed to add the address. Please try again."
+  },
   "login": {
     "title": "LOG IN",
     "subtitle": "Login to make your shopping easy",

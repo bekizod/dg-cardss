@@ -76,8 +76,49 @@
     "buyNow": "اشترِ الآن",
     "doYouHaveCouponOrGiftCard": "هل لديك قسيمة أو بطاقة هدية؟",
     "enterCoupon": "أدخل القسيمة",
-    "enterGiftCard":"أدخل بطاقة الهدية",
+    "enterGiftCard": "أدخل بطاقة الهدية",
     "applyCoupon": "تطبيق"
+  },
+  "checkout": {
+    "orderSummary": "ملخص الطلب",
+    "subtotal": "المجموع الفرعي",
+    "discount": "الخصم",
+    "shipping": "الشحن",
+    "total": "الإجمالي",
+    "buyNow": "اشترِ الآن",
+    "doYouHaveCouponOrGiftCard": "هل لديك قسيمة أو بطاقة هدية؟",
+    "enterCoupon": "أدخل القسيمة",
+    "enterGiftCard": "أدخل بطاقة الهدية",
+    "applyCoupon": "تطبيق",
+    "login": "تسجيل الدخول",
+    "address": "العنوان",
+    "payment": "الدفع",
+    "tax": "شامل الضريبة",
+    "creating": "جارٍ إنشاء الطلب...",
+    "create": "إنشاء الطلب"
+  },
+  "CheckPay": {
+   "login": "تسجيل الدخول",
+    "address": "العنوان",
+    "payment": "الدفع",
+    "order_summary": "ملخص الطلب",
+    "confirm": "تأكيد",
+    "choose_payment_method": "اختر طريقة الدفع",
+    "split_into_6_payments_with_madfu": "قسّم المبلغ على 6 دفعات مع مدفو (بحد أقصى 2000 ريال سعودي)",
+    "credit_debit_card_payment": "دفع بواسطة بطاقة الائتمان/الخصم",
+    "split_in_up_to_4_payments_or_pay_in_full_securely_with_tamara": "قسّم المبلغ على 4 دفعات أو ادفع المبلغ كاملاً بأمان مع تمارة",
+    "interest_free_payments": "4 دفعات بدون فوائد",
+    "pay_with_cash": "دفع نقدًا (29 ريال + رسوم الشحن)",
+    "split_into_3_payments_without_fees_with_tamara": "قسّم المبلغ على 3 دفعات بدون رسوم مع تمارة"
+  },
+  "address": {
+    "selectCity": "اختر المدينة",
+    "submitAddress": "إرسال العنوان",
+    "noSavedAddress": "لا يوجد عناوين محفوظة",
+    "confirm": "تأكيد",
+    "addressAdded": "تمت إضافة العنوان",
+    "submissionFailed": "فشل الإرسال",
+    "submissionFailedDescription": "فشل في إضافة العنوان. حاول مرة أخرى."
   },
   "login": {
     "title": "تسجيل الدخول",
@@ -154,8 +195,8 @@
     "discount": "الخصم",
     "brand": "العلامة التجارية",
     "description": "الوصف",
-    "Favorite_Categories":"الفئات المفضلة",
-"Fav_in" :"المنتجات المفضلة في سلة التسوق الخاصة بك."
+    "Favorite_Categories": "الفئات المفضلة",
+    "Fav_in": "المنتجات المفضلة في سلة التسوق الخاصة بك."
   },
   "order": {
     "orderHistory": "سجل الطلبات",

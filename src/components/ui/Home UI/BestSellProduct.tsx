@@ -31,7 +31,7 @@ const { currentLocale, translations } = useSelector(
   (state: RootState) => state.locale
 );
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItems = useSelector((state: RootState) => state.cart.items as any);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -185,7 +185,7 @@ const { currentLocale, translations } = useSelector(
               "default";
             // Check if the product is already in the cart
             const existingItem = cartItems.find(
-              (item) =>
+              (item : any) =>
                 item.id === productIdt &&
                 item.buyerId === buyerId &&
                 item.color === productColor

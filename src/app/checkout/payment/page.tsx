@@ -14,44 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clearCartByBuyerId } from "@/redux/slices/cartSlice";
 import { setPaymentSelected } from "@/redux/slices/paymentSlice";
-const paymentMethods = [
-  {
-    id: 1,
-    label: "Split into 6 payments with Madfu (Max 2000 SAR)",
-    imgSrc: "/madufu.png",
-    alt: "madfu_gateway icon",
-  },
-  {
-    id: 2,
-    label: "Credit/Debit Card Payment",
-    imgSrc: "/credit.png",
-    alt: "checkoutcom_card_payment icon",
-  },
-  {
-    id: 3,
-    label: "Split in up to 4 payments or Pay in full securely with Tamara",
-    imgSrc: "/tamara.png",
-    alt: "tamara_pay_by_instalments_4 icon",
-  },
-  {
-    id: 4,
-    label: "4 interest-free payments",
-    imgSrc: "/tabby.png",
-    alt: "tabby_installments icon",
-  },
-  {
-    id: 5,
-    label: "Pay With Cash (29 SAR + Shipping Fees)",
-    imgSrc: "/cash.png",
-    alt: "cashondelivery icon",
-  },
-  {
-    id: 6,
-    label: "Split into 3 payments, without fees with Tamara",
-    imgSrc: "/tamara.png",
-    alt: "tamara_pay_by_instalments icon",
-  },
-];
+
 
 export default function PaymentMethods() {
   const dispatch = useDispatch();
@@ -79,7 +42,9 @@ export default function PaymentMethods() {
   );
   const searchParams = useSearchParams();
   const [address, setAddress] = useState<string | null>(null);
-
+const { currentLocale, translations } = useSelector(
+  (state: RootState) => state.locale
+);
   useEffect(() => {
     // Retrieve the address query parameter and decode it
     const queryAddress = searchParams.get("address");
@@ -88,7 +53,44 @@ export default function PaymentMethods() {
       setAddress(decodedAddress); // Set the decoded address in the state
     }
   }, [searchParams]);
-
+const paymentMethods = [
+  {
+    id: 1,
+    label: `${translations.CheckPay.split_into_6_payments_with_madfu}`,
+    imgSrc: "/madufu.png",
+    alt: "madfu_gateway icon",
+  },
+  {
+    id: 2,
+    label: `${translations.CheckPay.credit_debit_card_payment}`,
+    imgSrc: "/credit.png",
+    alt: "checkoutcom_card_payment icon",
+  },
+  {
+    id: 3,
+    label: `${translations.CheckPay.split_in_up_to_4_payments_or_pay_in_full_securely_with_tamara}`,
+    imgSrc: "/tamara.png",
+    alt: "tamara_pay_by_instalments_4 icon",
+  },
+  {
+    id: 4,
+    label: `${translations.CheckPay.interest_free_payments}`,
+    imgSrc: "/tabby.png",
+    alt: "tabby_installments icon",
+  },
+  {
+    id: 5,
+    label: `${translations.CheckPay.pay_with_cash}`,
+    imgSrc: "/cash.png",
+    alt: "cashondelivery icon",
+  },
+  {
+    id: 6,
+    label: `${translations.CheckPay.split_into_3_payments_without_fees_with_tamara}`,
+    imgSrc: "/tamara.png",
+    alt: "tamara_pay_by_instalments icon",
+  },
+];
   const createOrderList = () => {
     const cart = filteredCartItems?.map((item) => ({
       productId: item.id, // Replace with your product ID property
@@ -229,7 +231,7 @@ export default function PaymentMethods() {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <p className="text-lg text-center font-semibold mb-4 dark:text-white">
-        Choose payment method
+       {translations.CheckPay.choose_payment_method}
       </p>
        
       <div className="space-y-1">
