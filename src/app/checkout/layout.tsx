@@ -383,9 +383,20 @@ const steps = [
                 {translations.checkout.orderSummary}
               </div>
 
-              <div>
+              <div
+                style={{
+                  maxHeight: "400px", // Adjust the height as per your requirement
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  // Enable vertical scrolling
+                }}
+                className="scrollbar-thin -mx-5 scrollbar-thumb-gray-400 scrollbar-track-gray-100" // Optional: Tailwind custom scrollbar styles
+              >
                 {filteredCartItems?.map((item: any) => (
-                  <div className="flex items-center mb-4 " key={item.id}>
+                  <div
+                    className="flex items-center border-b  p-4 mb-4 "
+                    key={item.id}
+                  >
                     <Link
                       href={`/singleProduct/${item.name}/${item.id}`}
                       className="flex-shrink-0"
