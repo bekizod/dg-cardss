@@ -14,7 +14,8 @@ import { useAuth } from "@/context/UserContext";
 import { notification } from "antd";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import Loader from "../loading";
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 const AccountPage = () => {
   const { user, logout, token } = useAuth(); // Fetch user info from context
   const router = useRouter(); // Use router for redirection
@@ -28,7 +29,10 @@ const AccountPage = () => {
       router.push("/login"); // Redirect to login if no token is found
     }
   }, [router]);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   // State for profile update
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -141,7 +145,7 @@ const AccountPage = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="welcome-text">
             <p className="text-xl font-semibold">
-              Welcome, {user.firstName} {user.lastName}
+              {translations.account.welcome} {user.firstName} {user.lastName}
             </p>
             <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
           </div>
@@ -176,14 +180,16 @@ const AccountPage = () => {
               exit={{ opacity: 0, height: 0 }}
               className="w-full md:w-1/2 mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
             >
-              <p className="text-lg font-semibold mb-4">Change Password</p>
+              <p className="text-lg font-semibold mb-4">
+                {translations.account.changePassword}
+              </p>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div>
                   <label
                     htmlFor="old-password"
                     className="block mb-1 text-sm font-medium"
                   >
-                    Old Password
+                    {translations.account.oldPassword}
                   </label>
                   <input
                     id="old-password"
@@ -199,7 +205,7 @@ const AccountPage = () => {
                     htmlFor="new-password"
                     className="block mb-1 text-sm font-medium"
                   >
-                    New Password
+                    {translations.account.newPassword}
                   </label>
                   <input
                     id="new-password"
@@ -215,7 +221,7 @@ const AccountPage = () => {
                     htmlFor="confirm-password"
                     className="block mb-1 text-sm font-medium"
                   >
-                    Confirm New Password
+                    {translations.account.confirmNewPassword}
                   </label>
                   <input
                     id="confirm-password"
@@ -231,7 +237,7 @@ const AccountPage = () => {
                   whileHover={{ scale: 1.05 }}
                   className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
                 >
-                  Change Password
+                  {translations.account.changePassword}
                 </motion.button>
               </form>
             </motion.div>
@@ -242,7 +248,9 @@ const AccountPage = () => {
               exit={{ opacity: 0, height: 0 }}
               className="w-full md:w-1/2 mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
             >
-              <p className="text-lg font-semibold mb-4">Update Profile</p>
+              <p className="text-lg font-semibold mb-4">
+                {translations.account.updateProfile}
+              </p>
               <form onSubmit={handleProfileUpdate} className="space-y-4">
                 <div>
                   <label
@@ -308,7 +316,7 @@ const AccountPage = () => {
                   whileHover={{ scale: 1.05 }}
                   className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]  text-white py-2 px-4 rounded-lg w-full"
                 >
-                  Update Profile
+                  {translations.account.updateProfile}
                 </motion.button>
               </form>
             </motion.div>
@@ -321,17 +329,17 @@ const AccountPage = () => {
             {
               href: "/account/orders",
               icon: <FaShoppingCart size={32} />,
-              label: "Orders",
+              label: `${translations.account.orders}`,
             },
             {
               href: "/account/returns",
               icon: <FaUndoAlt size={32} />,
-              label: "Returns",
+              label: `${translations.account.returns}`,
             },
             {
               href: "/account/favorites",
               icon: <FaHeart size={32} />,
-              label: "Favorite",
+              label: `${translations.account.favorites}`,
             },
           ].map((utility, index) => (
             <Link key={index} href={utility.href}>
@@ -349,7 +357,9 @@ const AccountPage = () => {
             onClick={handleLogout}
             className="flex lg:hidden  items-center gap-2 text-sm cursor-pointer"
           >
-            <span className=" md:inline font-bold text-lg">Logout</span>
+            <span className=" md:inline font-bold text-lg">
+              {translations.account.logout}
+            </span>
             <FaSignOutAlt className="text-red-500" size={27} />
           </button>
         </div>

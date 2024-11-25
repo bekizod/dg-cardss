@@ -30,6 +30,9 @@ const FavoriteList: React.FC = () => {
   const { favoriteProducts } = useSelector(
     (state: RootState) => state.favoriteProducts as any
   );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const { user } = useAuth();
   useEffect(() => {
@@ -130,15 +133,13 @@ const FavoriteList: React.FC = () => {
   };
 
   return (
-   
-
     <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]     dark:text-white p-3">
       {/* Left Section */}
       <div className="flex flex-col lg:w-1/2 w-full">
         <div className="flex flex-col">
           <div className="flex flex-col">
             <div className="text-2xl text-center font-bold">
-              Favorite Products
+              {translations.fav.favoriteProducts}
             </div>
             <div className="font-bold py-2 text-center">
               {/* You have{" "}
@@ -187,7 +188,7 @@ const FavoriteList: React.FC = () => {
                   >
                     {isInCart && (
                       <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-lg bg-[var(--color-primary)] text-white text-xs font-bold px-2 py-1 rounded-br-md">
-                        In Cart
+                        {translations.fav.inCart}
                       </div>
                     )}
 

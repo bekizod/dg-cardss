@@ -51,6 +51,9 @@ export default function SingleProductPage({
     (state: RootState) =>
       state.categories as { product: any; loading: boolean; error: string }
   );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const [rating, setRating] = useState<number | null>(
     product.ratings?.averageRating || 0
   ); // Set initial rating

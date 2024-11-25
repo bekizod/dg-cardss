@@ -42,14 +42,20 @@ import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
 import ThemeSwitcher from "./ui/ThemeSwitcher";
 
-export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: string, onLanguageToggle : any }) {
+export default function TopNextNavbar({
+  logoUrl,
+  onLanguageToggle,
+}: {
+  logoUrl: string;
+  onLanguageToggle: any;
+}) {
   const router = useRouter();
   const [parentName, setParentName] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("");
   const [filteredCards, setFilteredCards] = useState(cardData);
   const { user, logout } = useAuth(); // Get user and logout function from context
-  
+
   const dispatch = useDispatch<AppDispatch>();
   const { parentCategories, subCategories, loading, error } = useSelector(
     (state: RootState) =>
@@ -63,9 +69,9 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
   const { products, pages, total, status } = useSelector(
     (state: RootState) => state.searchProducts as any
   );
-    const { currentLocale, translations } = useSelector(
-      (state: RootState) => state.locale
-    );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const { totalItems } = useSelector((state: RootState) => state.cart);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
@@ -301,7 +307,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                 }
               }}
               type="text"
-              placeholder="What are you looking for?"
+              placeholder={translations.tnn.what_are_you_looking_for}
               className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)]   dark:bg-slate-800"
             />
           </div>
@@ -326,7 +332,9 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                 className="flex items-center gap-2 text-sm cursor-pointer"
               >
                 <FaSignOutAlt className="text-red-500" />
-                <span className="hidden md:inline">Logout</span>
+                <span className="hidden md:inline">
+                  {translations.tnn.logout}
+                </span>
               </button>
             </>
           ) : (
@@ -336,7 +344,9 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
               className="flex items-center gap-2 text-sm cursor-pointer"
             >
               <FaRegUser className="text-[var(--color-primary)]" />
-              <span className="hidden md:inline">Account/Login</span>
+              <span className="hidden md:inline">
+                {translations.tnn.account_login}
+              </span>
             </Link>
           )}
           <div className="hidden md:block">|</div>
@@ -668,7 +678,11 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
               </button>
 
               <div className="text-2xl font-semibold mb-4">
-                Search Results <div>Total Products of {total}</div>
+                {translations.tnn.search_results}{" "}
+                <div>
+                  {translations.tnn.total_products}
+                  {total}
+                </div>
               </div>
 
               {/* {status === "loading" && <p>Loading products...</p>} */}
@@ -735,7 +749,7 @@ export default function TopNextNavbar({ logoUrl, onLanguageToggle }: { logoUrl: 
                             {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                             <div className="relative">
                               <Link
-                                onClick={searchcloseModal}  
+                                onClick={searchcloseModal}
                                 href={`/singleProduct/${product?.category?.parentCategory?.categoryName}/${product?.category?.parentCategory?._id}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
                                 className="block w-full"
                               >

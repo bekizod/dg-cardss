@@ -31,6 +31,9 @@ const CartComponent = () => {
   const [selectedSize, setSelectedSize] = useState(
     "" // Default to the first size, or set to an empty string if no sizes
   );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   // Ensure component is mounted before rendering cart items (client-side rendering)
   const [filteredCartItems, setFilteredCartItems] = useState(cartItems);
   const { totalItems, totalPrice, totalDiscount } = useSelector(
@@ -144,7 +147,7 @@ const CartComponent = () => {
             <div className="p-4">
               <div className="mb-4">
                 <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                  Cart (0 Products)
+                  {translations.Cart.cartTitle}
                 </p>
               </div>
               <div className="flex flex-col items-center">
@@ -156,14 +159,14 @@ const CartComponent = () => {
                   className="mb-4"
                 />
                 <p className="text-center text-gray-600 dark:text-gray-400 mb-4">
-                  Your cart is empty.Please Add your favorite products to it.
+                  {translations.Cart.emptyCartMessage}
                 </p>
                 <Link href="/ " passHref>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     className=" bg-[var(--color-primary)] text-white py-2 px-4 rounded-lg hover:bg-[var(--color-primary)] dark:hover:bg-green-300"
                   >
-                    Start Shopping
+                    {translations.Cart.startShopping}
                   </motion.button>
                 </Link>
               </div>
@@ -177,7 +180,7 @@ const CartComponent = () => {
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
             <div className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md text-gray-800 dark:text-white font-medium">
-              <span>Total Quantity in Cart:</span>
+              <span>{translations.Cart.totalQuantity}</span>
               <span className="text-lg font-semibold text-[var(--color-primary)]">
                 {filteredCartItems?.length}
               </span>
@@ -291,7 +294,9 @@ const CartComponent = () => {
                       <div>
                         Choose your size
                         <select
-                          onChange={(e)=>handleSizeChange(e,item.id,item.buyerId)}
+                          onChange={(e) =>
+                            handleSizeChange(e, item.id, item.buyerId)
+                          }
                           value={item.selectedSize}
                         >
                           {item.size.map((size: any, index: any) => (
@@ -329,7 +334,7 @@ const CartComponent = () => {
             <div className="mt-4 md:mt-0 p-4 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-xl w-full ">
               {/* Order Summary Title */}
               <h2 className="text-xl font-semibold dark:text-gray-200">
-                Order Summary
+                {translations.Cart.orderSummary}
               </h2>
 
               {/* Coupon/Gift Card Section */}
@@ -415,22 +420,22 @@ const CartComponent = () => {
               {/* Money Totals */}
               <div className="mt-6 space-y-2 dark:text-gray-300">
                 <div className="flex justify-between">
-                  <p>Subtotal</p>
+                  <p>{translations.Cart.subtotal}</p>
                   <p>{totalPrice} SAR</p>
                 </div>
                 <div className="flex justify-between text-red-500 dark:text-red-400">
-                  <p>Discount</p>
+                  <p>{translations.Cart.discount}</p>
                   <p>-{totalDiscount} SAR</p>
                 </div>
                 <div className="flex justify-between">
-                  <p>Shipping</p>
+                  <p>{translations.Cart.shipping}</p>
                   <p>0 SAR</p>
                 </div>
               </div>
 
               {/* Total */}
               <div className="flex justify-between text-lg font-bold mt-4 dark:text-gray-200">
-                <p>Total</p>
+                <p>{translations.Cart.total}</p>
                 <p>{totalPrice} SAR</p>
               </div>
 
@@ -440,7 +445,7 @@ const CartComponent = () => {
                   whileTap={{ scale: 0.95 }}
                   className="w-full mt-6 hover:bg-[var(--color-primary)] bg-[var(--color-secondary)] text-white py-2 rounded-lg"
                 >
-                  Buy Now
+                  {translations.Cart.buyNow}
                 </motion.button>
               </div>
               <Image

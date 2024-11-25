@@ -10,12 +10,15 @@ import axios from "axios";
 import Loader from "@/app/loading";
 import BestProducts from "./BestSellProduct";
 import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function HomeHero() {
   const [coverPictures, setCoverPictures] = useState<any[]>([]); // Initialize as an empty array
   const [loading, setLoading] = useState<boolean>(false); // Track loading state
   const [error, setError] = useState<string | null>(null); // Store error message
-const currentLocale = useSelector((state: any) => state.locale.currentLocale);
+const { currentLocale, translations } = useSelector(
+  (state: RootState) => state.locale
+);
 const isRTL = currentLocale === "ar";
 
   useEffect(() => {

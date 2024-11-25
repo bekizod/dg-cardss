@@ -6,6 +6,8 @@ import "antd/dist/reset.css";
 import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,7 +16,10 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [step, setStep] = useState<"sendCode" | "recoverPassword">("sendCode");
   const router = useRouter();
-
+ const dispatch = useDispatch<AppDispatch>();
+ const { currentLocale, translations } = useSelector(
+   (state: RootState) => state.locale
+ );
   const openNotification = (success: boolean, message: string) => {
     notification.open({
       message: success ? "Success" : "Error",
@@ -49,14 +54,14 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       console.error("Error sending code:", error);
-      openNotification(false, "Failed to send the code. Please try again.");
+      openNotification(false, `${translations.forgotPassword.failureSendCode}`);
     }
   };
 
   const handleRecoverPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      openNotification(false, "Passwords do not match. Please try again.");
+      openNotification(false, `${translations.forgotPassword.passwordMismatch}`);
       return;
     }
 
@@ -85,7 +90,7 @@ const ForgotPassword = () => {
       console.error("Error recovering password:", error);
       openNotification(
         false,
-        "Failed to recover the password. Please try again."
+         `${translations.forgotPassword.failureRecoverPassword}`
       );
     }
   };
@@ -94,7 +99,9 @@ const ForgotPassword = () => {
     <div className="flex max-lg:h-screen 2xl:mt-[124px] justify-center items-center py-28  bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">
-          {step === "sendCode" ? "Forgot Password" : "Recover Password"}
+          {step === "sendCode"
+            ? `${translations.forgotPassword.titleSendCode}`
+            : `${translations.forgotPassword.titleRecoverPassword}`}
         </h2>
         <form
           onSubmit={
@@ -106,14 +113,14 @@ const ForgotPassword = () => {
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email
+                  {translations.forgotPassword.emailLabel}
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="Enter your email"
+                  placeholder={translations.forgotPassword.emailPlaceholder}
                   className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
                 />
               </div>
@@ -123,47 +130,47 @@ const ForgotPassword = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Send Code
+                 {translations.forgotPassword.sendCodeButton}
               </motion.button>
             </>
           ) : (
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Code
+                {translations.forgotPassword.codeLabel}
                 </label>
                 <input
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   required
-                  placeholder="Enter the code sent to your email"
+                  placeholder={translations.forgotPassword.codePlaceholder}
                   className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  New Password
+                    { translations.forgotPassword.newPasswordLabel}
                 </label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
-                  placeholder="Enter your new password"
+                  placeholder={translations.forgotPassword.newPasswordPlaceholder}
                   className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Confirm Password
+                   {translations.forgotPassword.confirmPasswordLabel}
                 </label>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  placeholder="Confirm your new password"
+                  placeholder={translations.forgotPassword.confirmPasswordPlaceholder}
                   className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
                 />
               </div>
@@ -173,7 +180,7 @@ const ForgotPassword = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Update Password
+                {translations.forgotPassword.updatePasswordButton}
               </motion.button>
             </>
           )}
@@ -184,7 +191,7 @@ const ForgotPassword = () => {
               onClick={() => setStep("sendCode")}
               className="cursor-pointer text-[var(--color-primary)]"
             >
-              Back to Send Code
+              {translations.forgotPassword.backToSendCode}
             </span>
           )}
         </p>

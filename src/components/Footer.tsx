@@ -52,7 +52,9 @@ const Footer = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
-
+ const { currentLocale, translations } = useSelector(
+   (state: RootState) => state.locale
+ );
   useEffect(() => {
     // Filter cart items based on buyerId (either user._id or 'guest')
     if (token && user) {
@@ -97,7 +99,9 @@ const Footer = () => {
               </svg>
             </div>
 
-            <div className="font-bold text-">New Technologies</div>
+            <div className="font-bold text-">
+              {translations.footer.new_technologies}
+            </div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
@@ -116,7 +120,9 @@ const Footer = () => {
                 </g>
               </svg>
             </div>
-            <div className="font-bold text-">Certified Warranty</div>
+            <div className="font-bold text-">
+              {translations.footer.certified_warranty}
+            </div>
           </div>
 
           <div className="flex flex-row gap-3 items-center">
@@ -139,7 +145,7 @@ const Footer = () => {
               </svg>
             </div>
             <div className="font-bold text-">
-              Free shipping for orders over 799 SAR
+              {translations.footer.free_shipping}
             </div>
           </div>
 
@@ -169,7 +175,9 @@ const Footer = () => {
                 />
               </svg>
             </div>
-            <div className="font-bold text-">Customer Service 24/7</div>
+            <div className="font-bold text-">
+              {translations.footer.customer_service}
+            </div>
           </div>
         </div>
       </div>
@@ -194,7 +202,7 @@ const Footer = () => {
           {/* First Column */}
           <div className="flex flex-col gap-3 z-10">
             <h3 className="text-white font-bold border-b-2 pb-1 mx-16 flex justify-center">
-              Questions and complaints
+              {translations.footer.questions_and_complaints}
             </h3>
 
             {/* Whatsapp Section */}
@@ -210,7 +218,9 @@ const Footer = () => {
                 className="h-6"
               />
               <div className="flex flex-col">
-                <span className="text-white">Whatsapp</span>
+                <span className="text-white">
+                  {translations.footer.whatsapp}
+                </span>
                 <span className="text-white">+966920009017</span>
               </div>
             </Link>
@@ -225,7 +235,9 @@ const Footer = () => {
                 className="h-6 mr-2"
               />
               <div className="flex flex-col">
-                <span className="text-white">Call Us</span>
+                <span className="text-white">
+                  {translations.footer.call_us}
+                </span>
                 <span className="text-white">+966920009016</span>
               </div>
             </Link>
@@ -234,50 +246,60 @@ const Footer = () => {
           {/* Second Column */}
           <div className="flex flex-col font-thin text-white z-10">
             <h3 className="text-white font-bold border-b-2 pb-1 mx-20 text-md text-center">
-              Need Help ?
+              {translations.footer.need_help}
             </h3>
             <ul className="space-y-2 text-sm pt-3 flex flex-col items-center">
               <li className="flex flex-row gap-2 items-center  hover:text-slate-400">
                 <FaInfoCircle className=" " />
-                <Link href="/our-story">Our Story</Link>
+                <Link href="/our-story">{translations.footer.our_story}</Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaWallet className="" />
-                <Link href="/loyalty-points-policy">Loyalty Points Policy</Link>
+                <Link href="/loyalty-points-policy">
+                  {translations.footer.loyalty_points_policy}
+                </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaShieldAlt className="" />
-                <Link href="/privacy-policy">Privacy Policy</Link>
+                <Link href="/privacy-policy">
+                  {translations.footer.privacy_policy}
+                </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaMoneyBillWave className="" />
-                <Link href="/payment-method">Payment Method</Link>
+                <Link href="/payment-method">
+                  {translations.footer.payment_method}
+                </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaShippingFast className="" />
                 <Link href="/shipping-and-delivery-information">
-                  Shipping and Delivery Information
+                  {translations.footer.shipping_and_delivery_information}
                 </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaShoppingCart className="" />
-                <Link href="/how-to-buy">How to Buy</Link>
+                <Link href="/how-to-buy">{translations.footer.how_to_buy}</Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaFileContract className="" />
-                <Link href="/terms-and-conditions">Terms and Conditions</Link>
+                <Link href="/terms-and-conditions">
+                  {translations.footer.terms_and_conditions}
+                </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaQuestionCircle className="" />
-                <Link href="/faqs">FAQs</Link>
+                <Link href="/faqs">{translations.footer.faqs}</Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaArrowCircleRight className="" />
-                <Link href="/return-policy">Return Policy</Link>
+                <Link href="/return-policy">
+                  {translations.footer.return_policy}
+                </Link>
               </li>
               <li className="flex flex-row gap-2 items-center hover:text-slate-400">
                 <FaPhone className="" />
-                <Link href="/warranty">Warranty</Link>
+                <Link href="/warranty">{translations.footer.warranty}</Link>
               </li>
             </ul>
           </div>
@@ -285,10 +307,10 @@ const Footer = () => {
           {/* Third Column */}
           <div className="flex flex-col text-white z-10">
             <h3 className="text-white font-bold text-center border-b-2 pb-1 mb-1 mx-24">
-              Follow Us
+              {translations.footer.follow_us}
             </h3>
             <p className="text-xs text-center">
-              You can follow us on social media
+              {translations.footer.follow_us_social_media}
             </p>
             <div className="flex justify-center gap-4 mt-2">
               <Link href="https://www.facebook.com/alsaifgallery">
@@ -305,10 +327,10 @@ const Footer = () => {
               </Link>
             </div>
             <h3 className="text-white font-bold text-center mt-4">
-              Download App
+              {translations.footer.download_app}
             </h3>
             <p className="text-xs text-center">
-              Download the app and enjoy exclusive offers
+              {translations.footer.download_app_offers}
             </p>
             <div className="flex flex-col items-center mt-4 space-y-4">
               <Link href="https://apps.apple.com/sa/app/alsaif-gallery-السيف-غاليري/id1459530502">
@@ -362,7 +384,7 @@ const Footer = () => {
 
         {/* Fourth Section: Copyright Information */}
         <div className="text-center text-white py-2 z-10">
-          <p>Copyright © digitalcard.com/ All rights reserved.</p>
+          <p>{translations.footer.copyright}</p>
         </div>
       </main>
 

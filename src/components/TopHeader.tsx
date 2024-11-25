@@ -59,10 +59,25 @@ export default function TopHeader() {
     <div className="hidden lg:block">
       <div className="bg-gray-100 dark:bg-slate-900 text-sm font-serif py-2 flex justify-around items-center gap-8">
         <div className="flex items-center gap-3">
-          <p>{translations.welcome}</p>
-          <Image src={flagSrc} alt="Country flag" onClick={() => setOpen(true)} className="h-5 w-7 cursor-pointer" width={100} height={100} /> |{" "}
-          <div className="cursor-pointer" onClick={() => handleLanguageChange(currentLocale === "en" ? "ar" : "en")}>
-            {currentLocale === "en" ? translations.arabic : translations.english}
+          <p>{translations.welcome_to_digital_card}</p>
+          <Image
+            src={flagSrc}
+            alt="Country flag"
+            onClick={() => setOpen(true)}
+            className="h-5 w-7 cursor-pointer"
+            width={100}
+            height={100}
+          />{" "}
+          |{" "}
+          <div
+            className="cursor-pointer"
+            onClick={() =>
+              handleLanguageChange(currentLocale === "en" ? "ar" : "en")
+            }
+          >
+            {currentLocale === "en"
+              ? translations.arabic
+              : translations.english}
           </div>
         </div>
 
@@ -97,7 +112,10 @@ export default function TopHeader() {
                         readOnly
                         className="h-5 w-5 cursor-pointer text-blue-600 focus:ring-blue-500"
                       />
-                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "Saudi Arabia" : "  المملكة العربية السعودية"}
+                      <p className="text-lg text-gray-800 dark:text-gray-100">
+                        {currentLocale === "en"
+                          ? "Saudi Arabia"
+                          : "  المملكة العربية السعودية"}
                       </p>
                     </div>
                     <Image
@@ -120,7 +138,10 @@ export default function TopHeader() {
                         readOnly
                         className="h-5 w-5 cursor-pointer text-blue-600 focus:ring-blue-500"
                       />
-                      <p className="text-lg text-gray-800 dark:text-gray-100">{currentLocale === "en" ? "United Arab Emirates" : " الإمارات العربية المتحدة"}
+                      <p className="text-lg text-gray-800 dark:text-gray-100">
+                        {currentLocale === "en"
+                          ? "United Arab Emirates"
+                          : " الإمارات العربية المتحدة"}
                       </p>
                     </div>
                     <Image

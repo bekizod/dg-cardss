@@ -5,12 +5,18 @@ import { notification } from "antd";
 import "antd/dist/reset.css";
 import { SmileOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const router = useRouter();
+ const dispatch = useDispatch<AppDispatch>();
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
 
   const openNotification = (success: boolean, message: string) => {
     notification.open({
@@ -68,44 +74,48 @@ const ChangePassword = () => {
   return (
     <div className="flex max-lg:h-screen  2xl:mt-[124px] justify-center items-center py-28 bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
-        <h2 className="text-2xl font-bold text-center mb-6">Change Password</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">
+          {translations.changePassword.title}
+        </h2>
         <form onSubmit={handleChangePassword} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Old Password
+              {translations.changePassword.oldPassword}
             </label>
             <input
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
               required
-              placeholder="Enter your old password"
+              placeholder={translations.changePassword.oldPasswordPlaceholder}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              New Password
+              {translations.changePassword.newPassword}
             </label>
             <input
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
-              placeholder="Enter your new password"
+              placeholder={translations.changePassword.newPasswordPlaceholder}
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Confirm Password
+              {translations.changePassword.confirmPassword}
             </label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              placeholder="Confirm your new password"
+              placeholder={
+                translations.changePassword.confirmPasswordPlaceholder
+              }
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
@@ -115,7 +125,7 @@ const ChangePassword = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Change Password
+            {translations.changePassword.submitButton}
           </motion.button>
         </form>
       </div>

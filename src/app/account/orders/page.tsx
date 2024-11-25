@@ -35,7 +35,9 @@ export default function Order() {
   const { orders, loading, error } = useSelector(
     (state: RootState) => state.orders as any
   );
-
+const { currentLocale, translations } = useSelector(
+  (state: RootState) => state.locale
+);
   // State to track visibility of cart items for each order
   const [showCartItems, setShowCartItems] = useState<{
     [key: string]: boolean;
@@ -87,14 +89,14 @@ export default function Order() {
   return (
     <div className="order-list max-lg:mt-[34px]     p-4   transition-colors duration-300">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-        Order History
+         {translations.order.orderHistory}
       </h2>
 
       {/* Loading and error handling */}
       {loading && <Loader />}
       {error && (
         <p className="text-red-600 text-center">
-          Error loading orders: {error}
+          {translations.order.errorLoadingOrders} {error}
         </p>
       )}
 
@@ -121,25 +123,27 @@ export default function Order() {
                     {order.item}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300">
-                    Order Code:{" "}
+                    {translations.order.orderCode}:{" "}
                     <span className="font-medium">{order.itemCode}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    Amount: <span className="font-medium">${order.price}</span>
+                    {translations.order.amount}:{" "}
+                    <span className="font-medium">${order.price}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    Total Quantity:{" "}
+                    {translations.order.totalQuantity}:{" "}
                     <span className="font-medium">{order.amount}</span>
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    Date: <span className="font-medium">{order.date}</span>
+                    {translations.order.date}:{" "}
+                    <span className="font-medium">{order.date}</span>
                   </p>
                   <p
                     className={`p-2 rounded mt-2 text-center ${getStatusClass(
                       order.status
                     )} text-white`}
                   >
-                    Status: {order.status}
+                    {translations.order.status}: {order.status}
                   </p>
 
                   {/* Button to toggle cart items visibility for the specific order */}
@@ -147,14 +151,16 @@ export default function Order() {
                     onClick={() => toggleCartItemsVisibility(order.itemCode)}
                     className="mt-4 bg-[var(--color-primary)]   text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
                   >
-                    {isVisible ? "Hide Cart Items" : "View Cart Items"}
+                    {isVisible
+                      ? `${translations.order.hideCartItems}`
+                      : `${translations.order.viewCartItems}`}
                   </button>
 
                   {/* Conditionally render cart items */}
                   {isVisible && (
                     <div className="mt-4">
                       <h4 className="font-semibold mb-1 text-gray-800 dark:text-white">
-                        Cart Items:
+                        {translations.order.cartItems}:
                       </h4>
                       <div className="flex flex-col space-y-2">
                         {order.cart.map((cartItem: any) => (
@@ -167,19 +173,23 @@ export default function Order() {
                             >
                               <div className="flex flex-col">
                                 <span className="font-medium">
-                                  Product ID: {cartItem?.productId?._id}
+                                  {translations.order.productID}:{" "}
+                                  {cartItem?.productId?._id}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  Product Name: {cartItem?.productId?.name}
+                                  {translations.order.productName}:{" "}
+                                  {cartItem?.productId?.name}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  Quantity: {cartItem?.quantity}
+                                  {translations.order.quantity}:{" "}
+                                  {cartItem?.quantity}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  Price: ${cartItem?.productId?.price}
+                                  {translations.order.price}: $
+                                  {cartItem?.productId?.price}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
-                                  Category:{" "}
+                                  {translations.order.category}:{" "}
                                   {cartItem?.productId?.category.categoryName}
                                 </span>
                               </div>

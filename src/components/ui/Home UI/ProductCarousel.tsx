@@ -33,9 +33,12 @@ const ProductCarousel = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { user } = useAuth();
- const [loading, setLoading] = useState(false)
-  const { favoriteProducts,   error } = useSelector(
+  const [loading, setLoading] = useState(false);
+  const { favoriteProducts, error } = useSelector(
     (state: RootState) => state.favoriteProducts as any
+  );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
   );
   useEffect(() => {
     const fetchProducts = async () => {
@@ -56,7 +59,7 @@ const ProductCarousel = () => {
         .join("&"); // Filter out any null values before joining
 
       try {
-        setLoading(true)
+        setLoading(true);
         // Dispatch the action
         await dispatch(SearchProducts(queryParams)).unwrap(); // Using unwrap() to handle resolved promise
       } catch (err: any) {
@@ -66,8 +69,8 @@ const ProductCarousel = () => {
           description:
             err?.message || "Failed to fetch products. Please try again.",
         });
-      } finally{
-setLoading(false)
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -118,7 +121,6 @@ setLoading(false)
     console.log("Favorite Products:", favoriteProducts);
   }, [favoriteProducts]);
 
-
   const handleFavoriteToggle = async (productId: string) => {
     const isFavorite = favoriteProducts?.some(
       (product: any) => product._id === productId
@@ -168,7 +170,9 @@ setLoading(false)
   return (
     <div className="relative ">
       {!loading && (
-        <div className="font-bold text-xl ">Our Discount Products</div>
+        <div className="font-bold text-xl ">
+          {translations.bestSellingProducts.our_discount_products}
+        </div>
       )}
 
       <div

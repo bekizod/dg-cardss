@@ -27,7 +27,9 @@ import axios from "axios";
 const BestProducts = () => {
   // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
-
+const { currentLocale, translations } = useSelector(
+  (state: RootState) => state.locale
+);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -162,7 +164,7 @@ const BestProducts = () => {
   return (
     <div className="relative ">
       {!loading && (
-        <div className="font-bold text-xl">Top Selling Products</div>
+        <div className="font-bold text-xl">{ translations.bestSellingProducts.top_selling_products}</div>
       )}
 
       <div
