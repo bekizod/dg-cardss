@@ -107,7 +107,7 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
               margin: 0,
               transition: "transform 0.35s ease-in-out",
               transform:
-                currentLocale === "en"
+                currentLocale === "ar"
                   ? `translateX(${currentSlide * 100}%)` // Reverse for RTL
                   : `translateX(-${currentSlide * 100}%)`,
             }}
