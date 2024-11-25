@@ -103,15 +103,21 @@ const ProductCarousel = () => {
     );
   };
   const handleNavigation = (direction: number) => {
+    const isRTL = currentLocale === "ar"; // Check if the current locale is Arabic
     const newIndex = currentIndex + direction;
+
     if (newIndex >= 0 && newIndex < products.length && carouselRef.current) {
       setCurrentIndex(newIndex);
-      carouselRef.current.scrollTo({
-        left: carouselRef.current.clientWidth * newIndex,
+
+      // Adjust scroll direction based on layout
+      const scrollOffset = carouselRef.current.clientWidth * direction;
+      carouselRef.current.scrollBy({
+        left: isRTL ? -scrollOffset : scrollOffset, // Reverse scroll direction for RTL
         behavior: "smooth",
       });
     }
   };
+
 
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
