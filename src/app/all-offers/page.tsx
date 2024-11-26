@@ -521,10 +521,10 @@ export default function ProductsAccordion({
             </h2>
             <button
               onClick={() => toggleSortModal()}
-              className="py-1 px-3  max     bg-gray-100 justify-center place-items-center dark:bg-gray-800 rounded lg:flex hidden items-center gap-2"
+              className="py-1 px-3   my-2  bg-gray-100 justify-center place-items-center dark:bg-gray-800 rounded lg:flex hidden items-center gap-2"
             >
               <BsSortDown className="text-gray-700 dark:text-gray-300" />
-              <div className="text-sm">{translations.slug.sort}</div>
+              <div className="text-lg">{translations.slug.sort}</div>
             </button>
           </div>
 

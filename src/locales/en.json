@@ -51,7 +51,9 @@
   "tn": {
     "welcome_to_digital_card": "Welcome To Digital Card",
     "all_offers": "All Offers",
-    "sendFeedback": "Send Feedback"
+    "sendFeedback": "Send Feedback",
+    "submitFeedback": "Submit Feedback",
+    "enterFeedback": "Enter your feedback here..."
   },
   "tnn": {
     "what_are_you_looking_for": "What are you looking for?",
@@ -281,7 +283,27 @@
     "purchase_now": "Purchase now",
     "choose_your_size": "Choose Your Size",
     "product_in_cart": "Product in Cart, Go to Cart",
-    "add_to_cart": "Add To Cart"
+    "add_to_cart": "Add To Cart",
+    "submitRating": "Submit Rating",
+    "addCommentPrompt": "Do you want to add a comment with your rating?",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "enterComment": "Enter your comment",
+    "taxIncluded": "Tax included",
+    "outOfStock": "Out Of Stock",
+    "productAddedToCart": "Product added successfully to cart",
+    "continueShopping": "Continue Shopping",
+    "completePurchase": "Complete Purchase",
+    "barcode": "Barcode",
+    "brand": "Brand",
+    "color": "Color",
+    "material": "Material",
+    "size": "Size",
+    "warranty": "Warranty",
+    "customersRateThisProduct": "Customers Rate This Product",
+    "totalProductInStock": "Total product in stock"
   },
   "tabs": {
     "All": "All",

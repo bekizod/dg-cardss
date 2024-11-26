@@ -20,6 +20,7 @@ import Custom404 from "@/app/not-found";
 import { addToCart, updateSelectedSize } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
+import { useTheme } from "next-themes";
 
 interface Product {
   id: string;
@@ -64,6 +65,7 @@ export default function SingleProductPage({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addComment, setAddComment] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const {theme} = useTheme()
   const [selectedSize, setSelectedSize] = useState(
     "" // Default to the first size, or set to an empty string if no sizes
   );
@@ -359,10 +361,10 @@ export default function SingleProductPage({
           <div>
             {product.stockQuantity > 0 ? (
               <span className="font-bold">
-                total product in stock : {product.stockQuantity}
+                {translations.single.totalProductInStock} : {product.stockQuantity}
               </span>
             ) : (
-              <span className="text-red-500 font-bold">Out Of Stock</span>
+                <span className="text-red-500 font-bold">{ translations.single.outOfStock}</span>
             )}
           </div>
 
@@ -472,7 +474,11 @@ export default function SingleProductPage({
               value={rating || product.ratings?.averageRating}
               onChange={handleRateChange}
               disabled={Loading}
-              className="custom-rate bg-transparent rounded"
+              className={`text-sm ${
+                product.productDetails?.ratings.averageRating > 0
+                  ? ""
+                  : "rate-empty"
+              }`}
             />
             |
             <motion.p
@@ -484,32 +490,78 @@ export default function SingleProductPage({
               {product.adjective}
             </motion.p>
             <Modal
-              title="Submit Rating"
+              title={translations.single.submitRating}
               visible={isModalVisible}
               onOk={handleModalOk}
               onCancel={handleModalCancel}
-              okText="Submit"
-              cancelText="Cancel"
+              okText={translations.single.submit}
+              cancelText={translations.single.cancel}
               confirmLoading={Loading}
+              style={{
+                backgroundColor: theme === "dark" ? "#1f1f1f" : "white", // Dark background
+                color: theme === "dark" ? "#ffffff" : "black", // Light text in dark mode
+              }}
               okButtonProps={{
                 style: {
-                  backgroundColor: "var(--color-primary)",
-                  borderColor: "var(--color-secondary)",
+                  backgroundColor:
+                    theme === "dark" ? "#4caf50" : "var(--color-primary)",
+                  borderColor:
+                    theme === "dark" ? "#4caf50" : "var(--color-secondary)",
                   color: "white",
                 },
               }}
+              cancelButtonProps={{
+                style: {
+                  backgroundColor: theme === "dark" ? "#333333" : "white",
+                  color: theme === "dark" ? "#ffffff" : "black",
+                  borderColor: theme === "dark" ? "#555555" : "lightgrey",
+                },
+              }}
             >
-              <p>Do you want to add a comment with your rating?</p>
-              <Button onClick={() => setAddComment(true)}>Yes</Button>
-              <Button onClick={() => setAddComment(false)}>No</Button>
+              <p
+                style={{
+                  color: theme === "dark" ? "#cccccc" : "black",
+                }}
+              >
+                 {translations.single.addCommentPrompt}
+              </p>
+              <Button
+                onClick={() => setAddComment(true)}
+                style={{
+                  backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
+                  color: theme === "dark" ? "#ffffff" : "black",
+                  border: "none",
+                  marginRight: 8,
+                }}
+              >
+                {translations.single.yes}
+              </Button>
+              <Button
+                onClick={() => setAddComment(false)}
+                style={{
+                  backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
+                  color: theme === "dark" ? "#ffffff" : "black",
+                  border: "none",
+                }}
+              >
+                {translations.single.no}
+              </Button>
 
               {addComment && (
                 <Input.TextArea
-                  placeholder="Enter your comment"
+                  placeholder={translations.single.enterComment}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   rows={3}
-                  style={{ marginTop: 10 }}
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: theme === "dark" ? "#2b2b2b" : "white",
+                    color: theme === "dark" ? "#ffffff" : "black",
+                    border:
+                      theme === "dark"
+                        ? "1px solid #555555"
+                        : "1px solid lightgrey",
+                  }}
                 />
               )}
             </Modal>
@@ -625,7 +677,7 @@ export default function SingleProductPage({
                 )}
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Tax included
+                {translations.single.taxIncluded}
               </p>
             </div>
             {/* Purchase Option */}
@@ -680,7 +732,7 @@ export default function SingleProductPage({
                   : `${translations.single.add_to_cart}`}
               </motion.button>
             ) : (
-              <div className="font-bold text-red-500">Out Of Stock</div>
+                <div className="font-bold text-red-500">{translations.single.outOfStock }</div>
             )}
           </motion.div>
           {/* Modal */}
@@ -709,18 +761,18 @@ export default function SingleProductPage({
                 </Link>
 
                 <p className="mt-4 text-gray-600 dark:text-gray-300">
-                  Product added successfully to cart
+                  {translations.single.productAddedToCart}
                 </p>
                 <div className="mt-6 flex justify-between">
                   <button
                     className="text-xs lg:text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                     onClick={handleCloseModal}
                   >
-                    Continue Shopping
+                     {translations.single.continueShopping}
                   </button>
                   <Link href="/cart">
                     <button className="text-xs lg:text-lg  bg-[var(--color-primary)]   text-white dark:text-gray-200 px-4 py-2 rounded-xl   dark:hover:bg-[var(--color-primary)] transition">
-                      Complete Purchase
+                     {translations.single.completePurchase}
                     </button>
                   </Link>
                 </div>
@@ -904,15 +956,15 @@ export default function SingleProductPage({
               <div id="dt-additional-info-content" className="space-y-2">
                 <ul className="text-gray-800 dark:text-gray-200">
                   <li>SKU: {product.additionalInformation?.SKU}</li>
-                  <li>Barcode: {product.additionalInformation?.barcode}</li>
-                  <li>Brand: {product.additionalInformation?.brand}</li>
-                  <li>Color: {product.additionalInformation?.color}</li>
-                  <li>Material: {product.additionalInformation?.material}</li>
+                  <li>{translations.single.barcode}: {product.additionalInformation?.barcode}</li>
+                  <li>{translations.single.brand}: {product.additionalInformation?.brand}</li>
+                  <li>{translations.single.color}: {product.additionalInformation?.color}</li>
+                  <li>{translations.single.material}: {product.additionalInformation?.material}</li>
                   <li>
-                    Size: {product.additionalInformation?.size?.join(", ")}
+                    {translations.single.size}: {product.additionalInformation?.size?.join(", ")}
                   </li>
 
-                  <li>warranty: {product.additionalInformation?.warranty}</li>
+                  <li>{translations.single.warranty}: {product.additionalInformation?.warranty}</li>
                 </ul>
               </div>
             )}
@@ -957,8 +1009,7 @@ export default function SingleProductPage({
                   <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
                   {/* Render the number of ratings (if needed) */}
                   <p className="text-gray-800 dark:text-gray-200">
-                    {product.ratings?.numberOfRatings || 0} Customers Rate This
-                    product
+                    {product.ratings?.numberOfRatings || 0}  {translations.single.customersRateThisProduct}
                   </p>
                 </div>
               </div>

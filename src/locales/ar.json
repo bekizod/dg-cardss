@@ -24,7 +24,9 @@
   "tn": {
     "welcome_to_digital_card": "مرحباً بكم في البطاقة الرقمية",
     "all_offers": "جميع العروض",
-    "sendFeedback": "إرسال الملاحظات"
+    "sendFeedback": "إرسال الملاحظات",
+    "submitFeedback": "إرسال الملاحظات",
+    "enterFeedback": "أدخل ملاحظاتك هنا..."
   },
   "tnn": {
     "what_are_you_looking_for": "ماذا تبحث عنه؟",
@@ -278,10 +280,30 @@
     "split_payment": "أو قسّم على 4 دفعات بقيمة 100.00 ريال سعودي - بدون رسوم تأخير، متوافق مع الشريعة!",
     "learn_more": "تعرف على المزيد",
     "tamara_payment": "4 دفعات بدون فوائد بقيمة 100.00 ريال سعودي. بدون رسوم. متوافق مع الشريعة.",
-    "purchase_now":  "اشتر الآن",
-    "choose_your_size":  "اختر مقاسك",
+    "purchase_now": "اشتر الآن",
+    "choose_your_size": "اختر مقاسك",
     "product_in_cart": "المنتج في السلة، انتقل إلى السلة",
-    "add_to_cart": "أضف إلى السلة"
+    "add_to_cart": "أضف إلى السلة",
+    "submitRating": "إرسال التقييم",
+    "addCommentPrompt": "هل تريد إضافة تعليق مع تقييمك؟",
+    "yes": "نعم",
+    "no": "لا",
+    "cancel": "إلغاء",
+    "submit": "إرسال",
+    "enterComment": "أدخل تعليقك",
+    "taxIncluded": "شامل الضريبة",
+    "outOfStock": "غير متوفر في المخزون",
+    "productAddedToCart": "تمت إضافة المنتج بنجاح إلى السلة",
+    "continueShopping": "متابعة التسوق",
+    "completePurchase": "إتمام الشراء",
+    "barcode": "الرمز الشريطي",
+    "brand": "العلامة التجارية",
+    "color": "اللون",
+    "material": "المادة",
+    "size": "الحجم",
+    "warranty": "الضمان",
+    "customersRateThisProduct": "تقييم العملاء لهذا المنتج",
+    "totalProductInStock": "إجمالي المنتج في المخزون"
   },
   "tabs": {
     "All": "الكل",

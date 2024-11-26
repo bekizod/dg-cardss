@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setSelectedAddress } from "@/redux/slices/addressSlice";
+import { useTheme } from "next-themes";
 
 interface City {
   id: number;
@@ -28,6 +29,7 @@ export default function Address() {
   const router = useRouter();
   const { user, token } = useAuth();
   const [addressMe, setAddressMe] = useState<string[]>([]);
+  const{theme} = useTheme()
   const { currentLocale, translations } = useSelector(
     (state: RootState) => state.locale
   );
@@ -147,7 +149,7 @@ export default function Address() {
       </div>
 
       {showMap && (
-        <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-800 bg-opacity-75 dark:bg-gray-300">
+        <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-800 bg-opacity-75 dark:bg-gray-700 dark:bg-opacity-75">
           <motion.div
             className="relative w-full max-w-4xl bg-white rounded-lg shadow-md p-4 dark:bg-gray-900"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -155,7 +157,9 @@ export default function Address() {
             transition={{ duration: 0.3 }}
           >
             <button
-              className="absolute z-50 top-4 right-4 cursor-pointer text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+              className={`absolute z-50 top-4  ${
+                currentLocale === "ar" ? "left-4 " : " right-4"
+              } cursor-pointer text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200`}
               onClick={() => setShowMap(false)}
             >
               <svg
@@ -172,14 +176,34 @@ export default function Address() {
               </svg>
             </button>
             <Form layout="vertical" onFinish={handleSubmit}>
-              <Form.Item label={translations.address.selectCity} required>
+              <Form.Item
+                className="text-white  "
+                label={
+                  <span className="dark:text-white">
+                    {translations.address.selectCity}
+                  </span>
+                }
+                required
+              >
                 <Select
                   placeholder={translations.address.selectCity}
                   value={city}
                   onChange={(value) => setCity(value)}
+                  style={{
+                    background: theme === "dark" ? "#334155" : "#ffffff",
+                    color: theme === "dark" ? "#ffffff" : "#000000",
+                  }}
+                  dropdownStyle={{
+                    background: theme === "dark" ? "#1e293b" : "#ffffff",
+                    color: theme === "dark" ? "#ffffff" : "#000000",
+                  }}
                 >
                   {cities.map((city) => (
-                    <Select.Option key={city.id} value={city.name}>
+                    <Select.Option
+                      className="dark:bg-slate-950 dark:text-white"
+                      key={city.id}
+                      value={city.name}
+                    >
                       {city.name}
                     </Select.Option>
                   ))}
@@ -189,7 +213,7 @@ export default function Address() {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
+                  className="text-black dark:text-white bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
                   loading={loading}
                   disabled={!city}
                 >
@@ -231,7 +255,7 @@ export default function Address() {
                   className="p-2 rounded-lg text-white bg-[var(--color-primary)] hover:bg-[var(--color-secondary)]"
                   onClick={handleConfirmSelection}
                 >
-                   {translations.address.confirm}
+                  {translations.address.confirm}
                 </button>
               </div>
             </div>

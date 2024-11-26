@@ -264,7 +264,7 @@ export default function TopHeader() {
             transition={{ duration: 0.3 }}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Send Feedback</h2>
+              <h2 className="text-xl font-semibold">{translations.tn.sendFeedback}</h2>
               <button
                 onClick={() => setFeedbackModalOpen(false)}
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
