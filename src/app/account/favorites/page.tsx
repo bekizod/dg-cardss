@@ -170,7 +170,10 @@ const FavoriteList: React.FC = () => {
                 const productColor =
                   product?.additionalInformation?.color || "default";
                 const existingItem = cartItems.find(
-                  (item) => item.id === productIdt && item.buyerId === buyerId
+                  (item) =>
+                    item.id === productIdt &&
+                    item.buyerId === buyerId 
+                    // item.color === productColor
                 );
                 const isInCart = existingItem;
 
