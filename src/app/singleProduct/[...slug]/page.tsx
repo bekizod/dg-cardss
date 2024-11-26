@@ -632,9 +632,11 @@ export default function SingleProductPage({
                 className="form-radio h-4 w-4 text-blue-600 dark:text-blue-400 transition duration-150 ease-in-out"
               />
 
-              <p className="text-gray-900 dark:text-gray-100">Purchase now</p>
+              <p className="text-gray-900 dark:text-gray-100">
+                {translations.single.purchase_now}
+              </p>
             </div>
-            Choose Your Size
+            {translations.single.choose_your_size}
             {Array.isArray(product.additionalInformation?.size) &&
             product.additionalInformation.size.length > 1 ? (
               <select
@@ -666,7 +668,9 @@ export default function SingleProductPage({
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {existingItem ? "Product in Cart, Go to Cart" : "Add to Cart"}
+                {existingItem
+                  ? `${translations.single.product_in_cart}`
+                  : `${translations.single.add_to_cart}`}
               </motion.button>
             ) : (
               <div className="font-bold text-red-500">Out Of Stock</div>
@@ -693,7 +697,7 @@ export default function SingleProductPage({
                   />
 
                   <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Added to cart
+                    {translations.single.add_to_cart}
                   </p>
                 </Link>
 
@@ -762,7 +766,7 @@ export default function SingleProductPage({
                 <span className="font-semibold">SAR 100.00</span> - No late
                 fees, Sharia compliant!{" "}
                 <span className="text-blue-500 underline cursor-pointer">
-                  Learn more
+                  {translations.single.learn_more}
                 </span>
               </p>
             </div>
@@ -786,10 +790,9 @@ export default function SingleProductPage({
           >
             <div>
               <p>
-                4 interest-free payments of <strong>SAR 100.00</strong>. No
-                fees. Shariah-compliant.
+                {translations.single.tamara_payment}
                 <span className="text-blue-500 underline cursor-pointer">
-                  Learn more
+                  {translations.single.learn_more}
                 </span>
               </p>
             </div>
@@ -821,7 +824,7 @@ export default function SingleProductPage({
               }`}
               onClick={() => setActiveTab("description")}
             >
-              Description
+              {translations.single.description}
             </p>
             <p
               id="dt-additional-info"
@@ -836,7 +839,7 @@ export default function SingleProductPage({
               }`}
               onClick={() => setActiveTab("additional-info")}
             >
-              Additional Information
+              {translations.single.additional_information}
             </p>
             <p
               id="dt-reviews"
@@ -849,7 +852,7 @@ export default function SingleProductPage({
               }`}
               onClick={() => setActiveTab("reviews")}
             >
-              Ratings
+              {translations.single.ratings}
             </p>
           </div>
 
@@ -910,7 +913,9 @@ export default function SingleProductPage({
             {activeTab === "reviews" && (
               <div id="dt-reviews-content" className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <p className="text-gray-800 dark:text-gray-200">Ratings</p>
+                  <p className="text-gray-800 dark:text-gray-200">
+                    {translations.single.ratings}
+                  </p>
                   <p className="text-lg font-bold text-gray-800 dark:text-gray-200">
                     {rating}
                   </p>
@@ -957,3 +962,90 @@ export default function SingleProductPage({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+// Submit
+// Submit Rating
+// Submit
+// Cancel
+// Enter your comment
+// Tax included
+// Out Of Stock
+// Product added successfully to cart
+// Continue Shopping
+// Complete Purchase
+// Barcode
+// Brand
+// Color
+// Material
+// Size
+// warranty
+// Customers Rate This
+//  product
+// total product in stock
+
+
+
+
+
+
+
+
+
+
+// {
+//   "content": {
+//     "description": {
+//       "en": "Description",
+//       "ar": "الوصف"
+//     },
+//     "additional_information": {
+//       "en": "Additional Information",
+//       "ar": "معلومات إضافية"
+//     },
+//     "ratings": {
+//       "en": "Ratings",
+//       "ar": "التقييمات"
+//     },
+//     "madfu_installments": {
+//       "en": "Pay with Madfu on 6 installments with a value of 66.67 SAR per installment (Warning: Maximum value is 2000 SAR)",
+//       "ar": "ادفع مع مدفو على 6 أقساط بقيمة 66.67 ريال سعودي لكل قسط (تحذير: الحد الأقصى للقيمة هو 2000 ريال سعودي)"
+//     },
+//     "split_payment": {
+//       "en": "Or split in 4 payments of SAR 100.00 - No late fees, Sharia compliant!",
+//       "ar": "أو قسّم على 4 دفعات بقيمة 100.00 ريال سعودي - بدون رسوم تأخير، متوافق مع الشريعة!"
+//     },
+//     "learn_more": {
+//       "en": "Learn more",
+//       "ar": "تعرف على المزيد"
+//     },
+//     "tamara_payment": {
+//       "en": "4 interest-free payments of SAR 100.00. No fees. Shariah-compliant.",
+//       "ar": "4 دفعات بدون فوائد بقيمة 100.00 ريال سعودي. بدون رسوم. متوافق مع الشريعة."
+//     },
+//     "purchase_now": {
+//       "en": "Purchase now",
+//       "ar": "اشتر الآن"
+//     },
+//     "choose_your_size": {
+//       "en": "Choose Your Size",
+//       "ar": "اختر مقاسك"
+//     },
+//     "product_in_cart": {
+//       "en": "Product in Cart, Go to Cart",
+//       "ar": "المنتج في السلة، انتقل إلى السلة"
+//     },
+//     "add_to_cart": {
+//       "en": "Add To Cart",
+//       "ar": "أضف إلى السلة"
+//     }
+//   }
+// }
+

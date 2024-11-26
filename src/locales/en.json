@@ -270,6 +270,19 @@
     "all_offers": "All Offers",
     "all_offer_products": "All Offer Products"
   },
+  "single": {
+    "description": "Description",
+    "additional_information": "Additional Information",
+    "ratings": "Ratings",
+    "madfu_installments": "Pay with Madfu on 6 installments with a value of 66.67 SAR per installment (Warning: Maximum value is 2000 SAR)",
+    "split_payment": "Or split in 4 payments of SAR 100.00 - No late fees, Sharia compliant!",
+    "learn_more": "Learn more",
+    "tamara_payment": "4 interest-free payments of SAR 100.00. No fees. Shariah-compliant.",
+    "purchase_now": "Purchase now",
+    "choose_your_size": "Choose Your Size",
+    "product_in_cart": "Product in Cart, Go to Cart",
+    "add_to_cart": "Add To Cart"
+  },
   "tabs": {
     "All": "All",
     "ElectricalAppliance": "Electrical Appliance",
