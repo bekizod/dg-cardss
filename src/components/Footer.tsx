@@ -32,20 +32,14 @@ import Cookies from "js-cookie";
 
 const Footer = () => {
   const pathname = usePathname();
-  const navItems = [
-    { name: "Home", icon: <FaHome />, href: "/" },
-    { name: "Categories", icon: <FaList />, href: "/menu" },
-    { name: "Cart", icon: <FaShoppingCart />, href: "/cart" },
-    { name: "Offers", icon: <FaTag />, href: "/all-offers" },
-    { name: "Account", icon: <FaUser />, href: "/account" },
-  ];
-  const Menus = [
-    { name: "Home", icon: "home-outline", dis: "translate-x-0" },
-    { name: "Profile", icon: "person-outline", dis: "translate-x-16" },
-    { name: "Message", icon: "chatbubble-outline", dis: "translate-x-32" },
-    { name: "Photos", icon: "camera-outline", dis: "translate-x-48" },
-    { name: "Settings", icon: "settings-outline", dis: "translate-x-64" },
-  ];
+  
+  // const Menus = [
+  //   { name: "Home", icon: "home-outline", dis: "translate-x-0" },
+  //   { name: "Profile", icon: "person-outline", dis: "translate-x-16" },
+  //   { name: "Message", icon: "chatbubble-outline", dis: "translate-x-32" },
+  //   { name: "Photos", icon: "camera-outline", dis: "translate-x-48" },
+  //   { name: "Settings", icon: "settings-outline", dis: "translate-x-64" },
+  // ];
   const [active, setActive] = useState(0);
   const { user, logout } = useAuth();
   const token = Cookies.get("token");
@@ -54,7 +48,14 @@ const Footer = () => {
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
  const { currentLocale, translations } = useSelector(
    (state: RootState) => state.locale
- );
+  );
+  const navItems = [
+    { name:  translations.footer.home, icon: <FaHome />, href: "/" },
+    { name: translations.footer.categories, icon: <FaList />, href: "/menu" },
+    { name: translations.footer.cart, icon: <FaShoppingCart />, href: "/cart" },
+    { name: translations.footer.offers, icon: <FaTag />, href: "/all-offers" },
+    { name: translations.footer.account, icon: <FaUser />, href: "/account" },
+  ];
   useEffect(() => {
     // Filter cart items based on buyerId (either user._id or 'guest')
     if (token && user) {

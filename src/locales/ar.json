@@ -61,7 +61,12 @@
     "follow_us_social_media": "يمكنك متابعتنا على وسائل التواصل الاجتماعي",
     "download_app": "تحميل التطبيق",
     "download_app_offers": "قم بتحميل التطبيق واستمتع بالعروض الحصرية",
-    "copyright": "حقوق الطبع والنشر © digitalcard.com/ جميع الحقوق محفوظة."
+    "copyright": "حقوق الطبع والنشر © digitalcard.com/ جميع الحقوق محفوظة.",
+    "home": "الرئيسية",
+    "categories": "الفئات",
+    "cart": "عربة التسوق",
+    "offers": "العروض",
+    "account": "الحساب"
   },
   "bestSellingProducts": {
     "top_selling_products": "أعلى المنتجات مبيعًا",

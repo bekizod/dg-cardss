@@ -98,9 +98,13 @@ export default function Login() {
       setLoging(false);
     }
   };
-
+  const handleLanguageChange = (newLocale: string) => {
+    localStorage.setItem("locale", newLocale);
+    window.location.reload(); // Refresh the page after setting the locale
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
-    <div className="flex justify-center items-center py-28 h-screen bg-gray-200 dark:bg-gray-800">
+    <div className="flex flex-col gap-3 justify-center items-center py-28 h-screen bg-gray-200 dark:bg-gray-800">
       <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">{translations.login.title}</div>
@@ -157,6 +161,16 @@ export default function Login() {
           >
             {translations.login.signup}
           </Link>
+        </div>
+      </div>
+      <div className="p-3 bg-slate-400 dark:bg-slate-800 rounded shadow-lg hidden max-lg:block">
+        <div
+          className="cursor-pointer "
+          onClick={() =>
+            handleLanguageChange(currentLocale === "en" ? "ar" : "en")
+          }
+        >
+          {currentLocale === "en" ? translations.arabic : translations.english}
         </div>
       </div>
     </div>
