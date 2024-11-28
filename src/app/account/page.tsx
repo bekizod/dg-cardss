@@ -16,6 +16,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import Loader from "../loading";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import PhoneFooter from "@/components/PhoneFooter";
 const AccountPage = () => {
   const { user, logout, token } = useAuth(); // Fetch user info from context
   const router = useRouter(); // Use router for redirection
@@ -139,7 +140,7 @@ const AccountPage = () => {
   }
 
   return (
-    <div className="page-container p-5 flex justify-center w-full   max-lg:mt-[34px]  2xl:mt-[100px]   dark:text-white">
+    <div className="page-container p-5 flex flex-col justify-center w-full   max-lg:mt-[34px]  2xl:mt-[100px]   dark:text-white">
       <div className="content max-w-7xl w-full bg-white dark:bg-gray-800 px-6 py-8 rounded-2xl shadow-lg mx-4">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
@@ -366,6 +367,7 @@ const AccountPage = () => {
           </button>
         </div>
       </div>
+      <PhoneFooter />
     </div>
   );
 };

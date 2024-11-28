@@ -9,6 +9,7 @@ import Link from "next/link";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector"; // Import country library
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import PhoneFooter from "@/components/PhoneFooter";
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
 // TypeScript types
@@ -128,8 +129,8 @@ export default function Register() {
   };
 
   return (
-    <div className="flex justify-center items-center py-28 2xl:mt-[124px] bg-gray-200 dark:bg-gray-800">
-      <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 shadow-xl w-full max-w-xl">
+    <div className="flex flex-col justify-center items-center   2xl:mt-[124px] bg-gray-200 dark:bg-gray-800">
+      <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 my-24 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold">
             {translations.register.register}
@@ -299,6 +300,7 @@ export default function Register() {
           </Link>
         </p>
       </div>
+      <PhoneFooter />
     </div>
   );
 }

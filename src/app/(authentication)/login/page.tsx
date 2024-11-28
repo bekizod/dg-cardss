@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
 import Cookies from "js-cookie";
 import axios from "axios"; // Import axios
+import PhoneFooter from "@/components/PhoneFooter";
 
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
@@ -94,6 +95,7 @@ export default function Login() {
         "Login Error",
         "Something went wrong. Please try again later."
       );
+
     } finally {
       setLoging(false);
     }
@@ -104,8 +106,11 @@ export default function Login() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
-    <div className="flex flex-col gap-3 justify-center items-center py-28 h-screen bg-gray-200 dark:bg-gray-800">
-      <div className="bg-white rounded-lg dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 shadow-xl w-full max-w-xl">
+    <div className="flex flex-col gap-8 justify-center items-center   bg-gray-200 dark:bg-gray-800">
+ 
+
+      
+      <div className="bg-white rounded-lg  dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 my-24 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">{translations.login.title}</div>
           <div className="flex items-center justify-center mt-2">
@@ -163,16 +168,8 @@ export default function Login() {
           </Link>
         </div>
       </div>
-      <div className="p-3 bg-slate-400 dark:bg-slate-800 rounded shadow-lg hidden max-lg:block">
-        <div
-          className="cursor-pointer "
-          onClick={() =>
-            handleLanguageChange(currentLocale === "en" ? "ar" : "en")
-          }
-        >
-          {currentLocale === "en" ? translations.arabic : translations.english}
-        </div>
-      </div>
+      
+      <PhoneFooter />
     </div>
   );
 }

@@ -44,7 +44,7 @@ const Footer = () => {
   const { user, logout } = useAuth();
   const token = Cookies.get("token");
   const dispatch = useDispatch<AppDispatch>();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItems = useSelector((state: RootState) => state.cart.items as any);
   const [filteredCartItems, setFilteredCartItems] = useState<any>(null);
  const { currentLocale, translations } = useSelector(
    (state: RootState) => state.locale
@@ -61,13 +61,13 @@ const Footer = () => {
     if (token && user) {
       // If user is logged in, filter by user's ID
       const userCartItems = cartItems.filter(
-        (item) => item.buyerId === user?._id
+        (item:any) => item.buyerId === user?._id
       );
       setFilteredCartItems(userCartItems);
     } else {
       // If guest, filter by 'guest' ID
       const guestCartItems = cartItems.filter(
-        (item) => item.buyerId === "guest"
+        (item:any) => item.buyerId === "guest"
       );
       setFilteredCartItems(guestCartItems);
     }
