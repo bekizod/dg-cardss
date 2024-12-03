@@ -113,9 +113,9 @@ export default function Register() {
       } else {
         openNotification(false, data.message);
       }
-    } catch (error) {
-      console.error("Error during registration:", error);
-      openNotification(false, "Error occurred during registration");
+    } catch (error : any) {
+      // console.error("Error during registration:", error);
+      openNotification(false, error.message || "Error occurred during registration");
     } finally {
       setRegistering(false);
     }
