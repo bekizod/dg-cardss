@@ -75,7 +75,7 @@ const { currentLocale, translations } = useSelector(
         id: product._id,
         buyerId: user?._id || "guest",
         image: product.imageIds[0],
-        color: product.additionalInformation?.color,
+        color: product.additionalInformation?.color[0],
         name: product.name,
         quantity: 1,
         stockQuantity: product.stockQuantity,
@@ -192,8 +192,7 @@ const { currentLocale, translations } = useSelector(
             const existingItem = cartItems.find(
               (item : any) =>
                 item.id === productIdt &&
-                item.buyerId === buyerId &&
-                item.color === productColor
+                item.buyerId === buyerId
             );
             const existingQuantity = existingItem ? existingItem.quantity : 0;
             const BuyerId = existingItem ? existingItem.buyerId : "guest";

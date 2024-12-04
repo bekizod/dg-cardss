@@ -74,8 +74,7 @@ export default function SingleProductPage({
     state.cart.items.find(
       (item) =>
         item.id === productIdt &&
-        item.buyerId === buyerId &&
-        item.color === productColor
+        item.buyerId === buyerId  
     )
   );
 
@@ -172,6 +171,8 @@ export default function SingleProductPage({
         </div>
       </div>
     );
+  
+  
   if (error) return <p>Error: {error}</p>;
 
   const goToPrevious = () => {
@@ -203,7 +204,7 @@ export default function SingleProductPage({
           id: product._id,
           buyerId: user?._id || "guest",
           image: product.imageIds[0],
-          color: product.additionalInformation?.color,
+          color: product.additionalInformation?.color[0],
           name: product.name,
           quantity: 1,
           stockQuantity: product.stockQuantity,
@@ -233,7 +234,14 @@ export default function SingleProductPage({
       })
     );
   };
-
+const renderValue = (
+  defaultValue: string,
+  translatedValue: string | undefined
+) => {
+  return currentLocale === "ar" && translatedValue
+    ? translatedValue
+    : defaultValue;
+};
   const handleRate = async () => {
     const token = Cookies.get("token");
     try {
@@ -361,10 +369,13 @@ export default function SingleProductPage({
           <div>
             {product.stockQuantity > 0 ? (
               <span className="font-bold">
-                {translations.single.totalProductInStock} : {product.stockQuantity}
+                {translations.single.totalProductInStock} :{" "}
+                {product.stockQuantity}
               </span>
             ) : (
-                <span className="text-red-500 font-bold">{ translations.single.outOfStock}</span>
+              <span className="text-red-500 font-bold">
+                {translations.single.outOfStock}
+              </span>
             )}
           </div>
 
@@ -467,7 +478,7 @@ export default function SingleProductPage({
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            {product.name}
+            {renderValue(product.name, product.translatedName)}
           </motion.h1>
           <div className="flex flex-row gap-2 items-center text-slate-400">
             <Rate
@@ -487,7 +498,7 @@ export default function SingleProductPage({
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              {product.adjective}
+              {renderValue(product.adjective, product.translatedAdjective)}
             </motion.p>
             <Modal
               title={translations.single.submitRating}
@@ -523,7 +534,7 @@ export default function SingleProductPage({
                   color: theme === "dark" ? "#cccccc" : "black",
                 }}
               >
-                 {translations.single.addCommentPrompt}
+                {translations.single.addCommentPrompt}
               </p>
               <Button
                 onClick={() => setAddComment(true)}
@@ -580,7 +591,10 @@ export default function SingleProductPage({
                 height="20"
               />
               <p className="text-xs">
-                {product.additionalInformation?.returnPolicy}
+                {renderValue(
+                  product.additionalInformation?.returnPolicy,
+                  product.additionalInformation?.translatedReturnPolicy
+                )}
               </p>
             </div>
             <div className="flex items-center space-x-2">
@@ -605,7 +619,10 @@ export default function SingleProductPage({
                 />
               </svg>
               <p className="text-xs">
-                {product.additionalInformation?.warranty}
+                {renderValue(
+                  product.additionalInformation?.warranty,
+                  product.additionalInformation?.translatedWarranty
+              )}
               </p>
             </div>
           </motion.div>
@@ -615,7 +632,7 @@ export default function SingleProductPage({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            {product.description}
+            {renderValue(product.description,product.translatedDescription)}
           </motion.p>
         </div>
 
@@ -732,7 +749,9 @@ export default function SingleProductPage({
                   : `${translations.single.add_to_cart}`}
               </motion.button>
             ) : (
-                <div className="font-bold text-red-500">{translations.single.outOfStock }</div>
+              <div className="font-bold text-red-500">
+                {translations.single.outOfStock}
+              </div>
             )}
           </motion.div>
           {/* Modal */}
@@ -768,11 +787,11 @@ export default function SingleProductPage({
                     className="text-xs lg:text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                     onClick={handleCloseModal}
                   >
-                     {translations.single.continueShopping}
+                    {translations.single.continueShopping}
                   </button>
                   <Link href="/cart">
                     <button className="text-xs lg:text-lg  bg-[var(--color-primary)]   text-white dark:text-gray-200 px-4 py-2 rounded-xl   dark:hover:bg-[var(--color-primary)] transition">
-                     {translations.single.completePurchase}
+                      {translations.single.completePurchase}
                     </button>
                   </Link>
                 </div>
@@ -924,7 +943,7 @@ export default function SingleProductPage({
                   inspire your day.
                 </p> */}
                 <p className="text-gray-800 dark:text-gray-200">
-                  <strong>{product.description}</strong>
+                  <strong>{renderValue(product.description,product.translatedDescription)}</strong>
                 </p>
                 {/* <p className="text-gray-800 dark:text-gray-200">
                   <strong>Double cup option:</strong> Choose between one or two
@@ -956,15 +975,31 @@ export default function SingleProductPage({
               <div id="dt-additional-info-content" className="space-y-2">
                 <ul className="text-gray-800 dark:text-gray-200">
                   <li>SKU: {product.additionalInformation?.SKU}</li>
-                  <li>{translations.single.barcode}: {product.additionalInformation?.barcode}</li>
-                  <li>{translations.single.brand}: {product.additionalInformation?.brand}</li>
-                  <li>{translations.single.color}: {product.additionalInformation?.color}</li>
-                  <li>{translations.single.material}: {product.additionalInformation?.material}</li>
                   <li>
-                    {translations.single.size}: {product.additionalInformation?.size?.join(", ")}
+                    {translations.single.barcode}:{" "}
+                    {product.additionalInformation?.barcode}
+                  </li>
+                  <li>
+                    {translations.single.brand}:{" "}
+                    {renderValue(product.additionalInformation?.brand,product.additionalInformation?.translatedBrand)}
+                  </li>
+                  <li>
+                    {translations.single.color}:{" "}
+                    {product.additionalInformation?.color}
+                  </li>
+                  <li>
+                    {translations.single.material}:{" "}
+                    {renderValue(product.additionalInformation?.material,product.additionalInformation?.translatedMaterial)}
+                  </li>
+                  <li>
+                    {translations.single.size}:{" "}
+                    {product.additionalInformation?.size?.join(", ")}
                   </li>
 
-                  <li>{translations.single.warranty}: {product.additionalInformation?.warranty}</li>
+                  <li>
+                    {translations.single.warranty}:{" "}
+                    {renderValue(product.additionalInformation?.warranty,product.additionalInformation?.translatedWarranty)}
+                  </li>
                 </ul>
               </div>
             )}
@@ -1009,7 +1044,8 @@ export default function SingleProductPage({
                   <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
                   {/* Render the number of ratings (if needed) */}
                   <p className="text-gray-800 dark:text-gray-200">
-                    {product.ratings?.numberOfRatings || 0}  {translations.single.customersRateThisProduct}
+                    {product.ratings?.numberOfRatings || 0}{" "}
+                    {translations.single.customersRateThisProduct}
                   </p>
                 </div>
               </div>

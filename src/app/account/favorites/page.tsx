@@ -94,7 +94,7 @@ const FavoriteList: React.FC = () => {
         id: product._id,
         buyerId: user?._id || "guest",
         image: product.imageIds[0],
-        color: product.additionalInformation?.color,
+        color: product.additionalInformation?.color[0],
         name: product.name,
         quantity: 1,
         stockQuantity: product.stockQuantity,

@@ -194,7 +194,7 @@ export default function TopNextNavbar({
         id: product._id,
         buyerId: user?._id || "guest",
         image: product.imageIds[0],
-        color: product.additionalInformation?.color,
+        color: product.additionalInformation?.color[0],
         name: product.name,
         quantity: 1,
         stockQuantity: product.stockQuantity,
@@ -732,8 +732,7 @@ export default function TopNextNavbar({
                         const existingItem = cartItems.find(
                           (item) =>
                             item.id === productIdt &&
-                            item.buyerId === buyerId &&
-                            item.color === productColor
+                            item.buyerId === buyerId 
                         );
                         const existingQuantity = existingItem
                           ? existingItem.quantity

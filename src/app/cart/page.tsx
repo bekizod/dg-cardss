@@ -144,36 +144,7 @@ const CartComponent = () => {
       <div className="relative">
         {/* Toggle Button */}
 
-        {/* Sliding Size Nav */}
-        {isOpen && (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={slideVariants}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 h-full w-1/2 bg-gray-100 shadow-lg z-50"
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-            >
-              Close
-            </button>
-
-            {/* Nav Content */}
-            <div className="p-6">
-              <h2 className="text-xl font-bold mb-4">Sizes</h2>
-              <ul className="space-y-3">
-                <li className="text-gray-700">Small</li>
-                <li className="text-gray-700">Medium</li>
-                <li className="text-gray-700">Large</li>
-                <li className="text-gray-700">Extra Large</li>
-              </ul>
-            </div>
-          </motion.div>
-        )}
+         
       </div>
       <AnimatePresence>
         {filteredCartItems.length === 0 && (
@@ -250,15 +221,7 @@ const CartComponent = () => {
                 <div className="flex flex-col flex-1 justify-between">
                   {/* Product Name */}
 
-                  <div className="mb-1 sm:mb-3 font-light text-xs sm:text-sm">
-                    <button
-                      onClick={() => setIsOpen(true)}
-                      className="px-4 py-2 bg-gray-50   rounded shadow  "
-                    >
-                      Open Size Nav
-                    </button>
-                    {item.brand}
-                  </div>
+                 
 
                   {/* Description */}
                   <div className="text-base sm:text-xl font-bold mb-1 sm:mb-3">
