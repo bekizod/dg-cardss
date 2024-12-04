@@ -530,8 +530,7 @@ export default function ProductsAccordion({
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size,
-        selectedSize: product.additionalInformation.size[0],
+        size: product.additionalInformation.size
       })
     );
   };

@@ -17,7 +17,7 @@ import axios from "axios";
 import { message, notification, Modal, Input, Button, Rate } from "antd";
 import "./stars.css";
 import Custom404 from "@/app/not-found";
-import { addToCart, updateSelectedSize } from "@/redux/slices/cartSlice";
+import { addToCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
 import { useTheme } from "next-themes";
@@ -216,24 +216,13 @@ export default function SingleProductPage({
           numberOfRating: product.ratings.numberOfRatings,
           brand: product.additionalInformation.brand,
           adjective: product.adjective,
-          size: product.additionalInformation.size,
-          selectedSize: product.additionalInformation.size[0],
+          size: product.additionalInformation.size
         })
       );
     }
   };
 
-  const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSize = event.target.value;
-    setSelectedSize(newSize);
-    dispatch(
-      updateSelectedSize({
-        id: productIdt,
-        buyerId: buyerId,
-        selectedSize: newSize,
-      })
-    );
-  };
+   
 const renderValue = (
   defaultValue: string,
   translatedValue: string | undefined
@@ -712,28 +701,7 @@ const renderValue = (
                 {translations.single.purchase_now}
               </p>
             </div>
-            {translations.single.choose_your_size}
-            {Array.isArray(product.additionalInformation?.size) &&
-            product.additionalInformation.size.length > 1 ? (
-              <select
-                onChange={handleSizeChange}
-                value={
-                  existingItem?.selectedSize
-                    ? existingItem?.selectedSize
-                    : selectedSize
-                }
-              >
-                {product.additionalInformation.size.map(
-                  (size: any, index: any) => (
-                    <option key={index} value={size}>
-                      {size}
-                    </option>
-                  )
-                )}
-              </select>
-            ) : (
-              <span></span>
-            )}
+             
             {/* Add to Cart Button */}
             {product.stockQuantity > 0 ? (
               <motion.button

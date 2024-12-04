@@ -229,7 +229,7 @@ const steps = [
       productId: item.id, // Replace with your product ID property
       quantity: item.quantity, // Adjust based on your item structure
       unitPrice: Math.floor(item.unitPrice),
-      size: item.selectedSize, // Convert unitPrice to an integer
+      // size: item.size, // Convert unitPrice to an integer
     }));
 
      const orderList = {
