@@ -86,14 +86,14 @@ export default function Login() {
           "Email or password is incorrect. Please try again."
         );
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+    } catch (error : any) {
+      // console.error("An error occurred:", error);
 
       // Display error notification for exceptions
       openNotification(
         "error",
         "Login Error",
-        "Something went wrong. Please try again later."
+        "Email or password is incorrect. Please try again."
       );
 
     } finally {

@@ -38,6 +38,8 @@ export default function Register() {
     userType: "web", // Initialize userType
   });
   const [registering, setRegistering] = useState(false);
+  const [emailError, setEmailError] = useState("")
+  const [userNameError,setUserNameError] = useState("")
   const dispatch = useDispatch<AppDispatch>();
   const { currentLocale, translations } = useSelector(
     (state: RootState) => state.locale
@@ -106,12 +108,18 @@ export default function Register() {
 
       // Log the response data to the console
       console.log("Response data:", data);
-
+ 
       if (data.status) {
         openNotification(true, " ");
         router.push("/login");
       } else {
         openNotification(false, data.message);
+        if(data.message === "Email already exists"){
+          setEmailError("Email already exists");
+        }
+        else if (data.message === "USERNAME_ALREADY_EXISTS") {
+          setUserNameError("USERNAME_ALREADY_EXISTS");
+        }
       }
     } catch (error : any) {
       // console.error("Error during registration:", error);
@@ -161,7 +169,9 @@ export default function Register() {
               className="w-full bg-slate-100 p-3 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
-
+          {userNameError && (
+            <div className="text-red-500 font-medium">*{userNameError}</div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               {translations.register.firstName}
@@ -250,6 +260,9 @@ export default function Register() {
                 className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
               />
             </div>
+            {emailError && (
+              <div className="text-red-500 font-medium">*{emailError}</div>
+            )}
           </div>
 
           <div>
