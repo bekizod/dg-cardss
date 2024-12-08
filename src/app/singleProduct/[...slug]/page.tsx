@@ -611,7 +611,7 @@ const renderValue = (
                 {renderValue(
                   product.additionalInformation?.warranty,
                   product.additionalInformation?.translatedWarranty
-              )}
+                )}
               </p>
             </div>
           </motion.div>
@@ -621,7 +621,7 @@ const renderValue = (
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            {renderValue(product.description,product.translatedDescription)}
+            {renderValue(product.description, product.translatedDescription)}
           </motion.p>
         </div>
 
@@ -701,7 +701,7 @@ const renderValue = (
                 {translations.single.purchase_now}
               </p>
             </div>
-             
+
             {/* Add to Cart Button */}
             {product.stockQuantity > 0 ? (
               <motion.button
@@ -911,7 +911,12 @@ const renderValue = (
                   inspire your day.
                 </p> */}
                 <p className="text-gray-800 dark:text-gray-200">
-                  <strong>{renderValue(product.description,product.translatedDescription)}</strong>
+                  <strong>
+                    {renderValue(
+                      product.description,
+                      product.translatedDescription
+                    )}
+                  </strong>
                 </p>
                 {/* <p className="text-gray-800 dark:text-gray-200">
                   <strong>Double cup option:</strong> Choose between one or two
@@ -949,15 +954,28 @@ const renderValue = (
                   </li>
                   <li>
                     {translations.single.brand}:{" "}
-                    {renderValue(product.additionalInformation?.brand,product.additionalInformation?.translatedBrand)}
+                    {renderValue(
+                      product.additionalInformation?.brand,
+                      product.additionalInformation?.translatedBrand
+                    )}
                   </li>
                   <li>
                     {translations.single.color}:{" "}
-                    {product.additionalInformation?.color}
+                    <div
+                      className="w-5 h-5"
+                      style={{
+                        backgroundColor: product.additionalInformation?.color,
+                      }}
+                    >
+                      {" "}
+                    </div>
                   </li>
                   <li>
                     {translations.single.material}:{" "}
-                    {renderValue(product.additionalInformation?.material,product.additionalInformation?.translatedMaterial)}
+                    {renderValue(
+                      product.additionalInformation?.material,
+                      product.additionalInformation?.translatedMaterial
+                    )}
                   </li>
                   <li>
                     {translations.single.size}:{" "}
@@ -966,7 +984,10 @@ const renderValue = (
 
                   <li>
                     {translations.single.warranty}:{" "}
-                    {renderValue(product.additionalInformation?.warranty,product.additionalInformation?.translatedWarranty)}
+                    {renderValue(
+                      product.additionalInformation?.warranty,
+                      product.additionalInformation?.translatedWarranty
+                    )}
                   </li>
                 </ul>
               </div>
