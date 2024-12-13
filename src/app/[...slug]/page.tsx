@@ -534,6 +534,15 @@ export default function ProductsAccordion({
       })
     );
   };
+
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className=" md:px-20 lg:px-10 p-2 max-lg:mt-[34px] dark:text-white lg:mx-auto">
       {/* Breadcrumb */}
@@ -614,7 +623,7 @@ export default function ProductsAccordion({
           ) : (
             <GoHeart />
           )}
-          <span>{ translations.slug.category}</span>
+          <span>{translations.slug.category}</span>
         </div>
       </div>
 
@@ -625,7 +634,7 @@ export default function ProductsAccordion({
           {/* Title and Product Count */}
           <div className="mb-4">
             <div className="text-lg font-bold">
-              {  translations.slug.products}{" "}
+              {translations.slug.products}{" "}
               <span className="font-serif px-10 text-lg">
                 {filteredProducts.length} {translations.slug.products}
               </span>
@@ -878,9 +887,7 @@ export default function ProductsAccordion({
                   product?.additionalInformation?.color || "default";
 
                 const existingItem = cartItems.find(
-                  (item) =>
-                    item.id === productId &&
-                    item.buyerId === buyerId  
+                  (item) => item.id === productId && item.buyerId === buyerId
                 );
                 const existingQuantity = existingItem
                   ? existingItem.quantity
@@ -935,10 +942,13 @@ export default function ProductsAccordion({
                     {/* Product Details */}
                     <div className="flex w-full flex-col">
                       <div className="text-start text-lg font-semibold flex justify-start">
-                        {product.name}
+                        {renderValue(product.name, product.translatedName)}
                       </div>
                       <div className="test-sm text-start font-semibold">
-                        {product.additionalInformation.brand}
+                        {renderValue(
+                          product.additionalInformation?.brand,
+                          product.additionalInformation?.translatedBrand
+                        )}
                       </div>
                       <div className="flex flex-row gap-3">
                         <div>
@@ -1062,40 +1072,42 @@ export default function ProductsAccordion({
         <div className="p-3 w-full lg:w-1/4 max-w-lg mx-auto my-8 hidden lg:block">
           <div className="bg-white rounded shadow-lg p-5 dark:bg-gray-700">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">{ translations.slug.filter_by}</h3>
+              <h3 className="text-xl font-bold">
+                {translations.slug.filter_by}
+              </h3>
               <button
                 onClick={() => clearAllFilters()}
                 className="text-sm text-red-600 hover:underline"
               >
-                { translations.slug.clear_all}
+                {translations.slug.clear_all}
               </button>
             </div>
 
             {/* Filter Types */}
             {[
               {
-                label: `${ translations.slug.size}`,
+                label: `${translations.slug.size}`,
                 state: isSizeOpen,
                 setter: setIsSizeOpen,
                 options: filterOptions.sizes,
                 category: "size",
               },
               {
-                label: `${ translations.slug.color}`,
+                label: `${translations.slug.color}`,
                 state: isColorOpen,
                 setter: setIsColorOpen,
                 options: filterOptions.colors,
                 category: "color",
               },
               {
-                label: `${ translations.slug.brand}`,
+                label: `${translations.slug.brand}`,
                 state: isBrandOpen,
                 setter: setIsBrandOpen,
                 options: filterOptions.brands,
                 category: "brand",
               },
               {
-                label: `${ translations.slug.material}`,
+                label: `${translations.slug.material}`,
                 state: isMaterialOpen,
                 setter: setIsMaterialOpen,
                 options: filterOptions.materials,
@@ -1115,12 +1127,12 @@ export default function ProductsAccordion({
                     <ul className="space-y-2">
                       {filter.options.map((option, idx) => (
                         <li
-                          key={idx}
+                           key={idx}
                           className={`flex items-center justify-center mx-12 gap-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
                             selectedFilters[
                               filter.category as keyof typeof selectedFilters
                             ].includes(option)
-                              ? "text-[var(--color-primary)] font-semibold bg-transparent"
+                              ? "text-[var(--color-primary)] bg-slate-300 font-semibold "
                               : "text-gray-700 dark:text-gray-300"
                           }`}
                           onClick={() =>
@@ -1134,7 +1146,25 @@ export default function ProductsAccordion({
                             )
                           }
                         >
-                          <span>{option}</span>
+                          {filter.category === "color" ? (
+                            <div className="flex gap-1">
+                              {/* Check if the color is an array */}
+                              {(Array.isArray(option) ? option : [option]).map(
+                                (color, index) => (
+                                  <div
+                                    key={index}
+                                    className="w-4 h-4 border border-gray-300 rounded"
+                                    style={{ backgroundColor: color }}
+                                  ></div>
+                                )
+                              )}
+                            </div>
+                          ) : (
+                            <span>{option}</span>
+                          )}
+                          {/* <span>
+                            {Array.isArray(option) ? option.join(", ") : option}
+                          </span> */}
                         </li>
                       ))}
                     </ul>
@@ -1150,7 +1180,9 @@ export default function ProductsAccordion({
                 onClick={() => toggleFilter(setIsPriceOpen)}
                 className="flex justify-between items-center w-full text-left"
               >
-                <span className="text-lg font-medium">{  translations.slug.price}</span>
+                <span className="text-lg font-medium">
+                  {translations.slug.price}
+                </span>
                 {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
               </button>
               {isPriceOpen && (
@@ -1182,7 +1214,7 @@ export default function ProductsAccordion({
               }}
               className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] rounded"
             >
-             { translations.slug.show_results}
+              {translations.slug.show_results}
             </button>
           </div>
         </div>

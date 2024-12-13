@@ -261,6 +261,15 @@ export default function TopNextNavbar({
     }
   };
 
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
+
   return (
     <div className="flex flex-row justify-between items-center px-6 py-3 md:px-12 md:py-3 bg-white dark:bg-slate-950">
       {/* Language Toggle */}
@@ -789,10 +798,16 @@ export default function TopNextNavbar({
 
                             <div className="flex w-full flex-col">
                               <div className="text-start text-lg font-semibold flex justify-start">
-                                {product.name}
+                                {renderValue(
+                                  product.name,
+                                  product.translatedName
+                                )}
                               </div>
                               <div className="test-sm text-start font-semibold">
-                                {product.additionalInformation.brand}
+                                {renderValue(
+                                  product.additionalInformation?.brand,
+                                  product.additionalInformation?.translatedBrand
+                                )}
                               </div>
                               <div className="flex flex-row gap-3">
                                 <div>

@@ -171,7 +171,14 @@ const ProductCarousel = () => {
       });
     }
   };
-
+const renderValue = (
+  defaultValue: string,
+  translatedValue: string | undefined
+) => {
+  return currentLocale === "ar" && translatedValue
+    ? translatedValue
+    : defaultValue;
+};
   return (
     <div className="relative ">
       {!loading && (
@@ -253,10 +260,13 @@ const ProductCarousel = () => {
 
                 <div className="flex w-full flex-col">
                   <div className="text-start text-lg font-semibold flex justify-start">
-                    {product.name}
+                    {renderValue(product.name, product.translatedName)}
                   </div>
                   <div className="test-sm text-start font-semibold">
-                    {product.additionalInformation.brand}
+                    {renderValue(
+                      product.additionalInformation?.brand,
+                      product.additionalInformation?.translatedBrand
+                    )}
                   </div>
                   <div className="flex flex-row gap-3">
                     <div>

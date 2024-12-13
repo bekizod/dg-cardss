@@ -132,6 +132,15 @@ const FavoriteList: React.FC = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-lg:mt-[34px]     dark:text-white p-3">
       {/* Left Section */}
@@ -210,13 +219,16 @@ const FavoriteList: React.FC = () => {
 
                     <div className="flex flex-col w-full max-sm:text-xs  text-center sm:text-left">
                       <div className="font-semibold truncate">
-                        {product.name}
+                        {renderValue(product.name, product.translatedName)}
                       </div>
                       {/* <div className="truncate max-sm:hidden">
                         {product.description}
                       </div> */}
                       <div className="truncate">
-                        {product.additionalInformation.brand}
+                        {renderValue(
+                          product.additionalInformation?.brand,
+                          product.additionalInformation?.translatedBrand
+                        )}
                       </div>
                     </div>
 

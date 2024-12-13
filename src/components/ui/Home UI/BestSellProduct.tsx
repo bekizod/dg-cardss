@@ -164,7 +164,14 @@ const { currentLocale, translations } = useSelector(
       });
     }
   };
-
+ const renderValue = (
+   defaultValue: string,
+   translatedValue: string | undefined
+ ) => {
+   return currentLocale === "ar" && translatedValue
+     ? translatedValue
+     : defaultValue;
+ };
   return (
     <div className="relative ">
       {!loading && (
@@ -245,10 +252,13 @@ const { currentLocale, translations } = useSelector(
 
                 <div className="flex w-full flex-col">
                   <div className="text-start text-lg font-semibold flex justify-start">
-                    {product.productDetails?.name}
+                    {renderValue(product.name, product.translatedName)}
                   </div>
                   <div className="test-sm text-start font-semibold">
-                    {product.productDetails?.additionalInformation.brand}
+                    {renderValue(
+                      product.additionalInformation?.brand,
+                      product.additionalInformation?.translatedBrand
+                    )}
                   </div>
                   <div className="flex flex-row gap-3">
                     <div>
@@ -257,7 +267,9 @@ const { currentLocale, translations } = useSelector(
                           1
                         )}
                         className={`text-sm ${
-                          product.productDetails?.ratings.averageRating > 0 ? "" : "rate-empty"
+                          product.productDetails?.ratings.averageRating > 0
+                            ? ""
+                            : "rate-empty"
                         }`}
                         disabled
                       />

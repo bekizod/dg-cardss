@@ -88,6 +88,14 @@ export default function OrderReturned() {
     setShowCartItems((prev) => ({ ...prev, [orderId]: !prev[orderId] }));
   };
 
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="order-list max-lg:mt-[34px]   p-4   transition-colors duration-300">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
@@ -182,7 +190,10 @@ export default function OrderReturned() {
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
                                   {translations.return.productName}:{" "}
-                                  {cartItem?.productId?.name}
+                                  {renderValue(
+                                    cartItem?.productId?.name,
+                                    cartItem?.productId?.translatedName
+                                  )}
                                 </span>
                                 <span className="text-gray-600 dark:text-gray-300">
                                   {translations.return.quantity}:{" "}

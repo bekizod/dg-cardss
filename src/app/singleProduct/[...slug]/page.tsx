@@ -588,7 +588,12 @@ const renderValue = (
             </div>
             <div className="flex items-center space-x-2">
               <Image src="/delevery.png" alt="90 icon" width="20" height="20" />
-              <p className="text-xs">90% delivery in 2 days</p>
+              <p className="text-xs">
+                {renderValue(
+                  product.additionalInformation?.brand,
+                  product.additionalInformation?.translatedBrand
+                )}
+              </p>
             </div>
             <div className="flex items-center space-x-2">
               <svg
