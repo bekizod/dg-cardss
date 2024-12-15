@@ -110,7 +110,11 @@ const isRTL = currentLocale === "ar";
                   width={1000}
                   height={1000}
                   layout="responsive"
-                  src={item?.coverPic?.data}
+                  src={
+                    currentLocale === "ar" && item?.translatedCoverPic?.data
+                      ? item.translatedCoverPic?.data
+                      : item.coverPic?.data || "/path/to/default-image.jpg"
+                  }
                   alt={item?.subCategory?.categoryName}
                   objectFit="cover"
                   className="  w-full h-36  transition-opacity duration-300 hover:opacity-80"

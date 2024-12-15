@@ -60,15 +60,25 @@ export default function CheckoutLayout({
   const isPaymentSelected = useSelector(
     (state: RootState) => state.payment.isPaymentSelected
   );
-const { currentLocale, translations } = useSelector(
-  (state: RootState) => state.locale
-);
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
 
-const steps = [
-  { id: 1, label: "Step 1", svg: "check", name: translations.checkout.login },
-  { id: 2, label: "Step 2", svg: "user", name: translations.checkout.address },
-  { id: 3, label: "Step 3", svg: "file", name: translations.checkout.payment },
-];
+  const steps = [
+    { id: 1, label: "Step 1", svg: "check", name: translations.checkout.login },
+    {
+      id: 2,
+      label: "Step 2",
+      svg: "user",
+      name: translations.checkout.address,
+    },
+    {
+      id: 3,
+      label: "Step 3",
+      svg: "file",
+      name: translations.checkout.payment,
+    },
+  ];
   //  useEffect(() => {
   //   // This effect runs whenever `isPaymentSelected` changes
   //   if (isPaymentSelected) {
@@ -130,7 +140,11 @@ const steps = [
       setFilteredCartItems(guestCartItems);
     }
   }, [cartItems, user, token]);
-
+  useEffect(() => {
+    if ((filteredCartItems?.length == 0)) {
+      router.push("/");
+    }
+  });
   const toggleCouponFields = () => {
     setShowCouponFields(!showCouponFields);
   };
@@ -232,14 +246,14 @@ const steps = [
       // size: item.size, // Convert unitPrice to an integer
     }));
 
-     const orderList = {
-       orderedBy: user._id,
-       cart: cart,
-       address: selectedAddress || address,
-       totalAmount: totalQuantity, // Implement a function to calculate total amount
-     };
+    const orderList = {
+      orderedBy: user._id,
+      cart: cart,
+      address: selectedAddress || address,
+      totalAmount: totalQuantity, // Implement a function to calculate total amount
+    };
 
-     console.log(JSON.stringify(orderList, null, 4));
+    console.log(JSON.stringify(orderList, null, 4));
     try {
       const response = await axios.post(
         "https://alsaifgallery.onrender.com/api/v1/order/createOrder",
@@ -265,7 +279,7 @@ const steps = [
         dispatch(clearCartByBuyerId(user?._id));
         router.push("/account/orders");
       }
-    } catch (error : any) {
+    } catch (error: any) {
       console.error(error);
       notification.error({
         message: "Order Creation Failed",

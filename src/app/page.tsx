@@ -135,7 +135,14 @@ export default function Home() {
   if (!currentLocale) {
     <Loader /> // or a loading spinner can be shown
   }             
-
+const renderValue = (
+  defaultValue: string,
+  translatedValue: string | undefined
+) => {
+  return currentLocale === "ar" && translatedValue
+    ? translatedValue
+    : defaultValue;
+};
   return (
     <main className="    ">
       <nav className="fixed w-full  bg-gray-100 dark:bg-slate-800 shadow-md z-30">
@@ -162,7 +169,8 @@ export default function Home() {
                 handleTabClick(category.categoryName, category._id)
               }
             >
-              {category.categoryName}
+              {/* {category.categoryName} */}
+              {renderValue(category.categoryName, category.translatedCategoryName)}
             </li>
           ))}
         </ul>

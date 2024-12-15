@@ -463,7 +463,10 @@ export default function TopNextNavbar({
                           height={30}
                           className="text-green-500"
                         />
-                        {category.categoryName}
+                        {renderValue(
+                          category.categoryName,
+                          category.translatedCategoryName
+                        )}
                       </button>
                     ))}
                   </>
@@ -647,7 +650,10 @@ export default function TopNextNavbar({
                               className="w-full object-contain mb-4 rounded-md"
                             />
                             <p className="hover:text-[var(--color-primary)]">
-                              {subCategory.categoryName}
+                              {renderValue(
+                                subCategory.categoryName,
+                                subCategory.translatedCategoryName
+                              )}
                             </p>
                           </motion.div>
                         </Link>
@@ -739,8 +745,7 @@ export default function TopNextNavbar({
                         // Check if the product is already in the cart
                         const existingItem = cartItems.find(
                           (item) =>
-                            item.id === productIdt &&
-                            item.buyerId === buyerId 
+                            item.id === productIdt && item.buyerId === buyerId
                         );
                         const existingQuantity = existingItem
                           ? existingItem.quantity

@@ -252,12 +252,15 @@ const { currentLocale, translations } = useSelector(
 
                 <div className="flex w-full flex-col">
                   <div className="text-start text-lg font-semibold flex justify-start">
-                    {renderValue(product.name, product.translatedName)}
+                    {renderValue(
+                      product.productDetails?.name,
+                      product.productDetails?.translatedName
+                    )}
                   </div>
                   <div className="test-sm text-start font-semibold">
                     {renderValue(
-                      product.additionalInformation?.brand,
-                      product.additionalInformation?.translatedBrand
+                      product.productDetails?.additionalInformation?.brand,
+                      product.productDetails?.additionalInformation?.translatedBrand
                     )}
                   </div>
                   <div className="flex flex-row gap-3">

@@ -10,6 +10,7 @@ type Advertisement = {
   _id: string;
   imageId: { data: string };
   bannerLink: string;
+  translatedImageId: {data:string};
   parentCategoryId?: { categoryName: string; _id: string };
   subCategoryId?: { categoryName: string; _id: string };
 };
@@ -42,7 +43,6 @@ export default function Slider({ isRTL }: { isRTL: boolean }) {
   // Automatic slide transition
   useEffect(() => {
     if (advertisements.length === 0) return;
-
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % advertisements.length);
     }, 3000);
@@ -84,7 +84,11 @@ export default function Slider({ isRTL }: { isRTL: boolean }) {
                   >
                     <div className="relative w-full lg:h-[500px]">
                       <Image
-                        src={ad.imageId?.data || ""}
+                        src={
+                          isRTL && ad.translatedImageId?.data
+                            ? ad.translatedImageId?.data
+                            : ad.imageId?.data || "/path/to/default-image.jpg"
+                        }
                         alt={`Slide ${index + 1} - ${
                           ad.parentCategoryId?.categoryName || "Advertisement"
                         }`}
