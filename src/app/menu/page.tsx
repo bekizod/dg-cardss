@@ -16,7 +16,9 @@ const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [parentName, setParentName] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>("");
-
+ const { currentLocale, translations } = useSelector(
+   (state: RootState) => state.locale
+ );
   const { parentCategories, subCategories, loading, error } = useSelector(
     (state: RootState) =>
       state.categories as {
@@ -46,16 +48,21 @@ const Page = () => {
       dispatch(fetchSubCategories(firstParentId));
     }
   }, [parentCategories, activeTab, dispatch]);
-
+const renderValue = (
+  defaultValue: string,
+  translatedValue: string | undefined
+) => {
+  return currentLocale === "ar" && translatedValue
+    ? translatedValue
+    : defaultValue;
+};
   return (
     <div className="flex overflow-hidden h-screen max-lg:mt-[39px] bg-gray-100 dark:bg-slate-900">
       {/* Parent Categories Section */}
       <div className="w-1/4 h-full border-r border-gray-300 dark:border-slate-600 relative overflow-y-auto scrollbar-hidden">
         <div className="grid gap-2 py-3">
           {loading && !parentCategories.length ? (
-            <div className="flex justify-center items-center py-4">
-               {""}
-            </div>
+            <div className="flex justify-center items-center py-4">{""}</div>
           ) : error && !parentCategories.length ? (
             <div className="flex justify-center items-center py-4 text-red-500">
               Error fetching parent categories
@@ -80,7 +87,10 @@ const Page = () => {
                     className="text-green-500"
                   />
                   <span className="text-xs text-center">
-                    {tab.categoryName}
+                    {renderValue(
+                      tab.categoryName,
+                      tab.translatedCategoryName
+                    )}
                   </span>
                 </div>
               </button>
@@ -162,7 +172,10 @@ const Page = () => {
                     className="w-36 object-contain mb-4 rounded-md"
                   />
                   <div className="text-xs sm:text-sm flex justify-center items-center  ">
-                    {card.categoryName}
+                    {renderValue(
+                      card.categoryName,
+                      card.translatedCategoryName
+                    )}
                   </div>
                 </Link>
               </motion.div>

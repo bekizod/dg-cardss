@@ -647,7 +647,7 @@ const renderValue = (
                       {product.price}
                     </p>
                     <p className="text-red-600 dark:text-red-400 text-sm">
-                      SAVE {product.price - product.discount} SAR
+                      SAVE {Math.round(product.price - product.discount)} SAR
                     </p>
                   </>
                 )}

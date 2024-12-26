@@ -57,7 +57,7 @@ const ChangePassword = () => {
         openNotification(true, data.message);
         router.push("/login"); // Redirect to the login page
         setOldPassword("");
-        setNewPassword("");
+        setNewPassword(""); 
         setConfirmPassword("");
       } else {
         openNotification(false, data.message);

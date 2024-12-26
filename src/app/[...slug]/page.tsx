@@ -49,6 +49,9 @@ export default function ProductsAccordion({
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const sortModalRef = useRef<HTMLDivElement>(null);
   const filterModalRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
+  const [totalPages, setTotalPages] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
   const { currentLocale, translations } = useSelector(
     (state: RootState) => state.locale
@@ -63,11 +66,19 @@ export default function ProductsAccordion({
   );
   const {
     products,
+    size,
+    pages,
     loading: productsLoading,
     error: productsError,
   } = useSelector(
     (state: RootState) =>
-      state.categories as { products: any; loading: boolean; error: string }
+      state.categories as {
+        products: any;
+        loading: boolean;
+        error: string;
+        size: number;
+        pages: number;
+      }
   );
   const [thisCategoryId, setThisCategoryId] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
@@ -115,15 +126,25 @@ export default function ProductsAccordion({
 
   useEffect(() => {
     if (slugLength === 2 && parentId) {
-      dispatch(fetchProductsByCategory({ subcategoryId: parentId }) as any);
+      dispatch(
+        fetchProductsByCategory({
+          subcategoryId: parentId,
+          page: currentPage,
+          size: pageSize,
+        }) as any
+      );
       setThisCategoryId(parentId);
     } else if (slugLength === 4 && subcategoryId) {
       dispatch(
-        fetchProductsByCategory({ subcategoryId: subcategoryId }) as any
+        fetchProductsByCategory({
+          subcategoryId: subcategoryId,
+          page: currentPage,
+          size: pageSize,
+        }) as any
       );
       setThisCategoryId(subcategoryId);
     }
-  }, [slugLength, parentId, subcategoryId, dispatch]);
+  }, [slugLength, parentId, subcategoryId, dispatch, currentPage, pageSize]);
   useEffect(() => {
     if (thisCategoryId && user?.favoriteCategories) {
       setIsFavorited(user.favoriteCategories.includes(thisCategoryId));
@@ -503,6 +524,7 @@ export default function ProductsAccordion({
         </div>
       </div>
     );
+  
   if (productsError)
     return (
       <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>
@@ -1066,6 +1088,58 @@ export default function ProductsAccordion({
               </div>
             )}
           </div>
+
+          {size > 50 && (
+            <div className="flex justify-around items-center mt-4  ">
+              {/* Left: Showing X results of Y */}
+              <div className="text-sm font-thin">
+                Showing {(currentPage - 1) * pageSize + 1} to{" "}
+                {Math.min(
+                  currentPage * pageSize,
+                  size + currentPage * pageSize
+                )}{" "}
+                of {size} results
+              </div>
+
+              {/* Right: Page navigation */}
+              <div className="flex font-thin items-center space-x-2">
+                {/* Previous Button */}
+                <button
+                  className="px-2 py-1 disabled:opacity-50"
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                >
+                  &lt;
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: pages }, (_, index) => (
+                  <button
+                    key={index}
+                    className={`px-2 py-1 ${
+                      currentPage === index + 1 ? "font-semibold" : ""
+                    }`}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                {/* Next Button */}
+                <button
+                  className="px-2 py-1 disabled:opacity-50"
+                  disabled={currentPage >= pages}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, pages))
+                  }
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Left Column - Filter */}
@@ -1127,7 +1201,7 @@ export default function ProductsAccordion({
                     <ul className="space-y-2">
                       {filter.options.map((option, idx) => (
                         <li
-                           key={idx}
+                          key={idx}
                           className={`flex items-center justify-center mx-12 gap-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
                             selectedFilters[
                               filter.category as keyof typeof selectedFilters

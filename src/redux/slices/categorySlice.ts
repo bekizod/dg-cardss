@@ -11,6 +11,8 @@ interface CategoryState {
   subCategories: any[];
   products: any[];
   product: any[]; // For single product
+  pages: number;
+  size: number;
   loading: boolean;
   error: string | null;
 }
@@ -19,6 +21,8 @@ const initialState: CategoryState = {
   parentCategories: [],
   subCategories: [],
   products: [],
+  pages: 0,
+  size:0,
   product: [], // Initial value for the single product
   loading: false,
   error: null,
@@ -72,8 +76,8 @@ export const fetchProductsByCategory = createAsyncThunk(
   async (
     {
       subcategoryId,
-      page = 1,
-      size = 1000,
+      page,
+      size ,
       sort = "",
     }: { subcategoryId: string; page?: number; size?: number; sort?: string },
     { rejectWithValue }
@@ -89,7 +93,7 @@ export const fetchProductsByCategory = createAsyncThunk(
           },
         }
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch products");
     }
@@ -157,7 +161,9 @@ const categorySlice = createSlice({
     });
     builder.addCase(fetchProductsByCategory.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = action.payload.data;
+      state.pages = action.payload.pages;
+      state.size = action.payload.total;
     });
     builder.addCase(fetchProductsByCategory.rejected, (state, action) => {
       state.loading = false;
