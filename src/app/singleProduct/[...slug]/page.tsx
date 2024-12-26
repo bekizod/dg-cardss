@@ -490,7 +490,6 @@ const renderValue = (
               {renderValue(product.adjective, product.translatedAdjective)}
             </motion.p>
             <Modal
-               
               visible={isModalVisible}
               onOk={handleModalOk}
               onCancel={handleModalCancel}
@@ -532,6 +531,7 @@ const renderValue = (
                   color: theme === "dark" ? "#ffffff" : "black",
                   border: "none",
                   marginRight: 8,
+                  marginLeft: 8,
                 }}
               >
                 {translations.single.yes}
