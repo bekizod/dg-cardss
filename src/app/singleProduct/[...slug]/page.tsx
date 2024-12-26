@@ -490,7 +490,7 @@ const renderValue = (
               {renderValue(product.adjective, product.translatedAdjective)}
             </motion.p>
             <Modal
-              title={translations.single.submitRating}
+               
               visible={isModalVisible}
               onOk={handleModalOk}
               onCancel={handleModalCancel}

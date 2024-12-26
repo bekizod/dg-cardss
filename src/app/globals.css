@@ -112,3 +112,32 @@ html, body {
 }
 
 
+.custom-modal .ant-modal-header {
+  background-color: #2d3748; /* Dark background for the header */
+  color: white; /* White text color */
+}
+
+.custom-modal .ant-modal-footer {
+  background-color: #2d3748; /* Dark background for the footer */
+  color: white; /* White text color */
+}
+
+.custom-modal .ant-modal-close {
+  color: white; /* Close button color */
+}
+
+html[class="dark"] .ant-modal-content {
+  background-color: var(--modal-bg-dark) !important; /* Dark theme background */
+  color: white !important; /* Dark theme text color */
+}
+
+/* Apply styles for light theme */
+html[class="light"] .ant-modal-content {
+  background-color: var(
+    --modal-bg-light
+  ) !important; /* Light theme background */
+  color: black !important; /* Light theme text color */
+}
+
+
+
