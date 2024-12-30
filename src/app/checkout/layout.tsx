@@ -140,11 +140,15 @@ export default function CheckoutLayout({
       setFilteredCartItems(guestCartItems);
     }
   }, [cartItems, user, token]);
+
+
   useEffect(() => {
-    if ((filteredCartItems?.length == 0)) {
+    if (filteredCartItems?.length == 0) {
       router.push("/");
     }
-  });
+  }, [filteredCartItems,router]);
+
+
   const toggleCouponFields = () => {
     setShowCouponFields(!showCouponFields);
   };

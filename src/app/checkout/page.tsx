@@ -7,7 +7,7 @@ export default function Checkout() {
 
   useEffect(() => {
     // Navigate to /checkout/login on component load
-    router.push("/checkout1/login");
+    router.push("/checkout/login");
   }, [router]);
 
   return null; // Optionally, you can return a loading spinner or a blank component
