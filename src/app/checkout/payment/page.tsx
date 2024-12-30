@@ -104,7 +104,7 @@ const paymentMethods = [
       totalAmount: totalQuantity, // Implement a function to calculate total amount
     };
 
-    console.log(JSON.stringify(orderList, null, 4)); // Log the order list in formatted JSON
+    
   };
 
   useEffect(() => {

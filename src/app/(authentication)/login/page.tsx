@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaEnvelope } from "react-icons/fa";
+import { FaEnvelope, FaEye, FaPassport } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { notification } from "antd";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import { updateBuyerIdAfterLogin } from "@/redux/slices/cartSlice";
 import Cookies from "js-cookie";
 import axios from "axios"; // Import axios
 import PhoneFooter from "@/components/PhoneFooter";
+import Spinner from "@/components/Spinner";
 
 // Define a type for notification types
 type NotificationType = "success" | "error" | "info" | "warning";
@@ -27,7 +28,7 @@ export default function Login() {
   const router = useRouter();
   const { user, login } = useAuth(); // Use the login function from AuthContext
   const token = Cookies.get("token");
-
+const [logged, setLogged] = useState(false);
   useEffect(() => {
     if (user && token) {
       router.push("/account");
@@ -67,7 +68,7 @@ export default function Login() {
 
       if (response.status === 200) {
         const { token, user } = response.data.data;
-
+setLogged(true)
         // Store the token and user information in the context and cookies
         login(token, user);
         window.location.reload();
@@ -107,9 +108,6 @@ export default function Login() {
   };
   return (
     <div className="flex flex-col gap-8 justify-center items-center   bg-gray-200 dark:bg-gray-800">
- 
-
-      
       <div className="bg-white rounded-lg  dark:bg-gray-900 dark:text-gray-100 p-8 mx-3 my-24 shadow-xl w-full max-w-xl">
         <div className="text-center mb-6">
           <div className="text-2xl font-bold">{translations.login.title}</div>
@@ -132,6 +130,8 @@ export default function Login() {
             />
           </div>
           <div className="relative">
+            <FaEye className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+
             <input
               type="password"
               required
@@ -143,13 +143,12 @@ export default function Login() {
           </div>
           <motion.button
             type="submit"
-            className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
+            className="w-full flex justify-center bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={loging || logged}
           >
-            {loging
-              ? `${translations.login.loadingButton}`
-              : `${translations.login.loginButton}`}
+            {loging ? <Spinner /> : `${translations.login.loginButton}`}
           </motion.button>
           <Link
             href={"/forgotpassword"}
@@ -168,7 +167,7 @@ export default function Login() {
           </Link>
         </div>
       </div>
-      
+
       <PhoneFooter />
     </div>
   );

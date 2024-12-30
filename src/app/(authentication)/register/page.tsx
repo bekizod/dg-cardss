@@ -10,6 +10,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import PhoneFooter from "@/components/PhoneFooter";
+import Spinner from "@/components/Spinner";
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
 // TypeScript types
@@ -39,7 +40,7 @@ export default function Register() {
   });
   const [registering, setRegistering] = useState(false);
   const [emailError, setEmailError] = useState("")
-  const [userNameError,setUserNameError] = useState("")
+  const [userNameError, setUserNameError] = useState("")
   const dispatch = useDispatch<AppDispatch>();
   const { currentLocale, translations } = useSelector(
     (state: RootState) => state.locale
@@ -112,6 +113,7 @@ export default function Register() {
       if (data.status) {
         openNotification(true, " ");
         router.push("/login");
+        setRegistering(true)
       } else {
         openNotification(false, data.message);
         if(data.message === "Email already exists"){
@@ -293,13 +295,12 @@ export default function Register() {
 
           <motion.button
             type="submit"
-            className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
+            className="w-full flex justify-center  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={registering || registering}
           >
-            {registering
-              ? `${translations.register.registering}`
-              : `${translations.register.register}`}
+            {registering ? <Spinner /> : `${translations.register.register}`}
           </motion.button>
         </form>
 

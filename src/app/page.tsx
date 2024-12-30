@@ -178,7 +178,7 @@ const renderValue = (
       <div className="container mx-auto   ">
         {isLoading ? <Loader /> : renderContent()}
       </div>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 py-6 font-bold flex justify-center items-center text-xl">{error}!!!</p>}
     </main>
   );
 }

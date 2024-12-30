@@ -10,6 +10,7 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
+  clearCartByBuyerId,
 } from "../../redux/slices/cartSlice";
 import { message, Rate } from "antd";
 import { useAuth } from "@/context/UserContext";
@@ -126,11 +127,7 @@ const CartComponent = () => {
    
   return (
     <div className="flex justify-center max-lg:mt-[34px]       py-3  items-center  md:px-12 lg:px-16  ">
-      <div className="relative">
-        {/* Toggle Button */}
-
-         
-      </div>
+      <div className="relative">{/* Toggle Button */}</div>
       <AnimatePresence>
         {filteredCartItems.length === 0 && (
           <motion.div
@@ -175,11 +172,14 @@ const CartComponent = () => {
         <div className="flex flex-col md:flex-row gap-6 px-3 w-full">
           {/* Product Section */}
           <div className="md:w-2/3 flex flex-col gap-6">
-            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md text-gray-800 dark:text-white font-medium">
-              <span>{translations.Cart.totalQuantity}</span>
-              <span className="text-lg font-semibold text-[var(--color-primary)]">
-                {filteredCartItems?.length}
-              </span>
+            <div className="flex items-center justify-around gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-lg shadow-md text-gray-800 dark:text-white font-medium">
+              <div>
+                <span>{translations.Cart.totalQuantity}</span>
+                <span className="text-lg font-semibold text-[var(--color-primary)]">
+                  {filteredCartItems?.length}
+                </span>
+              </div>
+              <FaTrashAlt className="w-4 h-4 sm:w-6 sm:h-6 cursor-pointer" onClick={() => { dispatch(clearCartByBuyerId(user?._id || "guest"));}}/>
             </div>
             {filteredCartItems.map((item) => (
               <div
@@ -205,8 +205,6 @@ const CartComponent = () => {
                 {/* Product Info (Left) */}
                 <div className="flex flex-col flex-1 justify-between">
                   {/* Product Name */}
-
-                 
 
                   {/* Description */}
                   <div className="text-base sm:text-xl font-bold mb-1 sm:mb-3">

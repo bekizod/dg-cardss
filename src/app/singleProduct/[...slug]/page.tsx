@@ -173,7 +173,12 @@ export default function SingleProductPage({
     );
   
   
-  if (error) return <p>Error: {error}</p>;
+  if (error) return (
+    <div className="flex justify-center items-center">
+ 
+      <div className="font-bold text-2xl text-red-700">{error}</div>
+    </div>
+  );
 
   const goToPrevious = () => {
     setCurrentIndex((prevIndex) =>

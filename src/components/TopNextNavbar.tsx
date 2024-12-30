@@ -397,7 +397,7 @@ export default function TopNextNavbar({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 type="text"
-                placeholder="What are you looking for?"
+                placeholder={translations.tnn.what_are_you_looking_for}
                 className="w-full pl-10 pr-4 py-3 rounded-lg text-sm placeholder:text-black dark:placeholder:text-white bg-[var(--color-secondary)] dark:bg-slate-800"
               />
             </form>

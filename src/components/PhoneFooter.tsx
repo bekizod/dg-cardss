@@ -61,7 +61,7 @@ export default function PhoneFooter() {
     };
   }, []);
   return (
-    <div className=" w-full   gap-3 bg-[var(--color-tertiary)] text-white shadow-lg hidden max-lg:flex max-lg:flex-col">
+    <div className=" w-full justify-center  gap-3 bg-[var(--color-tertiary)] text-white shadow-lg hidden max-lg:flex max-lg:flex-col">
       <div className="flex  flex-row p-4  gap-1">
         <div
           className="cursor-pointer "
@@ -93,7 +93,7 @@ export default function PhoneFooter() {
       <h3 className="  font-bold border-b-2 px-5 mx-5 flex justify-center">
         {translations.footer.need_help}
       </h3>
-      <div className="flex flex-row gap-1 w-full">
+      <div className="flex flex-row px-7 gap-1 w-full">
         <div className="w-1/2 flex flex-col gap-1 px-3">
           <div className="flex flex-col font-thin justify-start   ">
             <ul className="gap-2 text-sm pt-3  flex flex-col justify-start  ">
@@ -166,7 +166,7 @@ export default function PhoneFooter() {
             {translations.footer.questions_and_complaints}
           </h3>
 
-          <div className="flex flex-row gap-2 px-3">
+          <div className="flex flex-row justify-center  gap-2 px-3">
             {/* Whatsapp Section */}
             <Link
               href="https://wa.me/966920009017"
@@ -218,7 +218,7 @@ export default function PhoneFooter() {
         </div>
       </div>
 
-      <div className="flex flex-row items-center  gap-4">
+      <div className="flex flex-row items-center justify-center  gap-4">
         <Link href="https://apps.apple.com/sa/app/alsaif-gallery-السيف-غاليري/id1459530502">
           <Image
             width={150} // Adjust width as needed

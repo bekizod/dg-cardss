@@ -136,16 +136,20 @@ export default function Login() {
               className="w-full bg-slate-100 p-3 pl-10 border rounded dark:bg-gray-800 dark:border-gray-700"
             />
           </div>
+
           <motion.button
             type="submit"
             className="w-full  bg-[var(--color-primary)] text-white py-3 mt-6 rounded"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={loging}
           >
             {loging
               ? `${translations.login.loadingButton}`
               : `${translations.login.loginButton}`}
           </motion.button>
+
+
           <Link
             href={"/forgotpassword"}
             className="hover:text-[var(--color-secondary)] py-1"
