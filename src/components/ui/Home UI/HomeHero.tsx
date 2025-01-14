@@ -70,7 +70,7 @@ const isRTL = currentLocale === "ar";
         <Slider isRTL={isRTL} />
       </div>
 
-      <motion.div
+      {/* <motion.div
         className="relative w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -87,7 +87,7 @@ const isRTL = currentLocale === "ar";
             className="w-full"
           />
         </div>
-      </motion.div>
+      </motion.div> */}
 
       <div className="px-7">
         <BestProducts />
