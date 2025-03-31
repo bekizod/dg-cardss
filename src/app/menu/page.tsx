@@ -1,5 +1,5 @@
 "use client";
-import { sideNav as tabs, cardData } from "../../utils/data";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -16,9 +16,9 @@ const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [parentName, setParentName] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>("");
- const { currentLocale, translations } = useSelector(
-   (state: RootState) => state.locale
- );
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const { parentCategories, subCategories, loading, error } = useSelector(
     (state: RootState) =>
       state.categories as {
@@ -48,14 +48,14 @@ const Page = () => {
       dispatch(fetchSubCategories(firstParentId));
     }
   }, [parentCategories, activeTab, dispatch]);
-const renderValue = (
-  defaultValue: string,
-  translatedValue: string | undefined
-) => {
-  return currentLocale === "ar" && translatedValue
-    ? translatedValue
-    : defaultValue;
-};
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="flex overflow-hidden h-screen max-lg:mt-[39px] bg-gray-100 dark:bg-slate-900">
       {/* Parent Categories Section */}
@@ -87,10 +87,7 @@ const renderValue = (
                     className="text-green-500"
                   />
                   <span className="text-xs text-center">
-                    {renderValue(
-                      tab.categoryName,
-                      tab.translatedCategoryName
-                    )}
+                    {renderValue(tab.categoryName, tab.translatedCategoryName)}
                   </span>
                 </div>
               </button>

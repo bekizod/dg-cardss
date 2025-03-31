@@ -12,7 +12,6 @@ import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
-import { sideNav as tabs, cardData } from "../utils/data";
 import { useAuth } from "@/context/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -53,7 +52,6 @@ export default function TopNextNavbar({
   const [parentName, setParentName] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("");
-  const [filteredCards, setFilteredCards] = useState(cardData);
   const { user, logout } = useAuth(); // Get user and logout function from context
 
   const dispatch = useDispatch<AppDispatch>();
@@ -146,11 +144,6 @@ export default function TopNextNavbar({
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const filterCards = (tabId: number) => {
-    const category = tabs.find((tab) => tab.id === tabId)?.label || "";
-    setFilteredCards(cardData.filter((card) => card.category === category));
   };
 
   const handleLogout = () => {
@@ -942,6 +935,3 @@ export default function TopNextNavbar({
     </div>
   );
 }
-
-
-
