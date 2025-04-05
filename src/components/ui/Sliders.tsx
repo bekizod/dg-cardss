@@ -180,15 +180,17 @@ const ImageSlider = ({
 
       {/* Main Slider */}
       <div className="relative flex-1 overflow-hidden border rounded-lg aspect-square">
-        <div
-          className={`absolute ${
-            currentLocale === "ar"
-              ? "top-0 right-0 rounded-tr-lg rounded-bl-lg"
-              : "top-0 left-0  rounded-tl-lg rounded-br-lg"
-          } bg-red-500/90 text-white text-sm font-semibold px-2 py-1 z-10 shadow-md`}
-        >
-          -{discount}%
-        </div>
+        {discount && discount > 0 && (
+          <div
+            className={`absolute ${
+              currentLocale === "ar"
+                ? "top-0 right-0 rounded-tr-lg rounded-bl-lg"
+                : "top-0 left-0  rounded-tl-lg rounded-br-lg"
+            } bg-red-500/90 text-white text-sm font-semibold px-2 py-1 z-10 shadow-md`}
+          >
+            -{discount}%
+          </div>
+        )}
 
         <div
           ref={sliderRef}

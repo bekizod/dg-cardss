@@ -920,25 +920,14 @@ export default function ProductsAccordion({
                 return (
                   <motion.div
                     key={productId}
-                    className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
-                    whileHover={{
-                      y: -5, // lifts up slightly
-
-                      transition: {
-                        duration: 0.2,
-                        ease: "easeOut",
-                      },
-                    }}
-                    whileTap={{
-                      scale: 0.98, // subtle press effect
-                    }}
+                    className="flex flex-col transform max-md:scale-75 max-lg:scale-50 max-md:-my-10 -translate-y-2 duration-200 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                   >
-                    {/* Image and Favorite Button */}
-                    <div className="relative">
-                      <Link
-                        href={`/singleProduct/${parentName}/${parentId}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
-                        className="block w-full"
-                      >
+                    <Link
+                      href={`/singleProduct/${parentName}/${parentId}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
+                      className="block w-full"
+                    >
+                      {/* Image and Favorite Button */}
+                      <div className="relative">
                         <Image
                           src={product.imageIds[0]}
                           alt="product"
@@ -946,167 +935,177 @@ export default function ProductsAccordion({
                           height={1000}
                           className="w-full h-44 rounded-md object-cover"
                         />
-                      </Link>
 
-                      {/* Favorite Icon */}
-                      <motion.div
-                        className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
-                        whileHover={{ scale: 1.2 }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 }}
-                        onClick={() => handleFavoriteToggle(productId)}
-                      >
-                        {isFavorite ? (
-                          <GoHeartFill
-                            className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
-                            size={17}
-                          />
-                        ) : (
-                          <GoHeart
-                            className="text-[var(--color-primary)]"
-                            size={17}
-                          />
-                        )}
-                      </motion.div>
-                    </div>
-
-                    {/* Product Details */}
-                    <div className="flex w-full flex-col">
-                      <div className="text-start text-lg font-semibold flex justify-start">
-                        {renderValue(
-                          product.name?.length > 20
-                            ? `${product.name.substring(0, 20)}...`
-                            : product.name,
-                          product.translatedName?.length > 20
-                            ? `${product.translatedName.substring(0, 20)}...`
-                            : product.translatedName
-                        )}
-                      </div>
-                      <div className="text-sm text-start font-semibold">
-                        {renderValue(
-                          product.additionalInformation?.brand?.length > 20
-                            ? `${product.additionalInformation.brand.substring(
-                                0,
-                                20
-                              )}...`
-                            : product.additionalInformation?.brand,
-                          product.additionalInformation?.translatedBrand
-                            ?.length > 20
-                            ? `${product.additionalInformation.translatedBrand.substring(
-                                0,
-                                20
-                              )}...`
-                            : product.additionalInformation?.translatedBrand
-                        )}
-                      </div>
-                      <div className="flex flex-row gap-3">
-                        <div>
-                          <Rate
-                            value={product.ratings.averageRating.toFixed(1)}
-                            className={`text-sm ${
-                              product.ratings.averageRating > 0
-                                ? ""
-                                : "rate-empty"
-                            }`}
-                            disabled
-                          />
-                        </div>
-                        <div className="flex flex-row gap-1 items-center text-sm">
-                          <FaRegComment />
-                          <div>{product.ratings.numberOfRatings}</div>
-                        </div>
-                      </div>
-
-                      {/* Pricing and Cart Buttons */}
-                      <div className="flex flex-row justify-between items-center mt-4">
-                        <div className="flex flex-col">
-                          <div className="flex flex-row gap-1 items-center">
-                            {product?.discount > 0 && (
-                              <>
-                                <div className="font-mono line-through">
-                                  {product.price}
-                                </div>
-                                <div className="bg-[var(--color-secondary)]  text-black  px-1 rounded font-bold text-xs">
-                                  -{Math.round(product.discountPercentage)}%
-                                </div>
-                              </>
-                            )}
-                          </div>
-
-                          <div className="font-bold text-2xl">
-                            {product?.discount > 0
-                              ? `${product.discount}`
-                              : `${product.price}`}
-                          </div>
-                        </div>
-                        <div className="rounded-lg">
-                          {product.stockQuantity > 0 ? (
-                            <>
-                              {existingItem ? (
-                                <div className="flex flex-row items-center justify-center gap-2">
-                                  {/* Decrement Button */}
-                                  <button
-                                    onClick={() =>
-                                      dispatch(
-                                        decrementQuantity({
-                                          id: existingItem.id,
-                                          buyerId: existingItem.buyerId,
-                                        })
-                                      )
-                                    }
-                                    className=""
-                                    aria-label="Decrease Quantity"
-                                  >
-                                    <BiChevronDown
-                                      className="text-[var(--color-secondary)] font-bold"
-                                      size={30}
-                                    />
-                                  </button>
-
-                                  {/* Quantity Display */}
-                                  <div className="dark:text-gray-200">
-                                    {existingQuantity}
-                                  </div>
-
-                                  {/* Increment Button */}
-                                  <button
-                                    onClick={() =>
-                                      dispatch(
-                                        incrementQuantity({
-                                          id: existingItem.id,
-                                          buyerId: existingItem.buyerId,
-                                        })
-                                      )
-                                    }
-                                    className=" "
-                                    aria-label="Increase Quantity"
-                                  >
-                                    <BiChevronUp
-                                      className="text-[var(--color-secondary)] font-bold"
-                                      size={30}
-                                    />
-                                  </button>
-                                </div>
-                              ) : (
-                                <motion.div
-                                  whileTap={{ scale: 0.95 }}
-                                  onClick={() => handleAddToCart(product)}
-                                  className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
-                                  aria-label="Add to Cart"
-                                >
-                                  <FaShoppingCart color="white" />
-                                </motion.div>
-                              )}
-                            </>
+                        {/* Favorite Icon */}
+                        <motion.div
+                          className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                          whileHover={{ scale: 1.2 }}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.1 }}
+                          onClick={(e) => {
+                            handleFavoriteToggle(productId);
+                            e.stopPropagation();
+                            e.preventDefault();
+                          }}
+                        >
+                          {isFavorite ? (
+                            <GoHeartFill
+                              className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                              size={17}
+                            />
                           ) : (
-                            <div className="text-red-500 font-bold">
-                              Out Of Stock
-                            </div>
+                            <GoHeart
+                              className="text-[var(--color-primary)]"
+                              size={17}
+                            />
+                          )}
+                        </motion.div>
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="flex w-full flex-col">
+                        <div className="text-start text-lg font-semibold flex justify-start">
+                          {renderValue(
+                            product.name?.length > 20
+                              ? `${product.name.substring(0, 20)}...`
+                              : product.name,
+                            product.translatedName?.length > 20
+                              ? `${product.translatedName.substring(0, 20)}...`
+                              : product.translatedName
                           )}
                         </div>
+                        <div className="text-sm text-start font-semibold">
+                          {renderValue(
+                            product.additionalInformation?.brand?.length > 20
+                              ? `${product.additionalInformation.brand.substring(
+                                  0,
+                                  20
+                                )}...`
+                              : product.additionalInformation?.brand,
+                            product.additionalInformation?.translatedBrand
+                              ?.length > 20
+                              ? `${product.additionalInformation.translatedBrand.substring(
+                                  0,
+                                  20
+                                )}...`
+                              : product.additionalInformation?.translatedBrand
+                          )}
+                        </div>
+                        <div className="flex flex-row gap-3">
+                          <div>
+                            <Rate
+                              value={product.ratings.averageRating.toFixed(1)}
+                              className={`text-sm ${
+                                product.ratings.averageRating > 0
+                                  ? ""
+                                  : "rate-empty"
+                              }`}
+                              disabled
+                            />
+                          </div>
+                          <div className="flex flex-row gap-1 items-center text-sm">
+                            <FaRegComment />
+                            <div>{product.ratings.numberOfRatings}</div>
+                          </div>
+                        </div>
+
+                        {/* Pricing and Cart Buttons */}
+                        <div className="flex flex-row justify-between items-center mt-4">
+                          <div className="flex flex-col">
+                            <div className="flex flex-row gap-1 items-center">
+                              {product?.discount > 0 && (
+                                <>
+                                  <div className="font-mono line-through">
+                                    {product.price}
+                                  </div>
+                                  <div className="bg-[var(--color-secondary)]  text-black  px-1 rounded font-bold text-xs">
+                                    -{Math.round(product.discountPercentage)}%
+                                  </div>
+                                </>
+                              )}
+                            </div>
+
+                            <div className="font-bold text-2xl">
+                              {product?.discount > 0
+                                ? `${product.discount}`
+                                : `${product.price}`}
+                            </div>
+                          </div>
+                          <div
+                            className="rounded-lg"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                            }}
+                          >
+                            {product.stockQuantity > 0 ? (
+                              <>
+                                {existingItem ? (
+                                  <div className="flex flex-row items-center justify-center gap-2">
+                                    {/* Decrement Button */}
+                                    <button
+                                      onClick={() =>
+                                        dispatch(
+                                          decrementQuantity({
+                                            id: existingItem.id,
+                                            buyerId: existingItem.buyerId,
+                                          })
+                                        )
+                                      }
+                                      className=""
+                                      aria-label="Decrease Quantity"
+                                    >
+                                      <BiChevronDown
+                                        className="text-[var(--color-secondary)] font-bold"
+                                        size={30}
+                                      />
+                                    </button>
+
+                                    {/* Quantity Display */}
+                                    <div className="dark:text-gray-200">
+                                      {existingQuantity}
+                                    </div>
+
+                                    {/* Increment Button */}
+                                    <button
+                                      onClick={() =>
+                                        dispatch(
+                                          incrementQuantity({
+                                            id: existingItem.id,
+                                            buyerId: existingItem.buyerId,
+                                          })
+                                        )
+                                      }
+                                      className=" "
+                                      aria-label="Increase Quantity"
+                                    >
+                                      <BiChevronUp
+                                        className="text-[var(--color-secondary)] font-bold"
+                                        size={30}
+                                      />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <motion.div
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => handleAddToCart(product)}
+                                    className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)] dark:hover:bg-blue-800"
+                                    aria-label="Add to Cart"
+                                  >
+                                    <FaShoppingCart color="white" />
+                                  </motion.div>
+                                )}
+                              </>
+                            ) : (
+                              <div className="text-red-500 font-bold">
+                                Out Of Stock
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </motion.div>
                 );
               })

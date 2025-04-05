@@ -210,205 +210,208 @@ const BestProducts = () => {
             return (
               <motion.div
                 key={productIdt}
-                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
-                whileHover={{
-                  y: -5, // lifts up slightly
-
-                  transition: {
-                    duration: 0.2,
-                    ease: "easeOut",
-                  },
-                }}
-                whileTap={{
-                  scale: 0.98, // subtle press effect
-                }}
+                className="flex flex-col transform hover:-translate-y-1 duration-200 max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
               >
-                <div className="relative">
-                  <Link
-                    href={`/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`}
-                    className="block w-full"
-                  >
+                <Link
+                  href={`/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`}
+                  className="block w-full"
+                >
+                  <div className="relative">
                     <Image
                       src={product.productDetails?.imageIds[0]}
                       alt="product"
                       width={1000}
                       height={1000}
                       className="w-full h-44 rounded-md object-cover"
+                     
                     />
-                  </Link>
 
-                  {/* Favorite Icon */}
-                  <motion.div
-                    className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
-                    whileHover={{ scale: 1.2 }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 }}
-                    onClick={() => handleFavoriteToggle(productIdt)}
-                  >
-                    {isFavorite ? (
-                      <GoHeartFill
-                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
-                        size={17}
-                      />
-                    ) : (
-                      <GoHeart
-                        className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
-                        size={17}
-                      />
-                    )}
-                  </motion.div>
-                </div>
-
-                <div className="flex w-full flex-col flex-grow">
-                  <div className="text-start text-lg font-semibold flex justify-start">
-                    {renderValue(
-                      product.productDetails?.name?.length > 20
-                        ? `${product.productDetails?.name?.substring(0, 20)}...`
-                        : product.productDetails?.name,
-                      product.productDetails?.translatedName?.length > 20
-                        ? `${product.productDetails?.translatedName?.substring(
-                            0,
-                            20
-                          )}...`
-                        : product.productDetails?.translatedName
-                    )}
-                  </div>
-                  <div className="text-sm text-start font-semibold">
-                    {renderValue(
-                      product.productDetails?.additionalInformation?.brand
-                        ?.length > 20
-                        ? `${product.productDetails?.additionalInformation?.brand?.substring(
-                            0,
-                            20
-                          )}...`
-                        : product.productDetails?.additionalInformation?.brand,
-                      product.productDetails?.additionalInformation
-                        ?.translatedBrand?.length > 20
-                        ? `${product.productDetails?.additionalInformation?.translatedBrand?.substring(
-                            0,
-                            20
-                          )}...`
-                        : product.productDetails?.additionalInformation
-                            ?.translatedBrand
-                    )}
-                  </div>
-                  <div className="flex flex-row gap-3 mt-1">
-                    <div>
-                      <Rate
-                        value={product.productDetails?.ratings.averageRating.toFixed(
-                          1
-                        )}
-                        className={`text-sm ${
-                          product.productDetails?.ratings.averageRating > 0
-                            ? ""
-                            : "rate-empty"
-                        }`}
-                        disabled
-                      />
-                    </div>
-                    <div className="flex flex-row gap-1 items-center text-sm">
-                      <div>
-                        <FaRegComment />
-                      </div>
-                      <div>
-                        {product.productDetails?.ratings.numberOfRatings}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-row justify-between items-center mt-auto">
-                    <div className="flex flex-col">
-                      <div className="flex flex-row gap-1 items-center">
-                        {product?.productDetails?.discount > 0 && (
-                          <>
-                            <div className="font-mono line-through">
-                              {product.productDetails?.price}
-                            </div>
-                            <div className="bg-[var(--color-secondary)] text-gray-200 px-1 rounded font-bold text-xs">
-                              -
-                              {Math.round(
-                                product.productDetails?.discountPercentage
-                              )}
-                              %
-                            </div>
-                          </>
-                        )}
-                      </div>
-
-                      <div className="font-bold text-2xl">
-                        {product?.productDetails?.discount > 0
-                          ? `${product.productDetails?.discount}`
-                          : `${product.productDetails?.price}`}
-                      </div>
-                    </div>
-                    <div className="rounded-lg">
-                      {product.productDetails?.stockQuantity > 0 ? (
-                        <>
-                          {existingItem ? (
-                            <div className="flex flex-row items-center justify-center gap-2">
-                              <button
-                                onClick={() =>
-                                  dispatch(
-                                    decrementQuantity({
-                                      id: existingItem.id,
-                                      buyerId: existingItem.buyerId,
-                                    })
-                                  )
-                                }
-                                className=""
-                                aria-label="Decrease Quantity"
-                              >
-                                <BiChevronDown
-                                  className="text-[var(--color-secondary)] font-bold"
-                                  size={30}
-                                />
-                              </button>
-
-                              <div className="dark:text-gray-200">
-                                {existingQuantity}
-                              </div>
-
-                              <button
-                                onClick={() =>
-                                  dispatch(
-                                    incrementQuantity({
-                                      id: existingItem.id,
-                                      buyerId: existingItem.buyerId,
-                                    })
-                                  )
-                                }
-                                className=" "
-                                aria-label="Increase Quantity"
-                              >
-                                <BiChevronUp
-                                  className="text-[var(--color-secondary)] font-bold"
-                                  size={30}
-                                />
-                              </button>
-                            </div>
-                          ) : (
-                            <motion.div
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                handleAddToCart(
-                                  product.productDetails,
-                                  `/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`
-                                )
-                              }
-                              className="p-3 bg-[var(--color-primary)] rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]"
-                              aria-label="Add to Cart"
-                            >
-                              <FaShoppingCart color="white" />
-                            </motion.div>
-                          )}
-                        </>
+                    {/* Favorite Icon */}
+                    <motion.div
+                      className="absolute top-2 right-2 rounded-full p-2 bg-slate-200 cursor-pointer dark:bg-slate-600"
+                      whileHover={{ scale: 1.2 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.1 }}
+                      onClick={(e) =>{ 
+                        e.stopPropagation()
+                        e.preventDefault();
+                         handleFavoriteToggle(productIdt)
+                      }}
+                    >
+                      {isFavorite ? (
+                        <GoHeartFill
+                          className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                          size={17}
+                        />
                       ) : (
-                        <div>Out Of Stock</div>
+                        <GoHeart
+                          className="text-[var(--color-primary)] dark:text-[var(--color-secondary)]"
+                          size={17}
+                        />
+                      )}
+                    </motion.div>
+                  </div>
+
+                  <div className="flex w-full flex-col flex-grow">
+                    <div className="text-start text-lg font-semibold flex justify-start">
+                      {renderValue(
+                        product.productDetails?.name?.length > 20
+                          ? `${product.productDetails?.name?.substring(
+                              0,
+                              20
+                            )}...`
+                          : product.productDetails?.name,
+                        product.productDetails?.translatedName?.length > 20
+                          ? `${product.productDetails?.translatedName?.substring(
+                              0,
+                              20
+                            )}...`
+                          : product.productDetails?.translatedName
                       )}
                     </div>
+                    <div className="text-sm text-start font-semibold">
+                      {renderValue(
+                        product.productDetails?.additionalInformation?.brand
+                          ?.length > 20
+                          ? `${product.productDetails?.additionalInformation?.brand?.substring(
+                              0,
+                              20
+                            )}...`
+                          : product.productDetails?.additionalInformation
+                              ?.brand,
+                        product.productDetails?.additionalInformation
+                          ?.translatedBrand?.length > 20
+                          ? `${product.productDetails?.additionalInformation?.translatedBrand?.substring(
+                              0,
+                              20
+                            )}...`
+                          : product.productDetails?.additionalInformation
+                              ?.translatedBrand
+                      )}
+                    </div>
+                    <div className="flex flex-row gap-3 mt-1">
+                      <div>
+                        <Rate
+                          value={product.productDetails?.ratings.averageRating.toFixed(
+                            1
+                          )}
+                          className={`text-sm ${
+                            product.productDetails?.ratings.averageRating > 0
+                              ? ""
+                              : "rate-empty"
+                          }`}
+                          disabled
+                        />
+                      </div>
+                      <div className="flex flex-row gap-1 items-center text-sm">
+                        <div>
+                          <FaRegComment />
+                        </div>
+                        <div>
+                          {product.productDetails?.ratings.numberOfRatings}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row justify-between items-center mt-auto">
+                      <div className="flex flex-col">
+                        <div className="flex flex-row gap-1 items-center">
+                          {product?.productDetails?.discount > 0 && (
+                            <>
+                              <div className="font-mono line-through">
+                                {product.productDetails?.price}
+                              </div>
+                              <div className="bg-[var(--color-secondary)] text-gray-200 px-1 rounded font-bold text-xs">
+                                -
+                                {Math.round(
+                                  product.productDetails?.discountPercentage
+                                )}
+                                %
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="font-bold text-2xl">
+                          {product?.productDetails?.discount > 0
+                            ? `${product.productDetails?.discount}`
+                            : `${product.productDetails?.price}`}
+                        </div>
+                      </div>
+                      <div className="rounded-lg" 
+                       onClick={(e) =>{ 
+                        e.stopPropagation()
+                        e.preventDefault();
+                      }}
+                      >
+                        {product.productDetails?.stockQuantity > 0 ? (
+                          <>
+                            {existingItem ? (
+                              <div className="flex flex-row items-center justify-center gap-2">
+                                <button
+                                  onClick={() =>
+                                    dispatch(
+                                      decrementQuantity({
+                                        id: existingItem.id,
+                                        buyerId: existingItem.buyerId,
+                                      })
+                                    )
+                                  }
+                                  className=""
+                                  aria-label="Decrease Quantity"
+                                >
+                                  <BiChevronDown
+                                    className="text-[var(--color-secondary)] font-bold"
+                                    size={30}
+                                  />
+                                </button>
+
+                                <div className="dark:text-gray-200">
+                                  {existingQuantity}
+                                </div>
+
+                                <button
+                                  onClick={() =>
+                                    dispatch(
+                                      incrementQuantity({
+                                        id: existingItem.id,
+                                        buyerId: existingItem.buyerId,
+                                      })
+                                    )
+                                  }
+                                  className=" "
+                                  aria-label="Increase Quantity"
+                                >
+                                  <BiChevronUp
+                                    className="text-[var(--color-secondary)] font-bold"
+                                    size={30}
+                                  />
+                                </button>
+                              </div>
+                            ) : (
+                              <motion.div
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() =>
+                                  handleAddToCart(
+                                    product.productDetails,
+                                    `/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`
+                                  )
+                                }
+                                className="p-3 bg-[var(--color-primary)] rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]"
+                                aria-label="Add to Cart"
+                              >
+                                <FaShoppingCart color="white" />
+                              </motion.div>
+                            )}
+                          </>
+                        ) : (
+                          <div>Out Of Stock</div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             );
           })}
