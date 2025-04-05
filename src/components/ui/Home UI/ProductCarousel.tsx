@@ -97,7 +97,7 @@ const ProductCarousel = () => {
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size
+        size: product.additionalInformation.size,
       })
     );
   };
@@ -116,7 +116,6 @@ const ProductCarousel = () => {
       });
     }
   };
-
 
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
@@ -171,14 +170,14 @@ const ProductCarousel = () => {
       });
     }
   };
-const renderValue = (
-  defaultValue: string,
-  translatedValue: string | undefined
-) => {
-  return currentLocale === "ar" && translatedValue
-    ? translatedValue
-    : defaultValue;
-};
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="relative ">
       {!loading && (
@@ -204,9 +203,7 @@ const renderValue = (
               product?.additionalInformation?.color || "default";
             // Check if the product is already in the cart
             const existingItem = cartItems.find(
-              (item) =>
-                item.id === productIdt &&
-                item.buyerId === buyerId 
+              (item) => item.id === productIdt && item.buyerId === buyerId
             );
             const existingQuantity = existingItem ? existingItem.quantity : 0;
             const BuyerId = existingItem ? existingItem.buyerId : "guest";
@@ -216,9 +213,20 @@ const renderValue = (
             );
 
             return (
-              <div
+              <motion.div
                 key={productIdt}
-                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5  w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                whileHover={{
+                  y: -5, // lifts up slightly
+
+                  transition: {
+                    duration: 0.2,
+                    ease: "easeOut",
+                  },
+                }}
+                whileTap={{
+                  scale: 0.98, // subtle press effect
+                }}
               >
                 {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="relative">
@@ -260,12 +268,30 @@ const renderValue = (
 
                 <div className="flex w-full flex-col">
                   <div className="text-start text-lg font-semibold flex justify-start">
-                    {renderValue(product.name, product.translatedName)}
-                  </div>
-                  <div className="test-sm text-start font-semibold">
                     {renderValue(
-                      product.additionalInformation?.brand,
-                      product.additionalInformation?.translatedBrand
+                      product.name?.length > 20
+                        ? `${product.name.substring(0, 20)}...`
+                        : product.name,
+                      product.translatedName?.length > 20
+                        ? `${product.translatedName.substring(0, 20)}...`
+                        : product.translatedName
+                    )}
+                  </div>
+                  <div className="text-sm text-start font-semibold">
+                    {renderValue(
+                      product.additionalInformation?.brand?.length > 20
+                        ? `${product.additionalInformation.brand.substring(
+                            0,
+                            20
+                          )}...`
+                        : product.additionalInformation?.brand,
+                      product.additionalInformation?.translatedBrand?.length >
+                        20
+                        ? `${product.additionalInformation.translatedBrand.substring(
+                            0,
+                            20
+                          )}...`
+                        : product.additionalInformation?.translatedBrand
                     )}
                   </div>
                   <div className="flex flex-row gap-3">
@@ -294,7 +320,7 @@ const renderValue = (
                             <div className="font-mono line-through">
                               {product.price}
                             </div>
-                            <div className="bg-[var(--color-secondary)] text-black  px-1 rounded font-bold text-xs">
+                            <div className="bg-[var(--color-secondary)] text-gray-200  px-1 rounded font-bold text-xs">
                               -{Math.round(product.discountPercentage)}%
                             </div>
                           </>
@@ -372,7 +398,7 @@ const renderValue = (
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </motion.div>

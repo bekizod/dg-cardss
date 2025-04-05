@@ -21,6 +21,7 @@ import { addToCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
 import { useTheme } from "next-themes";
+import ImageSlider from "@/components/ui/Sliders";
 
 interface Product {
   id: string;
@@ -65,16 +66,14 @@ export default function SingleProductPage({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addComment, setAddComment] = useState(false);
   const [Loading, setLoading] = useState(false);
-  const {theme} = useTheme()
+  const { theme } = useTheme();
   const [selectedSize, setSelectedSize] = useState(
     "" // Default to the first size, or set to an empty string if no sizes
   );
   // Now use useSelector to get cart items and perform the logic outside of the hook
   const existingItem = useSelector((state: RootState) =>
     state.cart.items.find(
-      (item) =>
-        item.id === productIdt &&
-        item.buyerId === buyerId  
+      (item) => item.id === productIdt && item.buyerId === buyerId
     )
   );
 
@@ -109,11 +108,11 @@ export default function SingleProductPage({
     dispatch(fetchSingleProduct(productId) as any);
   }, [dispatch, productId]);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (product) {
       setSelectedSize(product?.additionalInformation?.size[0]);
     }
-  },[product])
+  }, [product]);
 
   useEffect(() => {
     // Ensure the product has images before accessing them
@@ -171,14 +170,13 @@ export default function SingleProductPage({
         </div>
       </div>
     );
-  
-  
-  if (error) return (
-    <div className="flex justify-center items-center">
- 
-      <div className="font-bold text-2xl text-red-700">{error}</div>
-    </div>
-  );
+
+  if (error)
+    return (
+      <div className="flex justify-center items-center">
+        <div className="font-bold text-2xl text-red-700">{error}</div>
+      </div>
+    );
 
   const goToPrevious = () => {
     setCurrentIndex((prevIndex) =>
@@ -221,21 +219,20 @@ export default function SingleProductPage({
           numberOfRating: product.ratings.numberOfRatings,
           brand: product.additionalInformation.brand,
           adjective: product.adjective,
-          size: product.additionalInformation.size
+          size: product.additionalInformation.size,
         })
       );
     }
   };
 
-   
-const renderValue = (
-  defaultValue: string,
-  translatedValue: string | undefined
-) => {
-  return currentLocale === "ar" && translatedValue
-    ? translatedValue
-    : defaultValue;
-};
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   const handleRate = async () => {
     const token = Cookies.get("token");
     try {
@@ -293,7 +290,7 @@ const renderValue = (
   return (
     <div className="container mx-auto flex flex-col space-y-8 p-5  max-lg:mt-[34px]    max-w-screen-xl">
       {/* First Section */}
-      <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
+      <section className="flex flex-col lg:flex-row lg:gap-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
 
         <div className="relative w-full lg:w-1/3">
@@ -373,95 +370,10 @@ const renderValue = (
             )}
           </div>
 
-          <div
-            className="relative h-80 transition-opacity duration-700 ease-in-out flex items-center justify-center"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {product.name && (
-              <Image
-                src={product?.imageIds[currentIndex]} // Show the current image only
-                alt={`product ${currentIndex}`}
-                layout="intrinsic"
-                width={1000}
-                height={1000}
-                objectFit="contain"
-                className="rounded-2xl w-72 h-72  "
-              />
-            )}
-          </div>
-
-          {/* Slider Controls */}
-          {product?.imageIds?.length > 1 && (
-            <>
-              <button
-                type="button"
-                className="absolute top-1 -left-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                onClick={goToPrevious}
-              >
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                  <svg
-                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 1 1 5l4 4"
-                    />
-                  </svg>
-                  <span className="sr-only">Previous</span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="absolute top-1 -right-2 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                onClick={goToNext}
-              >
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-primary)] dark:bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] dark:hover:bg-[var(--color-secondary)] group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                  <svg
-                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 9 4-4-4-4"
-                    />
-                  </svg>
-                  <span className="sr-only">Next</span>
-                </span>
-              </button>
-
-              <ul className="absolute  left-1/2 transform -translate-x-1/2 flex gap-2">
-                {product?.imageIds.map((_: any, index: any) => (
-                  <li
-                    key={index}
-                    className={`w-2 h-2 rounded-full cursor-pointer ${
-                      currentIndex === index
-                        ? " bg-[var(--color-primary)]"
-                        : "bg-gray-200"
-                    }`}
-                    onClick={() => goToSlide(index)}
-                  />
-                ))}
-              </ul>
-            </>
-          )}
+          <ImageSlider
+            images={product?.imageIds}
+            discount={Math.round(product.discountPercentage)}
+          />
         </div>
 
         {/* Description Section */}
@@ -1056,14 +968,6 @@ const renderValue = (
   );
 }
 
-
-
-
-
-
-
-
-
 // Submit
 // Submit Rating
 // Submit
@@ -1083,15 +987,6 @@ const renderValue = (
 // Customers Rate This
 //  product
 // total product in stock
-
-
-
-
-
-
-
-
-
 
 // {
 //   "content": {
@@ -1141,4 +1036,3 @@ const renderValue = (
 //     }
 //   }
 // }
-

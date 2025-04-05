@@ -1,16 +1,14 @@
-"use client"; // Ensures this component is client-side
+"use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Type definitions
 type Advertisement = {
   _id: string;
   imageId: { data: string };
   bannerLink: string;
-  translatedImageId: {data:string};
+  translatedImageId: { data: string };
   parentCategoryId?: { categoryName: string; _id: string };
   subCategoryId?: { categoryName: string; _id: string };
 };
@@ -18,6 +16,11 @@ type Advertisement = {
 export default function Slider({ isRTL }: { isRTL: boolean }) {
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout>();
 
   // Fetch advertisements
   useEffect(() => {
@@ -42,99 +45,214 @@ export default function Slider({ isRTL }: { isRTL: boolean }) {
 
   // Automatic slide transition
   useEffect(() => {
-    if (advertisements.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % advertisements.length);
-    }, 3000);
+    const startAutoSlide = () => {
+      if (advertisements.length <= 1) return;
 
-    return () => clearInterval(interval);
-  }, [advertisements]);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
 
-  // Handlers
-  const goToSlide = (slideIndex: number) => setCurrentSlide(slideIndex);
-  const handlePrevSlide = () =>
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % advertisements.length);
+      }, 3000);
+    };
+
+    if (!isDragging) startAutoSlide();
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [advertisements, isDragging]);
+
+  // Navigation handlers
+  const goToSlide = (index: number) => {
+    resetAutoSlide();
+    setCurrentSlide(index);
+  };
+
+  const handlePrevSlide = () => {
+    resetAutoSlide();
     setCurrentSlide(
-      (prevSlide) =>
-        (prevSlide - 1 + advertisements.length) % advertisements.length
+      (prev) => (prev - 1 + advertisements.length) % advertisements.length
     );
-  const handleNextSlide = () =>
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % advertisements.length);
+  };
+
+  const handleNextSlide = () => {
+    resetAutoSlide();
+    setCurrentSlide((prev) => (prev + 1) % advertisements.length);
+  };
+
+  const resetAutoSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  // Touch handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setCurrentX(e.touches[0].clientX);
+    resetAutoSlide();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    const diff = startX - currentX;
+    const threshold = 25;
+
+    if (diff > threshold) {
+      handleNextSlide(); // Swiped left - go to next
+    } else if (diff < -threshold) {
+      handlePrevSlide(); // Swiped right - go to previous
+    }
+  };
+
+  // Mouse handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setCurrentX(e.clientX);
+    resetAutoSlide();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setCurrentX(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    const diff = startX - currentX;
+    const threshold = 25;
+
+    if (diff > threshold) {
+      handleNextSlide();
+    } else if (diff < -threshold) {
+      handlePrevSlide();
+    }
+  };
+
+  // Calculate transform for natural swipe
+  const getTransform = () => {
+    if (!isDragging) {
+      return isRTL
+        ? `translateX(${currentSlide * 100}%)`
+        : `translateX(-${currentSlide * 100}%)`;
+    }
+
+    const diff = currentX - startX;
+    const direction = isRTL ? -1 : 1;
+    const offset = diff * direction;
+
+    return isRTL
+      ? `translateX(calc(${currentSlide * 100}% + ${offset}px))`
+      : `translateX(calc(-${currentSlide * 100}% + ${offset}px))`;
+  };
 
   return (
-    <div className="relative w-full">
-      <div className="carousel-root">
-        <div className="carousel carousel-slider" style={{ width: "100%" }}>
-          <motion.div className="relative rounded-2xl w-full flex overflow-hidden">
-            <motion.ul
-              className="flex"
-              style={{
-                width: "100%",
-                padding: 0,
-                margin: 0,
-                transition: "transform 0.35s ease-in-out",
-                transform: isRTL
-                  ? `translateX(${currentSlide * 100}%)` // Reverse for RTL
-                  : `translateX(-${currentSlide * 100}%)`,
-              }}
+    <div className="relative w-full select-none touch-none">
+      <div
+        className="carousel-root"
+        ref={sliderRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        <div className="relative rounded-2xl w-full overflow-hidden">
+          <div
+            className="flex"
+            style={{
+              width: "100%",
+              transform: getTransform(),
+              transition: isDragging ? "none" : "transform 0.35s ease-out",
+            }}
+          >
+            {advertisements.map((ad, index) => (
+              <div key={ad._id} className="flex-shrink-0 w-full">
+                <div
+                  onClick={() => {
+                    const diff = Math.abs(startX - currentX);
+                    const threshold = 10;
+                    if (diff < threshold) {
+                      window.location.href = `/singleProduct/${ad?.parentCategoryId?.categoryName}/${ad?.parentCategoryId?._id}/${ad?.subCategoryId?.categoryName}/${ad?.subCategoryId?._id}`;
+                    }
+                  }}
+                  className="block w-full cursor-pointer"
+                  draggable={false}
+                >
+                  <div className="relative w-full lg:h-[500px]">
+                    <Image
+                      src={
+                        isRTL && ad.translatedImageId?.data
+                          ? ad.translatedImageId?.data
+                          : ad.imageId?.data || "/path/to/default-image.jpg"
+                      }
+                      alt={`Slide ${index + 1}`}
+                      width={1000}
+                      height={1000}
+                      className="w-full h-full object-cover rounded-2xl pointer-events-none"
+                      draggable={false}
+                      priority={index === 0}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Navigation arrows */}
+        {advertisements.length > 1 && (
+          <>
+            <button
+              onClick={handlePrevSlide}
+              className="hidden md:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 bg-primary text-white p-2 rounded-full z-10 hover:bg-black/50"
+              aria-label="Previous slide"
             >
-              {advertisements.map((ad, index) => (
-                <motion.li key={ad._id} className="flex-shrink-0 w-full">
-                  <Link
-                    href={`/singleProduct/${ad?.parentCategoryId?.categoryName}/${ad?.parentCategoryId?._id}/${ad?.subCategoryId?.categoryName}/${ad?.subCategoryId?._id}`}
-                  >
-                    <div className="relative w-full lg:h-[500px]">
-                      <Image
-                        src={
-                          isRTL && ad.translatedImageId?.data
-                            ? ad.translatedImageId?.data
-                            : ad.imageId?.data || "/path/to/default-image.jpg"
-                        }
-                        alt={`Slide ${index + 1} - ${
-                          ad.parentCategoryId?.categoryName || "Advertisement"
-                        }`}
-                        width={1000}
-                        height={1000}
-                        layout="responsive"
-                        objectFit="cover"
-                        className="rounded-2xl border border-gray-300"
-                      />
-                    </div>
-                  </Link>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </motion.div>
+              <span className="text-xl">‹</span>
+            </button>
+            <button
+              onClick={handleNextSlide}
+              className="hidden md:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white p-2 rounded-full z-10 hover:bg-black/50"
+              aria-label="Next slide"
+            >
+              <span className="text-xl">›</span>
+            </button>
+          </>
+        )}
 
-          <button
-            aria-label="previous slide"
-            className="hidden md:block absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full"
-            onClick={handlePrevSlide}
-          >
-            ‹
-          </button>
-
-          <button
-            aria-label="next slide"
-            className="hidden md:block absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-[var(--color-primary)] p-2 rounded-full"
-            onClick={handleNextSlide}
-          >
-            ›
-          </button>
-
-          <ul className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {/* Dots indicator */}
+        {advertisements.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             {advertisements.map((_, index) => (
-              <li
+              <button
                 key={index}
-                className={`w-2 h-2 rounded-full cursor-pointer ${
-                  currentSlide === index
-                    ? "bg-[var(--color-primary)]"
-                    : "bg-slate-300"
-                }`}
                 onClick={() => goToSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`
+          h-2 rounded-full transition-all duration-300 ease-in-out
+          ${
+            currentSlide === index
+              ? "w-6 bg-primary shadow-md scale-105"
+              : "w-2 bg-gray-300 hover:bg-gray-400"
+          }
+        `}
               />
             ))}
-          </ul>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

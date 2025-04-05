@@ -27,9 +27,9 @@ import axios from "axios";
 const BestProducts = () => {
   // Get user and logout function from context
   const dispatch = useDispatch<AppDispatch>();
-const { currentLocale, translations } = useSelector(
-  (state: RootState) => state.locale
-);
+  const { currentLocale, translations } = useSelector(
+    (state: RootState) => state.locale
+  );
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const cartItems = useSelector((state: RootState) => state.cart.items as any);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,7 +67,7 @@ const { currentLocale, translations } = useSelector(
     fetchHighlyOrderedProducts();
   }, [user?.token]);
 
-  const handleAddToCart = (product: any , link:any) => {
+  const handleAddToCart = (product: any, link: any) => {
     // Implement the logic to dispatch addToCart action with the product details
 
     dispatch(
@@ -87,7 +87,7 @@ const { currentLocale, translations } = useSelector(
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size
+        size: product.additionalInformation.size,
       })
     );
   };
@@ -107,9 +107,9 @@ const { currentLocale, translations } = useSelector(
     }
   };
 
-   useEffect(() => {
-     console.log(JSON.stringify(products,null,2))
-   }, [products]);
+  useEffect(() => {
+    console.log(JSON.stringify(products, null, 2));
+  }, [products]);
 
   useEffect(() => {
     dispatch(fetchFavoriteProducts());
@@ -164,18 +164,20 @@ const { currentLocale, translations } = useSelector(
       });
     }
   };
- const renderValue = (
-   defaultValue: string,
-   translatedValue: string | undefined
- ) => {
-   return currentLocale === "ar" && translatedValue
-     ? translatedValue
-     : defaultValue;
- };
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <div className="relative ">
       {!loading && (
-        <div className="font-bold text-xl">{ translations.bestSellingProducts.top_selling_products}</div>
+        <div className="font-bold text-xl">
+          {translations.bestSellingProducts.top_selling_products}
+        </div>
       )}
 
       <div
@@ -196,9 +198,7 @@ const { currentLocale, translations } = useSelector(
               "default";
             // Check if the product is already in the cart
             const existingItem = cartItems.find(
-              (item : any) =>
-                item.id === productIdt &&
-                item.buyerId === buyerId
+              (item: any) => item.id === productIdt && item.buyerId === buyerId
             );
             const existingQuantity = existingItem ? existingItem.quantity : 0;
             const BuyerId = existingItem ? existingItem.buyerId : "guest";
@@ -208,11 +208,21 @@ const { currentLocale, translations } = useSelector(
             );
 
             return (
-              <div
+              <motion.div
                 key={productIdt}
-                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5  w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                whileHover={{
+                  y: -5, // lifts up slightly
+
+                  transition: {
+                    duration: 0.2,
+                    ease: "easeOut",
+                  },
+                }}
+                whileTap={{
+                  scale: 0.98, // subtle press effect
+                }}
               >
-                {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                 <div className="relative">
                   <Link
                     href={`/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`}
@@ -250,20 +260,40 @@ const { currentLocale, translations } = useSelector(
                   </motion.div>
                 </div>
 
-                <div className="flex w-full flex-col">
+                <div className="flex w-full flex-col flex-grow">
                   <div className="text-start text-lg font-semibold flex justify-start">
                     {renderValue(
-                      product.productDetails?.name,
-                      product.productDetails?.translatedName
+                      product.productDetails?.name?.length > 20
+                        ? `${product.productDetails?.name?.substring(0, 20)}...`
+                        : product.productDetails?.name,
+                      product.productDetails?.translatedName?.length > 20
+                        ? `${product.productDetails?.translatedName?.substring(
+                            0,
+                            20
+                          )}...`
+                        : product.productDetails?.translatedName
                     )}
                   </div>
-                  <div className="test-sm text-start font-semibold">
+                  <div className="text-sm text-start font-semibold">
                     {renderValue(
-                      product.productDetails?.additionalInformation?.brand,
-                      product.productDetails?.additionalInformation?.translatedBrand
+                      product.productDetails?.additionalInformation?.brand
+                        ?.length > 20
+                        ? `${product.productDetails?.additionalInformation?.brand?.substring(
+                            0,
+                            20
+                          )}...`
+                        : product.productDetails?.additionalInformation?.brand,
+                      product.productDetails?.additionalInformation
+                        ?.translatedBrand?.length > 20
+                        ? `${product.productDetails?.additionalInformation?.translatedBrand?.substring(
+                            0,
+                            20
+                          )}...`
+                        : product.productDetails?.additionalInformation
+                            ?.translatedBrand
                     )}
                   </div>
-                  <div className="flex flex-row gap-3">
+                  <div className="flex flex-row gap-3 mt-1">
                     <div>
                       <Rate
                         value={product.productDetails?.ratings.averageRating.toFixed(
@@ -287,7 +317,7 @@ const { currentLocale, translations } = useSelector(
                     </div>
                   </div>
 
-                  <div className="flex flex-row justify-between items-center mt-4">
+                  <div className="flex flex-row justify-between items-center mt-auto">
                     <div className="flex flex-col">
                       <div className="flex flex-row gap-1 items-center">
                         {product?.productDetails?.discount > 0 && (
@@ -295,7 +325,7 @@ const { currentLocale, translations } = useSelector(
                             <div className="font-mono line-through">
                               {product.productDetails?.price}
                             </div>
-                            <div className="bg-[var(--color-secondary)] text-black  px-1 rounded font-bold text-xs">
+                            <div className="bg-[var(--color-secondary)] text-gray-200 px-1 rounded font-bold text-xs">
                               -
                               {Math.round(
                                 product.productDetails?.discountPercentage
@@ -317,7 +347,6 @@ const { currentLocale, translations } = useSelector(
                         <>
                           {existingItem ? (
                             <div className="flex flex-row items-center justify-center gap-2">
-                              {/* Decrement Button */}
                               <button
                                 onClick={() =>
                                   dispatch(
@@ -336,12 +365,10 @@ const { currentLocale, translations } = useSelector(
                                 />
                               </button>
 
-                              {/* Quantity Display */}
                               <div className="dark:text-gray-200">
                                 {existingQuantity}
                               </div>
 
-                              {/* Increment Button */}
                               <button
                                 onClick={() =>
                                   dispatch(
@@ -369,7 +396,7 @@ const { currentLocale, translations } = useSelector(
                                   `/singleProduct/${product?.parentCategoryDetails?.categoryName}/${product?.parentCategoryDetails?._id}/${product?.categoryDetails?.categoryName}/${product?.categoryDetails?._id}/${product?.productDetails?.name}/${product?.productDetails?._id}`
                                 )
                               }
-                              className="p-3 bg-[var(--color-primary)]   rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]  "
+                              className="p-3 bg-[var(--color-primary)] rounded-lg cursor-pointer hover:bg-[var(--color-secondary)]"
                               aria-label="Add to Cart"
                             >
                               <FaShoppingCart color="white" />
@@ -382,7 +409,7 @@ const { currentLocale, translations } = useSelector(
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </motion.div>

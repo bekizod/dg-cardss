@@ -159,11 +159,11 @@ export default function ProductsAccordion({
       const pricesSet = new Set<number>();
 
       products.forEach((product: any) => {
-       if (product.additionalInformation?.size?.length) {
-         product.additionalInformation.size.forEach((size : any) => {
-           sizesSet.add(size);
-         });
-       }
+        if (product.additionalInformation?.size?.length) {
+          product.additionalInformation.size.forEach((size: any) => {
+            sizesSet.add(size);
+          });
+        }
 
         if (product.additionalInformation?.color) {
           colorsSet.add(product.additionalInformation.color);
@@ -408,7 +408,6 @@ export default function ProductsAccordion({
       });
     }
 
-
     if (selectedFilters.color.length > 0) {
       filtered = filtered.filter((product: any) =>
         selectedFilters.color.includes(product.additionalInformation?.color)
@@ -524,7 +523,7 @@ export default function ProductsAccordion({
         </div>
       </div>
     );
-  
+
   if (productsError)
     return (
       <p className="mt-[124px] text-3xl">Product Error: {productsError}</p>
@@ -552,7 +551,7 @@ export default function ProductsAccordion({
         numberOfRating: product.ratings.numberOfRatings,
         brand: product.additionalInformation.brand,
         adjective: product.adjective,
-        size: product.additionalInformation.size
+        size: product.additionalInformation.size,
       })
     );
   };
@@ -919,9 +918,20 @@ export default function ProductsAccordion({
                 );
 
                 return (
-                  <div
+                  <motion.div
                     key={productId}
-                    className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                    className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                    whileHover={{
+                      y: -5, // lifts up slightly
+
+                      transition: {
+                        duration: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                    whileTap={{
+                      scale: 0.98, // subtle press effect
+                    }}
                   >
                     {/* Image and Favorite Button */}
                     <div className="relative">
@@ -964,12 +974,30 @@ export default function ProductsAccordion({
                     {/* Product Details */}
                     <div className="flex w-full flex-col">
                       <div className="text-start text-lg font-semibold flex justify-start">
-                        {renderValue(product.name, product.translatedName)}
-                      </div>
-                      <div className="test-sm text-start font-semibold">
                         {renderValue(
-                          product.additionalInformation?.brand,
+                          product.name?.length > 20
+                            ? `${product.name.substring(0, 20)}...`
+                            : product.name,
+                          product.translatedName?.length > 20
+                            ? `${product.translatedName.substring(0, 20)}...`
+                            : product.translatedName
+                        )}
+                      </div>
+                      <div className="text-sm text-start font-semibold">
+                        {renderValue(
+                          product.additionalInformation?.brand?.length > 20
+                            ? `${product.additionalInformation.brand.substring(
+                                0,
+                                20
+                              )}...`
+                            : product.additionalInformation?.brand,
                           product.additionalInformation?.translatedBrand
+                            ?.length > 20
+                            ? `${product.additionalInformation.translatedBrand.substring(
+                                0,
+                                20
+                              )}...`
+                            : product.additionalInformation?.translatedBrand
                         )}
                       </div>
                       <div className="flex flex-row gap-3">
@@ -1079,7 +1107,7 @@ export default function ProductsAccordion({
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })
             ) : (

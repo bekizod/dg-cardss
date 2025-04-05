@@ -40,6 +40,8 @@ import { useTranslation } from "react-i18next";
 import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
 import ThemeSwitcher from "./ui/ThemeSwitcher";
+import Spinner from "./Spinner";
+import Loader from "@/app/loading";
 
 export default function TopNextNavbar({
   logoUrl,
@@ -688,15 +690,24 @@ export default function TopNextNavbar({
                 &#10005; {/* X icon to close */}
               </button>
 
-              <div className="text-2xl font-semibold mb-4">
-                {translations.tnn.search_results}{" "}
-                <div>
-                  {translations.tnn.total_products}
-                  {total}
-                </div>
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  {translations.tnn.search_results}
+                </h2>
+
+                {status === "succeeded" && (
+                  <p className="text-lg text-gray-600">
+                    {translations.tnn.total_products}:{" "}
+                    <span className="font-medium">{total}</span>
+                  </p>
+                )}
               </div>
 
-              {/* {status === "loading" && <p>Loading products...</p>} */}
+              {status === "loading" && (
+                <div className="product-list max-h-96 overflow-y-auto flex items-center justify-center ">
+                  <Loader />
+                </div>
+              )}
               {status === "failed" && <p>Error fetching products: {error}</p>}
 
               {status === "succeeded" && (
@@ -704,7 +715,7 @@ export default function TopNextNavbar({
                   {" "}
                   {/* Set max height and enable scrolling */}
                   {products.length > 0 ? (
-                    <div className="grid grid-cols-2   sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-1">
+                    <div className="grid grid-cols-2 p-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-1">
                       {/* {products.map((product) => (
                   <div
                     key={product._id}
@@ -751,9 +762,20 @@ export default function TopNextNavbar({
                           (favProduct: any) => favProduct._id === productIdt
                         );
                         return (
-                          <div
+                          <motion.div
                             key={productIdt}
-                            className="flex flex-col max-w-60 bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                            className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                            whileHover={{
+                              y: -5, // lifts up slightly
+
+                              transition: {
+                                duration: 0.2,
+                                ease: "easeOut",
+                              },
+                            }}
+                            whileTap={{
+                              scale: 0.98, // subtle press effect
+                            }}
                           >
                             {/* <div className="flex font-thin justify-end">id: 12345789</div> */}
                             <div className="relative">
@@ -797,14 +819,34 @@ export default function TopNextNavbar({
                             <div className="flex w-full flex-col">
                               <div className="text-start text-lg font-semibold flex justify-start">
                                 {renderValue(
-                                  product.name,
-                                  product.translatedName
+                                  product.name?.length > 20
+                                    ? `${product.name.substring(0, 20)}...`
+                                    : product.name,
+                                  product.translatedName?.length > 20
+                                    ? `${product.translatedName.substring(
+                                        0,
+                                        20
+                                      )}...`
+                                    : product.translatedName
                                 )}
                               </div>
-                              <div className="test-sm text-start font-semibold">
+                              <div className="text-sm text-start font-semibold">
                                 {renderValue(
-                                  product.additionalInformation?.brand,
+                                  product.additionalInformation?.brand?.length >
+                                    20
+                                    ? `${product.additionalInformation.brand.substring(
+                                        0,
+                                        20
+                                      )}...`
+                                    : product.additionalInformation?.brand,
                                   product.additionalInformation?.translatedBrand
+                                    ?.length > 20
+                                    ? `${product.additionalInformation.translatedBrand.substring(
+                                        0,
+                                        20
+                                      )}...`
+                                    : product.additionalInformation
+                                        ?.translatedBrand
                                 )}
                               </div>
                               <div className="flex flex-row gap-3">
@@ -837,7 +879,7 @@ export default function TopNextNavbar({
                                         <div className="font-mono line-through">
                                           {product.price}
                                         </div>
-                                        <div className="bg-[var(--color-secondary)]   px-1 rounded font-bold text-xs">
+                                        <div className="bg-[var(--color-secondary)] text-gray-200  px-1 rounded font-bold text-xs">
                                           -
                                           {Math.round(
                                             product.discountPercentage
@@ -913,7 +955,7 @@ export default function TopNextNavbar({
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </motion.div>
                         );
                       })}
                     </div>
