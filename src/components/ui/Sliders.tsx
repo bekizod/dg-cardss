@@ -181,8 +181,8 @@ const ImageSlider = ({
       )}
 
       {/* Main Slider */}
-      <div className="relative flex-1 overflow-hidden dark:border rounded-lg aspect-square dark:border-slate-800">
-        {discount && discount > 0 && (
+      <div className="relative flex-1 overflow-hidden border rounded-lg aspect-square dark:border-slate-800">
+        {typeof discount === "number" && discount > 0 && (
           <div
             className={`absolute ${
               currentLocale === "ar"
