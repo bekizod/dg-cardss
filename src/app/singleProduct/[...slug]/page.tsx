@@ -390,7 +390,7 @@ export default function SingleProductPage({
             <Rate
               value={rating || product.ratings?.averageRating}
               onChange={handleRateChange}
-              disabled={Loading}
+              disabled={Loading || !user}
               className={`text-sm ${
                 product.productDetails?.ratings.averageRating > 0
                   ? ""

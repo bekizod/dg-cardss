@@ -152,8 +152,18 @@ const BestProducts = () => {
 
       // Check if the error message contains "jwt malformed"
       if (error == "jwt malformed") {
-        errorMessage =
-          "Authentication error: Please log in to save favorite products.";
+        errorMessage = (
+          <span>
+            Authentication error: Please{" "}
+            <Link
+              href="/login"
+              className="text-primary text-md hover:text-secondary underline font-semibold"
+            >
+              login
+            </Link>{" "}
+            to save favorite products.
+          </span>
+        ) as any;
       } else {
         errorMessage = "Failed,No internet connection.";
       }
@@ -223,7 +233,6 @@ const BestProducts = () => {
                       width={1000}
                       height={1000}
                       className="w-full h-44 rounded-md object-cover"
-                     
                     />
 
                     {/* Favorite Icon */}
@@ -233,10 +242,10 @@ const BestProducts = () => {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.1 }}
-                      onClick={(e) =>{ 
-                        e.stopPropagation()
+                      onClick={(e) => {
+                        e.stopPropagation();
                         e.preventDefault();
-                         handleFavoriteToggle(productIdt)
+                        handleFavoriteToggle(productIdt);
                       }}
                     >
                       {isFavorite ? (
@@ -339,11 +348,12 @@ const BestProducts = () => {
                             : `${product.productDetails?.price}`}
                         </div>
                       </div>
-                      <div className="rounded-lg" 
-                       onClick={(e) =>{ 
-                        e.stopPropagation()
-                        e.preventDefault();
-                      }}
+                      <div
+                        className="rounded-lg"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                        }}
                       >
                         {product.productDetails?.stockQuantity > 0 ? (
                           <>

@@ -160,8 +160,10 @@ const ImageSlider = ({
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-full aspect-square rounded-md border-2 overflow-hidden transition-all ${
-                currentIndex === index ? "border-primary" : ""
+              className={`w-full aspect-square rounded-md  overflow-hidden transition-all ${
+                currentIndex === index
+                  ? " border-2 border-primary"
+                  : "border-none"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             >
@@ -179,7 +181,7 @@ const ImageSlider = ({
       )}
 
       {/* Main Slider */}
-      <div className="relative flex-1 overflow-hidden border rounded-lg aspect-square">
+      <div className="relative flex-1 overflow-hidden dark:border rounded-lg aspect-square dark:border-slate-800">
         {discount && discount > 0 && (
           <div
             className={`absolute ${
