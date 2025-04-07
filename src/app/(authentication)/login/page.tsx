@@ -28,7 +28,7 @@ export default function Login() {
   const router = useRouter();
   const { user, login } = useAuth(); // Use the login function from AuthContext
   const token = Cookies.get("token");
-const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(false);
   useEffect(() => {
     if (user && token) {
       router.push("/account");
@@ -68,7 +68,7 @@ const [logged, setLogged] = useState(false);
 
       if (response.status === 200) {
         const { token, user } = response.data.data;
-setLogged(true)
+        setLogged(true);
         // Store the token and user information in the context and cookies
         login(token, user);
         window.location.reload();
@@ -87,7 +87,7 @@ setLogged(true)
           "Email or password is incorrect. Please try again."
         );
       }
-    } catch (error : any) {
+    } catch (error: any) {
       // console.error("An error occurred:", error);
 
       // Display error notification for exceptions
@@ -96,7 +96,6 @@ setLogged(true)
         "Login Error",
         "Email or password is incorrect. Please try again."
       );
-
     } finally {
       setLoging(false);
     }
@@ -158,7 +157,7 @@ setLogged(true)
           </Link>
         </form>
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400">
-          {translations.login.forgotPassword}{" "}
+          {translations.login.noAccount}{" "}
           <Link
             href="/register"
             className="text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
