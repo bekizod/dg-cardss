@@ -72,11 +72,12 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { motion } from "framer-motion";
+import { FiGrid, FiChevronRight } from "react-icons/fi";
 import { AppDispatch, RootState } from "@/redux/store";
 import PageBuilder from "../components/ui/Home UI/PageBuilder";
 import HomeHero from "@/components/ui/Home UI/HomeHero";
- 
+
 import enTranslations from "@/locales/en.json";
 import arTranslations from "@/locales/ar.json";
 import Loader from "./loading";
@@ -133,52 +134,120 @@ export default function Home() {
 
   // Don't render the page until the currentLocale is set to avoid flicker
   if (!currentLocale) {
-    <Loader /> // or a loading spinner can be shown
-  }             
-const renderValue = (
-  defaultValue: string,
-  translatedValue: string | undefined
-) => {
-  return currentLocale === "ar" && translatedValue
-    ? translatedValue
-    : defaultValue;
-};
+    <Loader />; // or a loading spinner can be shown
+  }
+  const renderValue = (
+    defaultValue: string,
+    translatedValue: string | undefined
+  ) => {
+    return currentLocale === "ar" && translatedValue
+      ? translatedValue
+      : defaultValue;
+  };
   return (
     <main className="    ">
       <nav className="fixed w-full  bg-gray-100 dark:bg-slate-800 shadow-md z-30">
         <ul className="hidden lg:flex justify-center gap-8 p-1">
-          <li
-            className={`cursor-pointer py-1 px-2 rounded-xl ${
-              activeTab === "All"
-                ? "bg-[var(--color-primary)] dark:text-white text-white"
-                : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"
-            }`}
+          {/* All Tab */}
+          <motion.li
+            className="relative cursor-pointer py-1 px-2 group "
             onClick={() => handleTabClick("All")}
+            whileHover={{ scale: 1.05 }}
+            initial={false}
           >
-            All
-          </li>
+            <div className="flex items-center gap-2">
+              <motion.span
+                animate={{
+                  rotate: [0, 360],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 4,
+                  ease: "linear",
+                }}
+              >
+                <FiGrid className="text-lg" />
+              </motion.span>
+              <span className={`${activeTab === "All" ? "font-medium" : ""}`}>
+                All
+              </span>
+            </div>
+
+            {/* Underline for active & hover */}
+            {activeTab === "All" && (
+              <motion.div
+                className="absolute bottom-0 left-0 w-full h-[2px] bg-[var(--color-primary)] dark:bg-slate-200 "
+                layoutId="underline"
+                initial={false}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            )}
+          </motion.li>
+
+          {/* Category Tabs */}
           {categories.map((category: any) => (
-            <li
+            <motion.li
               key={category._id}
-              className={`cursor-pointer py-1 px-2 rounded-xl ${
-                activeTab === category.categoryName
-                  ? "bg-[var(--color-primary)] dark:text-white text-white"
-                  : "dark:bg-slate-900 bg-[var(--color-secondary)] dark:text-white text-black"
-              }`}
+              className="relative cursor-pointer py-1 px-2 group"
               onClick={() =>
                 handleTabClick(category.categoryName, category._id)
               }
+              whileHover={{
+                scale: 1.05,
+                transition: { duration: 0.2 },
+              }}
+              initial={false}
             >
-              {/* {category.categoryName} */}
-              {renderValue(category.categoryName, category.translatedCategoryName)}
-            </li>
+              <div className="flex items-center gap-1">
+                <motion.span
+                  className={`${
+                    activeTab === category.categoryName ? "font-medium" : ""
+                  }`}
+                >
+                  {renderValue(
+                    category.categoryName,
+                    category.translatedCategoryName
+                  )}
+                </motion.span>
+                {/* <motion.span
+                  animate={{
+                    x: activeTab === category.categoryName ? 5 : 0,
+                    opacity: activeTab === category.categoryName ? 1 : 0,
+                  }}
+                  transition={{ type: "spring", stiffness: 500 }}
+                >
+                  <FiChevronRight size={14} />
+                </motion.span> */}
+              </div>
+
+              {/* Underline for active & hover */}
+              {activeTab === category.categoryName ? (
+                <motion.div
+                  className="absolute bottom-0 left-0 w-full h-[2px] dark:bg-slate-200 bg-[var(--color-primary)]"
+                  layoutId="underline"
+                  initial={false}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 30,
+                    mass: 0.5,
+                  }}
+                />
+              ) : (
+                <motion.div className="absolute bottom-0 left-0 w-full h-[2px] dark:bg-slate-200 bg-[var(--color-primary)] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+              )}
+            </motion.li>
           ))}
         </ul>
       </nav>
       <div className="container mx-auto   ">
         {isLoading ? <Loader /> : renderContent()}
       </div>
-      {error && <p className="text-red-500 py-6 font-bold flex justify-center items-center text-xl">{error}!!!</p>}
+      {error && (
+        <p className="text-red-500 py-6 font-bold flex justify-center items-center text-xl">
+          {error}!!!
+        </p>
+      )}
     </main>
   );
 }
