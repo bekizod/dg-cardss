@@ -243,8 +243,18 @@ export default function TopNextNavbar({
 
       // Check if the error message contains "jwt malformed"
       if (error == "jwt malformed") {
-        errorMessage =
-          "Authentication error: Please log in to save favorite products.";
+        errorMessage = (
+          <span>
+            You Are Not Logged: Please{" "}
+            <Link
+              href="/login"
+              className="text-primary text-md hover:text-secondary underline font-semibold"
+            >
+              login
+            </Link>{" "}
+            to save favorite products.
+          </span>
+        ) as any;
       } else {
         errorMessage = "Failed,No internet connection.";
       }

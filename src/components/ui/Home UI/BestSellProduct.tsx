@@ -154,7 +154,7 @@ const BestProducts = () => {
       if (error == "jwt malformed") {
         errorMessage = (
           <span>
-            Authentication error: Please{" "}
+            You Are Not Logged: Please{" "}
             <Link
               href="/login"
               className="text-primary text-md hover:text-secondary underline font-semibold"

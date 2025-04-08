@@ -300,10 +300,20 @@ export default function ProductsAccordion({
 
       // Check if the error message contains "jwt malformed"
       if (error == "jwt malformed") {
-        errorMessage =
-          "Authentication error: Please log in to save favorite products.";
+       errorMessage = (
+          <span>
+            You Are Not Logged: Please{" "}
+            <Link
+              href="/login"
+              className="text-primary text-md hover:text-secondary underline font-semibold"
+            >
+              login
+            </Link>{" "}
+            to save favorite products.
+          </span>
+        ) as any;
       } else {
-        errorMessage = "Failed,No internet connection.";
+        errorMessage = "Failed,Try Later!";
       }
 
       notification.error({
@@ -463,7 +473,7 @@ export default function ProductsAccordion({
   //     );
 
   if (favoritesLoading) return <Loader />;
-  if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
+  // if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
   const handleAddToCart = (product: any) => {
     // Implement the logic to dispatch addToCart action with the product details
@@ -827,18 +837,7 @@ export default function ProductsAccordion({
                 return (
                   <motion.div
                     key={productId}
-                    className="flex flex-col transform max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
-                    whileHover={{
-                      y: -5, // lifts up slightly
-
-                      transition: {
-                        duration: 0.2,
-                        ease: "easeOut",
-                      },
-                    }}
-                    whileTap={{
-                      scale: 0.98, // subtle press effect
-                    }}
+                    className="flex flex-col transform hover:-translate-y-1 duration-200 max-md:scale-75 max-md:-my-10 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                   >
                     {/* Image and Favorite Button */}
                     <div className="relative">

@@ -36,14 +36,32 @@ export const fetchFavorites = createAsyncThunk("favorites/fetch", async () => {
 // Thunk to add a favorite category
 export const addFavorite = createAsyncThunk(
   "favorites/add",
-  async (categoryId: string) => {
-    const token = Cookies.get("token");
-    const response = await axios.post(
-      "https://alsaifgallery.onrender.com/api/v1/user/saveFavoriteCategories",
-      { categoryId },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    return response.data.data;
+
+  async (categoryId: string, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get("token");
+      const response = await fetch(
+     "https://alsaifgallery.onrender.com/api/v1/user/saveFavoriteCategories",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ categoryId }),
+        }
+      );
+      const data = await response.json();
+      if (data.status) {
+        return { categoryId, categoryData: data.data }; // Send back the added product's details
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.message || "Failed to save favorite product"
+      );
+    }
   }
 );
 
@@ -81,6 +99,10 @@ const favoriteSlice = createSlice({
       })
       .addCase(addFavorite.fulfilled, (state, action) => {
         state.favorites = action.payload;
+      })
+      .addCase(addFavorite.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Error adding favorites category";
       })
       .addCase(removeFavorite.fulfilled, (state, action) => {
         state.favorites = state.favorites.filter(

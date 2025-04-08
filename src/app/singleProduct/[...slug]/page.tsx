@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { BsCartCheck } from "react-icons/bs";
 import React from "react";
+import { CloseOutlined } from "@ant-design/icons";
 // import ProductCarousel from "@/components/ui/Home UI/ProductCarousel";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import Cookies from "js-cookie";
@@ -22,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/UserContext";
 import { useTheme } from "next-themes";
 import ImageSlider from "@/components/ui/Sliders";
+import { MdRemoveShoppingCart } from "react-icons/md";
 
 interface Product {
   id: string;
@@ -70,6 +72,10 @@ export default function SingleProductPage({
   const [selectedSize, setSelectedSize] = useState(
     "" // Default to the first size, or set to an empty string if no sizes
   );
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
+
+  const handleOpen = () => setIsCommentModalVisible(true);
+  const handleClose = () => setIsCommentModalVisible(false);
   // Now use useSelector to get cart items and perform the logic outside of the hook
   const existingItem = useSelector((state: RootState) =>
     state.cart.items.find(
@@ -250,6 +256,7 @@ export default function SingleProductPage({
           description: "Your rating has been submitted successfully!",
           placement: "topRight",
         });
+        dispatch(fetchSingleProduct(productId) as any);
       } else {
         notification.error({
           message: "Submission Failed",
@@ -277,8 +284,26 @@ export default function SingleProductPage({
 
   const handleModalOk = () => {
     setLoading(true);
+    if (addComment) {
+      if (comment.trim() === "") {
+        message.error("Please enter a comment.");
+        return;
+      }
+      if (comment.length < 10) {
+        message.error("Comment must be at least 10 characters.");
+        return;
+      }
+      if (comment.length > 300) {
+        message.error("Comment must not exceed 300 characters.");
+        return;
+      }
+    }
+
     handleRate();
   };
+  const isCommentInvalid =
+    addComment &&
+    (comment.trim() === "" || comment.length < 10 || comment.length > 300);
 
   const handleModalCancel = () => {
     setIsModalVisible(false);
@@ -292,8 +317,7 @@ export default function SingleProductPage({
       {/* First Section */}
       <section className="flex flex-col lg:flex-row lg:gap-8 space-y-8 lg:space-y-0">
         {/* Image Slider */}
-
-        <div className="relative w-full lg:w-1/3">
+        <div className="relative w-full lg:w-1/2">
           {/* Carousel wrapper */}
           {slugLength === 4 && (
             <div className="mb-4">
@@ -377,7 +401,7 @@ export default function SingleProductPage({
         </div>
 
         {/* Description Section */}
-        <div className="lg:w-1/3 w-full space-y-4">
+        <div className="lg:w-1/2 w-full space-y-4">
           <motion.h1
             className="text-2xl font-semibold dark:text-white"
             initial={{ opacity: 0 }}
@@ -386,26 +410,162 @@ export default function SingleProductPage({
           >
             {renderValue(product.name, product.translatedName)}
           </motion.h1>
+          <motion.div
+            className="text-lg flex justify-between items-center font-semibold dark:text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {product?.discount > 0 ? (
+              <div className="flex justify-center items-center gap-3">
+                {product?.discount > 0 && (
+                  <>
+                    <p className="line-through text-gray-600 dark:text-gray-400">
+                      {product.price}
+                    </p>
+                  </>
+                )}
+                <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                  {product.discount}
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                  {product.price}
+                </p>
+              </>
+            )}
+            {product?.discount > 0 && (
+              <div className="flex items-center text-red-600 dark:text-red-400">
+                <p className="text-lg font-bold">
+                  -{Math.round(product.discountPercentage)}%
+                </p>
+                <svg
+                  className="ml-2"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z"
+                    fill="#FF233F"
+                  />
+                </svg>
+              </div>
+            )}
+          </motion.div>
           <div className="flex flex-row gap-2 items-center text-slate-400">
-            <Rate
-              value={rating || product.ratings?.averageRating}
-              onChange={handleRateChange}
-              disabled={Loading || !user}
-              className={`text-sm ${
-                product.productDetails?.ratings.averageRating > 0
-                  ? ""
-                  : "rate-empty"
-              }`}
-            />
-            |
-            <motion.p
-              className="text-sm text-gray-500 dark:text-gray-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              {renderValue(product.adjective, product.translatedAdjective)}
-            </motion.p>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+              {/* Rating + customer count */}
+              <div className="flex flex-col items-center sm:items-start">
+                <Rate
+                  value={product?.ratings?.averageRating.toFixed(1)}
+                  onChange={handleRateChange}
+                  disabled={
+                    !user ||
+                    product?.ratings?.ratingsByUser?.some(
+                      (rater: any) => rater?.userId?._id === user?._id
+                    )
+                  }
+                  // className={`text-base ${
+                  //   product?.ratings?.averageRating > 0 ? "" : "rate-empty"
+                  // }`}
+                />
+                <p
+                  onClick={handleOpen}
+                  className="text-sm text-gray-600 cursor-pointer font-semibold dark:text-gray-300 mt-1"
+                >
+                  {product.ratings?.numberOfRatings || 0}{" "}
+                  {translations.single.customersRateThisProduct}
+                </p>
+              </div>
+              <Modal
+                open={isCommentModalVisible}
+                onCancel={handleClose}
+                footer={null}
+                closeIcon={
+                  <CloseOutlined
+                    style={{ color: theme === "dark" ? "#ffffff" : "#000000" }}
+                  />
+                }
+                style={{
+                  backgroundColor: theme === "dark" ? "#1f1f1f" : "white",
+                  color: theme === "dark" ? "#ffffff" : "black",
+                  padding: "0px",
+                  borderRadius: 8,
+                  maxHeight: "80vh", // Restrict modal height
+                  overflow: "hidden", // Prevent outer scroll
+                }}
+                bodyStyle={{
+                  backgroundColor: theme === "dark" ? "#1f1f1f" : "white",
+                  padding: "1rem",
+                  maxHeight: "65vh", // Content area height
+                  overflowY: "auto", // Scroll only the comment area
+                }}
+              >
+                <div className="space-y-4 max-h-[400px] overflow-y-auto">
+                  {product?.ratings?.ratingsByUser?.filter(
+                    (rater: any) => rater.comment
+                  )?.length > 0 ? (
+                    product.ratings.ratingsByUser
+                      .filter((rater: any) => rater.comment) // ✅ Only include raters with comments
+                      .map((rater: any) => (
+                        <div
+                          key={rater._id}
+                          className={`border p-3 rounded-lg shadow-sm ${
+                            theme === "dark"
+                              ? "bg-[#2b2b2b] text-white"
+                              : "bg-white text-black"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="font-semibold">
+                              {rater?.userId?.firstName}{" "}
+                              {rater?.userId?.lastName}
+                            </div>
+                            <div className="text-yellow-500">
+                              <Rate value={rater.rating} disabled />
+                            </div>
+                          </div>
+                          <p
+                            className={`text-sm ${
+                              theme === "dark"
+                                ? "text-gray-300"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {rater.comment}
+                          </p>
+                        </div>
+                      ))
+                  ) : (
+                    <p
+                      className={`text-sm ${
+                        theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
+                      No comments yet.
+                    </p>
+                  )}
+                </div>
+              </Modal>
+
+              <div className="hidden sm:block h-4 w-px bg-gray-300 dark:bg-gray-600" />
+
+              {/* Product Adjective */}
+              <motion.p
+                className="text-sm text-gray-500 dark:text-gray-400 italic"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+              >
+                {renderValue(product.adjective, product.translatedAdjective)}
+              </motion.p>
+            </div>
+
             <Modal
               visible={isModalVisible}
               onOk={handleModalOk}
@@ -414,16 +574,30 @@ export default function SingleProductPage({
               cancelText={translations.single.cancel}
               confirmLoading={Loading}
               style={{
-                backgroundColor: theme === "dark" ? "#1f1f1f" : "white", // Dark background
-                color: theme === "dark" ? "#ffffff" : "black", // Light text in dark mode
+                backgroundColor: theme === "dark" ? "#1f1f1f" : "white",
+                color: theme === "dark" ? "#ffffff" : "black",
+                borderRadius: "8px",
+                padding: "0px",
               }}
               okButtonProps={{
+                disabled: isCommentInvalid,
                 style: {
-                  backgroundColor:
-                    theme === "dark" ? "#4caf50" : "var(--color-primary)",
-                  borderColor:
-                    theme === "dark" ? "#4caf50" : "var(--color-secondary)",
+                  backgroundColor: isCommentInvalid
+                    ? "grey"
+                    : theme === "dark"
+                    ? "#4caf50"
+                    : "var(--color-primary)",
+                  borderColor: isCommentInvalid
+                    ? "grey"
+                    : theme === "dark"
+                    ? "#4caf50"
+                    : "var(--color-secondary)",
                   color: "white",
+                  borderRadius: "5px",
+                  padding: "8px 16px",
+                  marginTop: "10px",
+                  fontWeight: "bold",
+                  cursor: isCommentInvalid ? "not-allowed" : "pointer",
                 },
               }}
               cancelButtonProps={{
@@ -431,55 +605,126 @@ export default function SingleProductPage({
                   backgroundColor: theme === "dark" ? "#333333" : "white",
                   color: theme === "dark" ? "#ffffff" : "black",
                   borderColor: theme === "dark" ? "#555555" : "lightgrey",
+                  borderRadius: "5px",
+                  padding: "8px 16px",
+                  marginTop: "10px",
+                  fontWeight: "bold",
                 },
               }}
             >
               <p
                 style={{
                   color: theme === "dark" ? "#cccccc" : "black",
+                  fontSize: "16px",
+                  fontWeight: "500",
                 }}
               >
                 {translations.single.addCommentPrompt}
               </p>
-              <Button
-                onClick={() => setAddComment(true)}
-                style={{
-                  backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
-                  color: theme === "dark" ? "#ffffff" : "black",
-                  border: "none",
-                  marginRight: 8,
-                  marginLeft: 8,
-                }}
-              >
-                {translations.single.yes}
-              </Button>
-              <Button
-                onClick={() => setAddComment(false)}
-                style={{
-                  backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
-                  color: theme === "dark" ? "#ffffff" : "black",
-                  border: "none",
-                }}
-              >
-                {translations.single.no}
-              </Button>
+
+              {!addComment && (
+                <>
+                  <Button
+                    onClick={() => setAddComment(true)}
+                    style={{
+                      backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
+                      color: theme === "dark" ? "#ffffff" : "black",
+                      border: "none",
+                      marginRight: 8,
+                      marginLeft: 8,
+                      borderRadius: "5px",
+                      padding: "6px 16px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {translations.single.yes}
+                  </Button>
+
+                  <Button
+                    onClick={() => setAddComment(false)}
+                    style={{
+                      backgroundColor: theme === "dark" ? "#333333" : "#f5f5f5",
+                      color: theme === "dark" ? "#ffffff" : "black",
+                      border: "none",
+                      borderRadius: "5px",
+                      padding: "6px 16px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {translations.single.no}
+                  </Button>
+                </>
+              )}
 
               {addComment && (
-                <Input.TextArea
-                  placeholder={translations.single.enterComment}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={3}
-                  style={{
-                    marginTop: 10,
-                    backgroundColor: theme === "dark" ? "#2b2b2b" : "white",
-                    color: theme === "dark" ? "#ffffff" : "black",
-                    border:
-                      theme === "dark"
-                        ? "1px solid #555555"
-                        : "1px solid lightgrey",
-                  }}
-                />
+                <div style={{ marginTop: "20px" }}>
+                  <Input.TextArea
+                    placeholder={translations.single.enterComment}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    rows={3}
+                    maxLength={300}
+                    showCount={{
+                      formatter: ({ count, maxLength }) => (
+                        <span
+                          className={
+                            theme === "dark"
+                              ? "text-gray-400 py-2"
+                              : "text-gray-600 py-2"
+                          }
+                        >
+                          {count}/{maxLength} characters
+                        </span>
+                      ),
+                    }}
+                    style={{
+                      backgroundColor: theme === "dark" ? "#2b2b2b" : "white",
+                      color: theme === "dark" ? "#ffffff" : "black",
+                      border:
+                        theme === "dark"
+                          ? "1px solid #555555"
+                          : "1px solid lightgrey",
+                      borderRadius: "5px",
+                      padding: "8px",
+                      fontSize: "14px",
+                      opacity: theme === "dark" ? 0.85 : 1,
+                    }}
+                  />
+
+                  {comment.length > 0 && comment.length < 10 && (
+                    <div
+                      style={{
+                        color: "orange",
+                        fontSize: "12px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      Comment must be at least 10 characters.
+                    </div>
+                  )}
+                  {comment.length > 300 && (
+                    <div
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      Comment is too long.
+                    </div>
+                  )}
+                  {comment === "" && (
+                    <div
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginTop: "8px",
+                      }}
+                    >
+                      Comment cannot be empty!
+                    </div>
+                  )}
+                </div>
               )}
             </Modal>
           </div>
@@ -537,94 +782,225 @@ export default function SingleProductPage({
               </p>
             </div>
           </motion.div>
-          <motion.p
+          <div
+            id="dt-additional-info-content"
+            className="w-full flex justify-center"
+          >
+            <div className="w-full md:w-1/2">
+              <table className="w-full text-gray-800 rounded-lg border dark:text-gray-200">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {product.additionalInformation?.brand && (
+                    <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                      <td className="py-3 px-4 font-medium">
+                        {translations.single.brand}
+                      </td>
+                      <td className="py-3 px-4">
+                        {renderValue(
+                          product.additionalInformation.brand,
+                          product.additionalInformation.translatedBrand
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                  {product.additionalInformation?.color && (
+                    <tr className="hover:bg-gray-100 dark:hover:bg-gray-600">
+                      <td className="py-3 px-4 font-medium">
+                        {translations.single.color}
+                      </td>
+                      <td className="py-3 px-4 flex items-center">
+                        {Array.isArray(product.additionalInformation.color) ? (
+                          <div className="flex flex-wrap gap-2">
+                            {product.additionalInformation.color.map(
+                              (color: any, index: any) => (
+                                <div key={index} className="flex items-center">
+                                  <div
+                                    className="w-5 h-5 rounded-full mr-1 border border-gray-300 dark:border-gray-600"
+                                    style={{ backgroundColor: color }}
+                                  />
+                                  {index <
+                                  product.additionalInformation.color.length - 1
+                                    ? `${color}, `
+                                    : color}
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center">
+                            <div
+                              className="w-5 h-5 rounded-full mr-2 border border-gray-300 dark:border-gray-600"
+                              style={{
+                                backgroundColor:
+                                  product.additionalInformation.color,
+                              }}
+                            />
+                            {product.additionalInformation.color}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                  {product.additionalInformation?.material && (
+                    <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                      <td className="py-3 px-4 font-medium">
+                        {translations.single.material}
+                      </td>
+                      <td className="py-3 px-4">
+                        {renderValue(
+                          product.additionalInformation.material,
+                          product.additionalInformation.translatedMaterial
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* <motion.p
             className="text-gray-700 dark:text-gray-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             {renderValue(product.description, product.translatedDescription)}
-          </motion.p>
-        </div>
+          </motion.p> */}
 
-        {/* Pricing and Payment Methods */}
-        <div className="lg:w-1/3 w-full space-y-4">
-          {/* Pricing Information Card */}
-          <motion.div
-            className="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div>
-              {/* Original Price and Discount */}
-              <div className="flex justify-between items-center">
-                {product?.discount > 0 && (
-                  <>
-                    <p className="line-through text-gray-500 dark:text-gray-400">
-                      {product.price}
-                    </p>
-                    <p className="text-red-600 dark:text-red-400 text-sm">
-                      SAVE {Math.round(product.price - product.discount)} SAR
-                    </p>
-                  </>
-                )}
-              </div>
+          <div className=" w-full space-y-4">
+            {/* Pricing Information Card */}
 
-              {/* Final Price and Discount Percentage */}
-              <div className="flex justify-between items-center">
-                {product?.discount > 0 ? (
-                  <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                    {product.discount}
+            {/* Modal */}
+            {isModalOpen && (
+              <motion.div
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-80 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.8 }}
+                >
+                  <Link href="/cart" className="flex items-center space-x-4">
+                    <BsCartCheck
+                      size={40}
+                      className="text-green-500 dark:text-green-400"
+                    />
+
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                      {translations.single.add_to_cart}
+                    </p>
+                  </Link>
+
+                  <p className="mt-4 text-gray-600 dark:text-gray-300">
+                    {translations.single.productAddedToCart}
                   </p>
-                ) : (
-                  <>
-                    <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                      {product.price}
-                    </p>
-                  </>
-                )}
-                {product?.discount > 0 && (
-                  <div className="flex items-center text-red-600 dark:text-red-400">
-                    <p className="text-lg font-bold">
-                      -{Math.round(product.discountPercentage)}%
-                    </p>
-                    <svg
-                      className="ml-2"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="mt-6 flex justify-between">
+                    <button
+                      className="text-xs lg:text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                      onClick={handleCloseModal}
                     >
-                      <path
-                        d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z"
-                        fill="#FF233F"
-                      />
-                    </svg>
+                      {translations.single.continueShopping}
+                    </button>
+                    <Link href="/cart">
+                      <button className="text-xs lg:text-lg  bg-[var(--color-primary)]   text-white dark:text-gray-200 px-4 py-2 rounded-xl   dark:hover:bg-[var(--color-primary)] transition">
+                        {translations.single.completePurchase}
+                      </button>
+                    </Link>
                   </div>
-                )}
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Payment Methods Card */}
+            <motion.div
+              className="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg flex items-center space-x-4"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="text-sm dark:text-gray-300">
+                <span>Pay with Madfu </span>
+                <span className="font-bold text-teal-500 underline dark:text-teal-400">
+                  on 6 installments
+                </span>
+                <span> with value of installment </span>
+                <span className="font-bold text-teal-500 underline dark:text-teal-400">
+                  66.67 SAR
+                </span>
+                <span className="text-xs dark:text-gray-400">
+                  (Warning: Maximum value is 2000 SAR)
+                </span>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {translations.single.taxIncluded}
-              </p>
-            </div>
-            {/* Purchase Option */}
-            <div className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="purchase-option"
-                value="purchase-now"
-                checked={purchaseOption === "purchase-now"}
-                onChange={() => setPurchaseOption("purchase-now")}
-                className="form-radio h-4 w-4 text-blue-600 dark:text-blue-400 transition duration-150 ease-in-out"
-              />
+              <div>
+                <Image
+                  src="/madufu.png"
+                  alt="Madfu Logo"
+                  width={200}
+                  height={300}
+                  className="rounded-lg"
+                />
+              </div>
+            </motion.div>
 
-              <p className="text-gray-900 dark:text-gray-100">
-                {translations.single.purchase_now}
-              </p>
-            </div>
+            <motion.div
+              className="p-6 flex-row bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg relative flex items-center space-x-4 cursor-pointer font-sans text-left text-sm text-black dark:text-white"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div>
+                <p>
+                  Or split in 4 payments of{" "}
+                  <span className="font-semibold">SAR 100.00</span> - No late
+                  fees, Sharia compliant!{" "}
+                  <span className="text-blue-500 underline cursor-pointer">
+                    {translations.single.learn_more}
+                  </span>
+                </p>
+              </div>
+              <div className="w-1/4">
+                <Image
+                  className="absolute top-6 right-4 h-7"
+                  src="data:image/svg+xml,%3csvg width='85' height='28' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3crect width='85' height='28' rx='8' fill='url(%23logo-grad-en__a)'/%3e%3cpath d='M25.599 10.129c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.731 1.884.272.22.516.429.755.636.392.339.799.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.938-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.491.104a.434.434 0 0 1-.302 0l-.078-.03-.063-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.728.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.11 5.11 0 0 0 3.438-1.189c.02-.016.25-.214.315-.266l.677-.521v1.962h2.825v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.604 1.075-1.588 1.682-2.721 1.682h-.144a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.194l-.345.618Zm30.381-6.447c-1.232-.46-2.424-.684-3.923-.368-1.174.246-2.115.715-2.732 1.884.272.22.516.429.755.636.394.339.8.688 1.344 1.093.431-.611 1.186-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.077 1.077 0 0 1-.078-.03l-.065-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.169 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.313-.266l.678-.521v1.962h2.824v-6.86c0-1.554-.85-2.755-2.318-3.303Zm-.873 6.447c-.602 1.075-1.589 1.682-2.72 1.682h-.144a3.35 3.35 0 0 1-.706-.09c-.848-.221-1.33-.899-1.293-1.81l.017-.4h5.193l-.347.618Zm20.172-6.447c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.73 1.884.27.22.515.429.754.636.392.339.8.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.114 1.114 0 0 1-.078-.03l-.064-.024a9.209 9.209 0 0 0-3.163-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.01.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.314-.266l.677-.521v1.962h2.824v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.603 1.075-1.588 1.682-2.72 1.682h-.145a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.192l-.343.618Zm-8.369-6.08c-.914.041-1.566.439-1.997 1.22-.047.086-.352.68-.352.68l-.677-.155v-1.606h-2.732v9.678h2.739v-3.78c0-.322-.022-.655 0-.988.04-.582.283-1.133.687-1.557a2.529 2.529 0 0 1 1.528-.764c.383-.054 1.344-.058 1.45-.06V10.49a10.688 10.688 0 0 0-.646.006Zm-49.737 7.556a5.728 5.728 0 0 1-.72-.057c-.718-.117-1.177-.469-1.372-1.047a2.414 2.414 0 0 1-.144-.754v-4.322l.424-.018c.907-.045 1.869-.11 2.782-.362l-.582-1.974-2.624.388V7h-3.098v2.906H8v1.992h2.093s0 4.11.017 5.158c.002.64.188 1.268.537 1.807.416.63 1.022 1.024 1.907 1.242.953.233 1.92.221 2.94.21h.245v-2.251h-.118l-.194-.012Zm23.721-3.192c0-.977.661-1.748 1.56-1.831 1.084-.102 1.846.437 2.04 1.439.029.176.04.354.036.533V20.3h2.731v-6.546a5.156 5.156 0 0 0-.078-.94c-.227-1.201-.874-1.933-1.965-2.242-1.181-.338-2.314-.087-3.313.681v-.66h-2.724v9.707h2.724v-3.43l.013-.053ZM6.538 16.317H4.562c-.377 0-.75-.002-1.125 0-.45 0-.838-.179-1.062-.542-.125-.21-.177-.448-.177-.693v-1.685h4.338v-1.99H2.198v-1.994h-.263c-.49.01-1.042-.049-1.47.097-.982.33-1.535 1.178-1.537 2.184-.004 1.323-.005 2.645 0 3.968.003.834.295 1.583.862 2.162.517.534 1.157.763 1.88.802l.304.016h3.564v-1.996Zm10.725 1.996v-2.728H12.63v2.728H10.52v-2.728H8.414v2.728H6.306v-6.44c0-.078-.002-.155 0-.233a1.967 1.967 0 0 1 .37-1.068c.434-.573 1.051-.84 1.735-.951.703-.114 1.41-.139 2.115-.128.843.012 1.693.073 2.528.21v2.234h-2.108v-1.016l-.072-.013c-.391-.048-.783-.099-1.176-.137-.299-.027-.6-.017-.899.03-.485.07-.79.352-.8.842-.01.521 0 1.043 0 1.565v.177h2.095v-1.737h2.108v5.575h-2.107Z' fill='%23fff'/%3e%3cdefs%3e%3clinearGradient id='logo-grad-en__a' x1='0' y1='0' x2='85' y2='28' gradientUnits='userSpaceOnUse'%3e%3cstop stop-color='%23BE90F4'/%3e%3cstop offset='1' stop-color='%237881FF'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e"
+                  alt="Tamara Payment"
+                  width={40}
+                  height={40}
+                />
+              </div>
+            </motion.div>
 
-            {/* Add to Cart Button */}
+            <motion.div
+              className="p-6 flex-row bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg relative flex items-center space-x-4 cursor-pointer font-sans text-left text-sm text-black dark:text-white"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div>
+                <p>
+                  {translations.single.tamara_payment}
+                  <span className="text-blue-500 underline cursor-pointer">
+                    {translations.single.learn_more}
+                  </span>
+                </p>
+              </div>
+              <div className="w-1/4">
+                <Image
+                  className="absolute top-6 right-4 h-7"
+                  src="data:image/svg+xml,%3csvg width='85' height='28' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3crect width='85' height='28' rx='8' fill='url(%23logo-grad-en__a)'/%3e%3cpath d='M25.599 10.129c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.731 1.884.272.22.516.429.755.636.392.339.799.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.938-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.491.104a.434.434 0 0 1-.302 0l-.078-.03-.063-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.728.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.11 5.11 0 0 0 3.438-1.189c.02-.016.25-.214.315-.266l.677-.521v1.962h2.825v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.604 1.075-1.588 1.682-2.721 1.682h-.144a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.194l-.345.618Zm30.381-6.447c-1.232-.46-2.424-.684-3.923-.368-1.174.246-2.115.715-2.732 1.884.272.22.516.429.755.636.394.339.8.688 1.344 1.093.431-.611 1.186-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.077 1.077 0 0 1-.078-.03l-.065-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.169 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.313-.266l.678-.521v1.962h2.824v-6.86c0-1.554-.85-2.755-2.318-3.303Zm-.873 6.447c-.602 1.075-1.589 1.682-2.72 1.682h-.144a3.35 3.35 0 0 1-.706-.09c-.848-.221-1.33-.899-1.293-1.81l.017-.4h5.193l-.347.618Zm20.172-6.447c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.73 1.884.27.22.515.429.754.636.392.339.8.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.114 1.114 0 0 1-.078-.03l-.064-.024a9.209 9.209 0 0 0-3.163-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.01.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.314-.266l.677-.521v1.962h2.824v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.603 1.075-1.588 1.682-2.72 1.682h-.145a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.192l-.343.618Zm-8.369-6.08c-.914.041-1.566.439-1.997 1.22-.047.086-.352.68-.352.68l-.677-.155v-1.606h-2.732v9.678h2.739v-3.78c0-.322-.022-.655 0-.988.04-.582.283-1.133.687-1.557a2.529 2.529 0 0 1 1.528-.764c.383-.054 1.344-.058 1.45-.06V10.49a10.688 10.688 0 0 0-.646.006Zm-49.737 7.556a5.728 5.728 0 0 1-.72-.057c-.718-.117-1.177-.469-1.372-1.047a2.414 2.414 0 0 1-.144-.754v-4.322l.424-.018c.907-.045 1.869-.11 2.782-.362l-.582-1.974-2.624.388V7h-3.098v2.906H8v1.992h2.093s0 4.11.017 5.158c.002.64.188 1.268.537 1.807.416.63 1.022 1.024 1.907 1.242.953.233 1.92.221 2.94.21h.245v-2.251h-.118l-.194-.012Zm23.721-3.192c0-.977.661-1.748 1.56-1.831 1.084-.102 1.846.437 2.04 1.439.029.176.04.354.036.533V20.3h2.731v-6.546a5.156 5.156 0 0 0-.078-.94c-.227-1.201-.874-1.933-1.965-2.242-1.181-.338-2.314-.087-3.313.681v-.66h-2.724v9.707h2.724v-3.43l.013-.053ZM6.538 16.317H4.562c-.377 0-.75-.002-1.125 0-.45 0-.838-.179-1.062-.542-.125-.21-.177-.448-.177-.693v-1.685h4.338v-1.99H2.198v-1.994h-.263c-.49.01-1.042-.049-1.47.097-.982.33-1.535 1.178-1.537 2.184-.004 1.323-.005 2.645 0 3.968.003.834.295 1.583.862 2.162.517.534 1.157.763 1.88.802l.304.016h3.564v-1.996Zm10.725 1.996v-2.728H12.63v2.728H10.52v-2.728H8.414v2.728H6.306v-6.44c0-.078-.002-.155 0-.233a1.967 1.967 0 0 1 .37-1.068c.434-.573 1.051-.84 1.735-.951.703-.114 1.41-.139 2.115-.128.843.012 1.693.073 2.528.21v2.234h-2.108v-1.016l-.072-.013c-.391-.048-.783-.099-1.176-.137-.299-.027-.6-.017-.899.03-.485.07-.79.352-.8.842-.01.521 0 1.043 0 1.565v.177h2.095v-1.737h2.108v5.575h-2.107Z' fill='%23fff'/%3e%3cdefs%3e%3clinearGradient id='logo-grad-en__a' x1='0' y1='0' x2='85' y2='28' gradientUnits='userSpaceOnUse'%3e%3cstop stop-color='%23BE90F4'/%3e%3cstop offset='1' stop-color='%237881FF'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e"
+                  alt="Tamara Payment"
+                  width={40}
+                  height={40}
+                />
+              </div>
+            </motion.div>
+
             {product.stockQuantity > 0 ? (
               <motion.button
                 onClick={() => {
@@ -639,199 +1015,26 @@ export default function SingleProductPage({
                   : `${translations.single.add_to_cart}`}
               </motion.button>
             ) : (
-              <div className="font-bold text-red-500">
-                {translations.single.outOfStock}
+              <div className="font-bold flex justify-center items-center gap-3 text-2xl text-red-500">
+                <div>{translations.single.outOfStock}</div>
+                <MdRemoveShoppingCart className="text-2xl text-red-500" />
               </div>
             )}
-          </motion.div>
-          {/* Modal */}
-          {isModalOpen && (
-            <motion.div
-              className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-80 z-50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.8 }}
-              >
-                <Link href="/cart" className="flex items-center space-x-4">
-                  <BsCartCheck
-                    size={40}
-                    className="text-green-500 dark:text-green-400"
-                  />
-
-                  <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    {translations.single.add_to_cart}
-                  </p>
-                </Link>
-
-                <p className="mt-4 text-gray-600 dark:text-gray-300">
-                  {translations.single.productAddedToCart}
-                </p>
-                <div className="mt-6 flex justify-between">
-                  <button
-                    className="text-xs lg:text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-                    onClick={handleCloseModal}
-                  >
-                    {translations.single.continueShopping}
-                  </button>
-                  <Link href="/cart">
-                    <button className="text-xs lg:text-lg  bg-[var(--color-primary)]   text-white dark:text-gray-200 px-4 py-2 rounded-xl   dark:hover:bg-[var(--color-primary)] transition">
-                      {translations.single.completePurchase}
-                    </button>
-                  </Link>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* Payment Methods Card */}
-          <motion.div
-            className="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg flex items-center space-x-4"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="text-sm dark:text-gray-300">
-              <span>Pay with Madfu </span>
-              <span className="font-bold text-teal-500 underline dark:text-teal-400">
-                on 6 installments
-              </span>
-              <span> with value of installment </span>
-              <span className="font-bold text-teal-500 underline dark:text-teal-400">
-                66.67 SAR
-              </span>
-              <span className="text-xs dark:text-gray-400">
-                (Warning: Maximum value is 2000 SAR)
-              </span>
-            </div>
-            <div>
-              <Image
-                src="/madufu.png"
-                alt="Madfu Logo"
-                width={200}
-                height={300}
-                className="rounded-lg"
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="p-6 flex-row bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg relative flex items-center space-x-4 cursor-pointer font-sans text-left text-sm text-black dark:text-white"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div>
-              <p>
-                Or split in 4 payments of{" "}
-                <span className="font-semibold">SAR 100.00</span> - No late
-                fees, Sharia compliant!{" "}
-                <span className="text-blue-500 underline cursor-pointer">
-                  {translations.single.learn_more}
-                </span>
-              </p>
-            </div>
-            <div className="w-1/4">
-              <Image
-                className="absolute top-6 right-4 h-7"
-                src="data:image/svg+xml,%3csvg width='85' height='28' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3crect width='85' height='28' rx='8' fill='url(%23logo-grad-en__a)'/%3e%3cpath d='M25.599 10.129c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.731 1.884.272.22.516.429.755.636.392.339.799.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.938-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.491.104a.434.434 0 0 1-.302 0l-.078-.03-.063-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.728.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.11 5.11 0 0 0 3.438-1.189c.02-.016.25-.214.315-.266l.677-.521v1.962h2.825v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.604 1.075-1.588 1.682-2.721 1.682h-.144a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.194l-.345.618Zm30.381-6.447c-1.232-.46-2.424-.684-3.923-.368-1.174.246-2.115.715-2.732 1.884.272.22.516.429.755.636.394.339.8.688 1.344 1.093.431-.611 1.186-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.077 1.077 0 0 1-.078-.03l-.065-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.169 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.313-.266l.678-.521v1.962h2.824v-6.86c0-1.554-.85-2.755-2.318-3.303Zm-.873 6.447c-.602 1.075-1.589 1.682-2.72 1.682h-.144a3.35 3.35 0 0 1-.706-.09c-.848-.221-1.33-.899-1.293-1.81l.017-.4h5.193l-.347.618Zm20.172-6.447c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.73 1.884.27.22.515.429.754.636.392.339.8.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.114 1.114 0 0 1-.078-.03l-.064-.024a9.209 9.209 0 0 0-3.163-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.01.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.314-.266l.677-.521v1.962h2.824v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.603 1.075-1.588 1.682-2.72 1.682h-.145a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.192l-.343.618Zm-8.369-6.08c-.914.041-1.566.439-1.997 1.22-.047.086-.352.68-.352.68l-.677-.155v-1.606h-2.732v9.678h2.739v-3.78c0-.322-.022-.655 0-.988.04-.582.283-1.133.687-1.557a2.529 2.529 0 0 1 1.528-.764c.383-.054 1.344-.058 1.45-.06V10.49a10.688 10.688 0 0 0-.646.006Zm-49.737 7.556a5.728 5.728 0 0 1-.72-.057c-.718-.117-1.177-.469-1.372-1.047a2.414 2.414 0 0 1-.144-.754v-4.322l.424-.018c.907-.045 1.869-.11 2.782-.362l-.582-1.974-2.624.388V7h-3.098v2.906H8v1.992h2.093s0 4.11.017 5.158c.002.64.188 1.268.537 1.807.416.63 1.022 1.024 1.907 1.242.953.233 1.92.221 2.94.21h.245v-2.251h-.118l-.194-.012Zm23.721-3.192c0-.977.661-1.748 1.56-1.831 1.084-.102 1.846.437 2.04 1.439.029.176.04.354.036.533V20.3h2.731v-6.546a5.156 5.156 0 0 0-.078-.94c-.227-1.201-.874-1.933-1.965-2.242-1.181-.338-2.314-.087-3.313.681v-.66h-2.724v9.707h2.724v-3.43l.013-.053ZM6.538 16.317H4.562c-.377 0-.75-.002-1.125 0-.45 0-.838-.179-1.062-.542-.125-.21-.177-.448-.177-.693v-1.685h4.338v-1.99H2.198v-1.994h-.263c-.49.01-1.042-.049-1.47.097-.982.33-1.535 1.178-1.537 2.184-.004 1.323-.005 2.645 0 3.968.003.834.295 1.583.862 2.162.517.534 1.157.763 1.88.802l.304.016h3.564v-1.996Zm10.725 1.996v-2.728H12.63v2.728H10.52v-2.728H8.414v2.728H6.306v-6.44c0-.078-.002-.155 0-.233a1.967 1.967 0 0 1 .37-1.068c.434-.573 1.051-.84 1.735-.951.703-.114 1.41-.139 2.115-.128.843.012 1.693.073 2.528.21v2.234h-2.108v-1.016l-.072-.013c-.391-.048-.783-.099-1.176-.137-.299-.027-.6-.017-.899.03-.485.07-.79.352-.8.842-.01.521 0 1.043 0 1.565v.177h2.095v-1.737h2.108v5.575h-2.107Z' fill='%23fff'/%3e%3cdefs%3e%3clinearGradient id='logo-grad-en__a' x1='0' y1='0' x2='85' y2='28' gradientUnits='userSpaceOnUse'%3e%3cstop stop-color='%23BE90F4'/%3e%3cstop offset='1' stop-color='%237881FF'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e"
-                alt="Tamara Payment"
-                width={40}
-                height={40}
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="p-6 flex-row bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg relative flex items-center space-x-4 cursor-pointer font-sans text-left text-sm text-black dark:text-white"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div>
-              <p>
-                {translations.single.tamara_payment}
-                <span className="text-blue-500 underline cursor-pointer">
-                  {translations.single.learn_more}
-                </span>
-              </p>
-            </div>
-            <div className="w-1/4">
-              <Image
-                className="absolute top-6 right-4 h-7"
-                src="data:image/svg+xml,%3csvg width='85' height='28' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3crect width='85' height='28' rx='8' fill='url(%23logo-grad-en__a)'/%3e%3cpath d='M25.599 10.129c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.731 1.884.272.22.516.429.755.636.392.339.799.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.938-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.491.104a.434.434 0 0 1-.302 0l-.078-.03-.063-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.728.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.11 5.11 0 0 0 3.438-1.189c.02-.016.25-.214.315-.266l.677-.521v1.962h2.825v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.604 1.075-1.588 1.682-2.721 1.682h-.144a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.194l-.345.618Zm30.381-6.447c-1.232-.46-2.424-.684-3.923-.368-1.174.246-2.115.715-2.732 1.884.272.22.516.429.755.636.394.339.8.688 1.344 1.093.431-.611 1.186-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.077 1.077 0 0 1-.078-.03l-.065-.024a9.209 9.209 0 0 0-3.162-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.009.753.169 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.313-.266l.678-.521v1.962h2.824v-6.86c0-1.554-.85-2.755-2.318-3.303Zm-.873 6.447c-.602 1.075-1.589 1.682-2.72 1.682h-.144a3.35 3.35 0 0 1-.706-.09c-.848-.221-1.33-.899-1.293-1.81l.017-.4h5.193l-.347.618Zm20.172-6.447c-1.232-.46-2.424-.684-3.925-.368-1.171.246-2.113.715-2.73 1.884.27.22.515.429.754.636.392.339.8.688 1.344 1.093.431-.611 1.184-1.3 1.992-1.316.94-.018 1.836.495 1.984 1.246.06.312.1 1.6.1 1.6l-.49.104a.434.434 0 0 1-.301 0 1.114 1.114 0 0 1-.078-.03l-.064-.024a9.209 9.209 0 0 0-3.163-.612c-.364 0-.727.028-1.087.084-1.104.173-2.417.794-2.394 2.773.01.753.167 1.318.5 1.777a3.142 3.142 0 0 0 2.62 1.33 5.113 5.113 0 0 0 3.44-1.189c.019-.016.249-.214.314-.266l.677-.521v1.962h2.824v-6.86c.002-1.554-.85-2.755-2.317-3.303Zm-.873 6.447c-.603 1.075-1.588 1.682-2.72 1.682h-.145a3.363 3.363 0 0 1-.707-.09c-.847-.221-1.328-.899-1.294-1.81l.017-.4h5.192l-.343.618Zm-8.369-6.08c-.914.041-1.566.439-1.997 1.22-.047.086-.352.68-.352.68l-.677-.155v-1.606h-2.732v9.678h2.739v-3.78c0-.322-.022-.655 0-.988.04-.582.283-1.133.687-1.557a2.529 2.529 0 0 1 1.528-.764c.383-.054 1.344-.058 1.45-.06V10.49a10.688 10.688 0 0 0-.646.006Zm-49.737 7.556a5.728 5.728 0 0 1-.72-.057c-.718-.117-1.177-.469-1.372-1.047a2.414 2.414 0 0 1-.144-.754v-4.322l.424-.018c.907-.045 1.869-.11 2.782-.362l-.582-1.974-2.624.388V7h-3.098v2.906H8v1.992h2.093s0 4.11.017 5.158c.002.64.188 1.268.537 1.807.416.63 1.022 1.024 1.907 1.242.953.233 1.92.221 2.94.21h.245v-2.251h-.118l-.194-.012Zm23.721-3.192c0-.977.661-1.748 1.56-1.831 1.084-.102 1.846.437 2.04 1.439.029.176.04.354.036.533V20.3h2.731v-6.546a5.156 5.156 0 0 0-.078-.94c-.227-1.201-.874-1.933-1.965-2.242-1.181-.338-2.314-.087-3.313.681v-.66h-2.724v9.707h2.724v-3.43l.013-.053ZM6.538 16.317H4.562c-.377 0-.75-.002-1.125 0-.45 0-.838-.179-1.062-.542-.125-.21-.177-.448-.177-.693v-1.685h4.338v-1.99H2.198v-1.994h-.263c-.49.01-1.042-.049-1.47.097-.982.33-1.535 1.178-1.537 2.184-.004 1.323-.005 2.645 0 3.968.003.834.295 1.583.862 2.162.517.534 1.157.763 1.88.802l.304.016h3.564v-1.996Zm10.725 1.996v-2.728H12.63v2.728H10.52v-2.728H8.414v2.728H6.306v-6.44c0-.078-.002-.155 0-.233a1.967 1.967 0 0 1 .37-1.068c.434-.573 1.051-.84 1.735-.951.703-.114 1.41-.139 2.115-.128.843.012 1.693.073 2.528.21v2.234h-2.108v-1.016l-.072-.013c-.391-.048-.783-.099-1.176-.137-.299-.027-.6-.017-.899.03-.485.07-.79.352-.8.842-.01.521 0 1.043 0 1.565v.177h2.095v-1.737h2.108v5.575h-2.107Z' fill='%23fff'/%3e%3cdefs%3e%3clinearGradient id='logo-grad-en__a' x1='0' y1='0' x2='85' y2='28' gradientUnits='userSpaceOnUse'%3e%3cstop stop-color='%23BE90F4'/%3e%3cstop offset='1' stop-color='%237881FF'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e"
-                alt="Tamara Payment"
-                width={40}
-                height={40}
-              />
-            </div>
-          </motion.div>
+          </div>
         </div>
+
+        {/* Pricing and Payment Methods */}
       </section>
 
       {/* Second Section */}
-      <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
-        <div className="w-full bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg">
-          <div className="flex justify-around bg-white dark:bg-gray-900">
-            <p
-              id="dt-description"
-              className={`cursor-pointer text-sm lg:text-lg p-3 ${
-                activeTab === "description"
-                  ? "font-bold text-[var(--color-primary)]"
-                  : "text-gray-700 dark:text-gray-300"
-              } ${
-                activeTab === "description" ? "text-[var(--color-primary)]" : ""
-              }`}
-              onClick={() => setActiveTab("description")}
-            >
-              {translations.single.description}
-            </p>
-            <p
-              id="dt-additional-info"
-              className={`cursor-pointer text-sm lg:text-lg p-3 ${
-                activeTab === "additional-info"
-                  ? "font-bold text-[var(--color-primary)]"
-                  : "text-gray-700 dark:text-gray-300"
-              } ${
-                activeTab === "additional-info"
-                  ? "text-[var(--color-primary)]"
-                  : ""
-              }`}
-              onClick={() => setActiveTab("additional-info")}
-            >
-              {translations.single.additional_information}
-            </p>
-            <p
-              id="dt-reviews"
-              className={`cursor-pointer text-sm lg:text-lg p-3 ${
-                activeTab === "reviews"
-                  ? "font-bold text-[var(--color-primary)]"
-                  : "text-gray-700 dark:text-gray-300"
-              } ${
-                activeTab === "reviews" ? "text-[var(--color-primary)]" : ""
-              }`}
-              onClick={() => setActiveTab("reviews")}
-            >
-              {translations.single.ratings}
-            </p>
-          </div>
-
-          <div className="p-6">
-            {activeTab === "description" && (
+      <section className="bg-gray-100 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
+            <div className="w-full lg:w-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">
+                {translations.single.description}
+              </h3>
               <div id="dt-description-content" className="space-y-2">
-                {/* <p className="text-gray-800 dark:text-gray-200">
-                  A Turkish coffee maker gives you the perfect cup of coffee
-                  filled with flavors and aromas that awaken your senses and
-                  inspire your day.
-                </p> */}
                 <p className="text-gray-800 dark:text-gray-200">
                   <strong>
                     {renderValue(
@@ -840,127 +1043,131 @@ export default function SingleProductPage({
                     )}
                   </strong>
                 </p>
-                {/* <p className="text-gray-800 dark:text-gray-200">
-                  <strong>Double cup option:</strong> Choose between one or two
-                  cups at a time for complete comfort.
-                </p>
-                <p className="text-gray-800 dark:text-gray-200">
-                  <strong>Top fill:</strong> Easily load coffee from the top,
-                  ensuring precise and hassle-free brewing.
-                </p>
-                <p className="text-gray-800 dark:text-gray-200">
-                  <strong>0.8 liter capacity:</strong> Large capacity of 0.8
-                  liters to prepare your coffee without the need for constant
-                  refilling.
-                </p>
-                <p className="text-gray-800 dark:text-gray-200">
-                  <strong>Automatic cleaning button:</strong> Effortlessly clean
-                  up coffee residue with the convenient auto clean button
-                  feature.
-                </p>
-                <p className="text-gray-800 dark:text-gray-200">
-                  <strong>3-year warranty:</strong> Enjoy peace of mind with a
-                  generous 3-year warranty, a testament to durability and
-                  quality.
-                </p> */}
               </div>
-            )}
+            </div>
 
-            {activeTab === "additional-info" && (
-              <div id="dt-additional-info-content" className="space-y-2">
-                <ul className="text-gray-800 dark:text-gray-200">
-                  <li>SKU: {product.additionalInformation?.SKU}</li>
-                  <li>
-                    {translations.single.barcode}:{" "}
-                    {product.additionalInformation?.barcode}
-                  </li>
-                  <li>
-                    {translations.single.brand}:{" "}
-                    {renderValue(
-                      product.additionalInformation?.brand,
-                      product.additionalInformation?.translatedBrand
+            <div className="w-full lg:w-1/2 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">
+                {translations.single.additional_information}
+              </h3>
+              <div id="dt-additional-info-content">
+                <table className="w-full text-gray-800 dark:text-gray-200">
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {product.additionalInformation?.SKU && (
+                      <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">SKU</td>
+                        <td className="py-3 px-4">
+                          {product.additionalInformation.SKU}
+                        </td>
+                      </tr>
                     )}
-                  </li>
-                  <li>
-                    {translations.single.color}:{" "}
-                    <div
-                      className="w-5 h-5"
-                      style={{
-                        backgroundColor: product.additionalInformation?.color,
-                      }}
-                    >
-                      {" "}
-                    </div>
-                  </li>
-                  <li>
-                    {translations.single.material}:{" "}
-                    {renderValue(
-                      product.additionalInformation?.material,
-                      product.additionalInformation?.translatedMaterial
+                    {product.additionalInformation?.barcode && (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.barcode}
+                        </td>
+                        <td className="py-3 px-4">
+                          {product.additionalInformation.barcode}
+                        </td>
+                      </tr>
                     )}
-                  </li>
-                  <li>
-                    {translations.single.size}:{" "}
-                    {product.additionalInformation?.size?.join(", ")}
-                  </li>
-
-                  <li>
-                    {translations.single.warranty}:{" "}
-                    {renderValue(
-                      product.additionalInformation?.warranty,
-                      product.additionalInformation?.translatedWarranty
-                    )}
-                  </li>
-                </ul>
-              </div>
-            )}
-
-            {activeTab === "reviews" && (
-              <div id="dt-reviews-content" className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <p className="text-gray-800 dark:text-gray-200">
-                    {translations.single.ratings}
-                  </p>
-                  <p className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                    {rating}
-                  </p>
-                </div>
-                <div>
-                  {/* Render the star rating */}
-                  <div className="flex items-center space-x-2">
-                    <motion.div
-                      className="text-xl flex flex-row text-yellow-500 dark:text-yellow-300"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2, duration: 0.5 }}
-                    >
-                      {[...Array(5)].map((_, index) => (
-                        <React.Fragment key={index}>
-                          {index < (rating || 0) ? (
-                            <AiFillStar
-                              key={index}
-                              className="w-6 h-6 text-yellow-500"
-                            />
-                          ) : (
-                            <AiOutlineStar
-                              key={index}
-                              className="w-6 h-6 text-gray-400"
-                            />
+                    {product.additionalInformation?.brand && (
+                      <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.brand}
+                        </td>
+                        <td className="py-3 px-4">
+                          {renderValue(
+                            product.additionalInformation.brand,
+                            product.additionalInformation.translatedBrand
                           )}
-                        </React.Fragment>
-                      ))}
-                    </motion.div>
-                  </div>
-                  {/* Render the horizontal line */}
-                  <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
-                  {/* Render the number of ratings (if needed) */}
-                  <p className="text-gray-800 dark:text-gray-200">
-                    {product.ratings?.numberOfRatings || 0}{" "}
-                    {translations.single.customersRateThisProduct}
-                  </p>
-                </div>
+                        </td>
+                      </tr>
+                    )}
+                    {product.additionalInformation?.color && (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.color}
+                        </td>
+                        <td className="py-3 px-4 flex items-center">
+                          {Array.isArray(
+                            product.additionalInformation.color
+                          ) ? (
+                            <div className="flex flex-wrap gap-2">
+                              {product.additionalInformation.color.map(
+                                (color: any, index: any) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center"
+                                  >
+                                    <div
+                                      className="w-5 h-5 rounded-full mr-1 border border-gray-300 dark:border-gray-600"
+                                      style={{ backgroundColor: color }}
+                                    />
+                                    {index <
+                                    product.additionalInformation.color.length -
+                                      1
+                                      ? `${color}, `
+                                      : color}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          ) : (
+                            <div className="flex items-center">
+                              <div
+                                className="w-5 h-5 rounded-full mr-2 border border-gray-300 dark:border-gray-600"
+                                style={{
+                                  backgroundColor:
+                                    product.additionalInformation.color,
+                                }}
+                              />
+                              {product.additionalInformation.color}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {product.additionalInformation?.material && (
+                      <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.material}
+                        </td>
+                        <td className="py-3 px-4">
+                          {renderValue(
+                            product.additionalInformation.material,
+                            product.additionalInformation.translatedMaterial
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {product.additionalInformation?.size?.length > 0 && (
+                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.size}
+                        </td>
+                        <td className="py-3 px-4">
+                          {product.additionalInformation.size.join(", ")}
+                        </td>
+                      </tr>
+                    )}
+                    {product.additionalInformation?.warranty && (
+                      <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <td className="py-3 px-4 font-medium">
+                          {translations.single.warranty}
+                        </td>
+                        <td className="py-3 px-4">
+                          {renderValue(
+                            product.additionalInformation.warranty,
+                            product.additionalInformation.translatedWarranty
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </section>

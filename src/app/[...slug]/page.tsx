@@ -293,8 +293,18 @@ export default function ProductsAccordion({
 
       // Check if the error message contains "jwt malformed"
       if (error == "jwt malformed") {
-        errorMessage =
-          "Authentication error: Please log in to save favorite products.";
+        errorMessage = (
+          <span>
+            You Are Not Logged: Please{" "}
+            <Link
+              href="/login"
+              className="text-primary text-md hover:text-secondary underline font-semibold"
+            >
+              login
+            </Link>{" "}
+            to save favorite products.
+          </span>
+        ) as any;
       } else {
         errorMessage = "Failed,No internet connection.";
       }
@@ -336,9 +346,28 @@ export default function ProductsAccordion({
           setIsFavorited(true);
         })
         .catch((error: any) => {
+          let errorMessage = "Failed to save favorite Category.";
+          console.log(JSON.stringify(error, null, 2));
+          if (error == "jwt malformed") {
+            errorMessage = (
+              <span>
+                You Are Not Logged: Please{" "}
+                <Link
+                  href="/login"
+                  className="text-primary text-md hover:text-secondary underline font-semibold"
+                >
+                  login
+                </Link>{" "}
+                to save favorite Category.
+              </span>
+            ) as any;
+          } else {
+            errorMessage = "Failed,Retry Later!.";
+          }
+
           notification.error({
-            message:
-              "Ooops!!, Make sure about your connection or make sure you have logged in",
+            message: "Error",
+            description: errorMessage,
           });
         });
 
@@ -530,7 +559,7 @@ export default function ProductsAccordion({
     );
 
   if (favoritesLoading) return <Loader />;
-  if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
+  // if (favoritesError) return <p>Favorite Error: {favoritesError}</p>;
 
   const handleAddToCart = (product: any) => {
     // Implement the logic to dispatch addToCart action with the product details
@@ -1170,15 +1199,15 @@ export default function ProductsAccordion({
         </div>
 
         {/* Left Column - Filter */}
-        <div className="p-3 w-full lg:w-1/4 max-w-lg mx-auto my-8 hidden lg:block">
-          <div className="bg-white rounded shadow-lg p-5 dark:bg-gray-700">
+        <div className="p-2 w-full lg:w-[280px] max-w-md mx-auto my-4 hidden lg:block">
+          <div className="bg-white rounded-lg shadow-sm p-4 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                 {translations.slug.filter_by}
               </h3>
               <button
                 onClick={() => clearAllFilters()}
-                className="text-sm text-red-600 hover:underline"
+                className="text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
               >
                 {translations.slug.clear_all}
               </button>
@@ -1215,26 +1244,32 @@ export default function ProductsAccordion({
                 category: "material",
               },
             ].map((filter, index) => (
-              <div key={index} className="mb-4">
+              <div key={index} className="mb-3">
                 <button
                   onClick={() => toggleFilter(filter.setter)}
-                  className="flex justify-between items-center w-full text-left"
+                  className="flex justify-between items-center w-full text-left py-1 px-1 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors"
                 >
-                  <span className="text-lg font-medium">{filter.label}</span>
-                  {filter.state ? <BsChevronUp /> : <BsChevronDown />}
+                  <span className="text-base font-medium text-gray-800 dark:text-gray-200">
+                    {filter.label}
+                  </span>
+                  {filter.state ? (
+                    <BsChevronUp className="text-gray-400 dark:text-gray-400 text-sm" />
+                  ) : (
+                    <BsChevronDown className="text-gray-400 dark:text-gray-400 text-sm" />
+                  )}
                 </button>
                 {filter.state && (
-                  <div className="mt-2">
-                    <ul className="space-y-2">
+                  <div className="mt-1 pl-0">
+                    <ul className="space-y-0.5">
                       {filter.options.map((option, idx) => (
                         <li
                           key={idx}
-                          className={`flex items-center justify-center mx-12 gap-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
+                          className={`flex items-center gap-2 p-1.5 rounded cursor-pointer transition-all ${
                             selectedFilters[
                               filter.category as keyof typeof selectedFilters
                             ].includes(option)
-                              ? "text-[var(--color-primary)] bg-slate-300 font-semibold "
-                              : "text-gray-700 dark:text-gray-300"
+                              ? "bg-secondary dark:bg-secondary border-l-4 border-primary font-medium text-white dark:text-primary-200"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                           }`}
                           onClick={() =>
                             handleCheckboxChange(
@@ -1249,45 +1284,45 @@ export default function ProductsAccordion({
                         >
                           {filter.category === "color" ? (
                             <div className="flex gap-1">
-                              {/* Check if the color is an array */}
                               {(Array.isArray(option) ? option : [option]).map(
                                 (color, index) => (
                                   <div
                                     key={index}
-                                    className="w-4 h-4 border border-gray-300 rounded"
+                                    className="w-4 h-4 border border-gray-200 dark:border-gray-600 rounded-full"
                                     style={{ backgroundColor: color }}
                                   ></div>
                                 )
                               )}
                             </div>
                           ) : (
-                            <span>{option}</span>
+                            <span className="truncate text-sm">{option}</span>
                           )}
-                          {/* <span>
-                            {Array.isArray(option) ? option.join(", ") : option}
-                          </span> */}
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-                <hr className="mx-11" />
+                <hr className="my-2 border-gray-100 dark:border-gray-700" />
               </div>
             ))}
 
             {/* Price Filter */}
-            <div className="mb-4">
+            <div className="mb-3">
               <button
                 onClick={() => toggleFilter(setIsPriceOpen)}
-                className="flex justify-between items-center w-full text-left"
+                className="flex justify-between items-center w-full text-left py-1 px-1 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors"
               >
-                <span className="text-lg font-medium">
+                <span className="text-base font-medium text-gray-800 dark:text-gray-200">
                   {translations.slug.price}
                 </span>
-                {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
+                {isPriceOpen ? (
+                  <BsChevronUp className="text-gray-400 dark:text-gray-400 text-sm" />
+                ) : (
+                  <BsChevronDown className="text-gray-400 dark:text-gray-400 text-sm" />
+                )}
               </button>
               {isPriceOpen && (
-                <div className="mt-2">
+                <div className="mt-1 pl-0">
                   <MultiRangeSlider
                     min={Math.min(...filterOptions.prices)}
                     max={Math.max(...filterOptions.prices)}
@@ -1299,21 +1334,21 @@ export default function ProductsAccordion({
                       setMaxValue(e.maxValue);
                     }}
                   />
-                  <div className="flex justify-between mt-2">
-                    <span>Min: {minValue}</span>
-                    <span>Max: {maxValue}</span>
+                  <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span>${minValue}</span>
+                    <span>${maxValue}</span>
                   </div>
                 </div>
               )}
-              <hr className="mx-11" />
+              <hr className="my-2 border-gray-100 dark:border-gray-700" />
             </div>
 
             <button
               onClick={() => {
                 applyFilters();
-                toggleFilterModal(); // Close the modal if needed
+                toggleFilterModal();
               }}
-              className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] rounded"
+              className="mt-2 w-full py-2 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white font-medium rounded-md transition-colors text-sm"
             >
               {translations.slug.show_results}
             </button>
