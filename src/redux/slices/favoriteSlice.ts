@@ -13,10 +13,14 @@ interface FavoriteState {
   favorites: Category[];
   loading: boolean;
   error: string | null;
+  categoryId: string;
+  categoryData: any;
 }
 
 const initialState: FavoriteState = {
   favorites: [],
+  categoryId: "",
+  categoryData: "",
   loading: false,
   error: null,
 };
@@ -41,7 +45,7 @@ export const addFavorite = createAsyncThunk(
     try {
       const token = Cookies.get("token");
       const response = await fetch(
-     "https://alsaifgallery.onrender.com/api/v1/user/saveFavoriteCategories",
+        "https://alsaifgallery.onrender.com/api/v1/user/saveFavoriteCategories",
         {
           method: "POST",
           headers: {
@@ -53,7 +57,7 @@ export const addFavorite = createAsyncThunk(
       );
       const data = await response.json();
       if (data.status) {
-        return { categoryId, categoryData: data.data }; // Send back the added product's details
+        return data.data; // Send back the added product's details
       } else {
         return rejectWithValue(data.message);
       }

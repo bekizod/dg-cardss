@@ -9,6 +9,7 @@ import {
   BsChevronUp,
   BsSortDown,
   BsFilter,
+  BsX,
 } from "react-icons/bs";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -791,23 +792,22 @@ export default function ProductsAccordion({
 
           {/* Filter Modal for Small Screens */}
           {filterModalOpen && (
-            <div className="fixed inset-0 lg:hidden bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
+            <div className="fixed inset-0 overflow-y-auto lg:hidden bg-black bg-opacity-50 flex justify-center items-center z-50 h-auto">
               <div
                 ref={filterModalRef}
-                className="bg-white dark:bg-gray-700 p-6 rounded shadow-lg w-full max-w-lg max-h-full overflow-y-auto scrollbar-hidden"
+                className="bg-white w-full rounded-lg shadow-sm p-6 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 max-h-[80vh] overflow-y-auto relative"
               >
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                     {translations.slug.filter_by}
                   </h3>
                   <button
                     onClick={() => clearAllFilters()}
-                    className="text-sm text-red-600 hover:underline"
+                    className="text-lg text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                   >
                     {translations.slug.clear_all}
                   </button>
                 </div>
-
                 {/* Filter Types */}
                 {[
                   {
@@ -839,28 +839,32 @@ export default function ProductsAccordion({
                     category: "material",
                   },
                 ].map((filter, index) => (
-                  <div key={index} className="mb-4">
+                  <div key={index} className="mb-3">
                     <button
                       onClick={() => toggleFilter(filter.setter)}
-                      className="flex justify-between items-center w-full text-left"
+                      className="flex justify-between items-center w-full text-left py-1 px-1 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors"
                     >
-                      <span className="text-lg font-medium">
+                      <span className="text-base font-medium text-gray-800 dark:text-gray-200">
                         {filter.label}
                       </span>
-                      {filter.state ? <BsChevronUp /> : <BsChevronDown />}
+                      {filter.state ? (
+                        <BsChevronUp className="text-gray-400 dark:text-gray-400 text-sm" />
+                      ) : (
+                        <BsChevronDown className="text-gray-400 dark:text-gray-400 text-sm" />
+                      )}
                     </button>
                     {filter.state && (
-                      <div className="mt-2">
-                        <ul className="space-y-2">
+                      <div className="mt-1 pl-0">
+                        <ul className="space-y-0.5">
                           {filter.options.map((option, idx) => (
                             <li
                               key={idx}
-                              className={`flex items-center justify-center mx-12 gap-2 hover:bg-slate-300 dark:hover:bg-slate-500 cursor-pointer ${
+                              className={`flex items-center gap-2 p-1.5 rounded cursor-pointer transition-all ${
                                 selectedFilters[
                                   filter.category as keyof typeof selectedFilters
                                 ].includes(option)
-                                  ? "text-[var(--color-primary)] font-semibold bg-transparent"
-                                  : "text-gray-700 dark:text-gray-300"
+                                  ? "bg-secondary dark:bg-secondary border-l-4 border-primary font-medium text-white dark:text-primary-200"
+                                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                               }`}
                               onClick={() =>
                                 handleCheckboxChange(
@@ -873,28 +877,49 @@ export default function ProductsAccordion({
                                 )
                               }
                             >
-                              <span>{option}</span>
+                              {filter.category === "color" ? (
+                                <div className="flex gap-1">
+                                  {(Array.isArray(option)
+                                    ? option
+                                    : [option]
+                                  ).map((color, index) => (
+                                    <div
+                                      key={index}
+                                      className="w-4 h-4 border border-gray-200 dark:border-gray-600 rounded-full"
+                                      style={{ backgroundColor: color }}
+                                    ></div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span className="truncate text-sm">
+                                  {option}
+                                </span>
+                              )}
                             </li>
                           ))}
                         </ul>
                       </div>
                     )}
-                    <hr className="mx-11" />
+                    <hr className="my-2  border-t-2 border-gray-100 dark:border-gray-700" />
                   </div>
                 ))}
                 {/* Price Filter */}
-                <div className="mb-4">
+                <div className="mb-3">
                   <button
                     onClick={() => toggleFilter(setIsPriceOpen)}
-                    className="flex justify-between items-center w-full text-left"
+                    className="flex justify-between items-center w-full text-left py-1 px-1 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors"
                   >
-                    <span className="text-lg font-medium">
+                    <span className="text-base font-medium text-gray-800 dark:text-gray-200">
                       {translations.slug.price}
                     </span>
-                    {isPriceOpen ? <BsChevronUp /> : <BsChevronDown />}
+                    {isPriceOpen ? (
+                      <BsChevronUp className="text-gray-400 dark:text-gray-400 text-sm" />
+                    ) : (
+                      <BsChevronDown className="text-gray-400 dark:text-gray-400 text-sm" />
+                    )}
                   </button>
                   {isPriceOpen && (
-                    <div className="mt-2">
+                    <div className="mt-1 pl-0">
                       <MultiRangeSlider
                         min={Math.min(...filterOptions.prices)}
                         max={Math.max(...filterOptions.prices)}
@@ -906,27 +931,36 @@ export default function ProductsAccordion({
                           setMaxValue(e.maxValue);
                         }}
                       />
-                      <div className="flex justify-between mt-2">
-                        <span>Min: {minValue}</span>
-                        <span>Max: {maxValue}</span>
+                      <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        <span>${minValue}</span>
+                        <span>${maxValue}</span>
                       </div>
                     </div>
                   )}
-                  <hr className="mx-11" />
+                  <hr className="my-2  border-t-2 border-gray-100 dark:border-gray-700" />
                 </div>
 
-                <button
-                  onClick={() => {
-                    applyFilters();
-                    toggleFilterModal(); // Close the modal if needed
-                  }}
-                  className="mt-4 w-full py-2  bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] rounded"
-                >
-                  {translations.slug.show_results}
-                </button>
+                <div className="flex w-full items-center justify-center flex-row gap-3">
+                  <button
+                    onClick={() => {
+                      applyFilters();
+                      toggleFilterModal();
+                    }}
+                    className="mt-2 w-1/2 py-2 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white font-medium rounded-md transition-colors text-sm"
+                  >
+                    {translations.slug.show_results}
+                  </button>
+                  <button
+                    onClick={toggleFilterModal}
+                    className="mt-2 w-1/2 py-2 bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white font-medium rounded-md transition-colors text-sm"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           )}
+
           {/* Product Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {filteredProducts && filteredProducts.length > 0 ? (
@@ -1302,7 +1336,7 @@ export default function ProductsAccordion({
                     </ul>
                   </div>
                 )}
-                <hr className="my-2 border-gray-100 dark:border-gray-700" />
+                <hr className="my-2  border-t-2 border-gray-100 dark:border-gray-700" />
               </div>
             ))}
 
@@ -1340,7 +1374,7 @@ export default function ProductsAccordion({
                   </div>
                 </div>
               )}
-              <hr className="my-2 border-gray-100 dark:border-gray-700" />
+              <hr className="my-2  border-t-2 border-gray-100 dark:border-gray-700" />
             </div>
 
             <button
