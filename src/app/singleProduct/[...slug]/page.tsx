@@ -786,8 +786,8 @@ export default function SingleProductPage({
             id="dt-additional-info-content"
             className="w-full flex justify-center"
           >
-            <div className="w-full md:w-1/2">
-              <table className="w-full text-gray-800 rounded-lg border dark:text-gray-200">
+            <div className="w-full md:w-1/2 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+              <table className="w-full text-gray-800 rounded-lg  dark:text-gray-200">
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {product.additionalInformation?.brand && (
                     <tr className="bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
