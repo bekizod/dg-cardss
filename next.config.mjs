@@ -5,7 +5,17 @@ const nextConfig = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["via.placeholder.com", "/", "pwa-cdn.alsaifgallery.com","alsaifimages.s3.eu-north-1.amazonaws.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pwa-cdn.alsaifgallery.com",
+      },
+
+      {
+        protocol: "https",
+        hostname: "alsaifimages.s3.eu-north-1.amazonaws.com",
+      },
+    ],
   },
 };
 

@@ -113,7 +113,7 @@ const isRTL = currentLocale === "ar";
                   src={
                     currentLocale === "ar" && item?.translatedCoverPic?.data
                       ? item.translatedCoverPic?.data
-                      : item.coverPic?.data || "/path/to/default-image.jpg"
+                      : item.coverPic?.data 
                   }
                   alt={item?.subCategory?.categoryName}
                   objectFit="cover"

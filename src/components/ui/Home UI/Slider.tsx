@@ -197,7 +197,7 @@ export default function Slider({ isRTL }: { isRTL: boolean }) {
                       src={
                         isRTL && ad.translatedImageId?.data
                           ? ad.translatedImageId?.data
-                          : ad.imageId?.data || "/path/to/default-image.jpg"
+                          : ad.imageId?.data 
                       }
                       alt={`Slide ${index + 1}`}
                       width={1000}

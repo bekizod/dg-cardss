@@ -13,6 +13,7 @@ const Loader = () => {
           src="/LoaderLarge.gif"
           width={1000}
           height={1000}
+          unoptimized
           alt="Loader for medium and large devices"
           className="" // Adjust width and height for larger screens
         />

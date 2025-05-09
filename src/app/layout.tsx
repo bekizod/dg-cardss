@@ -104,7 +104,7 @@ function ThemeFetcherAndApplier({
     }
   }, [dispatch, theme.primaryColor, theme.secondaryColor, theme.tertiaryColor]);
 
-  const logoUrl = theme.logo || "/default-logo.png";
+  const logoUrl = theme?.logo
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">

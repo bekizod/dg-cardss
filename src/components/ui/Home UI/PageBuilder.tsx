@@ -126,7 +126,7 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
                       src={
                         currentLocale === "ar" && ad.translatedImageId?.data
                           ? ad.translatedImageId?.data
-                          : ad.imageId?.data || "/path/to/default-image.jpg"
+                          : ad.imageId?.data 
                       }
                       alt={`slide ${index}`}
                       layout="responsive"
@@ -387,7 +387,7 @@ export default function PageBuilder({ parentId }: { parentId: any }) {
                 src={
                   currentLocale === "ar" && item.translatedCoverPic?.data
                     ? item.translatedCoverPic?.data
-                    : item.coverPic?.data || "/path/to/default-image.jpg"
+                    : item.coverPic?.data  
                 }
                 alt={item.subCategory.categoryName}
                 className=" w-full h-60 transition-opacity duration-300 hover:opacity-80"
