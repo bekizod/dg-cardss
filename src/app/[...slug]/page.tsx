@@ -962,7 +962,7 @@ export default function ProductsAccordion({
           )}
 
           {/* Product Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="w-full grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 justify-center items-center gap-3">
             {filteredProducts && filteredProducts.length > 0 ? (
               filteredProducts.map((product: any) => {
                 const productId = product?._id;
@@ -983,7 +983,7 @@ export default function ProductsAccordion({
                 return (
                   <motion.div
                     key={productId}
-                    className="flex flex-col transform max-md:scale-75 max-lg:scale-50 max-md:-my-10 -translate-y-2 duration-200 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
+                    className="flex flex-col transform max-md:scale-75  max-[1071px]:scale-75 max-md:-my-10 hover:-translate-y-2 duration-200 max-md:-mx-5 w-60 h-[350px] bg-white dark:bg-slate-800 dark:text-white shadow-xl gap-1 border dark:border-slate-700 rounded-3xl p-3"
                   >
                     <Link
                       href={`/singleProduct/${parentName}/${parentId}/${product?.category?.categoryName}/${product?.category?._id}/${product?.name}/${product?._id}`}
